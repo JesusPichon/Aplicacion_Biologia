@@ -1,7 +1,7 @@
 import React from "react";
-import { Text, View, TouchableHighlight, TouchableOpacity, ImageBackground } from "react-native";
-import styles from "./StyledApp";
-import { principal, secundario, tercero } from "../../components/styles/style-colors";
+import { Text, View, TouchableOpacity, ImageBackground } from "react-native";
+import styles from "./style-canales";
+import { secundario } from "../../styles/style-colors";
 
 
 const Canales = ({ navigation }) => {

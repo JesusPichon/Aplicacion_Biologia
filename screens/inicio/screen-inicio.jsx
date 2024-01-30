@@ -1,11 +1,5 @@
 import React, { useRef } from 'react';
-import styles from '../../components/styles/style-app';
-
-import {
-    principal,
-    secundario,
-    tercero
-} from '../../components/styles/style-colors';
+import styles from '../../styles/style-app';
 
 import {
     Text,

@@ -1,13 +1,9 @@
 import React, { useState } from "react";
-import styles from '../../components/styles/style-app';
-import TextInputCustom from '../../components/styles/style-textInputCostume';
+import styles from "../../styles/style-app";
+import TextInputCustom from "../../components/textInputCustome";
 import { Dropdown } from "react-native-element-dropdown";
 
-import {
-    principal,
-    secundario,
-    tercero
-} from '../../components/styles/style-colors';
+import {secundario } from "../../styles/style-colors";
 
 import {
     ScrollView,

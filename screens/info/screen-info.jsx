@@ -1,11 +1,6 @@
 import React, { useRef } from 'react';
-import Inicio from '../inicio';
-import styles from "../../components/styles/style-app";
-import {
-    principal,
-    secundario,
-    tercero
-} from '../../components/styles/style-colors';
+import styles from "../../styles/style-app";
+import { tercero } from '../../styles/style-colors';
 
 import {
     Text,
@@ -15,7 +10,6 @@ import {
     Easing,
     ImageBackground,
     SafeAreaView,
-    ScrollView,
     Dimensions
 } from "react-native";
 
@@ -116,11 +110,6 @@ const InfColecta = ({ navigation }) => {
                 alignItems: 'center',
                 position: 'relative'
             }]}>
-            {/*<StatusBar
-                style="light"
-                animated={true}
-                backgroundColor={secundario}
-        />*/}
 
             <TouchableWithoutFeedback style={{}} onPress={() => {
                 animacionOpacity()

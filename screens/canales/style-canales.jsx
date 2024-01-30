@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { principal,secundario, tercero } from '../../components/styles/style-colors';
+import { principal, secundario, tercero } from '../../styles/style-colors';
 
 const styles = StyleSheet.create({
     // color de las letras
@@ -59,8 +59,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     cardVImagen: {
-        width: 125,
-        height: 'auto'
+        flex: 1
     },
     image: {
         flex: 1,

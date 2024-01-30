@@ -13,7 +13,7 @@ import {
     principal,
     secundario,
     tercero
-} from './style-colors';
+} from '../../styles/style-colors';
 
 const TextInputCustome = ({ label, control, name, rules, errors }) => {
     return (

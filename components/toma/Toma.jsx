@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { principal,secundario,tercero } from '../styles/style-colors';
+import { principal } from '../../styles/style-colors';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 const styleToma = StyleSheet.create({
@@ -31,10 +31,6 @@ const DATA = [
 ];
 
 class Toma extends Component {
-
-  constructor(props) {
-    super(props)
-  }
 
   render() {
     return (
