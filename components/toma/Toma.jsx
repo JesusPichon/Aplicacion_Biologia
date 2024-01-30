@@ -4,10 +4,10 @@ import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 const styleToma = StyleSheet.create({
   card: {
-    width: "98%",
+    width: "90%",
     backgroundColor: principal,
     borderRadius: 5,
-    margin: "1%"
+    margin: "2.5%"
   },
 
   text: {

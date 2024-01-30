@@ -1,9 +1,17 @@
 import { StyleSheet } from "react-native";
 
-const styleToma = StyleSheet.create({
+const style_screenTomas = StyleSheet.create({
 
     view_main: {
         margin: "2.5%"
+    },
+
+    searchBar_container: {
+        marginTop: "2.5%",
+        marginLeft: "2.5%",
+        marginRight: "2.5%",
+        padding: "1.2%",
+        backgroundColor: 'white'
     },
 
     view_buttons: {
@@ -20,4 +28,4 @@ const styleToma = StyleSheet.create({
 });
 
 
-export default styleToma;
+export default style_screenTomas;
