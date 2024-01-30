@@ -13,7 +13,7 @@ class Tomas extends Component {
                 <Toma navigation={this.props.navigation}></Toma>
                 <View style={styleToma.view_buttons}>
                     <Button
-                        title="nuevo"
+                        title="nuevo"   
                         style={styleToma.button}
                         onPress={() => {
                             this.props.navigation.navigate('Formulario');
