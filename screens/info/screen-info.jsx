@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import styles from "../../styles/style-app";
 import { tercero } from '../../styles/style-colors';
+import imprimir from '../../components/imprimir/imprimir';
 
 import {
     Text,
@@ -16,6 +17,18 @@ import {
 
 
 const InfColecta = ({ navigation }) => {
+    data={
+        nombre: "nombre",
+        nombre1: "nombre",
+        nombre2: "nombre",
+        nombre3: "nombre",
+        nombre4: "nombre",
+        nombre5: "nombre",
+        nombre6: "nombre",
+        nombre7: "nombre",
+        nombre8: "nombre",
+        nombre9: "nombre",
+    }
     // animaciones
     const opacityAnim = useRef(new Animated.Value(0)).current;
     const translateAnimUP = useRef(new Animated.Value(Dimensions.get('screen').height)).current;
@@ -112,12 +125,9 @@ const InfColecta = ({ navigation }) => {
             }]}>
 
             <TouchableWithoutFeedback style={{}} onPress={() => {
-                animacionOpacity()
-                setTimeout(() => {
-                    navigation.replace('Tomas');
-                }, 1500);
+                imprimir(data);
             }}>
-                <Animated.View style={[styles.fondoP, { width: 55, height: 55, borderRadius: 500, margin: 0, padding: 15, opacity: opacityAnim, position: 'absolute', zIndex: 3, left: 10, top: 10 }]}>
+                <Animated.View style={[styles.fondoP, { width: 55, height: 55, borderRadius: 500, margin: 0, padding: 15, opacity: opacityAnim, position: 'absolute', zIndex: 3, right: 10, bottom: 10 }]}>
                     <ImageBackground source={require('../../images/regresar.png')} resizeMode="contain" style={{ flex: 1 }}></ImageBackground>
                 </Animated.View>
             </TouchableWithoutFeedback>
