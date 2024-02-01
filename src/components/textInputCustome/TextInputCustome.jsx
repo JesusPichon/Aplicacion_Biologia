@@ -1,6 +1,7 @@
 // TextInputCustom.js
 import React from 'react';
 import { Controller } from "react-hook-form";
+import { principal, secundario, tercero } from '../../styles/style-colors';
 
 import {
     Text,
@@ -9,11 +10,6 @@ import {
     StyleSheet
 } from 'react-native';
 
-import {
-    principal,
-    secundario,
-    tercero
-} from '../../styles/style-colors';
 
 const TextInputCustome = ({ label, control, name, rules, errors }) => {
     return (

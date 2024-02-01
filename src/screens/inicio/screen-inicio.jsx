@@ -70,7 +70,7 @@ const Inicio = ({ navigation }) => {
             {/* View del logo*/}
             <Animated.View style={{ flex: 2, flexDirection: 'row', overflow: 'hidden', transform: [{ scale: scaleAnim }] }}>
                 <View style={{ flex: 1 }}></View>
-                <ImageBackground source={require('../../images/buap.png')} resizeMode="contain" style={{ flex: 8 }}></ImageBackground>
+                <ImageBackground source={require('../../assets/images/buap.png')} resizeMode="contain" style={{ flex: 8 }}></ImageBackground>
                 <View style={{ flex: 1 }}></View>
             </Animated.View>
 

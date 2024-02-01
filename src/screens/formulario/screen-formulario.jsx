@@ -3,7 +3,7 @@ import styles from "../../styles/style-app";
 import TextInputCustom from "../../components/textInputCustome";
 import { Dropdown } from "react-native-element-dropdown";
 
-import {secundario } from "../../styles/style-colors";
+import { secundario } from "../../styles/style-colors";
 
 import {
     ScrollView,
