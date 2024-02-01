@@ -15,9 +15,9 @@ const style_screenTomas = StyleSheet.create({
     },
 
     view_buttons: {
-        width: "50%",
+        width: "95%",
         flexDirection: "row",
-        justifyContent: "space-between",
+        justifyContent: "flex-end",
         margin: "2%"
     },
 

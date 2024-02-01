@@ -1,12 +1,30 @@
 import { Component } from "react";
 import { Button, ScrollView, View } from "react-native";
-import Toma from "../../components/toma/Toma";
+import CardToma from "../../components/cardToma";
 import style_screenTomas from "./style-tomas";
 import styles from "../../styles/style-app";
 import { SearchBar } from '@rneui/themed';
 import { secundario } from "../../styles/style-colors";
 
 class Tomas extends Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            listTomas: [{
+                nombreCientifico: "",
+                Familia: "Nyctaginaceae",
+                nombreLocal: "Bugambilia",
+                direccion: {
+                    localidad: "CU BUAP",
+                    municipio: "Puebla",
+                    estado: "Puebla"
+                },
+                coordenadas: "-98.20, 19.002'N",
+                tipoVegetacion: "Bosque urbano"
+            }]
+        };
+    }
 
     render() {
         return (
@@ -17,16 +35,21 @@ class Tomas extends Component {
                 <SearchBar
                     placeholder="filtrar en el canal ..."
                     containerStyle={style_screenTomas.searchBar_container}
-                    inputContainerStyle={{backgroundColor: 'white'}}
-                    inputStyle={{backgroundColor: 'white'}}
-                    >
+                    inputContainerStyle={{ backgroundColor: 'white' }}
+                    inputStyle={{ backgroundColor: 'white' }}>
                 </SearchBar>
 
                 <View style={[styles.container, styles.fondoT]}>
                     <ScrollView>
-                        <Toma navigation={this.props.navigation}></Toma>
-                        <Toma navigation={this.props.navigation}></Toma>
-                        <Toma navigation={this.props.navigation}></Toma>
+                        {this.state.listTomas.map((item, index) => {
+                            return (
+                                <CardToma
+                                    key={index}
+                                    navigation={this.props.navigation}
+                                    infoToma={item}>
+                                </CardToma>
+                            );
+                        })}
                         <View style={style_screenTomas.view_buttons}>
                             <Button
                                 title="nuevo"
