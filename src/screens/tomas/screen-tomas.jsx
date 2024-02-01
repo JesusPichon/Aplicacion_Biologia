@@ -33,9 +33,10 @@ class Tomas extends Component {
                 backgroundColor: secundario
             }}>
                 <SearchBar
-                    placeholder="filtrar en el canal ..."
-                    containerStyle={style_screenTomas.searchBar_container}
-                    inputContainerStyle={{ backgroundColor: 'white' }}
+                    placeholder="Fecha: 29/01/2024"
+                    searchIcon={null}
+                    containerStyle={{backgroundColor: secundario, borderColor: secundario}}
+                    inputContainerStyle={{ backgroundColor: 'white', borderRadius: 20}}
                     inputStyle={{ backgroundColor: 'white' }}>
                 </SearchBar>
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { principal } from '../../styles/style-colors';
-import { View, StyleSheet, Text, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
 
 const styleToma = StyleSheet.create({
   card: {
@@ -33,9 +33,8 @@ class CardToma extends Component {
           this.props.navigation.navigate('InformacionToma');
         }} style={{flexDirection: 'row', justifyContent: 'center'}}>
           <View style={{padding: '2.5%'}}>
-            <Text>Imagen</Text>
             {/**¨Cambiar  la imagen de las tomas */}
-            <ImageBackground source={require('../../assets/images/buap.png')} resizeMode="contain" style={{flex:1}}></ImageBackground>
+            <Image source={require('../../assets/images/flor.png')} style={{width: 50, height: 50, marginVertical: 30}}></Image>
           </View>
           <View style={{padding: '2.5%'}}>
             <Text style={styleToma.text}>Nombre Cientifico: {this.info.nombreCientifico == "" ? "NaN" : this.info.nombreCientifico}</Text>
