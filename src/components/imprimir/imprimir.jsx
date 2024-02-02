@@ -1,5 +1,4 @@
 import RNPrint from 'react-native-print';
-import buapLogo from '../../images/buap.png';
 
 const imprimir = async (formData) => {
   const htmlContent = `
