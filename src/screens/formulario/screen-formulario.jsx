@@ -91,11 +91,10 @@ const Formulario = () => {
                     label="Nombre Científico:"
                     control={control}
                     name="Nombre_cientifico"
-                    rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
                 />
 
-                <View>
+                {/* <View>
                     <Dropdown
                         // style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
                         placeholderStyle={styles.placeholderStyle}
@@ -117,20 +116,18 @@ const Formulario = () => {
                             setIsFocus(false);
                         }}
                     />
-                </View>
+                </View> */}
 
                 <TextInputCustom
                     label="Familia:"
                     control={control}
                     name="Familia"
-                    rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
                 />
                 <TextInputCustom
                     label="Nombre Local:"
                     control={control}
                     name="Nombre_local"
-                    rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
                 />
                 <TextInputCustom
@@ -158,7 +155,6 @@ const Formulario = () => {
                     label="Altitud:"
                     control={control}
                     name="Altitud"
-                    rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
                 />
                 <TextInputCustom
@@ -186,7 +182,6 @@ const Formulario = () => {
                     label="Tipo de vegetación:"
                     control={control}
                     name="Tipo_vegetacion"
-                    rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
                 />
                 <TextInputCustom
@@ -228,21 +223,18 @@ const Formulario = () => {
                     label="Tamaño:"
                     control={control}
                     name="Tamano"
-                    rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
                 />
                 <TextInputCustom
                     label="Flor:"
                     control={control}
                     name="Flor"
-                    rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
                 />
                 <TextInputCustom
                     label="Fruto:"
                     control={control}
                     name="Fruto"
-                    rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
                 />
                 <TextInputCustom
@@ -277,14 +269,12 @@ const Formulario = () => {
                     label="Determino:"
                     control={control}
                     name="Determino"
-                    rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
                 />
                 <TextInputCustom
                     label="Otros Datos:"
                     control={control}
                     name="Otros_datos"
-                    rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
                 />
 
