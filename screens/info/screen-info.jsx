@@ -1,17 +1,17 @@
-import React, { useRef } from 'react';
+import React, { useEffect } from 'react';
 import styles from "../../styles/style-app";
-import { tercero } from '../../styles/style-colors';
+import { principal, secundario, tercero } from '../../styles/style-colors';
 import imprimir from '../../components/imprimir/imprimir';
+import animaciones from '../../components/animaciones/animaciones';
 
 import {
     Text,
     View,
     TouchableWithoutFeedback,
     Animated,
-    Easing,
     ImageBackground,
     SafeAreaView,
-    Dimensions
+    StatusBar
 } from "react-native";
 
 
@@ -29,91 +29,21 @@ const InfColecta = ({ navigation }) => {
         nombre8: "nombre",
         nombre9: "nombre",
     }
-    // animaciones
-    const opacityAnim = useRef(new Animated.Value(0)).current;
-    const translateAnimUP = useRef(new Animated.Value(Dimensions.get('screen').height)).current;
-    const translateAnimDOWN = useRef(new Animated.Value(-Dimensions.get('screen').height)).current;
-    const bezierPoints = [.59, 1.2, .88, .97];
 
     // variables de animacion
-    let opacity = false
-
-    // animaciones
-    const opacityIn = () => {
-        Animated.timing(opacityAnim, {
-            toValue: 1,
-            duration: 500,
-            delay: 750,
-            easing: Easing.ease,
-            useNativeDriver: true,
-        }).start();
-        opacity = true;
-    };
-
-    const opacityOut = () => {
-        Animated.timing(opacityAnim, {
-            toValue: 0,
-            duration: 500,
-            easing: Easing.ease,
-            useNativeDriver: true,
-        }).start();
-        opacity = false;
-    };
-
-    const translateIn = () => {
-        Animated.timing(translateAnimUP, {
-            toValue: 0,
-            duration: 750,
-            easing: Easing.bezier(...bezierPoints),
-            useNativeDriver: true,
-        }).start();
-
-        Animated.timing(translateAnimDOWN, {
-            toValue: 0,
-            duration: 750,
-            easing: Easing.bezier(...bezierPoints),
-            useNativeDriver: true,
-        }).start();
-    };
-
-    const translateOut = () => {
-        Animated.timing(translateAnimUP, {
-            toValue: Dimensions.get('screen').height,
-            duration: 1000,
-            delay: 500,
-            easing: Easing.bezier(...bezierPoints),
-            useNativeDriver: true,
-        }).start();
-
-        Animated.timing(translateAnimDOWN, {
-            toValue: -Dimensions.get('screen').height,
-            duration: 1000,
-            delay: 500,
-            easing: Easing.bezier(...bezierPoints),
-            useNativeDriver: true,
-        }).start();
-    };
+    const {
+        unoAnim,
+        translateAnimDOWN,
+        translateAnimUP,
+        startAnimations,
+    } = animaciones();
 
 
-    // funciones para activar animaciones
-    const animacionOpacity = () => {
-        //console.log(opacity)
-        if (opacity === false) {
-            //console.log('IN')
-            opacityIn()
-            translateIn()
-        } else {
-            opacityOut()
-            //console.log('OUT')
-            translateOut()
-        }
-        //console.log(Dimensions.get('screen').height)
-    }
+    useEffect(() => {
+        startAnimations();
+    }, []);
 
     return (
-        // ejecutar animaciones al inicio
-        animacionOpacity(),
-        // aplicacion
         <View style={[
             styles.fondoS,
             {
@@ -123,22 +53,27 @@ const InfColecta = ({ navigation }) => {
                 alignItems: 'center',
                 position: 'relative'
             }]}>
+            <StatusBar
+                barStyle="light-content"
+                animated={true}
+                backgroundColor={secundario}
+            />
 
-            <TouchableWithoutFeedback style={{}} onPress={() => {
+            <TouchableWithoutFeedback onPress={() => {
                 imprimir(data);
             }}>
-                <Animated.View style={[styles.fondoP, { width: 55, height: 55, borderRadius: 500, margin: 0, padding: 15, opacity: opacityAnim, position: 'absolute', zIndex: 3, right: 10, bottom: 10 }]}>
-                    <ImageBackground source={require('../../images/regresar.png')} resizeMode="contain" style={{ flex: 1 }}></ImageBackground>
+                <Animated.View style={[styles.fondoP, { width: 55, height: 55, borderRadius: 500, margin: 0, padding: 15, opacity: unoAnim, position: 'absolute', zIndex: 3, right: 10, bottom: 10 }]}>
+                
                 </Animated.View>
             </TouchableWithoutFeedback>
 
             <View style={{ flex: 3, flexDirection: 'row', overflow: 'visible', zIndex: 2 }}>
                 <View style={{ flex: 1 }}></View>
                 <Animated.View style={{ flex: 18, borderRadius: 20, backgroundColor: tercero, position: 'relative', transform: [{ translateY: translateAnimDOWN }] }}>
-                    <Animated.View style={{ opacity: opacityAnim, flex: 1 }}>
+                    <Animated.View style={{ opacity: unoAnim, flex: 1 }}>
                         <ImageBackground source={{ uri: 'https://chart.googleapis.com/chart?chs=500x500&cht=qr&chl=hola' }} resizeMode="contain" style={{ flex: 8 }}></ImageBackground>
                         <TouchableWithoutFeedback style={{ flex: 1 }}>
-                            <Animated.View style={[styles.fondoP, { width: 55, height: 55, borderRadius: 500, padding: 15, opacity: opacityAnim, position: 'absolute', bottom: 5, right: 5 }]}>
+                            <Animated.View style={[styles.fondoP, { width: 55, height: 55, borderRadius: 500, padding: 15, opacity: unoAnim, position: 'absolute', bottom: 5, right: 5 }]}>
                                 <ImageBackground source={require('../../images/compartir.png')} resizeMode="contain" style={{ flex: 1 }}></ImageBackground>
                             </Animated.View>
                         </TouchableWithoutFeedback>
@@ -150,7 +85,7 @@ const InfColecta = ({ navigation }) => {
             <Animated.View style={{ flex: 6, flexDirection: 'row', overflow: 'hidden', zIndex: 1, transform: [{ translateY: translateAnimUP }] }}>
                 <View style={{ flex: 1 }}></View>
                 <SafeAreaView style={[styles.fondoT, styles.container, { flex: 18 }]}>
-                    <Animated.ScrollView style={{ opacity: opacityAnim }}>
+                    <Animated.ScrollView style={{ opacity: unoAnim }}>
                         <View style={{ rowGap: 25, columnGap: 5, flexWrap: 'wrap', flexDirection: 'row', justifyContent: 'space-evenly', marginBottom: 30 }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <Text style={[styles.textP, { fontSize: 15, fontWeight: 'bold' }]}>campo:</Text>
