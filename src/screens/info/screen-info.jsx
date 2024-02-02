@@ -118,7 +118,7 @@ const InfColecta = ({ navigation }) => {
                 }, 1500);
             }}>
                 <Animated.View style={[styles.fondoP, { width: 55, height: 55, borderRadius: 500, margin: 0, padding: 15, opacity: opacityAnim, position: 'absolute', zIndex: 3, left: 10, top: 10 }]}>
-                    <ImageBackground source={require('../../images/regresar.png')} resizeMode="contain" style={{ flex: 1 }}></ImageBackground>
+                    <ImageBackground source={require('../../assets/images/regresar.png')} resizeMode="contain" style={{ flex: 1 }}></ImageBackground>
                 </Animated.View>
             </TouchableWithoutFeedback>
 
@@ -129,7 +129,7 @@ const InfColecta = ({ navigation }) => {
                         <ImageBackground source={{ uri: 'https://chart.googleapis.com/chart?chs=500x500&cht=qr&chl=hola' }} resizeMode="contain" style={{ flex: 8 }}></ImageBackground>
                         <TouchableWithoutFeedback style={{ flex: 1 }}>
                             <Animated.View style={[styles.fondoP, { width: 55, height: 55, borderRadius: 500, padding: 15, opacity: opacityAnim, position: 'absolute', bottom: 5, right: 5 }]}>
-                                <ImageBackground source={require('../../images/compartir.png')} resizeMode="contain" style={{ flex: 1 }}></ImageBackground>
+                                <ImageBackground source={require('../../assets/images/compartir.png')} resizeMode="contain" style={{ flex: 1 }}></ImageBackground>
                             </Animated.View>
                         </TouchableWithoutFeedback>
                     </Animated.View>

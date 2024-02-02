@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ScrollView, View } from "react-native";
+import { ScrollView, TouchableOpacity, View } from "react-native";
 import { Button, SearchBar } from '@rneui/themed';
 import styles from "../../styles/style-app";
 import { principal, secundario } from "../../styles/style-colors";
@@ -9,7 +9,7 @@ const Tomas = (props) => {
 
     const toma = {
         nombreCientifico: "",
-        Familia: "Nyctaginaceae",
+        Familia: "America",
         nombreLocal: "Bugambilia",
         direccion: {
             localidad: "CU BUAP",
@@ -37,12 +37,14 @@ const Tomas = (props) => {
                 <ScrollView>
                     {listaTomas.map((toma, index) => {
                         return (
-                            <Toma key={index} item={toma} />
+                            <TouchableOpacity onPress={() => props.navigation.navigate('InformacionToma')}>
+                                <Toma key={index} item={toma} />
+                            </TouchableOpacity>
                         );
                     })}
                 </ScrollView>
-                <View style={{flexDirection: "row", justifyContent: "flex-end", padding: 10}}>
-                    <Button radius={'sm'} type="solid"  onPress={() => {props.navigation.navigate('Formulario')}}>Nuevo</Button>
+                <View style={{ flexDirection: "row", justifyContent: "flex-end", padding: 10 }}>
+                    <Button radius={'sm'} type="solid" onPress={() => { props.navigation.navigate('Formulario') }}>Nuevo</Button>
                 </View>
             </View>
         </View>
