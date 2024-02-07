@@ -2,7 +2,6 @@
 import React from 'react';
 import { Controller } from "react-hook-form";
 import { principal, secundario, tercero } from '../../styles/style-colors';
-
 import {
     Text,
     TextInput,
@@ -30,7 +29,6 @@ const TextInputCustome = ({ label, control, name, rules, errors }) => {
                 defaultValue=""
             />
             {errors && errors[name] && <Text style={styles.textError}>{errors[name].message}</Text>}
-
         </View>
     );
 };

@@ -20,6 +20,8 @@ import {
     Controller
 } from "react-hook-form";
 
+import ExclusiveCheckboxes from "../../components/coordenadas-select/coordselCustom";
+
 
 
 const data = [
@@ -43,7 +45,7 @@ const Formulario = () => {
         Localidad: '',
         Altitud: '',
         Coordenadas: '',
-        Longitud_oeste: '',
+        Longitud: '',
         Latitud_norte: '',
         Tipo_vegetacion: '',
         Informacion_ambiental: '',
@@ -93,31 +95,6 @@ const Formulario = () => {
                     name="Nombre_cientifico"
                     errors={errors}
                 />
-
-                {/* <View>
-                    <Dropdown
-                        // style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-                        placeholderStyle={styles.placeholderStyle}
-                        selectedTextStyle={styles.selectedTextStyle}
-                        inputSearchStyle={styles.inputSearchStyle}
-                        // iconStyle={styles.iconStyle}
-                        data={data}
-                        search
-                        maxHeight={300}
-                        labelField="label"
-                        valueField="value"
-                        placeholder={!isFocus ? 'Select item' : '...'}
-                        searchPlaceholder="Search..."
-                        value={value}
-                        onFocus={() => setIsFocus(true)}
-                        onBlur={() => setIsFocus(false)}
-                        onChange={item => {
-                            setValue(item.value);
-                            setIsFocus(false);
-                        }}
-                    />
-                </View> */}
-
                 <TextInputCustom
                     label="Familia:"
                     control={control}
@@ -157,7 +134,9 @@ const Formulario = () => {
                     name="Altitud"
                     errors={errors}
                 />
-                <TextInputCustom
+                <Text style={styles.textP}>Coordenadas:</Text>
+                <ExclusiveCheckboxes />
+                {/* <TextInputCustom
                     label="Coordenadas:"
                     control={control}
                     name="Coordenadas"
@@ -177,7 +156,7 @@ const Formulario = () => {
                     name="Latitud_norte"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                />
+                /> */}
                 <TextInputCustom
                     label="Tipo de vegetación:"
                     control={control}
