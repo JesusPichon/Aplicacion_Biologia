@@ -32,12 +32,18 @@ const styles = StyleSheet.create({
         flex: 1
     },
     // boton --------------> el color se cambia con el atributo fondoP,S,T y el texto con textP,S,T
-    boton: {
+    botongrupo: {
         padding: 10,
-        maxWidth: 150,
-        borderRadius: 5,
-        margin: 10,
-    },
+        width: '100%', // Ocupar el 100% del ancho del card
+        height: 65,
+        backgroundColor: 'tu_color_de_fondo_del_boton', // Puedes agregar un color de fondo aquí
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderBottomLeftRadius: 5,
+        borderBottomRightRadius: 5,
+        borderTopLeftRadius: 0,
+        borderTopRightRadius: 0,
+      },
     // cartas en vertical (utilizadas para buscar el canal)
     cardVertical: {
         borderRadius: 10,
@@ -64,6 +70,15 @@ const styles = StyleSheet.create({
     image: {
         flex: 1,
         justifyContent: 'center',
+    },
+
+    nuevo: {
+        position: 'absolute',
+        bottom: 20,
+        right: 20,
+        width: 125,
+        borderRadius: 5,
+        
     }
 });
 
