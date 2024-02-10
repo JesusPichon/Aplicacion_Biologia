@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styles from "../../styles/style-app";
 import TextInputCustom from "../../components/textInputCustome";
 import { Dropdown } from "react-native-element-dropdown";
-
 import { secundario } from "../../styles/style-colors";
 
 import {
@@ -22,8 +21,6 @@ import {
 
 import ExclusiveCheckboxes from "../../components/coordenadas-select/coordselCustom";
 
-
-
 const data = [
     { label: 'Item 1', value: '1' },
     { label: 'Item 2', value: '2' },
@@ -36,7 +33,7 @@ const data = [
 ];
 
 const Formulario = () => {
-    const { control, handleSubmit, formState: { errors } } = useForm({
+    const { control, handleSubmit, formState: { errors }, watch, setValue } = useForm({
         Nombre_cientifico: '',
         Familia: '',
         Nombre_local: '',
@@ -44,10 +41,14 @@ const Formulario = () => {
         Municipio: '',
         Localidad: '',
         Altitud: '',
-        Coordenadas: '',
-        Longitud: '',
-        Latitud_norte: '',
-        Tipo_vegetacion: '',
+        Grados_Latitud: '',
+        Minutos_Latitud: '',
+        Hemisferio_Latitud: '',
+        Grados_Longitud: '',
+        Minutos_Longitud: '',
+        Hemisferio_Longitud: '',
+        X:'',
+        Y:'',
         Informacion_ambiental: '',
         Suelo: '',
         Asociada: '',
@@ -62,17 +63,27 @@ const Formulario = () => {
         Fecha: '',
         Determino: '',
         Otros_datos: '',
-        // otros campos...
     });
+
+    const reglasCoordenadas = {
+        required: 'Este campo es requerido.',
+        pattern: {
+          value: /^[0-9.-]+$/, // Permite solo números, punto decimal y signo negativo
+          message: 'Solo se permiten números y signos especiales.'
+        },
+        maxLength: {
+          value: 10, // Establece el límite máximo de caracteres a 10
+          message: 'El número máximo de caracteres permitidos es 10.'
+        }
+      };
+      
 
     const onSubmit = (data) => {
         console.log(data);
-        // Here you can perform further actions with the form data, like sending it to a server
     };
 
-    const [value, setValue] = useState(null);
-    const [isFocus, setIsFocus] = useState(false);
-
+    // const [value, setValue] = useState(null);
+    // const [isFocus, setIsFocus] = useState(false);
 
     return (
 
@@ -135,28 +146,21 @@ const Formulario = () => {
                     errors={errors}
                 />
                 <Text style={styles.textP}>Coordenadas:</Text>
-                <ExclusiveCheckboxes />
-                {/* <TextInputCustom
-                    label="Coordenadas:"
+                <ExclusiveCheckboxes 
                     control={control}
-                    name="Coordenadas"
-                    rules={{ required: 'Este campo es requerido.' }}
+                    rules={reglasCoordenadas}
                     errors={errors}
+                    name1="Grados_Latitud" 
+                    name2="Minutos_Latitud"
+                    name3="Hemisferio_Latitud"
+                    name4="Grados_Longitud"
+                    name5="Minutos_Longitud"
+                    name6="Hemisferio_Longitud"
+                    name7="X"
+                    name8="Y"
+                    setValue={setValue}
+                    watch={watch}
                 />
-                <TextInputCustom
-                    label="Longitud Oeste:"
-                    control={control}
-                    name="Longitud_oeste"
-                    rules={{ required: 'Este campo es requerido.' }}
-                    errors={errors}
-                />
-                <TextInputCustom
-                    label="Latitud Norte:"
-                    control={control}
-                    name="Latitud_norte"
-                    rules={{ required: 'Este campo es requerido.' }}
-                    errors={errors}
-                /> */}
                 <TextInputCustom
                     label="Tipo de vegetación:"
                     control={control}
