@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { View, TextInput, StyleSheet,Text } from 'react-native';
 import { Controller } from 'react-hook-form';
 import { principal, secundario, tercero } from '../../styles/style-colors';
@@ -16,7 +17,10 @@ const Hemisferio_latitud = [
 
 const ExclusiveCheckboxes = ({ control, rules, errors, name1, name2, name3, name4, name5, name6, name7, name8, watch, setValue }) => {
   const watchOption = watch('option', null); 
-  const setValueOption = (value) => {setValue('option', value); console.log(value)};
+  const setValueOption = (value) => {setValue('option', value);};
+  const [isFocus, setIsFocus] = useState(false);
+  const [selectedLatitud, setSelectedLatitud] = useState('Norte'); // Estado local para la latitud
+  const [selectedLongitud, setSelectedLongitud] = useState('Oeste'); // Estado local para la longitud
 
   const handleOptionChange = (value) => {
     if (value === 'geographic') {
@@ -31,10 +35,20 @@ const ExclusiveCheckboxes = ({ control, rules, errors, name1, name2, name3, name
         setValue(name6, 'Oeste'); // Dropdown de hemisferio de longitud
     }
     setValueOption(value);
-};
+  };
+
+  useEffect(() => {
+    // Actualiza el estado local de la latitud cuando se cambia el valor seleccionado
+    setValue(name3, selectedLatitud);
+  }, [selectedLatitud]);
+
+  useEffect(() => {
+    // Actualiza el estado local de la longitud cuando se cambia el valor seleccionado
+    setValue(name6, selectedLongitud);
+  }, [selectedLongitud]);
 
   return (
-    <View>
+    <View style={styles.container}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <CheckBox
           center
@@ -60,8 +74,8 @@ const ExclusiveCheckboxes = ({ control, rules, errors, name1, name2, name3, name
       </View>
 
       {watchOption === 'geographic' && (
-  
         <View style={styles.container}>
+          <View style={styles.container}>
             <Text style={styles.textPCoordenadas}>Latitud:</Text>
             <Controller
               control={control}
@@ -79,6 +93,8 @@ const ExclusiveCheckboxes = ({ control, rules, errors, name1, name2, name3, name
               rules={rules}
             />
             {errors && errors[name1] && <Text style={styles.textError}>{errors[name1].message}</Text>}
+          </View>
+          <View style={styles.container}>
             <Controller
               control={control}
               render={({ field: { onChange, value } }) => (
@@ -95,24 +111,32 @@ const ExclusiveCheckboxes = ({ control, rules, errors, name1, name2, name3, name
               rules={rules} 
             />
             {errors && errors[name2] && <Text style={styles.textError}>{errors[name2].message}</Text>}
+          </View>
+          <View style={styles.container}>
             <Controller
               control={control}
-              render={({ field: { onChange, value } }) => (
+              render={({ field: { onChange, value, onBlur } }) => (
                 <Dropdown
                   style={styles.dropdown}
                   data={Hemisferio_latitud}
                   labelField="label"
                   valueField="value"
-                  //placeholder="Hemisferio de latitud"
+                  placeholder="Hemisferio de latitud"
+                  selectedTextStyle={styles.selectedTextStyle}
                   value={value}
-                  onChange={onChange}
+                  onChange={(selectedItem) => {
+                    onChange(selectedItem.value);
+                    onBlur();
+                  }}
                 />
               )}
               name={name3}
               defaultValue="Norte"
               rules={{ required: true }}
             />
-            <Text style={styles.textPCoordenadas}>Latitud:</Text>
+          </View>
+          <Text style={styles.textPCoordenadas}>Latitud:</Text>
+          <View style={styles.container}>
             <Controller
               control={control}
               render={({ field: { onChange, value } }) => (
@@ -129,6 +153,8 @@ const ExclusiveCheckboxes = ({ control, rules, errors, name1, name2, name3, name
               rules={rules}
             />
             {errors && errors[name4] && <Text style={styles.textError}>{errors[name4].message}</Text>}
+          </View>
+          <View style={styles.container}>
             <Controller
               control={control}
               render={({ field: { onChange, value } }) => (
@@ -145,66 +171,77 @@ const ExclusiveCheckboxes = ({ control, rules, errors, name1, name2, name3, name
               rules={rules} 
             />
             {errors && errors[name5] && <Text style={styles.textError}>{errors[name5].message}</Text>}
+          </View>
+          <View style={styles.container}>
             <Controller
               control={control}
-              render={({ field: { onChange, value } }) => (
-                <Dropdown
-                  style={styles.dropdown}
-                  data={Hemisferio_longitud}
-                  labelField="label"
-                  valueField="value"
-                  //placeholder="Hemisferio de longitud"
-                  value={value}
-                  onChange={onChange}
-                />
+              render={({ field: { onChange, value, onBlur } }) => (
+              <Dropdown
+                style={styles.dropdown}
+                data={Hemisferio_longitud}
+                labelField="label"
+                valueField="value"
+                placeholder="Hemisferio de longitud"
+                selectedTextStyle={styles.selectedTextStyle}
+                value={value}
+                onChange={(selectedItem) => {
+                  onChange(selectedItem.value);
+                  onBlur(); 
+                }}
+              />
               )}
               name={name6}
               defaultValue="Oeste"
               rules={{ required: true }}
             />
-            <Text style={styles.textPCoordenadasFinal}>
-              Latitud: {watch(name1)}° {watch(name2)}' {watch(name3)}
-            </Text>
-            <Text style={styles.textPCoordenadasFinal}>
-              Longitud: {watch(name4)}° {watch(name5)}' {watch(name6)}
-            </Text>
+          </View>
+          <Text style={styles.textPCoordenadasFinal}>
+            Latitud: {watch(name1)}° {watch(name2)}' {watch(name3)}
+          </Text>
+          <Text style={styles.textPCoordenadasFinal}>
+            Longitud: {watch(name4)}° {watch(name5)}' {watch(name6)}
+          </Text>
         </View>
       )}
 
       {watchOption === 'metric' && (
         <View>
-          <Controller
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <TextInput
-                style={styles.textInputCoordenadas}
-                onChangeText={onChange}
-                value={value}
-                placeholder="Ingrese la coordenada X"
-                keyboardType="numeric"
-              />
-            )}
-            name={name7}
-            defaultValue="" 
-            rules={rules} 
-          />
-          {errors && errors[name7] && <Text style={styles.textError}>{errors[name7].message}</Text>}
-          <Controller
-            control={control}
-            render={({ field: { onChange, value } }) => (
-              <TextInput
-                style={styles.textInputCoordenadas}
-                onChangeText={onChange}
-                value={value}
-                placeholder="Ingrese la coordenada Y"
-                keyboardType="numeric"
-              />
-            )}
-            name={name8}
-            defaultValue="" 
-            rules={rules} 
-          />
-          {errors && errors[name8] && <Text style={styles.textError}>{errors[name8].message}</Text>}
+          <View style={styles.container}>
+            <Controller
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <TextInput
+                  style={styles.textInputCoordenadas}
+                  onChangeText={onChange}
+                  value={value}
+                  placeholder="Ingrese la coordenada X"
+                  keyboardType="numeric"
+                />
+              )}
+              name={name7}
+              defaultValue="" 
+              rules={rules} 
+            />
+            {errors && errors[name7] && <Text style={styles.textError}>{errors[name7].message}</Text>}
+          </View>
+          <View style={styles.container}>
+            <Controller
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <TextInput
+                  style={styles.textInputCoordenadas}
+                  onChangeText={onChange}
+                  value={value}
+                  placeholder="Ingrese la coordenada Y"
+                  keyboardType="numeric"
+                />
+              )}
+              name={name8}
+              defaultValue="" 
+              rules={rules} 
+            />
+            {errors && errors[name8] && <Text style={styles.textError}>{errors[name8].message}</Text>}
+          </View>
           <Text style={styles.textPCoordenadasFinal}>
             X: {watch(name7)}    Y: {watch(name8)}
           </Text>
@@ -237,7 +274,7 @@ const styles = StyleSheet.create({
     color: tercero,
     paddingLeft: 10,
     paddingRight: 10,
-    marginBottom: 10,
+    // marginBottom: 10,
     marginHorizontal: 10,
   },
   textError: {
@@ -250,6 +287,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
 
+  },
+  selectedTextStyle: {
+    color: tercero,
   }
 })
 

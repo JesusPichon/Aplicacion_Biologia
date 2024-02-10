@@ -68,14 +68,14 @@ const Formulario = () => {
     const reglasCoordenadas = {
         required: 'Este campo es requerido.',
         pattern: {
-          value: /^[0-9.-]+$/, // Permite solo números, punto decimal y signo negativo
-          message: 'Solo se permiten números y signos especiales.'
+            value: /^[0-9.-]+$/, // Permite solo números, punto decimal y signo negativo
+            message: 'Solo se permiten números y signos especiales.'
         },
         maxLength: {
-          value: 10, // Establece el límite máximo de caracteres a 10
-          message: 'El número máximo de caracteres permitidos es 10.'
+            value: 10, // Establece el límite máximo de caracteres a 10
+            message: 'El número máximo de caracteres permitidos es 10.'
         }
-      };
+    };
       
 
     const onSubmit = (data) => {
@@ -86,7 +86,6 @@ const Formulario = () => {
     // const [isFocus, setIsFocus] = useState(false);
 
     return (
-
         <View style={{
             backgroundColor: secundario,
             /*marginTop: Constants.statusBarHeight,*/

@@ -1,4 +1,3 @@
-// TextInputCustom.js
 import React from 'react';
 import { Controller } from "react-hook-form";
 import { principal, secundario, tercero } from '../../styles/style-colors';
@@ -9,10 +8,9 @@ import {
     StyleSheet
 } from 'react-native';
 
-
 const TextInputCustome = ({ label, control, name, rules, errors }) => {
     return (
-        <View style={{ fontWeight: 'bold' }}>
+        <View style={ styles.container}>
             <Text style={styles.textP}>{label}</Text>
             <Controller
                 control={control}
@@ -34,6 +32,9 @@ const TextInputCustome = ({ label, control, name, rules, errors }) => {
 };
 
 const styles = StyleSheet.create({
+    container: {
+        marginBottom: 10
+    },
     textP: {
         color: principal,
         textAlign: 'left',
@@ -46,7 +47,6 @@ const styles = StyleSheet.create({
         borderColor: false,
         color: tercero,
         paddingLeft: 10,
-        marginBottom: 10,
         fontWeight: 'bold'
 
     },
