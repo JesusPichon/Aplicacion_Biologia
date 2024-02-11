@@ -16,7 +16,7 @@ const Hemisferio_latitud = [
 ];
 
 const InputCoordenadas = ({ control, rules, errors, name1, name2, name3, name4, name5, name6, name7, name8, watch, setValue }) => {
-  const watchOption = watch('option', null); 
+  const watchOption = watch('option', 'geographic'); 
   const setValueOption = (value) => {setValue('option', value);};
   const [isFocus, setIsFocus] = useState(false);
   const [selectedLatitud, setSelectedLatitud] = useState('Norte'); // Estado local para la latitud

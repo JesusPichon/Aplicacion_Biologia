@@ -1,37 +1,18 @@
 import React, { useState } from "react";
 import styles from "../../styles/style-app";
 import TextInputCustom from "../../components/textInputCustome";
-import { Dropdown } from "react-native-element-dropdown";
 import { secundario, tercero } from "../../styles/style-colors";
+import { useForm } from "react-hook-form";
+import InputCoordenadas from "../../components/coordenadas-select/coordenadasComponent";
+import FechaComponente from "../../components/fecha-select/FechaComponente";
 
 import {
     ScrollView,
     Text,
     View,
     TouchableOpacity,
-    TextInput,
-    Button,
-    KeyboardAvoidingView,
-    StyleSheet
+    KeyboardAvoidingView
 } from "react-native";
-
-import {
-    useForm,
-    Controller
-} from "react-hook-form";
-
-import InputCoordenadas from "../../components/coordenadas-select/coordenadasComponent";
-
-const data = [
-    { label: 'Item 1', value: '1' },
-    { label: 'Item 2', value: '2' },
-    { label: 'Item 3', value: '3' },
-    { label: 'Item 4', value: '4' },
-    { label: 'Item 5', value: '5' },
-    { label: 'Item 6', value: '6' },
-    { label: 'Item 7', value: '7' },
-    { label: 'Item 8', value: '8' },
-];
 
 const Formulario = () => {
     const { control, handleSubmit, formState: { errors }, watch, setValue } = useForm({
@@ -78,13 +59,9 @@ const Formulario = () => {
         }
     };
       
-
     const onSubmit = (data) => {
         console.log(data);
     };
-
-    // const [value, setValue] = useState(null);
-    // const [isFocus, setIsFocus] = useState(false);
 
     return (
         <View style={{
@@ -241,17 +218,24 @@ const Formulario = () => {
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
                 />
-                <TextInputCustom
+                {/* <TextInputCustom
                     label="Fecha:"
                     control={control}
                     name="Fecha"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
+                /> */}
+                <FechaComponente
+                    control={control}
+                    name="Fecha"
+                    errors={errors}
+                    rules={{ required: 'Este campo es requerido.' }}
                 />
                 <TextInputCustom
                     label="Determino:"
                     control={control}
                     name="Determino"
+                    rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
                 />
                 <TextInputCustom
