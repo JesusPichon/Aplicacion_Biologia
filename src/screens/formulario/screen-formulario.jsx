@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "../../styles/style-app";
 import TextInputCustom from "../../components/textInputCustome";
 import { Dropdown } from "react-native-element-dropdown";
-import { secundario } from "../../styles/style-colors";
+import { secundario, tercero } from "../../styles/style-colors";
 
 import {
     ScrollView,
@@ -11,7 +11,8 @@ import {
     TouchableOpacity,
     TextInput,
     Button,
-    KeyboardAvoidingView
+    KeyboardAvoidingView,
+    StyleSheet
 } from "react-native";
 
 import {
@@ -19,7 +20,7 @@ import {
     Controller
 } from "react-hook-form";
 
-import ExclusiveCheckboxes from "../../components/coordenadas-select/coordselCustom";
+import InputCoordenadas from "../../components/coordenadas-select/coordenadasComponent";
 
 const data = [
     { label: 'Item 1', value: '1' },
@@ -145,7 +146,7 @@ const Formulario = () => {
                     errors={errors}
                 />
                 <Text style={styles.textP}>Coordenadas:</Text>
-                <ExclusiveCheckboxes 
+                <InputCoordenadas 
                     control={control}
                     rules={reglasCoordenadas}
                     errors={errors}
@@ -258,8 +259,9 @@ const Formulario = () => {
                     control={control}
                     name="Otros_datos"
                     errors={errors}
+                    multiline={true} // Pernmite multilinea en el textinput
+                    maxLines={20} // Indica el numero de lineas maximo en el textinput (Solo si multiline = true)
                 />
-
                 <TouchableOpacity
                     style={[styles.bGuardar, styles.fondoP]}
                     onPress={handleSubmit(onSubmit)}

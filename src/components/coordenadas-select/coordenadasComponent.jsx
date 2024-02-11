@@ -15,7 +15,7 @@ const Hemisferio_latitud = [
   { label: 'Sur', value: 'Sur' }
 ];
 
-const ExclusiveCheckboxes = ({ control, rules, errors, name1, name2, name3, name4, name5, name6, name7, name8, watch, setValue }) => {
+const InputCoordenadas = ({ control, rules, errors, name1, name2, name3, name4, name5, name6, name7, name8, watch, setValue }) => {
   const watchOption = watch('option', null); 
   const setValueOption = (value) => {setValue('option', value);};
   const [isFocus, setIsFocus] = useState(false);
@@ -293,4 +293,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default ExclusiveCheckboxes;
+export default InputCoordenadas;
