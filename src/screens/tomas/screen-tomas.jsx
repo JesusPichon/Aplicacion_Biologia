@@ -4,6 +4,7 @@ import { ScrollView, View } from 'react-native';
 import styles from "../../styles/style-app";
 import { secundario } from '../../styles/style-colors';
 import Toma from "../../components/Toma";
+import imprimir from "../../components/imprimir/imprimir";
 
 
 const toma = {
@@ -80,6 +81,7 @@ const Tomas = ({ navigation }) => {
                     icon={{ name: 'print', color: 'white' }}
                     onPress={() => {
                         setOpen(!open);
+                        imprimir(listPrint);
                     }}
                 />
 
