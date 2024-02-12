@@ -57,13 +57,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         overflow: 'hidden'
     },
-    cardVcontenido: {
-        backgroundColor: principal,
-        height: 65,
-        width: 125,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
     cardVImagen: {
         flex: 1
     },
