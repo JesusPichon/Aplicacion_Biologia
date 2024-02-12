@@ -143,6 +143,7 @@ const Formulario = () => {
                     control={control}
                     name="Tipo_vegetacion"
                     errors={errors}
+                    tooltip={"Aqui va un mensaje de ayuda"}
                 />
                 <TextInputCustom
                     label="Información Ambiental:"
@@ -150,6 +151,7 @@ const Formulario = () => {
                     name="Informacion_ambiental"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
+                    tooltip={"Aqui va un mensaje de ayuda"}
                 />
                 <TextInputCustom
                     label="Suelo:"
@@ -157,6 +159,7 @@ const Formulario = () => {
                     name="Suelo"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
+                    tooltip={"Aqui va un mensaje de ayuda"}
                 />
                 <TextInputCustom
                     label="Asociada:"
@@ -164,6 +167,7 @@ const Formulario = () => {
                     name="Asociada"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
+                    tooltip={"Aqui va un mensaje de ayuda"}
                 />
                 <TextInputCustom
                     label="Abundancia:"
@@ -171,6 +175,7 @@ const Formulario = () => {
                     name="Abundancia"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
+                    tooltip={"Aqui va un mensaje de ayuda"}
                 />
                 <TextInputCustom
                     label="Forma Biológica:"
@@ -178,24 +183,28 @@ const Formulario = () => {
                     name="Forma_biologica"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
+                    tooltip={"Aqui va un mensaje de ayuda"}
                 />
                 <TextInputCustom
                     label="Tamaño:"
                     control={control}
                     name="Tamano"
                     errors={errors}
+                    tooltip={"Aqui va un mensaje de ayuda"}
                 />
                 <TextInputCustom
                     label="Flor:"
                     control={control}
                     name="Flor"
                     errors={errors}
+                    tooltip={"Aqui va un mensaje de ayuda"}
                 />
                 <TextInputCustom
                     label="Fruto:"
                     control={control}
                     name="Fruto"
                     errors={errors}
+                    tooltip={"Aqui va un mensaje de ayuda"}
                 />
                 <TextInputCustom
                     label="Usos:"
@@ -203,6 +212,7 @@ const Formulario = () => {
                     name="Usos"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
+                    tooltip={"Aqui va un mensaje de ayuda"}
                 />
                 <TextInputCustom
                     label="Colector(es):"
@@ -210,6 +220,7 @@ const Formulario = () => {
                     name="Colector_es"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
+                    tooltip={"Aqui va un mensaje de ayuda"}
                 />
                 <TextInputCustom
                     label="No. de colecta:"
@@ -217,14 +228,8 @@ const Formulario = () => {
                     name="No_colecta"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
+                    tooltip={"Aqui va un mensaje de ayuda"}
                 />
-                {/* <TextInputCustom
-                    label="Fecha:"
-                    control={control}
-                    name="Fecha"
-                    rules={{ required: 'Este campo es requerido.' }}
-                    errors={errors}
-                /> */}
                 <FechaComponente
                     control={control}
                     name="Fecha"
@@ -237,6 +242,7 @@ const Formulario = () => {
                     name="Determino"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
+                    tooltip={"Aqui va un mensaje de ayuda"}
                 />
                 <TextInputCustom
                     label="Otros Datos:"
@@ -245,6 +251,7 @@ const Formulario = () => {
                     errors={errors}
                     multiline={true} // Pernmite multilinea en el textinput
                     maxLines={20} // Indica el numero de lineas maximo en el textinput (Solo si multiline = true)
+                    tooltip={"Aqui va un mensaje de ayuda"}
                 />
                 <TouchableOpacity
                     style={[styles.bGuardar, styles.fondoP]}

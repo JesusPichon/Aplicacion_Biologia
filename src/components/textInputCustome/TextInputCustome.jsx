@@ -1,6 +1,7 @@
 import React from 'react';
 import { Controller } from "react-hook-form";
 import { principal, secundario, tercero } from '../../styles/style-colors';
+import { Tooltip, Icon } from '@rneui/themed'
 import {
     Text,
     TextInput,
@@ -8,13 +9,35 @@ import {
     StyleSheet
 } from 'react-native';
 
-const TextInputCustome = ({ label, control, name, rules, errors, multiline, maxLines }) => {
-    // Determinar el estilo de TextInput según la prop multilinea
-    const textInputStyle = multiline ? styles.textInputMultiLine : styles.textInput;
+const TextInputCustome = ({ label, control, name, rules, errors, multiline, maxLines, tooltip }) => {
+    const textInputStyle = multiline ? styles.textInputMultiLine : styles.textInput;  // Determinar el estilo de TextInput según la prop multilinea
+    const [open, setOpen] = React.useState(false);
 
     return (
         <View style={ styles.container}>
-            <Text style={styles.textP}>{label}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={styles.textP}>{label}</Text>
+                {tooltip && (
+                    <View >
+                        <Tooltip 
+                            popover={<Text style={styles.tooltipText}>{tooltip}</Text>}
+                            visible={open}
+                            onOpen={() => {
+                                setOpen(true);
+                            }}
+                            onClose={() => {
+                                setOpen(false);
+                            }}
+                            withPointer={true}
+                            withOverlay={true}
+                            skipAndroidStatusBar={true}
+                            backgroundColor='#424242'
+                        >
+                                <Icon name="help-outline" size={20} color="#9E9E9E" />
+                        </Tooltip>
+                    </View>
+                )}
+            </View>
             <Controller
                 control={control}
                 render={({ field: { onChange, onBlur, value } }) => (
@@ -38,6 +61,10 @@ const TextInputCustome = ({ label, control, name, rules, errors, multiline, maxL
 };
 
 const styles = StyleSheet.create({
+    tooltipText: {
+        color:tercero,
+        fontWeight: 'bold'
+    },  
     container: {
         marginBottom: 10
     },
@@ -46,7 +73,6 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         fontWeight: 'bold'
     },
-    // TextInput
     textInput: {
         backgroundColor: 'rgb(128, 155, 174)',
         borderRadius: 5,
