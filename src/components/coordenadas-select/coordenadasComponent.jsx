@@ -118,6 +118,7 @@ const InputCoordenadas = ({ control, rules, errors, name1, name2, name3, name4, 
               render={({ field: { onChange, value, onBlur } }) => (
                 <Dropdown
                   style={styles.dropdown}
+                  iconColor='#FFF'
                   data={Hemisferio_latitud}
                   labelField="label"
                   valueField="value"
@@ -178,6 +179,7 @@ const InputCoordenadas = ({ control, rules, errors, name1, name2, name3, name4, 
               render={({ field: { onChange, value, onBlur } }) => (
               <Dropdown
                 style={styles.dropdown}
+                iconColor='#FFF'
                 data={Hemisferio_longitud}
                 labelField="label"
                 valueField="value"

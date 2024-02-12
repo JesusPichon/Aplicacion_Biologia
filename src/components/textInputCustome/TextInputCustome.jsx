@@ -1,7 +1,7 @@
 import React from 'react';
 import { Controller } from "react-hook-form";
 import { principal, secundario, tercero } from '../../styles/style-colors';
-import { Tooltip, Icon } from '@rneui/themed'
+import { Tooltip, Icon } from '@rneui/themed';
 import {
     Text,
     TextInput,
@@ -71,7 +71,8 @@ const styles = StyleSheet.create({
     textP: {
         color: principal,
         textAlign: 'left',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        marginRight: 5
     },
     textInput: {
         backgroundColor: 'rgb(128, 155, 174)',
