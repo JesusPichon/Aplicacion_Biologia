@@ -1,10 +1,25 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Modal, ImageBackground } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, TextInput, TouchableOpacity, Modal, ImageBackground, Animated } from "react-native";
 import { SearchBar, SpeedDial } from '@rneui/themed';
 import { principal, secundario, tercero } from "../../styles/style-colors";
 import styles from "./style-canales";
+import animaciones from '../../components/animaciones/animaciones';
+
 
 const Canales = ({ navigation }) => {
+    // animaciones
+    const {
+        unoAnim,
+        translateAnimDOWN,
+        translateAnimUP,
+        startAnimations,
+    } = animaciones();
+
+
+    useEffect(() => {
+        startAnimations();
+    }, []);
+
     const [open, setOpen] = useState(false);
     const [passwordModalVisible, setPasswordModalVisible] = useState(false);
     const [password, setPassword] = useState("");
@@ -29,18 +44,20 @@ const Canales = ({ navigation }) => {
     return (
         <View style={{ backgroundColor: secundario, flex: 1 }}>
 
-            <SearchBar
-                placeholder="Busqueda del Grupo"
-                searchIcon={null}
-                containerStyle={{ backgroundColor: secundario, borderColor: secundario }}
-                inputContainerStyle={{ backgroundColor: 'white', borderRadius: 20 }}
-                inputStyle={{ backgroundColor: 'white' }}
-            />
+            <Animated.View style={{ opacity: unoAnim}}>
+                <SearchBar
+                    placeholder="Busqueda del Grupo"
+                    searchIcon={null}
+                    containerStyle={{ backgroundColor: secundario, borderColor: secundario }}
+                    inputContainerStyle={{ backgroundColor: 'white', borderRadius: 20 }}
+                    inputStyle={{ backgroundColor: 'white'}}
+                />
+            </Animated.View>
 
             <View style={[styles.container, styles.fondoT, { alignItems: 'center' }]}>
 
 
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginBottom: 32 }}>
+            <Animated.View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginBottom: 32, transform: [{ scale: unoAnim}] }}>
 
                 <View style={[styles.cardVertical, styles.fondoT, { width: '48%' }]}>
                     <View style={[styles.cardVImagen]}>
@@ -53,7 +70,7 @@ const Canales = ({ navigation }) => {
                         <Text style={[styles.textT, { textAlign: 'center', fontWeight: 'bold' }]}>Canal 1</Text>
                     </TouchableOpacity>
                     </View>
-                </View>
+                </Animated.View>
             </View>
 
             <SpeedDial //boton especial para dos botones mas.
