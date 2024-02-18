@@ -24,19 +24,25 @@ const styles = StyleSheet.create({
     },
     // contenedor principal
     container: {
-        borderTopRightRadius: 75,
-        borderTopLeftRadius: 75,
         paddingHorizontal: 20,
         paddingTop: 40,
         marginTop: 20,
-        flex: 1
+        flex: 1,
+        borderTopLeft: 30,  
+        borderTopRight: 10, 
     },
-    // boton --------------> el color se cambia con el atributo fondoP,S,T y el texto con textP,S,T
+    //contenerdor de los botones 
+    buttonContainer: { 
+        flexDirection: 'row', // Esto coloca los elementos en fila en lugar de columna
+        justifyContent: 'space-around', // Esto distribuye el espacio entre los elementos de manera uniforme
+        marginTop: -10, // Puedes ajustar esto según sea necesario
+      },
+    
+    // botones --------------> el color se cambia con el atributo fondoP,S,T y el texto con textP,S,T
     botongrupo: {
         padding: 10,
         width: '100%', // Ocupar el 100% del ancho del card
         height: 65,
-        backgroundColor: 'tu_color_de_fondo_del_boton', // Puedes agregar un color de fondo aquí
         justifyContent: 'center',
         alignItems: 'center',
         borderBottomLeftRadius: 5,
@@ -44,6 +50,23 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 0,
         borderTopRightRadius: 0,
       },
+      fusionar: {
+        flex: 1,
+        padding: 13,
+        maxWidth: 200,  // Ajusta el valor según sea necesario para hacer el botón más largo
+        borderRadius: 5,
+        margin: 10,
+      },
+    
+      exportar: {
+        flex: 1,
+        padding: 13,
+        maxWidth: 200,  // Ajusta el valor según sea necesario para hacer el botón más largo
+        borderRadius: 5,
+        margin: 10,
+      },
+    
+
     // cartas en vertical (utilizadas para buscar el canal)
     cardVertical: {
         borderRadius: 10,
@@ -65,14 +88,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 
-    nuevo: {
-        position: 'absolute',
-        bottom: 20,
-        right: 20,
-        width: 125,
-        borderRadius: 5,
-        
-    }
+
+
+    
 });
 
 export default styles;
