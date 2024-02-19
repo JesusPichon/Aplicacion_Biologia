@@ -46,12 +46,19 @@ const Canales = ({ navigation }) => {
                 </TouchableOpacity>
             </View>
 
+            <View style={[styles.container2, styles.fondoT]}>
+            </View>
+
             <View style={[styles.container, styles.fondoT, { alignItems: 'center' }]}>
-                <Animated.View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginBottom: 32, transform: [{ scale: unoAnim}] }}>
+            <View style={[styles.container1, styles.fondoT]}>
+            </View>
+
+            <Animated.View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginBottom: 32, transform: [{ scale: unoAnim}] }}>
                     <View style={[styles.cardVertical, styles.fondoT, { width: '48%' }]}>
                         <View style={[styles.cardVImagen]}>
-                            <ImageBackground source={{ uri: 'https://seeklogo.com/images/B/benemerita-universidad-autonoma-de-puebla-logo-08A9E090F7-seeklogo.com.png' }}
-                            resizeMode="cover" style={styles.image}> 
+                        <ImageBackground source={require('../../assets/images/Campo_flores.jpg')}
+                            resizeMode="cover"
+                            style={styles.image}>
                             </ImageBackground>
                         </View>
                         <TouchableOpacity style={[styles.botongrupo, styles.fondoP]}
@@ -84,8 +91,6 @@ const Canales = ({ navigation }) => {
                         onPress={() => console.log('Delete Something')}
                         />
             </SpeedDial>
-
-            
         </View>
     );
 };

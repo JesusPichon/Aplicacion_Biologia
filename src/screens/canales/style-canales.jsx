@@ -25,12 +25,26 @@ const styles = StyleSheet.create({
     // contenedor principal
     container: {
         paddingHorizontal: 20,
-        paddingTop: 40,
+        paddingTop: 0,
         marginTop: 20,
         flex: 1,
         borderTopLeft: 30,  
-        borderTopRight: 10, 
+        borderTopRight: 30, 
     },
+    container1: {
+        paddingHorizontal: 200, // Ajusta el relleno horizontal según tus necesidades
+        paddingTop: 50, // Ajusta el relleno superior según tus necesidades
+        marginTop: -20, // Ajusta el margen superior según tus necesidades
+        overflow: 'hidden', // Esto ocultará cualquier contenido que se extienda fuera del contenedor
+        transform: [{ skewY: '-3deg' }], // Ajusta el ángulo de inclinación según tus necesidades
+      },
+      container2: {
+        paddingHorizontal: 200, // Ajusta el relleno horizontal según tus necesidades
+        paddingTop: 10, // Ajusta el relleno superior según tus necesidades
+        marginTop: 15, // Ajusta el margen superior según tus necesidades
+        overflow: 'hidden', // Esto ocultará cualquier contenido que se extienda fuera del contenedor
+        transform: [{ skewY: '-3deg' }], // Ajusta el ángulo de inclinación según tus necesidades
+      },
     //contenerdor de los botones 
     buttonContainer: { 
         flexDirection: 'row', // Esto coloca los elementos en fila en lugar de columna
