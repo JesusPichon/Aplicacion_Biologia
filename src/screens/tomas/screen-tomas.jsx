@@ -1,11 +1,14 @@
-import { SearchBar, SpeedDial } from "@rneui/themed";
 import { useState } from "react";
-import { ScrollView, View } from 'react-native';
+import { ScrollView, TextInput, View } from 'react-native';
 import styles from "../../styles/style-app";
 import { secundario } from '../../styles/style-colors';
 import Toma from "../../components/Toma";
 import imprimir from "../../components/imprimir/imprimir";
 import BotonFlotante from "../../components/BotonFlotante";
+import BarraBusqueda from "../../components/BarraBusqueda";
+
+
+
 
 
 const toma = {
@@ -60,16 +63,10 @@ const Tomas = ({ navigation }) => {
     }]);
 
 
-
-
     return (
         <View style={{ flex: 1, backgroundColor: secundario }}>
 
-            <SearchBar
-                placeholder="Date"
-                containerStyle={{ backgroundColor: secundario, borderColor: secundario }}
-                inputContainerStyle={{ backgroundColor: 'white', borderRadius: 20 }}
-                inputStyle={{ backgroundColor: 'white' }} />
+            <BarraBusqueda titulo={'Date'} />
 
             <View style={[styles.container, styles.fondoT]}>
                 <ScrollView>

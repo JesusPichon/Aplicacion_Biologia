@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, TouchableOpacity, Modal, ImageBackground, Animated } from "react-native";
-import { SearchBar, SpeedDial } from '@rneui/themed';
-import { principal, secundario, tercero } from "../../styles/style-colors";
+import { secundario } from "../../styles/style-colors";
 import styles from "./style-canales";
 import animaciones from '../../components/animaciones/animaciones';
 import BotonFlotante from "../../components/BotonFlotante";
+import BarraBusqueda from "../../components/BarraBusqueda";
 
 
 const Canales = ({ navigation }) => {
-    
+
     // animaciones
     const {
         unoAnim,
@@ -42,13 +42,7 @@ const Canales = ({ navigation }) => {
         <View style={{ backgroundColor: secundario, flex: 1 }}>
 
             <Animated.View style={{ opacity: unoAnim }}>
-                <SearchBar
-                    placeholder="Buscar el grupo"
-                    searchIcon={null}
-                    containerStyle={{ backgroundColor: secundario, borderColor: secundario }}
-                    inputContainerStyle={{ backgroundColor: 'white', borderRadius: 20 }}
-                    inputStyle={{ backgroundColor: 'white' }}
-                />
+                <BarraBusqueda titulo={'Buscar grupo'} />
             </Animated.View>
 
             {/* Nueva sección con los botones en fila */}
