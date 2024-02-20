@@ -5,6 +5,7 @@ import styles from "../../styles/style-app";
 import { secundario } from '../../styles/style-colors';
 import Toma from "../../components/Toma";
 import imprimir from "../../components/imprimir/imprimir";
+import BotonFlotante from "../../components/BotonFlotante";
 
 
 const toma = {
@@ -29,6 +30,7 @@ const Tomas = ({ navigation }) => {
     const [open, setOpen] = useState(false);
 
 
+    //Funciones que definen el comportamiento de las tomas 
     const seleccionar = (item) => {
         setListPrint([...listPrint, item]);
     }
@@ -36,6 +38,28 @@ const Tomas = ({ navigation }) => {
     const agregar = (item) => {
         setListaTomas([...listaTomas, item]);
     }
+
+    //Funciones para el componente BotonFlotante
+    const [actions, setActions] = useState([{
+        icon: 'add',
+        title: 'agregar',
+        action: () => navigation.navigate('Formulario')
+    },
+    {
+        icon: 'print',
+        title: 'imprimir',
+        action: () => {
+            setOpen(!open);
+            imprimir(listPrint);
+        }
+    },
+    {
+        icon: 'list',
+        title: 'listar',
+        action: () => console.log(listPrint)
+    }]);
+
+
 
 
     return (
@@ -59,42 +83,8 @@ const Tomas = ({ navigation }) => {
                 </ScrollView>
             </View>
 
-
-            <SpeedDial
-                isOpen={open}
-                icon={{ name: 'add', color: 'white' }}
-                openIcon={{ name: 'close', color: 'white' }}
-                color='#00B5DF'
-                onOpen={() => setOpen(!open)}
-                onClose={() => setOpen(!open)}>
-
-                <SpeedDial.Action
-                    title='add'
-                    color='#00B5DF'
-                    icon={{ name: 'add', color: 'white' }}
-                    onPress={() => { navigation.navigate('Formulario') }}
-                />
-
-                <SpeedDial.Action
-                    title='print'
-                    color='#00B5DF'
-                    icon={{ name: 'print', color: 'white' }}
-                    onPress={() => {
-                        setOpen(!open);
-                        imprimir(listPrint);
-                    }}
-                />
-
-                <SpeedDial.Action
-                    title='listar'
-                    color='#00B5DF'
-                    icon={{ name: 'edit', color: 'white' }}
-                    onPress={() => {
-                        console.log(listPrint)
-                    }}
-                />
-
-            </SpeedDial>
+            <BotonFlotante actions={actions} />       
+            
         </View>
     );
 }

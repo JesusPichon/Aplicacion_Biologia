@@ -8,6 +8,7 @@ import BotonFlotante from "../../components/BotonFlotante";
 
 
 const Canales = ({ navigation }) => {
+    
     // animaciones
     const {
         unoAnim,
