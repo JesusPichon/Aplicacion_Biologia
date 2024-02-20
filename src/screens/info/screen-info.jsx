@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import styles from "../../styles/style-app";
 import { principal, secundario, tercero } from '../../styles/style-colors';
-import imprimir from '../../components/imprimir/imprimir';
+import imprimir from '../../components/imprimir/imprimirUno';
 import animaciones from '../../components/animaciones/animaciones';
+import { Button} from '@rneui/themed';
 
 import {
     Text,
@@ -18,16 +19,35 @@ import {
 
 const InfColecta = ({ navigation }) => {
     data={
-        nombre: "nombre",
-        nombre1: "nombre",
-        nombre2: "nombre",
-        nombre3: "nombre",
-        nombre4: "nombre",
-        nombre5: "nombre",
-        nombre6: "nombre",
-        nombre7: "nombre",
-        nombre8: "nombre",
-        nombre9: "nombre",
+        Nombre_cientifico: 'Ejemplo de nombre cientifico',
+        Familia: 'patricio es un dios',
+        Nombre_local: 'Ejemplo de nombre local',
+        Estado: 'puebla', // Debe coincidir con el value de la opción que deseas seleccionar
+        Municipio: 'Ejemplo de municipio',
+        Localidad: 'Ejemplo de localidad',
+        Altitud: 'asfa',
+        Grados_Latitud: '24524',
+        Minutos_Latitud: '24524',
+        Hemisferio_Latitud: '2452',
+        Grados_Longitud: '245245',
+        Minutos_Longitud: '24523',
+        Hemisferio_Longitud: '24524',
+        X:'',
+        Y:'',
+        Informacion_ambiental: 'casdfasf',
+        Suelo: 'asdasd',
+        Asociada: 'sadfdsdf',
+        Abundancia: 'Abundante',
+        Forma_biologica: 'Arbusto',
+        Tamano: 'sdvsdv',
+        Flor: 'sdvdv',
+        Fruto: 'crsced',
+        Usos: 'sdfvsdv',
+        Colector_es: 'sdvsdv',
+        No_colecta: 'sdvsdvsdv',
+        Fecha: '2024-02-15',
+        Determino: '15151',
+        Otros_datos: 'asdnauisdbnasuidgbaisudb',
     }
 
     // variables de animacion
@@ -36,6 +56,7 @@ const InfColecta = ({ navigation }) => {
         translateAnimDOWN,
         translateAnimUP,
         startAnimations,
+        resetAnimations,
     } = animaciones();
 
 
@@ -49,7 +70,7 @@ const InfColecta = ({ navigation }) => {
             {
                 flex: 1,
                 /*marginTop: Constants.statusBarHeight,*/
-                justifyContent: 'center',
+                justifyContent: 'space-around',
                 alignItems: 'center',
                 position: 'relative'
             }]}>
@@ -59,130 +80,58 @@ const InfColecta = ({ navigation }) => {
                 backgroundColor={secundario}
             />
 
-            <TouchableWithoutFeedback onPress={() => {
-                imprimir(data);
-            }}>
-                <Animated.View style={[styles.fondoP, { width: 55, height: 55, borderRadius: 500, margin: 0, padding: 15, opacity: unoAnim, position: 'absolute', zIndex: 3, right: 10, bottom: 10 }]}>
-                
-                </Animated.View>
-            </TouchableWithoutFeedback>
-
-            <View style={{ flex: 3, flexDirection: 'row', overflow: 'visible', zIndex: 2 }}>
+            <View style={{ height:50, flexDirection: 'row', overflow: 'visible', zIndex: 2, marginVertical:20 }}>
                 <View style={{ flex: 1 }}></View>
-                <Animated.View style={{ flex: 18, borderRadius: 20, backgroundColor: tercero, position: 'relative', transform: [{ translateY: translateAnimDOWN }] }}>
-                    <Animated.View style={{ opacity: unoAnim, flex: 1 }}>
-                        <ImageBackground source={{ uri: 'https://chart.googleapis.com/chart?chs=500x500&cht=qr&chl=hola' }} resizeMode="contain" style={{ flex: 8 }}></ImageBackground>
-                        <TouchableWithoutFeedback style={{ flex: 1 }}>
-                            <Animated.View style={[styles.fondoP, { width: 55, height: 55, borderRadius: 500, padding: 15, opacity: unoAnim, position: 'absolute', bottom: 5, right: 5 }]}>
-                                <ImageBackground source={require('../../assets/images/regresar.png')} resizeMode="contain" style={{ flex: 1 }}></ImageBackground>
-                            </Animated.View>
-                        </TouchableWithoutFeedback>
+                <Animated.View style={{ flex: 18, borderRadius: 20, position: 'relative', transform: [{ translateY: translateAnimDOWN }] }}>
+                    <Animated.View style={{ opacity: unoAnim, flex: 1, flexDirection: "row"}}>
+                        <View style={{ flex: 1, marginRight: 5 }}>
+                            <Button 
+                                radius={"md"} 
+                                type="solid"
+                                onPress={() => navigation.navigate("Editar", { data })}
+                                title="  Editar" 
+                                buttonStyle={{ backgroundColor: tercero}}
+                                icon={{name: 'edit', color: principal}}
+                                titleStyle={{ color: principal }}
+                            />
+                        </View>
+                        <View style={{ flex: 1, marginLeft: 5 }}>
+                            <Button 
+                                radius={"md"} 
+                                type="solid"
+                                onPress={() => imprimir(data)}
+                                title="  Imprimir" 
+                                buttonStyle={{ backgroundColor: tercero}}
+                                icon={{name: 'print', color: principal}}
+                                titleStyle={{ color: principal }}
+                            />
+                        </View>
                     </Animated.View>
                 </Animated.View>
                 <View style={{ flex: 1 }}></View>
             </View>
 
-            <Animated.View style={{ flex: 6, flexDirection: 'row', overflow: 'hidden', zIndex: 1, transform: [{ translateY: translateAnimUP }] }}>
-                <View style={{ flex: 1 }}></View>
-                <SafeAreaView style={[styles.fondoT, styles.container, { flex: 18 }]}>
-                    <Animated.ScrollView style={{ opacity: unoAnim }}>
-                        <View style={{ rowGap: 25, columnGap: 5, flexWrap: 'wrap', flexDirection: 'row', justifyContent: 'space-evenly', marginBottom: 30 }}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={[styles.textP, { fontSize: 15, fontWeight: 'bold' }]}>campo:</Text>
-                                <Text style={[styles.textP, { fontSize: 14, fontWeight: 'normal' }]}>Contenido</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={[styles.textP, { fontSize: 15, fontWeight: 'bold' }]}>campo:</Text>
-                                <Text style={[styles.textP, { fontSize: 14, fontWeight: 'normal' }]}>Contenido</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={[styles.textP, { fontSize: 15, fontWeight: 'bold' }]}>campo:</Text>
-                                <Text style={[styles.textP, { fontSize: 14, fontWeight: 'normal' }]}>Contenido</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={[styles.textP, { fontSize: 15, fontWeight: 'bold' }]}>campo:</Text>
-                                <Text style={[styles.textP, { fontSize: 14, fontWeight: 'normal' }]}>Contenido</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={[styles.textP, { fontSize: 15, fontWeight: 'bold' }]}>campo:</Text>
-                                <Text style={[styles.textP, { fontSize: 14, fontWeight: 'normal' }]}>Contenido</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={[styles.textP, { fontSize: 15, fontWeight: 'bold' }]}>campo:</Text>
-                                <Text style={[styles.textP, { fontSize: 14, fontWeight: 'normal' }]}>Contenido</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={[styles.textP, { fontSize: 15, fontWeight: 'bold' }]}>campo:</Text>
-                                <Text style={[styles.textP, { fontSize: 14, fontWeight: 'normal' }]}>Contenido</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={[styles.textP, { fontSize: 15, fontWeight: 'bold' }]}>campo:</Text>
-                                <Text style={[styles.textP, { fontSize: 14, fontWeight: 'normal' }]}>Contenido</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={[styles.textP, { fontSize: 15, fontWeight: 'bold' }]}>campo:</Text>
-                                <Text style={[styles.textP, { fontSize: 14, fontWeight: 'normal' }]}>Contenido</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={[styles.textP, { fontSize: 15, fontWeight: 'bold' }]}>campo:</Text>
-                                <Text style={[styles.textP, { fontSize: 14, fontWeight: 'normal' }]}>Contenido</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={[styles.textP, { fontSize: 15, fontWeight: 'bold' }]}>campo:</Text>
-                                <Text style={[styles.textP, { fontSize: 14, fontWeight: 'normal' }]}>Contenido</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={[styles.textP, { fontSize: 15, fontWeight: 'bold' }]}>campo:</Text>
-                                <Text style={[styles.textP, { fontSize: 14, fontWeight: 'normal' }]}>Contenido</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={[styles.textP, { fontSize: 15, fontWeight: 'bold' }]}>campo:</Text>
-                                <Text style={[styles.textP, { fontSize: 14, fontWeight: 'normal' }]}>Contenido</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={[styles.textP, { fontSize: 15, fontWeight: 'bold' }]}>campo:</Text>
-                                <Text style={[styles.textP, { fontSize: 14, fontWeight: 'normal' }]}>Contenido</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={[styles.textP, { fontSize: 15, fontWeight: 'bold' }]}>campo:</Text>
-                                <Text style={[styles.textP, { fontSize: 14, fontWeight: 'normal' }]}>Contenido</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={[styles.textP, { fontSize: 15, fontWeight: 'bold' }]}>campo:</Text>
-                                <Text style={[styles.textP, { fontSize: 14, fontWeight: 'normal' }]}>Contenido</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={[styles.textP, { fontSize: 15, fontWeight: 'bold' }]}>campo:</Text>
-                                <Text style={[styles.textP, { fontSize: 14, fontWeight: 'normal' }]}>Contenido</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={[styles.textP, { fontSize: 15, fontWeight: 'bold' }]}>campo:</Text>
-                                <Text style={[styles.textP, { fontSize: 14, fontWeight: 'normal' }]}>Contenido</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={[styles.textP, { fontSize: 15, fontWeight: 'bold' }]}>campo:</Text>
-                                <Text style={[styles.textP, { fontSize: 14, fontWeight: 'normal' }]}>Contenido</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={[styles.textP, { fontSize: 15, fontWeight: 'bold' }]}>campo:</Text>
-                                <Text style={[styles.textP, { fontSize: 14, fontWeight: 'normal' }]}>Contenido</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={[styles.textP, { fontSize: 15, fontWeight: 'bold' }]}>campo:</Text>
-                                <Text style={[styles.textP, { fontSize: 14, fontWeight: 'normal' }]}>Contenido</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={[styles.textP, { fontSize: 15, fontWeight: 'bold' }]}>campo:</Text>
-                                <Text style={[styles.textP, { fontSize: 14, fontWeight: 'normal' }]}>Contenido</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={[styles.textP, { fontSize: 15, fontWeight: 'bold' }]}>campo:</Text>
-                                <Text style={[styles.textP, { fontSize: 14, fontWeight: 'normal' }]}>Contenido</Text>
-                            </View>
+            <Animated.View style={{ flex: 8, overflow: 'visible', flexDirection:"row", zIndex: 1, transform: [{ translateY: translateAnimUP }] }}>
+                <SafeAreaView style={[styles.fondoT, { flex: 18}]}>
+                    <View style={{ height: 10, width:'120%', backgroundColor: secundario, transform: [{ rotate: '-1deg' }, {translateY: -5}, {translateX: -10}] }}></View>
+                    <Animated.ScrollView style={{ opacity: unoAnim, marginTop:10}}>
+                        <View style={{ rowGap: 25, columnGap: 5, flexWrap: 'wrap', flexDirection: 'row', justifyContent: 'space-around', marginBottom: 30 }}>
+                            {Object.entries(data).map(([campo, contenido], index) => {
+                            if (contenido !== null && contenido !== "") {
+                                const nombreCampo = campo === 'Tamano' ? 'Tamaño' : campo;
+                                return (
+                                    <View key={index} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                        <Text style={[styles.textP, { fontSize: 18, fontWeight: 'bold' }]}>{nombreCampo}:</Text>
+                                        <Text style={[styles.textP, { fontSize: 18, fontWeight: 'normal' }]}>{contenido}</Text>
+                                    </View>
+                                );
+                            } else {
+                                return null; // No renderizar si el contenido es null
+                            }
+                        })}
                         </View>
                     </Animated.ScrollView>
                 </SafeAreaView>
-                <View style={{ flex: 1 }}></View>
             </Animated.View>
         </View>
     )
