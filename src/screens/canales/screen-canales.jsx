@@ -4,6 +4,7 @@ import { SearchBar, SpeedDial } from '@rneui/themed';
 import { principal, secundario, tercero } from "../../styles/style-colors";
 import styles from "./style-canales";
 import animaciones from '../../components/animaciones/animaciones';
+import BotonFlotante from "../../components/BotonFlotante";
 
 
 const Canales = ({ navigation }) => {
@@ -20,29 +21,43 @@ const Canales = ({ navigation }) => {
         startAnimations();
     }, []);
 
-    const [open, setOpen] = useState(false);
-    
+
+    //Funciones que se incorporan al boton flotante 
+    const [actions, setActions] = useState([
+        {
+            icon: 'add',
+            title: 'agregar',
+            action: () => console.log("add something")
+        },
+        {
+            icon: 'delete',
+            title: 'eliminar',
+            action: () => console.log("delete something")
+        }
+    ]);
+
+
     return (
         <View style={{ backgroundColor: secundario, flex: 1 }}>
 
-            <Animated.View style={{ opacity: unoAnim}}>
+            <Animated.View style={{ opacity: unoAnim }}>
                 <SearchBar
                     placeholder="Buscar el grupo"
                     searchIcon={null}
                     containerStyle={{ backgroundColor: secundario, borderColor: secundario }}
                     inputContainerStyle={{ backgroundColor: 'white', borderRadius: 20 }}
-                    inputStyle={{ backgroundColor: 'white'}}
+                    inputStyle={{ backgroundColor: 'white' }}
                 />
             </Animated.View>
 
-             {/* Nueva sección con los botones en fila */}
-             <View style={styles.buttonContainer}>
+            {/* Nueva sección con los botones en fila */}
+            <View style={styles.buttonContainer}>
 
-             <TouchableOpacity style={[styles.fusionar, styles.fondoT]}>
-                    <Text style={[styles.textP, {textAlign: 'center', fontWeight: 'bold'}]}>FUSIONAR</Text>
+                <TouchableOpacity style={[styles.fusionar, styles.fondoT]}>
+                    <Text style={[styles.textP, { textAlign: 'center', fontWeight: 'bold' }]}>FUSIONAR</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.exportar, styles.fondoT]}>
-                    <Text style={[styles.textP, {textAlign: 'center', fontWeight: 'bold'}]}>EXPORTAR/IMPORTAR</Text>
+                    <Text style={[styles.textP, { textAlign: 'center', fontWeight: 'bold' }]}>EXPORTAR/IMPORTAR</Text>
                 </TouchableOpacity>
             </View>
 
@@ -50,47 +65,27 @@ const Canales = ({ navigation }) => {
             </View>
 
             <View style={[styles.container, styles.fondoT, { alignItems: 'center' }]}>
-            <View style={[styles.container1, styles.fondoT]}>
-            </View>
+                <View style={[styles.container1, styles.fondoT]}>
+                </View>
 
-            <Animated.View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginBottom: 32, transform: [{ scale: unoAnim}] }}>
+                <Animated.View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginBottom: 32, transform: [{ scale: unoAnim }] }}>
                     <View style={[styles.cardVertical, styles.fondoT, { width: '48%' }]}>
                         <View style={[styles.cardVImagen]}>
-                        <ImageBackground source={require('../../assets/images/Campo_flores.jpg')}
-                            resizeMode="cover"
-                            style={styles.image}>
+                            <ImageBackground source={require('../../assets/images/Campo_flores.jpg')}
+                                resizeMode="cover"
+                                style={styles.image}>
                             </ImageBackground>
                         </View>
                         <TouchableOpacity style={[styles.botongrupo, styles.fondoP]}
                             onPress={() => { navigation.navigate('Tomas') }}>
                             <Text style={[styles.textT, { textAlign: 'center', fontWeight: 'bold' }]}>MIS TOMAS</Text>
                         </TouchableOpacity>
-                        </View>
+                    </View>
                 </Animated.View>
             </View>
 
-            <SpeedDial
-                isOpen={open}
-                icon={{ name: 'add', color: 'white' }}
-                openIcon={{ name: 'close', color: 'white' }}
-                color={principal}
-                onOpen={() => setOpen(!open)}
-                onClose={() => setOpen(!open)}>
+            <BotonFlotante actions={actions} />
 
-                    <SpeedDial.Action
-                        icon={{ name: 'add', color: '#fff' }}
-                        color={principal}
-                        title="Crear"
-                        onPress={() => console.log('Add Something')}
-                        />
-
-                    <SpeedDial.Action
-                        icon={{ name: 'delete', color: '#fff' }}
-                        color={principal}
-                        title="Eliminar"
-                        onPress={() => console.log('Delete Something')}
-                        />
-            </SpeedDial>
         </View>
     );
 };
