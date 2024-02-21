@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import InputCoordenadas from "../../components/coordenadas-select/coordenadasComponent";
 import FechaComponente from "../../components/fecha-select/FechaComponente";
 import  CustomDropdown  from "../../components/listaComponente/ListaComponente";
-
 import {
     ScrollView,
     Text,
@@ -109,10 +108,6 @@ const Formulario = () => {
             value: 10, // Establece el límite máximo de caracteres a 10
             message: 'El número máximo de caracteres permitidos es 10.'
         }
-    };
-      
-    const onSubmit = (data) => {
-        console.log(data);
     };
 
     return (

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import styles from '../../styles/style-app';
 import animaciones from '../../components/animaciones/animaciones';
 import { tercero } from '../../styles/style-colors';
-
+import { crearTablas } from '../../services/database/SQLite'
 
 import {
     Text,
@@ -24,6 +24,7 @@ const Inicio = ({ navigation }) => {
 
 
     useEffect(() => {
+        crearTablas();
         startAnimations();
     }, []);
 
