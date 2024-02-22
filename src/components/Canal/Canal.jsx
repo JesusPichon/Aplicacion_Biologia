@@ -1,6 +1,8 @@
 import { View, Text, TouchableOpacity, Animated, ImageBackground } from "react-native";
 import styles from "../../styles/style-app";
 
+//Revisar por que no se ve la imagen del canal 
+
 const Canal = ({ animacion, navigation }) => {
 
 

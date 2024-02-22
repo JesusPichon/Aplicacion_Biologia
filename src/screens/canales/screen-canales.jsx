@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, ImageBackground, Animated } from "react-native";
+import { View, Text, TouchableOpacity, ImageBackground, Animated, ScrollView } from "react-native";
 import { secundario } from "../../styles/style-colors";
 import styles from "./style-canales";
 import animaciones from '../../components/animaciones/animaciones';
@@ -14,6 +14,9 @@ const Canales = ({ navigation }) => {
         unoAnim,
         startAnimations,
     } = animaciones();
+
+    //lista de tomas inizializada con un objeto vacio
+    const [canales, setCanales] = useState([{}, {},])
 
 
     useEffect(() => {
@@ -61,7 +64,16 @@ const Canales = ({ navigation }) => {
                 <View style={[styles.container1, styles.fondoT]}>
                 </View>
 
-                <Canal animacion={unoAnim} navigation={navigation} />
+
+                {canales.map((canal, index) => {
+                    return (
+                        <Canal
+                            key={index}
+                            animacion={unoAnim}
+                            navigation={navigation} />
+                    )
+                })}
+
             </View>
 
             <BotonFlotante actions={actions} />
