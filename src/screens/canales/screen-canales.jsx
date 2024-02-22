@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, ImageBackground, Animated, ScrollView } from "react-native";
-import { secundario } from "../../styles/style-colors";
+import { View, Text, TouchableOpacity, Animated, Modal } from "react-native";
+import { principal, secundario } from "../../styles/style-colors";
 import styles from "./style-canales";
 import animaciones from '../../components/animaciones/animaciones';
 import Canal from "../../components/Canal";
 import BotonFlotante from "../../components/BotonFlotante";
 import BarraBusqueda from "../../components/BarraBusqueda";
+import { Button, Input } from "@rneui/themed";
 
 const Canales = ({ navigation }) => {
 
@@ -16,12 +17,25 @@ const Canales = ({ navigation }) => {
     } = animaciones();
 
     //lista de tomas inizializada con un objeto vacio
-    const [canales, setCanales] = useState([{}, {},])
+    const [canales, setCanales] = useState([])
+
+    //visualizar modal 
+    const [modalVisible, setModalVisible] = useState(false);
+
+    //nombre del canal
+    const [nombreCanal, setNombreCanal] = useState('');
 
 
     useEffect(() => {
         startAnimations();
-    }, []);
+    }, [canales]);
+
+
+    //agregar canales 
+    const agregarCanal = (nombreCanal) => {
+        const nuevoCanal = { nombre: nombreCanal };
+        setCanales(canales.concat(nuevoCanal));
+    }
 
 
     //Funciones que se incorporan al boton flotante 
@@ -29,7 +43,9 @@ const Canales = ({ navigation }) => {
         {
             icon: 'add',
             title: 'agregar',
-            action: () => console.log("Add Something!!")
+            action: () => {
+                setModalVisible(!modalVisible);
+            }
         },
         {
             icon: 'delete',
@@ -65,18 +81,48 @@ const Canales = ({ navigation }) => {
                 </View>
 
 
-                {canales.map((canal, index) => {
+                {canales && canales.map((canal, index) => {
                     return (
                         <Canal
                             key={index}
                             animacion={unoAnim}
-                            navigation={navigation} />
+                            navigation={navigation}
+                            informacion={canal} />
                     )
                 })}
 
             </View>
 
             <BotonFlotante actions={actions} />
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}>
+
+                <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                    <View style={{ backgroundColor: principal, padding: 10, borderRadius: 10 }}>
+                        
+                        <Text style={{ color: 'white' }}> Nombre: </Text>
+
+                        <Input
+                            placeholder="Canal"
+                            inputStyle={{ color: 'white' }}
+                            containerStyle={{ width: '20' }}
+                            onChangeText={(text) => setNombreCanal(text)} />
+
+                        <Button
+                            title={'Aceptar'}
+                            buttonStyle={{ backgroundColor: principal }}
+                            onPress={() => {
+                                agregarCanal(nombreCanal);
+                                setModalVisible(!modalVisible)
+                            }} />
+
+                    </View>
+                </View>
+
+            </Modal>
 
         </View>
     );
