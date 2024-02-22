@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, Modal, ImageBackground, Animated } from "react-native";
+import { View, Text, TouchableOpacity, ImageBackground, Animated } from "react-native";
 import { secundario } from "../../styles/style-colors";
 import styles from "./style-canales";
 import animaciones from '../../components/animaciones/animaciones';
+import Canal from "../../components/Canal";
 import BotonFlotante from "../../components/BotonFlotante";
 import BarraBusqueda from "../../components/BarraBusqueda";
-
 
 const Canales = ({ navigation }) => {
 
     // animaciones
     const {
         unoAnim,
-        translateAnimDOWN,
-        translateAnimUP,
         startAnimations,
     } = animaciones();
 
@@ -28,12 +26,12 @@ const Canales = ({ navigation }) => {
         {
             icon: 'add',
             title: 'agregar',
-            action: () => console.log("add something")
+            action: () => console.log("Add Something!!")
         },
         {
             icon: 'delete',
             title: 'eliminar',
-            action: () => console.log("delete something")
+            action: () => console.log("Delete Something!!")
         }
     ]);
 
@@ -63,20 +61,7 @@ const Canales = ({ navigation }) => {
                 <View style={[styles.container1, styles.fondoT]}>
                 </View>
 
-                <Animated.View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginBottom: 32, transform: [{ scale: unoAnim }] }}>
-                    <View style={[styles.cardVertical, styles.fondoT, { width: '48%' }]}>
-                        <View style={[styles.cardVImagen]}>
-                            <ImageBackground source={require('../../assets/images/Campo_flores.jpg')}
-                                resizeMode="cover"
-                                style={styles.image}>
-                            </ImageBackground>
-                        </View>
-                        <TouchableOpacity style={[styles.botongrupo, styles.fondoP]}
-                            onPress={() => { navigation.navigate('Tomas') }}>
-                            <Text style={[styles.textT, { textAlign: 'center', fontWeight: 'bold' }]}>MIS TOMAS</Text>
-                        </TouchableOpacity>
-                    </View>
-                </Animated.View>
+                <Canal animacion={unoAnim} navigation={navigation} />
             </View>
 
             <BotonFlotante actions={actions} />
