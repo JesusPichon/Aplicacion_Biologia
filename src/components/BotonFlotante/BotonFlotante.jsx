@@ -6,6 +6,11 @@ const BotonFlotante = ({ actions }) => {
 
     const [open, setOpen] = useState(false);
 
+    const handleActionPress = (action) => {
+        action();
+        setOpen(false);
+    }
+
     return (
         <SpeedDial
             isOpen={open}
@@ -22,7 +27,7 @@ const BotonFlotante = ({ actions }) => {
                         icon={{ name: element.icon, color: '#fff' }}
                         color={principal}
                         title= {element.title}
-                        onPress={element.action} />
+                        onPress={() => handleActionPress(element.action)} />
                 );
             })}
 

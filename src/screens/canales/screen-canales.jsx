@@ -81,7 +81,7 @@ const Canales = ({ navigation }) => {
                 </View>
 
 
-                {canales && canales.map((canal, index) => {
+                {canales.map((canal, index) => {
                     return (
                         <Canal
                             key={index}
@@ -98,7 +98,8 @@ const Canales = ({ navigation }) => {
             <Modal
                 animationType="slide"
                 transparent={true}
-                visible={modalVisible}>
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(!modalVisible)}>
 
                 <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
                     <View style={{ backgroundColor: principal, padding: 10, borderRadius: 10 }}>
