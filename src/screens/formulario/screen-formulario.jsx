@@ -5,7 +5,7 @@ import { secundario, tercero } from "../../styles/style-colors";
 import { useForm } from "react-hook-form";
 import InputCoordenadas from "../../components/coordenadas-select/coordenadasComponent";
 import FechaComponente from "../../components/fecha-select/FechaComponente";
-import  CustomDropdown  from "../../components/listaComponente/ListaComponente";
+import CustomDropdown from "../../components/listaComponente/ListaComponente";
 import {
     ScrollView,
     Text,
@@ -49,7 +49,7 @@ const data_Estados = [
     { label: 'Zacatecas', value: 'zacatecas' },
     { label: 'Otro...', value: 'otro' },
 ];
-  
+
 
 const data_Abundancia = [
     { label: 'Abundante', value: 'Abundante' },
@@ -80,8 +80,8 @@ const Formulario = () => {
         Grados_Longitud: '',
         Minutos_Longitud: '',
         Hemisferio_Longitud: '',
-        X:'',
-        Y:'',
+        X: '',
+        Y: '',
         Informacion_ambiental: '',
         Suelo: '',
         Asociada: '',
@@ -109,6 +109,10 @@ const Formulario = () => {
             message: 'El número máximo de caracteres permitidos es 10.'
         }
     };
+
+    const onSubmit = (data) => {
+        console.log(data);
+    }
 
     return (
         <View style={{
@@ -182,11 +186,11 @@ const Formulario = () => {
                     errors={errors}
                 />
                 <Text style={styles.textP}>Coordenadas:</Text>
-                <InputCoordenadas 
+                <InputCoordenadas
                     control={control}
                     rules={reglasCoordenadas}
                     errors={errors}
-                    name1="Grados_Latitud" 
+                    name1="Grados_Latitud"
                     name2="Minutos_Latitud"
                     name3="Hemisferio_Latitud"
                     name4="Grados_Longitud"

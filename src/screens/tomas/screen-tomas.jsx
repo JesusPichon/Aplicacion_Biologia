@@ -1,15 +1,11 @@
 import { useState } from "react";
-import { ScrollView, TextInput, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
+import { SpeedDial } from "@rneui/themed";
 import styles from "../../styles/style-app";
-import { secundario } from '../../styles/style-colors';
+import { principal, secundario } from '../../styles/style-colors';
 import Toma from "../../components/Toma";
 import imprimir from "../../components/imprimir/imprimir";
-import BotonFlotante from "../../components/BotonFlotante";
 import BarraBusqueda from "../../components/BarraBusqueda";
-
-
-
-
 
 const toma = {
     nombreCientifico: "",
@@ -24,44 +20,25 @@ const toma = {
     tipoVegetacion: "Bosque urbano"
 }
 
+//Cambiar el componente boton flotante al speed dial
 
 const Tomas = ({ navigation }) => {
-
 
     const [listaTomas, setListaTomas] = useState([toma]);
     const [listPrint, setListPrint] = useState([]);
     const [open, setOpen] = useState(false);
 
+    const seleccionar = (toma) => {
+        setListPrint([...listPrint, toma]);
+    }
 
-    //Funciones que definen el comportamiento de las tomas 
-    const seleccionar = (item) => {
-        setListPrint([...listPrint, item]);
+    const deseleccionar = (toma) => {
+        setListPrint(listPrint.filter((item) => item !== toma));
     }
 
     const agregar = (item) => {
         setListaTomas([...listaTomas, item]);
     }
-
-    //Funciones para el componente BotonFlotante
-    const [actions, setActions] = useState([{
-        icon: 'add',
-        title: 'agregar',
-        action: () => navigation.navigate('Formulario')
-    },
-    {
-        icon: 'print',
-        title: 'imprimir',
-        action: () => {
-            setOpen(!open);
-            imprimir(listPrint);
-        }
-    },
-    {
-        icon: 'list',
-        title: 'listar',
-        action: () => console.log(listPrint)
-    }]);
-
 
     return (
         <View style={{ flex: 1, backgroundColor: secundario }}>
@@ -73,15 +50,53 @@ const Tomas = ({ navigation }) => {
                     {
                         listaTomas.map((item, index) => {
                             return (
-                                <Toma key={index} item={item} navigation={navigation} seleccionar={seleccionar} />
+                                <Toma
+                                    key={index}
+                                    data={item}
+                                    navigation={navigation}
+                                    seleccionar={seleccionar}
+                                    deseleccionar={deseleccionar} />
                             );
                         })
                     }
                 </ScrollView>
             </View>
 
-            <BotonFlotante actions={actions} />       
-            
+            <SpeedDial
+                isOpen={open}
+                icon={{ name: 'add', color: 'white' }}
+                openIcon={{ name: 'close', color: 'white' }}
+                color={principal}
+                onOpen={() => setOpen(!open)}
+                onClose={() => setOpen(!open)}>
+
+
+                <SpeedDial.Action
+                    icon={{ name: 'add', color: '#fff' }}
+                    color={principal}
+                    title={'agregar'}
+                    onPress={() => navigation.navigate('Formulario')} />
+
+                <SpeedDial.Action
+                    icon={{ name: 'print', color: '#fff' }}
+                    color={principal}
+                    title={'imprimir'}
+                    onPress={() => {
+                        setOpen(!open);
+                        imprimir(listPrint);
+                    }} />
+
+                <SpeedDial.Action
+                    icon={{ name: 'list', color: '#fff' }}
+                    color={principal}
+                    title={'listar'}
+                    onPress={() => {
+                        setOpen(!open);
+                        console.log(listPrint);
+                    }} />
+
+            </SpeedDial>
+
         </View>
     );
 }
