@@ -7,24 +7,11 @@ import Toma from "../../components/Toma";
 import imprimir from "../../components/imprimir/imprimir";
 import BarraBusqueda from "../../components/BarraBusqueda";
 
-const toma = {
-    nombreCientifico: "",
-    Familia: "America",
-    nombreLocal: "Bugambilia",
-    direccion: {
-        localidad: "CU BUAP",
-        municipio: "Puebla",
-        estado: "Puebla"
-    },
-    coordenadas: "-98.20, 19.002'N",
-    tipoVegetacion: "Bosque urbano"
-}
-
 //Cambiar el componente boton flotante al speed dial
 
 const Tomas = ({ navigation }) => {
 
-    const [listaTomas, setListaTomas] = useState([toma]);
+    const [listaTomas, setListaTomas] = useState([]);
     const [listPrint, setListPrint] = useState([]);
     const [open, setOpen] = useState(false);
 
@@ -75,7 +62,7 @@ const Tomas = ({ navigation }) => {
                     icon={{ name: 'add', color: '#fff' }}
                     color={principal}
                     title={'agregar'}
-                    onPress={() => navigation.navigate('Formulario')} />
+                    onPress={() => navigation.navigate('Formulario', { agregar })} />
 
                 <SpeedDial.Action
                     icon={{ name: 'print', color: '#fff' }}

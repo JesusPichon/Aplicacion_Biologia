@@ -65,7 +65,13 @@ const data_FormaBio = [
     { label: 'Otro...', value: 'otro' },
 ];
 
-const Formulario = () => {
+const Formulario = ({route}) => {
+
+
+    //funcion para agregar tomas 
+
+    const {agregar} = route.params;
+
     const { control, handleSubmit, formState: { errors }, watch, setValue } = useForm({
         Nombre_cientifico: '',
         Familia: '',
@@ -110,8 +116,9 @@ const Formulario = () => {
         }
     };
 
+    //agrega la nueva toma a la lista de tomas 
     const onSubmit = (data) => {
-        console.log(data);
+        agregar(data);
     }
 
     return (

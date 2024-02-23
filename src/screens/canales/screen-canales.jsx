@@ -7,7 +7,7 @@ import Canal from "../../components/Canal";
 import BarraBusqueda from "../../components/BarraBusqueda";
 import { Button, Input, SpeedDial } from "@rneui/themed";
 
-const Canales = ({ navigation }) => {
+const Canales = ({ navigation}) => {
 
     // animaciones
     const {
@@ -58,6 +58,8 @@ const Canales = ({ navigation }) => {
             <View style={[styles.container2, styles.fondoT]}>
             </View>
 
+            {/* visualizacion de canales */}
+
             <View style={[styles.container, styles.fondoT, { alignItems: 'center' }]}>
                 <View style={[styles.container1, styles.fondoT]}>
                 </View>
@@ -74,6 +76,9 @@ const Canales = ({ navigation }) => {
                 })}
 
             </View>
+
+
+            {/* Boton flotante */}
 
             <SpeedDial
                 isOpen={open}
