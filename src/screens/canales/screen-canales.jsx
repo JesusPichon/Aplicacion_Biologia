@@ -4,9 +4,8 @@ import { principal, secundario } from "../../styles/style-colors";
 import styles from "./style-canales";
 import animaciones from '../../components/animaciones/animaciones';
 import Canal from "../../components/Canal";
-import BotonFlotante from "../../components/BotonFlotante";
 import BarraBusqueda from "../../components/BarraBusqueda";
-import { Button, Input } from "@rneui/themed";
+import { Button, Input, SpeedDial } from "@rneui/themed";
 
 const Canales = ({ navigation }) => {
 
@@ -19,7 +18,8 @@ const Canales = ({ navigation }) => {
     //lista de tomas inizializada con un objeto vacio
     const [canales, setCanales] = useState([])
 
-    //visualizar modal 
+    //visualizar modal, speed dial
+    const [open, setOpen] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
 
     //nombre del canal
@@ -36,24 +36,6 @@ const Canales = ({ navigation }) => {
         const nuevoCanal = { nombre: nombreCanal };
         setCanales(canales.concat(nuevoCanal));
     }
-
-
-    //Funciones que se incorporan al boton flotante 
-    const [actions, setActions] = useState([
-        {
-            icon: 'add',
-            title: 'agregar',
-            action: () => {
-                setModalVisible(!modalVisible);
-            }
-        },
-        {
-            icon: 'delete',
-            title: 'eliminar',
-            action: () => console.log("Delete Something!!")
-        }
-    ]);
-
 
     return (
         <View style={{ backgroundColor: secundario, flex: 1 }}>
@@ -93,7 +75,34 @@ const Canales = ({ navigation }) => {
 
             </View>
 
-            <BotonFlotante actions={actions} />
+            <SpeedDial
+                isOpen={open}
+                icon={{ name: 'add', color: 'white' }}
+                openIcon={{ name: 'close', color: 'white' }}
+                color={principal}
+                onOpen={() => setOpen(!open)}
+                onClose={() => setOpen(!open)}>
+
+
+                <SpeedDial.Action
+                    icon={{ name: 'add', color: '#fff' }}
+                    color={principal}
+                    title={'agregar'}
+                    onPress={() => {
+                        setOpen(!open);
+                        setModalVisible(!modalVisible);
+                    }} />
+
+                <SpeedDial.Action
+                    icon={{ name: 'delete', color: '#fff' }}
+                    color={principal}
+                    title={'eliminar'}
+                    onPress={() => {
+                        setOpen(!open);
+                        console.log("Delete Something!!");
+                    }} />
+
+            </SpeedDial>
 
             <Modal
                 animationType="slide"
