@@ -56,6 +56,8 @@ This is one way to run your app — you can also run it directly from within And
 
 => npm install @react-navigation/native-stack
 
+=> npm install react-native-sqlite-storage
+
 ### Rama ReactElements
 
 Se creo la rama de REactElements con motivo de poder utilizar los componentes ya creados por la comunidadd para utilizarlos en nuestra aplicacion 

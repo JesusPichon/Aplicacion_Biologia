@@ -5,8 +5,7 @@ import { secundario, tercero } from "../../styles/style-colors";
 import { useForm } from "react-hook-form";
 import InputCoordenadas from "../../components/coordenadas-select/coordenadasComponent";
 import FechaComponente from "../../components/fecha-select/FechaComponente";
-import  CustomDropdown  from "../../components/listaComponente/ListaComponente";
-
+import CustomDropdown from "../../components/listaComponente/ListaComponente";
 import {
     ScrollView,
     Text,
@@ -50,7 +49,7 @@ const data_Estados = [
     { label: 'Zacatecas', value: 'zacatecas' },
     { label: 'Otro...', value: 'otro' },
 ];
-  
+
 
 const data_Abundancia = [
     { label: 'Abundante', value: 'Abundante' },
@@ -66,7 +65,13 @@ const data_FormaBio = [
     { label: 'Otro...', value: 'otro' },
 ];
 
-const Formulario = () => {
+const Formulario = ({route}) => {
+
+
+    //funcion para agregar tomas 
+
+    const {agregar} = route.params;
+
     const { control, handleSubmit, formState: { errors }, watch, setValue } = useForm({
         Nombre_cientifico: '',
         Familia: '',
@@ -81,8 +86,8 @@ const Formulario = () => {
         Grados_Longitud: '',
         Minutos_Longitud: '',
         Hemisferio_Longitud: '',
-        X:'',
-        Y:'',
+        X: '',
+        Y: '',
         Informacion_ambiental: '',
         Suelo: '',
         Asociada: '',
@@ -110,10 +115,11 @@ const Formulario = () => {
             message: 'El número máximo de caracteres permitidos es 10.'
         }
     };
-      
+
+    //agrega la nueva toma a la lista de tomas 
     const onSubmit = (data) => {
-        console.log(data);
-    };
+        agregar(data);
+    }
 
     return (
         <View style={{
@@ -187,11 +193,11 @@ const Formulario = () => {
                     errors={errors}
                 />
                 <Text style={styles.textP}>Coordenadas:</Text>
-                <InputCoordenadas 
+                <InputCoordenadas
                     control={control}
                     rules={reglasCoordenadas}
                     errors={errors}
-                    name1="Grados_Latitud" 
+                    name1="Grados_Latitud"
                     name2="Minutos_Latitud"
                     name3="Hemisferio_Latitud"
                     name4="Grados_Longitud"

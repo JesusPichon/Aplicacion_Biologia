@@ -1,37 +1,24 @@
-import { Image} from "@rneui/base";
+import { Image } from "@rneui/base";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { principal, secundario } from "../../styles/style-colors";
 import { useState } from "react";
 
-const data = [
-  'Cientifico:',
-  'Familia:',
-  'Nombre local:',
-  'Localidad:',
-  'Municipio:',
-  'Estado:',
-  'Altitud:',
-  'Coordenadas:',
-  'Tipo de vegetacion:',
-];
 
+const Toma = ({ navigation, data , seleccionar, deseleccionar }) => {
 
-
-const Toma = ({ navigation, item, seleccionar }) => {
-
-  const [isSelected, setIsSelected] = useState(false);
+  const [isSelected, setSelected] = useState(false);
 
 
   const style_toma = StyleSheet.create({
     view_toma: {
       flexDirection: 'row',
       margin: 5,
-      backgroundColor: isSelected ? '#1A6CA2' : principal,
+      backgroundColor: isSelected ? secundario : principal,
       borderRadius: 16,
     },
 
     text_card: {
-      fontSize: 12,
+      fontSize: 13,
       color: 'white'
     },
   });
@@ -40,8 +27,12 @@ const Toma = ({ navigation, item, seleccionar }) => {
     <TouchableOpacity
       onPress={() => { navigation.navigate('InformacionToma') }}
       onLongPress={() => {
-        seleccionar(item);
-        setIsSelected(!isSelected);
+        if (isSelected) {
+          deseleccionar(data);
+        } else {
+          seleccionar(data);
+        }
+        setSelected(!isSelected);
       }}>
 
       <View style={style_toma.view_toma}>
@@ -54,14 +45,14 @@ const Toma = ({ navigation, item, seleccionar }) => {
         </View>
 
         <View style={{ flex: 2, padding: 5 }}>
-          {data.map((item, index) => {
-            return (
-              <Text
-                key={index}
-                style={style_toma.text_card}>
-                {item}
-              </Text>);
-          })}
+          <Text style={style_toma.text_card}>Cientifico: {data.Nombre_cientifico}</Text>
+          <Text style={style_toma.text_card}>Familia: {data.Familia}</Text>
+          <Text style={style_toma.text_card}>Localidad: {data.Localidad}</Text>
+          <Text style={style_toma.text_card}>Municipio: {data.Municipio}</Text>
+          <Text style={style_toma.text_card}>Estado: {data.Estado}</Text>
+          <Text style={style_toma.text_card}>Altitud: {data.Altitud}</Text>
+          <Text style={style_toma.text_card}>Coordenadas: ??? </Text>
+          <Text style={style_toma.text_card}>Estado: {data.Tipo_vegetacion}</Text>
         </View>
 
       </View>

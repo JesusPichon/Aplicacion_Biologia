@@ -1,121 +1,137 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, Modal, ImageBackground, Animated } from "react-native";
-import { SearchBar, SpeedDial } from '@rneui/themed';
-import { principal, secundario, tercero } from "../../styles/style-colors";
+import { View, Text, TouchableOpacity, Animated, Modal, TextInput } from "react-native";
+import { principal, secundario } from "../../styles/style-colors";
 import styles from "./style-canales";
 import animaciones from '../../components/animaciones/animaciones';
-
+import Canal from "../../components/Canal";
+import BarraBusqueda from "../../components/BarraBusqueda";
+import { Button, SpeedDial } from "@rneui/themed";
 
 const Canales = ({ navigation }) => {
-    // animaciones
+
+     // animaciones
     const {
         unoAnim,
-        translateAnimDOWN,
-        translateAnimUP,
         startAnimations,
     } = animaciones();
 
+    //lista de tomas inizializada con un objeto vacio
+    const [canales, setCanales] = useState([]);
+
+    //visualizar modal, speed dial
+    const [open, setOpen] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
+
+     //nombre del canal
+    const [nombreCanal, setNombreCanal] = useState('');
 
     useEffect(() => {
         startAnimations();
-    }, []);
+    }, [canales]);
 
-    const [open, setOpen] = useState(false);
-    const [passwordModalVisible, setPasswordModalVisible] = useState(false);
-    const [password, setPassword] = useState("");
-    const correctPassword = "Soyeladmin"; // Reemplaza con tu contraseña
+    //agregar canales 
+    const agregarCanal = (nombreCanal) => {
+        const nuevoCanal = { nombre: nombreCanal };
+        setCanales(canales.concat(nuevoCanal));
+    }
 
-    const handleSpeedDialPress = () => {
-        // Puedes cambiar la lógica aquí para requerir la contraseña
-        if (password === correctPassword) {
-            setOpen(!open);
-            handleClosePasswordModal(); // Agrega esta línea para cerrar el cuadro de diálogo
-        } else {
-            setPassword("");
-            setPasswordModalVisible(true);
-        }
-    };
-
-    const handleClosePasswordModal = () => {
-        setPassword("");
-        setPasswordModalVisible(false);
+    const guardarTexto = () => {
+       // console.log('Texto guardado:', nombreCanal);
+        agregarCanal(nombreCanal);
+        setModalVisible(false);
     };
 
     return (
         <View style={{ backgroundColor: secundario, flex: 1 }}>
-
-            <Animated.View style={{ opacity: unoAnim}}>
-                <SearchBar
-                    placeholder="Busqueda del Grupo"
-                    searchIcon={null}
-                    containerStyle={{ backgroundColor: secundario, borderColor: secundario }}
-                    inputContainerStyle={{ backgroundColor: 'white', borderRadius: 20 }}
-                    inputStyle={{ backgroundColor: 'white'}}
-                />
+            <Animated.View style={{ opacity: unoAnim }}>
+                <BarraBusqueda titulo={'Buscar grupo'} />
             </Animated.View>
 
-            <View style={[styles.container, styles.fondoT, { alignItems: 'center' }]}>
 
-
-            <Animated.View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginBottom: 32, transform: [{ scale: unoAnim}] }}>
-
-                <View style={[styles.cardVertical, styles.fondoT, { width: '48%' }]}>
-                    <View style={[styles.cardVImagen]}>
-                        <ImageBackground source={{ uri: 'https://seeklogo.com/images/B/benemerita-universidad-autonoma-de-puebla-logo-08A9E090F7-seeklogo.com.png' }}
-                        resizeMode="cover" style={styles.image}> 
-                        </ImageBackground>
-                    </View>
-                    <TouchableOpacity style={[styles.botongrupo, styles.fondoP]}
-                        onPress={() => { navigation.navigate('Tomas') }}>
-                        <Text style={[styles.textT, { textAlign: 'center', fontWeight: 'bold' }]}>Canal 1</Text>
-                    </TouchableOpacity>
-                    </View>
-                </Animated.View>
+              {/* Nueva sección con los botones en fila */}
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity style={[styles.fusionar, styles.fondoT]}>
+                    <Text style={[styles.textP, { textAlign: 'center', fontWeight: 'bold' }]}>FUSIONAR</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.exportar, styles.fondoT]}>
+                    <Text style={[styles.textP, { textAlign: 'center', fontWeight: 'bold' }]}>EXPORTAR/IMPORTAR</Text>
+                </TouchableOpacity>
             </View>
 
-            <SpeedDial //boton especial para dos botones mas.
+            <View style={[styles.container2, styles.fondoT]}>
+            </View>
+
+
+             {/* visualizacion de canales */}
+            <View style={[styles.container, styles.fondoT, { alignItems: 'center' }]}>
+                <View style={[styles.container1, styles.fondoT]}>
+                </View>
+
+                {canales.map((canal, index) => {
+                    return (
+                        <Canal
+                            key={index}
+                            animacion={unoAnim}
+                            navigation={navigation}
+                            informacion={canal} />
+                    )
+                })}
+
+            </View>
+
+
+                {/* Boton flotante */}
+            <SpeedDial
                 isOpen={open}
-                icon={{ name: 'edit', color: '#fff' }}
-                openIcon={{ name: 'close', color: '#fff' }}
-                color= '#01395E'
-                onOpen={() => handleSpeedDialPress()}
-                onClose={() => handleSpeedDialPress()}
-            >
+                icon={{ name: 'add', color: 'white' }}
+                openIcon={{ name: 'close', color: 'white' }}
+                color={principal}
+                onOpen={() => setOpen(!open)}
+                onClose={() => setOpen(!open)}>
+
                 <SpeedDial.Action
-                    icon={{ name: 'add', color: tercero }}
-                    color= '#01395E'
-                    title="Crear"
-                    onPress={() => console.log('Add Something')}
-                />
+                    icon={{ name: 'add', color: '#fff' }}
+                    color={principal}
+                    title={'agregar'}
+                    onPress={() => {
+                        setOpen(!open);
+                        setModalVisible(!modalVisible);
+                    }} />
+
                 <SpeedDial.Action
-                    icon={{ name: 'delete', color: tercero }}
-                    color= '#01395E'
-                    title="Eliminar"
-                    onPress={() => console.log('Delete Something')}
-                />
+                    icon={{ name: 'delete', color: '#fff' }}
+                    color={principal}
+                    title={'eliminar'}
+                    onPress={() => {
+                        setOpen(!open);
+                        console.log("Delete Something!!");
+                    }} />
+
             </SpeedDial>
 
-            <Modal  //la ventana para solicitar la contraseña
+                <Modal  //Ventana flotante 
                 animationType="slide"
                 transparent={true}
-                visible={passwordModalVisible}
-                onRequestClose={handleClosePasswordModal}
-            >
-                <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                    <View style={{ backgroundColor: principal, padding: 20, borderRadius: 10 }}>
-                        <Text>Ingrese la contraseña:</Text>
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(!modalVisible)}>
+
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                    <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10}}>
                         <TextInput
-                            secureTextEntry
-                            style={{ borderBottomWidth: 1, marginBottom: 10 }}
-                            value={password}
-                            onChangeText={(text) => setPassword(text)}
+                            placeholder="Ingrese el nombre del grupo"
+                            style={{ borderWidth: 1, borderColor: 'gray', padding: 10, marginBottom: 10, borderRadius: 5, color: 'black' }}
+                            onChangeText={(text) => setNombreCanal(text)}
                         />
-                        <TouchableOpacity onPress={handleSpeedDialPress}>
-                            <Text style={{ color: tercero }}>Aceptar</Text>
+                        <TouchableOpacity
+                            style={{ backgroundColor: principal , padding: 10, borderRadius: 5 }}
+                            onPress={guardarTexto}
+                        >
+                            <Text style={{ color: 'white', textAlign: 'center' }}>Guardar</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
             </Modal>
+
         </View>
     );
 };

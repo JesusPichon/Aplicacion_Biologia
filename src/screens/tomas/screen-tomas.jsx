@@ -1,100 +1,89 @@
-import { SearchBar, SpeedDial } from "@rneui/themed";
 import { useState } from "react";
 import { ScrollView, View } from 'react-native';
+import { SpeedDial } from "@rneui/themed";
 import styles from "../../styles/style-app";
-import { secundario } from '../../styles/style-colors';
+import { principal, secundario } from '../../styles/style-colors';
 import Toma from "../../components/Toma";
 import imprimir from "../../components/imprimir/imprimir";
+import BarraBusqueda from "../../components/BarraBusqueda";
 
-
-const toma = {
-    nombreCientifico: "",
-    Familia: "America",
-    nombreLocal: "Bugambilia",
-    direccion: {
-        localidad: "CU BUAP",
-        municipio: "Puebla",
-        estado: "Puebla"
-    },
-    coordenadas: "-98.20, 19.002'N",
-    tipoVegetacion: "Bosque urbano"
-}
-
+//Cambiar el componente boton flotante al speed dial
 
 const Tomas = ({ navigation }) => {
 
-
-    const [listaTomas, setListaTomas] = useState([toma]);
+    const [listaTomas, setListaTomas] = useState([]);
     const [listPrint, setListPrint] = useState([]);
     const [open, setOpen] = useState(false);
 
+    const seleccionar = (toma) => {
+        setListPrint([...listPrint, toma]);
+    }
 
-    const seleccionar = (item) => {
-        setListPrint([...listPrint, item]);
+    const deseleccionar = (toma) => {
+        setListPrint(listPrint.filter((item) => item !== toma));
     }
 
     const agregar = (item) => {
         setListaTomas([...listaTomas, item]);
     }
 
-
     return (
         <View style={{ flex: 1, backgroundColor: secundario }}>
 
-            <SearchBar
-                placeholder="Date"
-                containerStyle={{ backgroundColor: secundario, borderColor: secundario }}
-                inputContainerStyle={{ backgroundColor: 'white', borderRadius: 20 }}
-                inputStyle={{ backgroundColor: 'white' }} />
+            <BarraBusqueda titulo={'Date'} />
 
             <View style={[styles.container, styles.fondoT]}>
                 <ScrollView>
                     {
                         listaTomas.map((item, index) => {
                             return (
-                                <Toma key={index} item={item} navigation={navigation} seleccionar={seleccionar} />
+                                <Toma
+                                    key={index}
+                                    data={item}
+                                    navigation={navigation}
+                                    seleccionar={seleccionar}
+                                    deseleccionar={deseleccionar} />
                             );
                         })
                     }
                 </ScrollView>
             </View>
 
-
             <SpeedDial
                 isOpen={open}
                 icon={{ name: 'add', color: 'white' }}
                 openIcon={{ name: 'close', color: 'white' }}
-                color='#00B5DF'
+                color={principal}
                 onOpen={() => setOpen(!open)}
                 onClose={() => setOpen(!open)}>
 
-                <SpeedDial.Action
-                    title='add'
-                    color='#00B5DF'
-                    icon={{ name: 'add', color: 'white' }}
-                    onPress={() => { navigation.navigate('Formulario') }}
-                />
 
                 <SpeedDial.Action
-                    title='print'
-                    color='#00B5DF'
-                    icon={{ name: 'print', color: 'white' }}
+                    icon={{ name: 'add', color: '#fff' }}
+                    color={principal}
+                    title={'agregar'}
+                    onPress={() => navigation.navigate('Formulario', { agregar })} />
+
+                <SpeedDial.Action
+                    icon={{ name: 'print', color: '#fff' }}
+                    color={principal}
+                    title={'imprimir'}
                     onPress={() => {
                         setOpen(!open);
                         imprimir(listPrint);
-                    }}
-                />
+                    }} />
 
                 <SpeedDial.Action
-                    title='listar'
-                    color='#00B5DF'
-                    icon={{ name: 'edit', color: 'white' }}
+                    icon={{ name: 'list', color: '#fff' }}
+                    color={principal}
+                    title={'listar'}
                     onPress={() => {
-                        console.log(listPrint)
-                    }}
-                />
+                        setOpen(!open);
+                        console.log(listPrint);
+                    }} />
 
             </SpeedDial>
+
         </View>
     );
 }
