@@ -6,6 +6,7 @@ import animaciones from '../../components/animaciones/animaciones';
 import Canal from "../../components/Canal";
 import BarraBusqueda from "../../components/BarraBusqueda";
 import { Button, SpeedDial } from "@rneui/themed";
+import  { selectCsv }  from "../../services/functions/import-csv"
 
 const Canales = ({ navigation }) => {
 
@@ -53,7 +54,9 @@ const Canales = ({ navigation }) => {
                 <TouchableOpacity style={[styles.fusionar, styles.fondoT]}>
                     <Text style={[styles.textP, { textAlign: 'center', fontWeight: 'bold' }]}>FUSIONAR</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.exportar, styles.fondoT]}>
+                <TouchableOpacity 
+                    style={[styles.exportar, styles.fondoT]}
+                    onPress={selectCsv}>
                     <Text style={[styles.textP, { textAlign: 'center', fontWeight: 'bold' }]}>EXPORTAR/IMPORTAR</Text>
                 </TouchableOpacity>
             </View>
