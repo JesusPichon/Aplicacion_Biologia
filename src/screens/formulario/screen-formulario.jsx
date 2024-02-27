@@ -102,6 +102,7 @@ const Formulario = ({route}) => {
         Fecha: '',
         Determino: '',
         Otros_datos: '',
+        Tipo_vegetacion: '',
     });
 
     const reglasCoordenadas = {

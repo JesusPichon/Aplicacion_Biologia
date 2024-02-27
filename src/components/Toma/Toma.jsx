@@ -52,7 +52,7 @@ const Toma = ({ navigation, data , seleccionar, deseleccionar }) => {
           <Text style={style_toma.text_card}>Estado: {data.Estado}</Text>
           <Text style={style_toma.text_card}>Altitud: {data.Altitud}</Text>
           <Text style={style_toma.text_card}>Coordenadas: ??? </Text>
-          <Text style={style_toma.text_card}>Estado: {data.Tipo_vegetacion}</Text>
+          <Text style={style_toma.text_card}>Tipo de vegetación: {data.Tipo_vegetacion}</Text>
         </View>
 
       </View>
