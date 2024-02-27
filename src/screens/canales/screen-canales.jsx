@@ -16,7 +16,7 @@ const Canales = ({ navigation}) => {
     } = animaciones();
 
     //lista de tomas inizializada con un objeto vacio
-    const [canales, setCanales] = useState([])
+    const [canales, setCanales] = useState([]);
 
     //visualizar modal, speed dial
     const [open, setOpen] = useState(false);
@@ -64,6 +64,7 @@ const Canales = ({ navigation}) => {
                 <View style={[styles.container1, styles.fondoT]}>
                 </View>
 
+                {/* Agregando nombre del canal  */}
 
                 {canales.map((canal, index) => {
                     return (
@@ -71,7 +72,8 @@ const Canales = ({ navigation}) => {
                             key={index}
                             animacion={unoAnim}
                             navigation={navigation}
-                            informacion={canal} />
+                            informacion={canal}
+                            nombre={nombreCanal} />
                     )
                 })}
 

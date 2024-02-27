@@ -3,7 +3,7 @@ import styles from "../../styles/style-app";
 
 //Revisar por que no se ve la imagen del canal 
 
-const Canal = ({ animacion, navigation, informacion }) => {
+const Canal = ({ animacion, navigation, informacion, nombre }) => {
 
 
     return (
@@ -16,7 +16,7 @@ const Canal = ({ animacion, navigation, informacion }) => {
                     </ImageBackground>
                 </View>
                 <TouchableOpacity style={[styles.botongrupo, styles.fondoP]}
-                    onPress={() => { navigation.navigate('Tomas') }}>
+                    onPress={() => { navigation.navigate('Tomas', {nombre}) }}>
                     <Text style={[styles.textT, { textAlign: 'center', fontWeight: 'bold' }]}>
                         {informacion.nombre}
                     </Text>

@@ -1,15 +1,17 @@
 import { useState } from "react";
 import { ScrollView, View } from 'react-native';
-import { SpeedDial } from "@rneui/themed";
+import { SpeedDial} from "@rneui/themed";
 import styles from "../../styles/style-app";
 import { principal, secundario } from '../../styles/style-colors';
 import Toma from "../../components/Toma";
 import imprimir from "../../components/imprimir/imprimir";
 import BarraBusqueda from "../../components/BarraBusqueda";
+import { Text } from "react-native-elements";
 
 //Cambiar el componente boton flotante al speed dial
 
-const Tomas = ({ navigation }) => {
+//la varible nombreCanal obtiene el nombre de la pantalla canales 
+const Tomas = ({ navigation, route}) => {
 
     const [listaTomas, setListaTomas] = useState([]);
     const [listPrint, setListPrint] = useState([]);
@@ -30,9 +32,14 @@ const Tomas = ({ navigation }) => {
     return (
         <View style={{ flex: 1, backgroundColor: secundario }}>
 
-            <BarraBusqueda titulo={'Date'} />
+            <BarraBusqueda titulo={'Fecha'} />
 
             <View style={[styles.container, styles.fondoT]}>
+
+                {/* Para acceder a la variable nombre del canal => route.params.nombre */}
+
+                {/* Ejemplo => <Text>{route.params.nombre}</Text>*/}
+
                 <ScrollView>
                     {
                         listaTomas.map((item, index) => {
