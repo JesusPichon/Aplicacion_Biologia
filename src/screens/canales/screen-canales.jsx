@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Animated, Modal } from "react-native";
+import { View, Text, TouchableOpacity, Animated, Modal, TextInput } from "react-native";
 import { principal, secundario } from "../../styles/style-colors";
 import styles from "./style-canales";
 import animaciones from '../../components/animaciones/animaciones';
 import Canal from "../../components/Canal";
 import BarraBusqueda from "../../components/BarraBusqueda";
-import { Button, Input, SpeedDial } from "@rneui/themed";
+import { Button, SpeedDial } from "@rneui/themed";
 
-const Canales = ({ navigation}) => {
+const Canales = ({ navigation }) => {
 
-    // animaciones
+     // animaciones
     const {
         unoAnim,
         startAnimations,
@@ -22,14 +22,12 @@ const Canales = ({ navigation}) => {
     const [open, setOpen] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
 
-    //nombre del canal
+     //nombre del canal
     const [nombreCanal, setNombreCanal] = useState('');
-
 
     useEffect(() => {
         startAnimations();
     }, [canales]);
-
 
     //agregar canales 
     const agregarCanal = (nombreCanal) => {
@@ -37,16 +35,21 @@ const Canales = ({ navigation}) => {
         setCanales(canales.concat(nuevoCanal));
     }
 
+    const guardarTexto = () => {
+       // console.log('Texto guardado:', nombreCanal);
+        agregarCanal(nombreCanal);
+        setModalVisible(false);
+    };
+
     return (
         <View style={{ backgroundColor: secundario, flex: 1 }}>
-
             <Animated.View style={{ opacity: unoAnim }}>
                 <BarraBusqueda titulo={'Buscar grupo'} />
             </Animated.View>
 
-            {/* Nueva sección con los botones en fila */}
-            <View style={styles.buttonContainer}>
 
+              {/* Nueva sección con los botones en fila */}
+            <View style={styles.buttonContainer}>
                 <TouchableOpacity style={[styles.fusionar, styles.fondoT]}>
                     <Text style={[styles.textP, { textAlign: 'center', fontWeight: 'bold' }]}>FUSIONAR</Text>
                 </TouchableOpacity>
@@ -58,8 +61,8 @@ const Canales = ({ navigation}) => {
             <View style={[styles.container2, styles.fondoT]}>
             </View>
 
-            {/* visualizacion de canales */}
 
+             {/* visualizacion de canales */}
             <View style={[styles.container, styles.fondoT, { alignItems: 'center' }]}>
                 <View style={[styles.container1, styles.fondoT]}>
                 </View>
@@ -80,8 +83,7 @@ const Canales = ({ navigation}) => {
             </View>
 
 
-            {/* Boton flotante */}
-
+                {/* Boton flotante */}
             <SpeedDial
                 isOpen={open}
                 icon={{ name: 'add', color: 'white' }}
@@ -89,7 +91,6 @@ const Canales = ({ navigation}) => {
                 color={principal}
                 onOpen={() => setOpen(!open)}
                 onClose={() => setOpen(!open)}>
-
 
                 <SpeedDial.Action
                     icon={{ name: 'add', color: '#fff' }}
@@ -111,34 +112,27 @@ const Canales = ({ navigation}) => {
 
             </SpeedDial>
 
-            <Modal
+                <Modal  //Ventana flotante 
                 animationType="slide"
                 transparent={true}
                 visible={modalVisible}
                 onRequestClose={() => setModalVisible(!modalVisible)}>
 
-                <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                    <View style={{ backgroundColor: principal, padding: 10, borderRadius: 10 }}>
-                        
-                        <Text style={{ color: 'white' }}> Nombre: </Text>
-
-                        <Input
-                            placeholder="Canal"
-                            inputStyle={{ color: 'white' }}
-                            containerStyle={{ width: '20' }}
-                            onChangeText={(text) => setNombreCanal(text)} />
-
-                        <Button
-                            title={'Aceptar'}
-                            buttonStyle={{ backgroundColor: principal }}
-                            onPress={() => {
-                                agregarCanal(nombreCanal);
-                                setModalVisible(!modalVisible)
-                            }} />
-
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                    <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10}}>
+                        <TextInput
+                            placeholder="Ingrese el nombre del grupo"
+                            style={{ borderWidth: 1, borderColor: 'gray', padding: 10, marginBottom: 10, borderRadius: 5, color: 'black' }}
+                            onChangeText={(text) => setNombreCanal(text)}
+                        />
+                        <TouchableOpacity
+                            style={{ backgroundColor: principal , padding: 10, borderRadius: 5 }}
+                            onPress={guardarTexto}
+                        >
+                            <Text style={{ color: 'white', textAlign: 'center' }}>Guardar</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
-
             </Modal>
 
         </View>

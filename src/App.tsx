@@ -4,6 +4,7 @@ import Formulario from "./screens/formulario";
 import InformacionToma from "./screens/info";
 import Canales from "./screens/canales";
 import Tomas from "./screens/tomas";
+import Editar from "./screens/editar";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -19,6 +20,7 @@ const App = () => {
         <Stack.Screen name="Tomas" component={Tomas} />
         <Stack.Screen name="InformacionToma" component={InformacionToma} />
         <Stack.Screen name="Canales" component={Canales} />
+        <Stack.Screen name="Editar" component={Editar} />
       </Stack.Navigator>
     </NavigationContainer>
   );

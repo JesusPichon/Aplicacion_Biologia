@@ -25,7 +25,7 @@ const Toma = ({ navigation, data , seleccionar, deseleccionar }) => {
 
   return (
     <TouchableOpacity
-      onPress={() => { navigation.navigate('InformacionToma') }}
+      onPress={() => { navigation.navigate('InformacionToma', { data }) }}
       onLongPress={() => {
         if (isSelected) {
           deseleccionar(data);

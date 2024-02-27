@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../../styles/style-app";
 import TextInputCustom from "../../components/textInputCustome";
-import { secundario, tercero } from "../../styles/style-colors";
+import { principal, secundario, tercero } from "../../styles/style-colors";
 import { useForm } from "react-hook-form";
+import { Button} from '@rneui/themed';
 import InputCoordenadas from "../../components/coordenadas-select/coordenadasComponent";
 import FechaComponente from "../../components/fecha-select/FechaComponente";
-import CustomDropdown from "../../components/listaComponente/ListaComponente";
+import  CustomDropdown  from "../../components/listaComponente/ListaComponente";
+
 import {
     ScrollView,
     Text,
@@ -49,7 +51,7 @@ const data_Estados = [
     { label: 'Zacatecas', value: 'zacatecas' },
     { label: 'Otro...', value: 'otro' },
 ];
-
+  
 
 const data_Abundancia = [
     { label: 'Abundante', value: 'Abundante' },
@@ -65,45 +67,28 @@ const data_FormaBio = [
     { label: 'Otro...', value: 'otro' },
 ];
 
-const Formulario = ({route}) => {
+const FormularioEdit = ({ route }) => {
+    const { control, handleSubmit, formState: { errors }, watch, setValue } = useForm();
+    const [datosEditados, setDatosEditados] = useState({});
+    useEffect(() => {
+        // Valores de ejemplo, puedes cambiarlos por los valores reales
+        const datosIniciales = route.params.data;
+
+        // Establecer los valores iniciales en el estado del formulario
+        Object.keys(datosIniciales).forEach(key => {
+            if (key === 'Fecha') {
+                // Separar la fecha en partes
+                const partesFecha = datosIniciales[key].split('/');
+                // Crear un objeto Date con el formato MM/DD/AA
+                const fechaAcomodada = new Date(partesFecha[2], partesFecha[0] - 1, partesFecha[1]);
+                setValue(key, fechaAcomodada);
+            }else{
+                setValue(key, datosIniciales[key]);
+            }
+        });
+    }, []); // Se ejecuta solo una vez al cargar el componente
 
 
-    //funcion para agregar tomas 
-
-    const {agregar} = route.params;
-
-    const { control, handleSubmit, formState: { errors }, watch, setValue } = useForm({
-        Nombre_cientifico: '',
-        Familia: '',
-        Nombre_local: '',
-        Estado: '',
-        Municipio: '',
-        Localidad: '',
-        Altitud: '',
-        Grados_Latitud: '',
-        Minutos_Latitud: '',
-        Hemisferio_Latitud: '',
-        Grados_Longitud: '',
-        Minutos_Longitud: '',
-        Hemisferio_Longitud: '',
-        X: '',
-        Y: '',
-        Informacion_ambiental: '',
-        Suelo: '',
-        Asociada: '',
-        Abundancia: '',
-        Forma_biologica: '',
-        Tamano: '',
-        Flor: '',
-        Fruto: '',
-        Usos: '',
-        Colector_es: '',
-        No_colecta: '',
-        Fecha: '',
-        Determino: '',
-        Otros_datos: '',
-        Tipo_vegetacion: '',
-    });
 
     const reglasCoordenadas = {
         required: 'Este campo es requerido.',
@@ -116,11 +101,16 @@ const Formulario = ({route}) => {
             message: 'El número máximo de caracteres permitidos es 10.'
         }
     };
-
-    //agrega la nueva toma a la lista de tomas 
+      
     const onSubmit = (data) => {
-        agregar(data);
-    }
+        console.log(data);
+    };
+
+    const handleEditar = () => {
+        const datosEditados = watch(); // Obtener los datos editados del formulario
+        setDatosEditados(datosEditados); // Actualizar el estado con los datos editados
+        console.log("Datos editados:", datosEditados); // Mostrar los datos editados por consola
+    };
 
     return (
         <View style={{
@@ -194,11 +184,11 @@ const Formulario = ({route}) => {
                     errors={errors}
                 />
                 <Text style={styles.textP}>Coordenadas:</Text>
-                <InputCoordenadas
+                <InputCoordenadas 
                     control={control}
                     rules={reglasCoordenadas}
                     errors={errors}
-                    name1="Grados_Latitud"
+                    name1="Grados_Latitud" 
                     name2="Minutos_Latitud"
                     name3="Hemisferio_Latitud"
                     name4="Grados_Longitud"
@@ -332,12 +322,14 @@ const Formulario = ({route}) => {
                     maxLines={20} // Indica el numero de lineas maximo en el textinput (Solo si multiline = true)
                     tooltip={"Aqui va un mensaje de ayuda"}
                 />
-                <TouchableOpacity
-                    style={[styles.bGuardar, styles.fondoP]}
-                    onPress={handleSubmit(onSubmit)}
-                >
-                    <Text style={styles.textT}>Guardar</Text>
-                </TouchableOpacity>
+                <Button 
+                    type="solid"
+                    onPress={handleEditar}
+                    title="  Editar" 
+                    buttonStyle={{ backgroundColor: principal}}
+                    icon={{name: 'edit', color: tercero}}
+                    titleStyle={{ color: tercero }}
+                />
                 <Text>   </Text>
             </ScrollView>
             {/* </KeyboardAvoidingView> */}
@@ -345,4 +337,4 @@ const Formulario = ({route}) => {
     )
 }
 
-export default Formulario;
+export default FormularioEdit;

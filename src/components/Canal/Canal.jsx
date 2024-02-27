@@ -1,15 +1,15 @@
 import { View, Text, TouchableOpacity, Animated, ImageBackground } from "react-native";
 import styles from "../../styles/style-app";
+import stylesCanales from "../../screens/canales/style-canales";
 
-//Revisar por que no se ve la imagen del canal 
 
 const Canal = ({ animacion, navigation, informacion, nombre }) => {
 
 
     return (
         <Animated.View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginBottom: 32, transform: [{ scale: animacion }] }}>
-            <View style={[styles.cardVertical, styles.fondoT, { width: '48%' }]}>
-                <View style={[styles.cardVImagen]}>
+            <View style={[stylesCanales.cardVertical, styles.fondoT, { width: '48%' }]}>
+                <View style={[stylesCanales.cardVImagen]}>
                     <ImageBackground source={require('../../assets/images/Campo_flores.jpg')}
                         resizeMode="cover"
                         style={styles.image}>
