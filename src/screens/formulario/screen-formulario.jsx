@@ -69,6 +69,7 @@ const Formulario = ({route}) => {
 
 
     //funcion para agregar tomas 
+    const nombreCanal = route.params.nombreCanal;
 
     const {agregar} = route.params;
 

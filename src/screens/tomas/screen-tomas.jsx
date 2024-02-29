@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { ScrollView, View } from 'react-native';
-import { SpeedDial} from "@rneui/themed";
+import { SpeedDial } from "@rneui/themed";
 import styles from "../../styles/style-app";
 import { principal, secundario } from '../../styles/style-colors';
 import Toma from "../../components/Toma";
 import imprimir from "../../components/imprimir/imprimir";
 import BarraBusqueda from "../../components/BarraBusqueda";
-import { Text } from "react-native-elements";
 
-//Cambiar el componente boton flotante al speed dial
 
-//la varible nombreCanal obtiene el nombre de la pantalla canales 
-const Tomas = ({ navigation, route}) => {
+const Tomas = ({ navigation, route }) => {
+
+    //variable que obtine el nombre del canal 
+    const nombreCanal = route.params.nombre;
 
     const [listaTomas, setListaTomas] = useState([]);
     const [listPrint, setListPrint] = useState([]);
@@ -69,7 +69,10 @@ const Tomas = ({ navigation, route}) => {
                     icon={{ name: 'add', color: '#fff' }}
                     color={principal}
                     title={'agregar'}
-                    onPress={() => navigation.navigate('Formulario', { agregar })} />
+                    onPress={() => {
+                        setOpen(!open);
+                        navigation.navigate('Formulario', { agregar, nombreCanal })
+                    }} />
 
                 <SpeedDial.Action
                     icon={{ name: 'print', color: '#fff' }}
@@ -78,15 +81,6 @@ const Tomas = ({ navigation, route}) => {
                     onPress={() => {
                         setOpen(!open);
                         imprimir(listPrint);
-                    }} />
-
-                <SpeedDial.Action
-                    icon={{ name: 'list', color: '#fff' }}
-                    color={principal}
-                    title={'listar'}
-                    onPress={() => {
-                        setOpen(!open);
-                        console.log(listPrint);
                     }} />
 
             </SpeedDial>
