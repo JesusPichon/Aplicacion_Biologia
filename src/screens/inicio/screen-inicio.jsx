@@ -2,9 +2,8 @@ import React, { useEffect } from 'react';
 import styles from '../../styles/style-app';
 import animaciones from '../../components/animaciones/animaciones';
 import { tercero } from '../../styles/style-colors';
-import { crearTablas } from '../../services/database/SQLite'
+import { crearTablas } from '../../services/database/SQLite';
 import { PermissionsAndroid } from 'react-native';
-
 import {
     Text,
     View,
@@ -49,6 +48,7 @@ const Inicio = ({ navigation }) => {
 
 
     useEffect(() => { 
+        crearTablas();
         requestWritePermission();
         startAnimations();
     }, []);

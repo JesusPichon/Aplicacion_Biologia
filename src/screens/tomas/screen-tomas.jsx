@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ScrollView, View } from 'react-native';
 import { SpeedDial } from "@rneui/themed";
 import styles from "../../styles/style-app";
@@ -6,6 +6,7 @@ import { principal, secundario } from '../../styles/style-colors';
 import Toma from "../../components/Toma";
 import imprimir from "../../components/imprimir/imprimir";
 import BarraBusqueda from "../../components/BarraBusqueda";
+import { verTomas, consultarIdGrupo} from "../../services/database/SQLite";
 
 
 const Tomas = ({ navigation, route }) => {
@@ -28,6 +29,29 @@ const Tomas = ({ navigation, route }) => {
     const agregar = (item) => {
         setListaTomas([...listaTomas, item]);
     }
+
+    const mostrarTomas = () => {
+        consultarIdGrupo(nombreCanal).then((id) => {
+            console.log(id);
+
+            verTomas(id).then(tomas => {
+                //Agregar aqui la funcionalidad para utilizar el resultado obtenido
+                console.log(tomas);
+            }).catch(error => {
+                // Maneja el error aquí
+                console.error(error);
+            });
+
+        }).catch((error) => {
+            console.log(error);
+        });
+
+        
+    };
+
+    useEffect(() => { 
+        mostrarTomas();
+    }, []);
 
     return (
         <View style={{ flex: 1, backgroundColor: secundario }}>
