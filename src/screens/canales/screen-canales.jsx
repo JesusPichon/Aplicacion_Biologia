@@ -9,6 +9,8 @@ import { Button, SpeedDial } from "@rneui/themed";
 import { insertarGrupos, verGrupos } from "../../services/database/SQLite";
 
 const Canales = ({ navigation }) => {
+    const [grupos, setGrupos] = useState([]);
+
 
      // animaciones
     const {
@@ -31,6 +33,7 @@ const Canales = ({ navigation }) => {
         .then(result => {
             //Agregar aqui la funcionalidad para utilizar el resultado obtenido
             console.log('Grupos obtenidos: ', result);
+            setGrupos(result);
         })
         .catch(error => {
             console.error('Ocurrió un error al obtener los grupos:', error);
@@ -84,14 +87,15 @@ const Canales = ({ navigation }) => {
 
                 {/* Agregando nombre del canal  */}
 
-                {canales.map((canal, index) => {
+                {grupos.map((canal, index) => {
+                    console.log(grupos)
                     return (
                         <Canal
                             key={index}
                             animacion={unoAnim}
                             navigation={navigation}
-                            informacion={canal}
-                            nombre={nombreCanal} />
+                            informacion={grupos[index]}
+                            nombre={grupos[index]} />
                     )
                 })}
 
