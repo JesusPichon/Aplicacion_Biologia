@@ -51,7 +51,7 @@ const InfColecta = ({ navigation, route }) => {
         Usos: route.params.data.Usos,
         Colector_es: route.params.data.Colector_es,
         No_colecta: route.params.data.No_colecta,
-        Fecha: route.params.data.Fecha.toLocaleDateString(),
+        Fecha: route.params.data.Fecha,
         Determino: route.params.data.Determino,
         Otros_datos: route.params.data.Otros_datos,
         Tipo_vegetacion: route.params.data.Tipo_vegetacion,

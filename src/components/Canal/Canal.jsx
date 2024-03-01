@@ -18,7 +18,7 @@ const Canal = ({ animacion, navigation, informacion, nombre }) => {
                 <TouchableOpacity style={[styles.botongrupo, styles.fondoP]}
                     onPress={() => { navigation.navigate('Tomas', {nombre}) }}>
                     <Text style={[styles.textT, { textAlign: 'center', fontWeight: 'bold' }]}>
-                        {informacion.nombre}
+                        {informacion}
                     </Text>
                 </TouchableOpacity>
             </View>
