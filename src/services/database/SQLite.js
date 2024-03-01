@@ -1,4 +1,4 @@
-import {openDatabase, deleteDatabase} from "react-native-sqlite-storage";
+import {openDatabase} from "react-native-sqlite-storage";
 
 let db = openDatabase({
     name: 'MisTomas.db',
@@ -271,3 +271,53 @@ export const verTomas = (grupoId) => {
     console.error(error);
   });*/
 ///////////////////////////////////////////////////////////////////////////
+
+export const editarToma = (tomasData, id) => {
+  db.transaction(tx => {
+    tx.executeSql(
+      `UPDATE TOMAS SET 
+        nombre_cientifico = ?,
+        familia = ?,
+        nombre_local = ?,
+        estado = ?,
+        municipio = ?,
+        localidad = ?,
+        altitud = ?,
+        grados_Latitud = ?,
+        minutos_Latitud = ?,
+        hemisferio_Latitud = ?,
+        grados_Longitud = ?,
+        minutos_Longitud = ?,
+        hemisferio_Longitud = ?,
+        x = ?,
+        y = ?,
+        tipo_vegetacion = ?,
+        informacion_ambiental = ?,
+        suelo = ?,
+        asociada = ?,
+        abundancia = ?,
+        forma_biologica = ?,
+        tamano = ?,
+        flor = ?,
+        fruto = ?,
+        usos = ?,
+        colector_es = ?,
+        no_colecta = ?,
+        fecha = ?,
+        determino = ?,
+        otros_datos = ?
+      WHERE id = ?`,
+      [...Object.values(tomasData), id], // Convierte el objeto en un array de valores y agrega el grupo para identificar la toma a editar
+      (_, results) => {
+        if (results.rowsAffected > 0) {
+          console.log(`La información de la toma ha sido actualizada correctamente en la tabla TOMAS.`);
+        } else {
+          console.log(`Error: No se pudo actualizar la información de la toma en la tabla TOMAS.`);
+        }
+      },
+      error => {
+        console.log(`Error al intentar editar la toma: ${error.message}`);
+      }
+    );
+  });
+};
