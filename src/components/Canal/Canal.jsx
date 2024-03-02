@@ -3,7 +3,7 @@ import styles from "../../styles/style-app";
 import stylesCanales from "../../screens/canales/style-canales";
 
 
-const Canal = ({ animacion, navigation, informacion }) => {
+const Canal = ({ animacion, navigation, informacion, nombre }) => {
 
 
     return (
@@ -15,10 +15,10 @@ const Canal = ({ animacion, navigation, informacion }) => {
                         style={styles.image}>
                     </ImageBackground>
                 </View>
-                <TouchableOpacity style={[stylesCanales.botongrupo, styles.fondoP]}
-                    onPress={() => { navigation.navigate('Tomas') }}>
+                <TouchableOpacity style={[styles.botongrupo, styles.fondoP]}
+                    onPress={() => { navigation.navigate('Tomas', {nombre}) }}>
                     <Text style={[styles.textT, { textAlign: 'center', fontWeight: 'bold' }]}>
-                        {informacion.nombre}
+                        {informacion}
                     </Text>
                 </TouchableOpacity>
             </View>

@@ -69,13 +69,22 @@ const data_FormaBio = [
 
 const FormularioEdit = ({ route }) => {
     const { control, handleSubmit, formState: { errors }, watch, setValue } = useForm();
+    const [datosEditados, setDatosEditados] = useState({});
     useEffect(() => {
         // Valores de ejemplo, puedes cambiarlos por los valores reales
         const datosIniciales = route.params.data;
 
         // Establecer los valores iniciales en el estado del formulario
         Object.keys(datosIniciales).forEach(key => {
-            setValue(key, datosIniciales[key]);
+            if (key === 'Fecha') {
+                // Separar la fecha en partes
+                const partesFecha = datosIniciales[key].split('/');
+                // Crear un objeto Date con el formato MM/DD/AA
+                const fechaAcomodada = new Date(partesFecha[2], partesFecha[0] - 1, partesFecha[1]);
+                setValue(key, fechaAcomodada);
+            }else{
+                setValue(key, datosIniciales[key]);
+            }
         });
     }, []); // Se ejecuta solo una vez al cargar el componente
 
@@ -95,6 +104,12 @@ const FormularioEdit = ({ route }) => {
       
     const onSubmit = (data) => {
         console.log(data);
+    };
+
+    const handleEditar = () => {
+        const datosEditados = watch(); // Obtener los datos editados del formulario
+        setDatosEditados(datosEditados); // Actualizar el estado con los datos editados
+        console.log("Datos editados:", datosEditados); // Mostrar los datos editados por consola
     };
 
     return (
@@ -309,7 +324,7 @@ const FormularioEdit = ({ route }) => {
                 />
                 <Button 
                     type="solid"
-                    onPress={() => console.log("eiditando")}
+                    onPress={handleEditar}
                     title="  Editar" 
                     buttonStyle={{ backgroundColor: principal}}
                     icon={{name: 'edit', color: tercero}}

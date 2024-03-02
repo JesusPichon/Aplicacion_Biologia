@@ -5,100 +5,319 @@ let db = openDatabase({
     location: 'default'
 });
 
+export const borrarTablas = (nombreTabla) => {
+  db.transaction(tx => {
+    tx.executeSql(`DROP TABLE IF EXISTS ${nombreTabla}`, [], (_, result) => {
+        console.log(`Tabla ${nombreTabla} eliminada correctamente.`);
+    }, (_, error) => {
+        console.error(`Error al eliminar la tabla ${nombreTabla}: ${error.message}`);
+    });
+});
+};
+
 export const crearTablas = () => {
     let tablesCreatedSuccessfullyCount = 0;
   
     const tableNames = [
-        'TABLA_NOMBRE',
-        'TABLA_DIRECCION',
-        'TABLA_CARACTERISTICAS',
-        'TABLA_INFO_AMBIENTAL',
-        'TABLA_CARACTERISTICAS_INFO',
-        'TABLA_TOMAS'
-      ];
+      'GRUPOS',
+      'TOMAS'
+    ];
     
-      for (const tableName of tableNames) {
-        const tableDefinition = generateTableDefinition(tableName);
+    for (const tableName of tableNames) {
+      const tableDefinition = generateTableDefinition(tableName);
     
-        db.transaction(tx => {
-          tx.executeSql(tableDefinition, [], successCallback(tableName), failureCallback(tableName));
-        });
-      }
+      db.transaction(tx => {
+        tx.executeSql(tableDefinition, [], successCallback(tableName), failureCallback(tableName));
+      });
+    }
     
-      function successCallback(tableName) {
-        return function(_, _results) {
-          console.log(`tabla ${tableName} creada exitosamente`);
-          tablesCreatedSuccessfullyCount++;
+    function successCallback(tableName) {
+      return function(_, _results) {
+        console.log(`tabla ${tableName} creada exitosamente`);
+        tablesCreatedSuccessfullyCount++;
     
-          if (tablesCreatedSuccessfullyCount === tableNames.length) {
-            console.log('Todas las tablas fueron creadas exitosamente!');
-          }
-        };
-      }
+        if (tablesCreatedSuccessfullyCount === tableNames.length) {
+          console.log('Todas las tablas fueron creadas exitosamente!');
+        }
+      };
+    }
     
-      function failureCallback(tableName) {
-        return function(_, error) {
-          console.error(`Error mientras se creaba la tabla "${tableName}": `);
-          console.error(error.message);
-        };
-      }
+    function failureCallback(tableName) {
+      return function(_, error) {
+        console.error(`Error mientras se creaba la tabla "${tableName}": `);
+        console.error(error.message);
+      };
+    }
   
     function generateTableDefinition(tableName) {
       switch (tableName) {
-        case 'TABLA_NOMBRE':
-          return `CREATE TABLE IF NOT EXISTS "TABLA_NOMBRE" (
-            "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-            "nombre"  TEXT,
-            "familia" TEXT,
-            "nombre_local" TEXT)`;
-        case 'TABLA_DIRECCION':
-          return `CREATE TABLE IF NOT EXISTS "TABLA_DIRECCION" (
-            "id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-            "localidad"	TEXT,
-            "municipio"	TEXT,
-            "estado" TEXT,
-            "altitud"	TEXT,
-            "coordenadas"	TEXT,
-            "longitud_oeste"	TEXT,
-            "longitud_norte"	TEXT)`;
-        case 'TABLA_CARACTERISTICAS':
-          return `CREATE TABLE IF NOT EXISTS "TABLA_CARACTERISTICAS" (
-            "id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-            "forma_biologica"	TEXT,
-            "tamano"	REAL,
-            "flor" TEXT,
-            "fruto"	TEXT,
-            "usos"	TEXT)`;
-        case 'TABLA_INFO_AMBIENTAL':
-          return `CREATE TABLE IF NOT EXISTS "TABLA_INFO_AMBIENTAL" (
-            "id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-            "comentarios"	TEXT,
-            "tipo_vegetacion"	TEXT,
-            "suelo" TEXT)`;
-        case 'TABLA_CARACTERISTICAS_INFO':
-          return `CREATE TABLE IF NOT EXISTS "TABLA_CARACTERISTICAS_INFO" (
-            "id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-            "asociadas"	TEXT,
-            "comentarios"	TEXT,
-            "numero"	INTEGER NOT NULL,
-            "fecha"	TEXT CHECK (date(fecha)),
-            "abundancia"	TEXT CHECK (abundancia IN ("escasa", "regular", "abundante")),
-            "colector_es"	TEXT)`;
-        case 'TABLA_TOMAS':
-          return `CREATE TABLE IF NOT EXISTS "TABLA_TOMAS" (
-            "id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-            "nombre"	INTEGER,
-            "direccion" INTEGER,
-            "informacion_ambiental" INTEGER,
-            "caracteristicas" INTEGER,
-            "caracteristicas_info"	INTEGER,
-            FOREIGN KEY("direccion") REFERENCES TABLA_DIRECCION("id"),
-            FOREIGN KEY("nombre") REFERENCES TABLA_NOMBRE("id"),
-            FOREIGN KEY("caracteristicas") REFERENCES TABLA_CARACTERISTICAS("id"),
-            FOREIGN KEY("informacion_ambiental") REFERENCES TABLA_INFO_AMBIENTAL("id"),
-            FOREIGN KEY("caracteristicas_info") REFERENCES TABLA_CARACTERISTICAS_INFO("id"))`;
+        case 'GRUPOS':
+          return `CREATE TABLE IF NOT EXISTS 'GRUPOS'(
+            id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+            nombre TEXT)`;
+        case 'TOMAS':
+          return `CREATE TABLE IF NOT EXISTS 'TOMAS'(
+            id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+            nombre_cientifico TEXT,
+            familia TEXT,
+            nombre_local TEXT,
+            estado TEXT,
+            municipio TEXT,
+            localidad TEXT,
+            altitud INTEGER, --Revisar si se puden poner decimales 
+            grados_Latitud INTEGER,
+            minutos_Latitud INTEGER,
+            hemisferio_Latitud INTEGER,
+            grados_Longitud INTEGER,
+            minutos_Longitud INTEGER,
+            hemisferio_Longitud INTEGER,
+            x REAL,
+            y REAL,
+            tipo_vegetacion TEXT,
+            informacion_ambiental TEXT,
+            suelo TEXT,
+            asociada TEXT,
+            abundancia TEXT CHECK (abundancia IN ("Escasa", "Regular", "Abundante")),
+            forma_biologica TEXT,
+            tamano REAL,
+            flor TEXT,
+            fruto TEXT,
+            usos TEXT,
+            colector_es TEXT,
+            no_colecta TEXT,
+            fecha TEXT CHECK(DATE(fecha)),
+            determino TEXT,
+            otros_datos TEXT,
+            grupo INTEGER NOT NULL,
+            FOREIGN KEY("grupo") REFERENCES GRUPOS("id"))`;
         default:
           throw new Error(`Nombre de tabla proporcionado no valido: ${tableName}`);
       }
     }
-  };
+};
+
+export const insertarGrupos = (nombreGrupo) => {
+  db.transaction(tx => {
+    tx.executeSql(
+      `INSERT INTO GRUPOS (nombre) VALUES (?)`,
+      [nombreGrupo],
+      (_, results) => {
+        if (results.rowsAffected > 0) {
+          console.log(`¡El grupo ${nombreGrupo} se ha insertado correctamente en la tabla GRUPOS!`);
+        } else {
+          console.log(`Error: No se pudo insertar el grupo ${nombreGrupo} en la tabla GRUPOS.`);
+        }
+      },
+      error => {
+        console.log(`Error al intentar insertar el grupo ${nombreGrupo}: ${error.message}`);
+      }
+    );
+  });
+};
+
+export const consultarIdGrupo = (nombreGrupo) => {
+  return new Promise((resolve, reject) => {
+      db.transaction((tx) => {
+          tx.executeSql(
+              'SELECT id FROM GRUPOS WHERE nombre = ?',
+              [nombreGrupo],
+              (tx, results) => {
+                  if (results.rows.length > 0) {
+                      const id = results.rows.item(0).id;
+                      console.log(`ID encontrado para ${nombreGrupo}: ${id}`);
+                      resolve(id);
+                  } else {
+                      console.log(`No se encontró ningún ID para ${nombreGrupo}`);
+                      reject(`No se encontró ningún ID para ${nombreGrupo}`);
+                  }
+              },
+              (error) => {
+                  console.log(`Error al consultar el ID para ${nombreGrupo}: ${error.message}`);
+                  reject(`Error al consultar el ID para ${nombreGrupo}: ${error.message}`);
+              }
+          );
+      });
+  });
+};
+
+export const insertarTomas = (tomasData) => {
+  db.transaction(tx => {
+    tx.executeSql(
+      `INSERT INTO TOMAS (
+        nombre_cientifico,
+        familia,
+        nombre_local,
+        estado,
+        municipio,
+        localidad,
+        altitud,
+        grados_Latitud,
+        minutos_Latitud,
+        hemisferio_Latitud,
+        grados_Longitud,
+        minutos_Longitud,
+        hemisferio_Longitud,
+        x,
+        y,
+        tipo_vegetacion,
+        informacion_ambiental,
+        suelo,
+        asociada,
+        abundancia,
+        forma_biologica,
+        tamano,
+        flor,
+        fruto,
+        usos,
+        colector_es,
+        no_colecta,
+        fecha,
+        determino,
+        otros_datos,
+        grupo)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [...Object.values(tomasData)], // Convierte el objeto en un array de valores
+      (_, results) => {
+        if (results.rowsAffected > 0) {
+          console.log(`La toma ha sido insertada correctamente en la tabla TOMAS.`);
+        } else {
+          console.log(`Error: La toma no se pudo insertar en la tabla TOMAS.`);
+        }
+      },
+      error => {
+        console.log(`Error al intentar insertar la toma: ${error.message}`);
+      }
+    );
+  });
+};
+
+export const verGrupos = () => {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql('SELECT nombre FROM GRUPOS', [], (tx, results) => {
+        const len = results.rows.length;
+        if (len > 0) {
+          const grupos = [];
+          for (let i = 0; i < len; i++) {
+            grupos.push(results.rows.item(i).nombre);
+          }
+          console.log(`Consulta exitosa, ${len} nombres de grupos encontrados`);
+          resolve(grupos);
+        } else {
+          console.log('No se encontraron resultados.');
+          resolve([]);
+        }
+      }, error => {
+        console.error('Error al ejecutar la consulta:', error);
+        reject(error);
+      });
+    });
+  });
+};
+
+//Este fragmento de codigo pasarlo a la sección donde se muestran los grupos
+/*verGrupos()
+  .then(result => {
+    //Agregar aqui la funcionalidad para utilizar el resultado obtenido
+    console.log('Grupos obtenidos: ', result);
+  })
+  .catch(error => {
+    console.error('Ocurrió un error al obtener los grupos:', error);
+  });*/
+////////////////////////////////////////////////////////////////////////////
+
+export const verTomas = (grupoId) => {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql('SELECT * FROM TOMAS WHERE grupo = ?',
+      [grupoId],
+      (tx, results) => {
+        const len = results.rows.length;
+        let tomas = [];
+        if (len > 0) {
+          for (let i = 0; i < len; i++) {
+            const row = results.rows.item(i);
+            const tomaObj = {};
+            
+            Object.keys(row).forEach(key => {
+              tomaObj[key] = row[key];
+            });
+            
+            tomas.push(tomaObj);
+          }
+          
+          console.log(`Consulta exitosa, ${len} tomas encontradas`);
+          resolve(tomas);
+        } else {
+          console.log('No se encontraron tomas.');
+          resolve([]);
+        }
+      }, error => {
+        console.error('Error al ejecutar la consulta de tomas:', error);
+        reject(error);
+      });
+    });
+  });
+};
+
+//Este fragmento de codigo pasarlo a la sección donde se muestran las tomas
+/*verTomas("Poner aqui la variable con el id del grupo del que se quieran mostrar sus tomas")
+  .then(tomas => {
+    //Agregar aqui la funcionalidad para utilizar el resultado obtenido
+    console.log(tomas);
+  })
+  .catch(error => {
+    // Maneja el error aquí
+    console.error(error);
+  });*/
+///////////////////////////////////////////////////////////////////////////
+
+export const editarToma = (tomasData, id) => {
+  db.transaction(tx => {
+    tx.executeSql(
+      `UPDATE TOMAS SET 
+        nombre_cientifico = ?,
+        familia = ?,
+        nombre_local = ?,
+        estado = ?,
+        municipio = ?,
+        localidad = ?,
+        altitud = ?,
+        grados_Latitud = ?,
+        minutos_Latitud = ?,
+        hemisferio_Latitud = ?,
+        grados_Longitud = ?,
+        minutos_Longitud = ?,
+        hemisferio_Longitud = ?,
+        x = ?,
+        y = ?,
+        tipo_vegetacion = ?,
+        informacion_ambiental = ?,
+        suelo = ?,
+        asociada = ?,
+        abundancia = ?,
+        forma_biologica = ?,
+        tamano = ?,
+        flor = ?,
+        fruto = ?,
+        usos = ?,
+        colector_es = ?,
+        no_colecta = ?,
+        fecha = ?,
+        determino = ?,
+        otros_datos = ?
+      WHERE id = ?`,
+      [...Object.values(tomasData), id], // Convierte el objeto en un array de valores y agrega el grupo para identificar la toma a editar
+      (_, results) => {
+        if (results.rowsAffected > 0) {
+          console.log(`La información de la toma ha sido actualizada correctamente en la tabla TOMAS.`);
+        } else {
+          console.log(`Error: No se pudo actualizar la información de la toma en la tabla TOMAS.`);
+        }
+      },
+      error => {
+        console.log(`Error al intentar editar la toma: ${error.message}`);
+      }
+    );
+  });
+};

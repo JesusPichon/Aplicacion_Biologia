@@ -6,9 +6,12 @@ import animaciones from '../../components/animaciones/animaciones';
 import Canal from "../../components/Canal";
 import BarraBusqueda from "../../components/BarraBusqueda";
 import { Button, SpeedDial } from "@rneui/themed";
+import { insertarGrupos, verGrupos } from "../../services/database/SQLite";
 import  { selectCsv }  from "../../services/functions/import-csv"
 
 const Canales = ({ navigation }) => {
+    const [grupos, setGrupos] = useState([]);
+
 
      // animaciones
     const {
@@ -26,14 +29,29 @@ const Canales = ({ navigation }) => {
      //nombre del canal
     const [nombreCanal, setNombreCanal] = useState('');
 
+    const verCanales = () => {
+        verGrupos()
+        .then(result => {
+            //Agregar aqui la funcionalidad para utilizar el resultado obtenido
+            console.log('Grupos obtenidos: ', result);
+            setGrupos(result);
+        })
+        .catch(error => {
+            console.error('Ocurrió un error al obtener los grupos:', error);
+        });
+        
+    };
+
     useEffect(() => {
         startAnimations();
+        verCanales();
     }, [canales]);
 
     //agregar canales 
     const agregarCanal = (nombreCanal) => {
         const nuevoCanal = { nombre: nombreCanal };
         setCanales(canales.concat(nuevoCanal));
+        insertarGrupos(nombreCanal);
     }
 
     const guardarTexto = () => {
@@ -70,13 +88,17 @@ const Canales = ({ navigation }) => {
                 <View style={[styles.container1, styles.fondoT]}>
                 </View>
 
-                {canales.map((canal, index) => {
+                {/* Agregando nombre del canal  */}
+
+                {grupos.map((canal, index) => {
+                    console.log(grupos)
                     return (
                         <Canal
                             key={index}
                             animacion={unoAnim}
                             navigation={navigation}
-                            informacion={canal} />
+                            informacion={grupos[index]}
+                            nombre={grupos[index]} />
                     )
                 })}
 

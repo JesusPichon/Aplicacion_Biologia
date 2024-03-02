@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import InputCoordenadas from "../../components/coordenadas-select/coordenadasComponent";
 import FechaComponente from "../../components/fecha-select/FechaComponente";
 import CustomDropdown from "../../components/listaComponente/ListaComponente";
+import { insertarTomas, consultarIdGrupo } from "../../services/database/SQLite";
 import {
     ScrollView,
     Text,
@@ -69,8 +70,10 @@ const Formulario = ({route}) => {
 
 
     //funcion para agregar tomas 
+    const nombreCanal = route.params.nombreCanal;
+    //console.log(nombreCanal);
 
-    const {agregar} = route.params;
+    //const {agregar} = route.params;
 
     const { control, handleSubmit, formState: { errors }, watch, setValue } = useForm({
         Nombre_cientifico: '',
@@ -88,6 +91,7 @@ const Formulario = ({route}) => {
         Hemisferio_Longitud: '',
         X: '',
         Y: '',
+        Tipo_vegetacion: '',
         Informacion_ambiental: '',
         Suelo: '',
         Asociada: '',
@@ -118,7 +122,49 @@ const Formulario = ({route}) => {
 
     //agrega la nueva toma a la lista de tomas 
     const onSubmit = (data) => {
-        agregar(data);
+        //agregar(data);
+
+        consultarIdGrupo(nombreCanal).then((id) => {
+            console.log(id)
+
+            const tomasData = {
+                nombre_cientifico: data.Nombre_cientifico,
+                familia: data.Familia,
+                nombre_local: data.Nombre_local,
+                estado: data.Estado,
+                municipio: data.Municipio,
+                localidad: data.Localidad,
+                altitud: data.Altitud,
+                grados_Latitud: data.Grados_Latitud,
+                minutos_Latitud: data.Minutos_Latitud,
+                hemisferio_Latitud: data.Hemisferio_Latitud,
+                grados_Longitud: data.Grados_Longitud,
+                minutos_Longitud: data.Minutos_Longitud,
+                hemisferio_Longitud: data.Hemisferio_Longitud,
+                x: data.X,
+                y: data.Y,
+                tipo_vegetacion: data.Tipo_vegetacion,
+                informacion_ambiental: data.Informacion_ambiental,
+                suelo: data.Suelo,
+                asociada: data.Asociada,
+                abundancia: data.Abundancia,
+                forma_biologica: data.Forma_biologica,
+                tamano: data.Tamano,
+                flor: data.Flor,
+                fruto: data.Fruto,
+                usos: data.Usos,
+                colector_es: data.Colector_es,
+                no_colecta: data.No_colecta,
+                fecha: data.Fecha.toLocaleDateString("gregory"),
+                determino: data.Determino,
+                otros_datos: data.Otros_datos,
+                grupo: id,
+            };
+
+            insertarTomas(tomasData);
+        }).catch((error) => {
+            console.log(error);
+        });
     }
 
     return (
