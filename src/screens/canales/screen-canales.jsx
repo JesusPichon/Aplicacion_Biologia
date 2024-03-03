@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Animated, Modal, TextInput, FlatList} from "react-native";
+import { View, Text, TouchableOpacity, Animated, Modal, TextInput, FlatList,TouchableWithoutFeedback} from "react-native";
 import { principal, secundario } from "../../styles/style-colors";
 import styles from "./style-canales";
 import animaciones from '../../components/animaciones/animaciones';
@@ -11,7 +11,8 @@ import  { selectCsv }  from "../../services/functions/import-csv"
 
 const Canales = ({ navigation }) => {
     const [grupos, setGrupos] = useState([]);
-
+    const [error, setError] = useState('');
+    
 
      // animaciones
     const {
@@ -55,9 +56,26 @@ const Canales = ({ navigation }) => {
     }
 
     const guardarTexto = () => {
-       // console.log('Texto guardado:', nombreCanal);
-        agregarCanal(nombreCanal);
+        if (nombreCanal.trim() === '') {
+            setError('El nombre del grupo no puede estar vacío');
+        } else {
+            // console.log('Texto guardado:', nombreCanal);
+            agregarCanal(nombreCanal);
+            setModalVisible(false);
+            setError(''); // Limpiar el mensaje de error
+            setNombreCanal('');
+        }
+    };
+
+    const handleTextChange = (text) => {
+        setNombreCanal(text);
+        setError(''); // Limpiar el mensaje de error cuando se ingresa texto
+    };
+
+    const closeModal = () => {
         setModalVisible(false);
+        setNombreCanal(''); // Limpiar el nombre del canal
+        setError(''); // Limpiar el mensaje de error
     };
 
     return (
@@ -149,7 +167,7 @@ const Canales = ({ navigation }) => {
 
             </SpeedDial>
 
-                <Modal  //Ventana flotante 
+                {/* <Modal  //Ventana flotante 
                 animationType="slide"
                 transparent={true}
                 visible={modalVisible}
@@ -160,8 +178,9 @@ const Canales = ({ navigation }) => {
                         <TextInput
                             placeholder="Ingrese el nombre del grupo"
                             style={{ borderWidth: 1, borderColor: 'gray', padding: 10, marginBottom: 10, borderRadius: 5, color: 'black' }}
-                            onChangeText={(text) => setNombreCanal(text)}
+                            onChangeText={handleTextChange}
                         />
+                        {error ? <Text style={{ color: 'red' }}>{error}</Text> : null}
                         <TouchableOpacity
                             style={{ backgroundColor: principal , padding: 10, borderRadius: 5 }}
                             onPress={guardarTexto}
@@ -170,6 +189,34 @@ const Canales = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
                 </View>
+                </Modal> */}
+
+                <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={closeModal}
+                >
+                <TouchableWithoutFeedback onPress={closeModal}>
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                        <TouchableWithoutFeedback>
+                            <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10}}>
+                                <TextInput
+                                    placeholder="Ingrese el nombre del grupo"
+                                    style={{ borderWidth: 1, borderColor: 'gray', padding: 10, marginBottom: 10, borderRadius: 5, color: 'black' }}
+                                    onChangeText={handleTextChange}
+                                />
+                                {error ? <Text style={{ color: 'red' }}>{error}</Text> : null}
+                                <TouchableOpacity
+                                    style={{ backgroundColor: principal, padding: 10, borderRadius: 5 }}
+                                    onPress={guardarTexto}
+                                >
+                                    <Text style={{ color: 'white', textAlign: 'center' }}>Guardar</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </TouchableWithoutFeedback>
+                    </View>
+                </TouchableWithoutFeedback>
             </Modal>
 
         </View>
