@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Animated, Modal, TextInput } from "react-native";
+import { View, Text, TouchableOpacity, Animated, Modal, TextInput, FlatList} from "react-native";
 import { principal, secundario } from "../../styles/style-colors";
 import styles from "./style-canales";
 import animaciones from '../../components/animaciones/animaciones';
@@ -70,12 +70,12 @@ const Canales = ({ navigation }) => {
               {/* Nueva sección con los botones en fila */}
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={[styles.fusionar, styles.fondoT]}>
-                    <Text style={[styles.textP, { textAlign: 'center', fontWeight: 'bold' }]}>FUSIONAR</Text>
+                    <Text style={[styles.textP, { textAlign: 'center', fontWeight: 'bold' }]}>EXPORTAR</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
                     style={[styles.exportar, styles.fondoT]}
                     onPress={selectCsv}>
-                    <Text style={[styles.textP, { textAlign: 'center', fontWeight: 'bold' }]}>EXPORTAR/IMPORTAR</Text>
+                    <Text style={[styles.textP, { textAlign: 'center', fontWeight: 'bold' }]}>IMPORTAR</Text>
                 </TouchableOpacity>
             </View>
 
@@ -83,13 +83,10 @@ const Canales = ({ navigation }) => {
             </View>
 
 
-             {/* visualizacion de canales */}
-            <View style={[styles.container, styles.fondoT, { alignItems: 'center' }]}>
+            {/* visualizacion de canales */}
+            {/* <View style={[styles.container, styles.fondoT, { alignItems: 'center' }]}>
                 <View style={[styles.container1, styles.fondoT]}>
                 </View>
-
-                {/* Agregando nombre del canal  */}
-
                 {grupos.map((canal, index) => {
                     console.log(grupos)
                     return (
@@ -101,9 +98,27 @@ const Canales = ({ navigation }) => {
                             nombre={grupos[index]} />
                     )
                 })}
+            </View> */}
+            
+            <View style={[styles.container, styles.fondoT, { alignItems: 'center' }]}>
+                <View style={[styles.container1, styles.fondoT]}>
+                </View>
 
+                {/* Agregando nombre del canal  */}
+                <FlatList
+                    data={grupos}
+                    numColumns={2}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item, index }) => (
+                        <Canal
+                            key={index}
+                            animacion={unoAnim}
+                            navigation={navigation}
+                            informacion={item}
+                            nombre={item} />
+                    )}
+                />
             </View>
-
 
                 {/* Boton flotante */}
             <SpeedDial
