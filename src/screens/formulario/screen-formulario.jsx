@@ -199,13 +199,6 @@ const Formulario = ({route}) => {
                     name="Nombre_local"
                     errors={errors}
                 />
-                {/* <TextInputCustom
-                    label="Estado:"
-                    control={control}
-                    name="Estado"
-                    rules={{ required: 'Este campo es requerido.' }}
-                    errors={errors}
-                /> */}
                 <CustomDropdown
                     label="Estado:"
                     data={data_Estados}
@@ -383,7 +376,6 @@ const Formulario = ({route}) => {
                 >
                     <Text style={styles.textT}>Guardar</Text>
                 </TouchableOpacity>
-                <Text>   </Text>
             </ScrollView>
             {/* </KeyboardAvoidingView> */}
         </View>
