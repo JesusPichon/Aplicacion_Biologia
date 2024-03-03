@@ -9,7 +9,7 @@ import {
     StyleSheet
 } from 'react-native';
 
-const TextInputCustome = ({ label, control, name, rules, errors, multiline, maxLines, tooltip }) => {
+const TextInputCustome = ({ label, control, name, rules, errors, multiline, maxLines, tooltip, keyboardType }) => {
     const textInputStyle = multiline ? styles.textInputMultiLine : styles.textInput;  // Determinar el estilo de TextInput según la prop multilinea
     const [open, setOpen] = React.useState(false);
 
@@ -49,6 +49,7 @@ const TextInputCustome = ({ label, control, name, rules, errors, multiline, maxL
                         multiline={multiline} // Activar o desactivar multilinea
                         numberOfLines={multiline ? maxLines : 1} // Ajustar el número de líneas máximo si es multilinea
                         textAlignVertical={multiline ? "top" : "center"} // Mover el cursor y el texto hacia arriba si es multilinea
+                        keyboardType={keyboardType}
                     />
                 )}
                 name={name}
@@ -72,7 +73,8 @@ const styles = StyleSheet.create({
         color: principal,
         textAlign: 'left',
         fontWeight: 'bold',
-        marginRight: 5
+        marginRight: 5,
+        fontSize: 15
     },
     textInput: {
         backgroundColor: 'rgb(128, 155, 174)',
@@ -80,8 +82,7 @@ const styles = StyleSheet.create({
         borderColor: false,
         color: tercero,
         paddingLeft: 10,
-        fontWeight: 'bold'
-
+        fontWeight: 'bold',
     },
     textInputMultiLine: {
         backgroundColor: 'rgb(128, 155, 174)',

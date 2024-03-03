@@ -70,7 +70,8 @@ const styles = StyleSheet.create({
     textP: {
         color: principal,
         textAlign: 'left',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontSize: 15
     },
     textInput: {
         backgroundColor: 'rgb(128, 155, 174)',

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "../../styles/style-app";
+import styles from "./style-formulario";
 import TextInputCustom from "../../components/textInputCustome";
 import { secundario, tercero } from "../../styles/style-colors";
 import { useForm } from "react-hook-form";
@@ -226,12 +226,12 @@ const Formulario = ({route}) => {
                     errors={errors}
                 />
                 <TextInputCustom
-                    label="Altitud:"
+                    label="Altitud (m.s.n.m):"
                     control={control}
                     name="Altitud"
                     errors={errors}
+                    keyboardType={'numeric'}
                 />
-                <Text style={styles.textP}>Coordenadas:</Text>
                 <InputCoordenadas
                     control={control}
                     rules={reglasCoordenadas}
@@ -303,11 +303,12 @@ const Formulario = ({route}) => {
                     placeholder={"Selecciona un item"}
                 />
                 <TextInputCustom
-                    label="Tamaño:"
+                    label="Tamaño (m):"
                     control={control}
                     name="Tamano"
                     errors={errors}
                     tooltip={"Aqui va un mensaje de ayuda"}
+                    keyboardType={'numeric'}
                 />
                 <TextInputCustom
                     label="Flor:"

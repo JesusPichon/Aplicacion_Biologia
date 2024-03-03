@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
       color: principal,
       textAlign: 'left',
       fontWeight: 'bold',
+      fontSize: 15
     },
     textInputOp: {
       flex: 1,

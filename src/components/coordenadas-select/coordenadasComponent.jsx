@@ -15,7 +15,7 @@ const Hemisferio_latitud = [
   { label: 'Sur', value: 'Sur' }
 ];
 
-const InputCoordenadas = ({ control, rules, errors, name1, name2, name3, name4, name5, name6, name7, name8, watch, setValue }) => {
+const InputCoordenadas = ({control, rules, errors, name1, name2, name3, name4, name5, name6, name7, name8, watch, setValue }) => {
   const watchOption = watch('option', 'geographic'); 
   const setValueOption = (value) => {setValue('option', value);};
   const [isFocus, setIsFocus] = useState(false);
@@ -49,6 +49,7 @@ const InputCoordenadas = ({ control, rules, errors, name1, name2, name3, name4, 
 
   return (
     <View style={styles.container}>
+      <Text style={styles.textP}>Coordenadas:</Text>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <CheckBox
           center
@@ -257,16 +258,25 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: 10
   },
+  textP: {
+    color: principal,
+    textAlign: 'left',
+    fontWeight: 'bold',
+    marginRight: 5,
+    fontSize: 15
+  },
   textPCoordenadas: {
     color: principal,
     textAlign: 'left',
     fontWeight: 'bold',
-    marginLeft:10
+    marginLeft:10,
+    fontSize: 15
   },
   textPCoordenadasFinal: {
     color: principal,
     fontWeight: 'bold',
     textAlign: 'center',
+    fontSize: 15
   },
   textInputCoordenadas: {
     flex: 1,
