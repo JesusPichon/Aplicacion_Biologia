@@ -45,12 +45,12 @@ const Toma = ({ navigation, data , seleccionar, deseleccionar }) => {
         </View>
 
         <View style={{ flex: 2, padding: 5 }}>
-          <Text style={style_toma.text_card}>Cientifico: {data.Nombre_cientifico}</Text>
-          <Text style={style_toma.text_card}>Familia: {data.Familia}</Text>
-          <Text style={style_toma.text_card}>Localidad: {data.Localidad}</Text>
-          <Text style={style_toma.text_card}>Municipio: {data.Municipio}</Text>
-          <Text style={style_toma.text_card}>Estado: {data.Estado}</Text>
-          <Text style={style_toma.text_card}>Tipo de vegetacion: {data.Tipo_vegetacion}</Text>
+          <Text style={style_toma.text_card}>Cientifico: {data.nombre_cientifico}</Text>
+          <Text style={style_toma.text_card}>Familia: {data.familia}</Text>
+          <Text style={style_toma.text_card}>Localidad: {data.localidad}</Text>
+          <Text style={style_toma.text_card}>Municipio: {data.municipio}</Text>
+          <Text style={style_toma.text_card}>Estado: {data.estado}</Text>
+          <Text style={style_toma.text_card}>Tipo de vegetacion: {data.tipo_vegetacion}</Text>
         </View>
 
       </View>

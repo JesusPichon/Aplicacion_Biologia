@@ -1,62 +1,62 @@
-import {openDatabase} from "react-native-sqlite-storage";
+import { openDatabase } from "react-native-sqlite-storage";
 
 let db = openDatabase({
-    name: 'MisTomas.db',
-    location: 'default'
+  name: 'MisTomas.db',
+  location: 'default'
 });
 
 export const borrarTablas = (nombreTabla) => {
   db.transaction(tx => {
     tx.executeSql(`DROP TABLE IF EXISTS ${nombreTabla}`, [], (_, result) => {
-        console.log(`Tabla ${nombreTabla} eliminada correctamente.`);
+      console.log(`Tabla ${nombreTabla} eliminada correctamente.`);
     }, (_, error) => {
-        console.error(`Error al eliminar la tabla ${nombreTabla}: ${error.message}`);
+      console.error(`Error al eliminar la tabla ${nombreTabla}: ${error.message}`);
     });
-});
+  });
 };
 
 export const crearTablas = () => {
-    let tablesCreatedSuccessfullyCount = 0;
-  
-    const tableNames = [
-      'GRUPOS',
-      'TOMAS'
-    ];
-    
-    for (const tableName of tableNames) {
-      const tableDefinition = generateTableDefinition(tableName);
-    
-      db.transaction(tx => {
-        tx.executeSql(tableDefinition, [], successCallback(tableName), failureCallback(tableName));
-      });
-    }
-    
-    function successCallback(tableName) {
-      return function(_, _results) {
-        console.log(`tabla ${tableName} creada exitosamente`);
-        tablesCreatedSuccessfullyCount++;
-    
-        if (tablesCreatedSuccessfullyCount === tableNames.length) {
-          console.log('Todas las tablas fueron creadas exitosamente!');
-        }
-      };
-    }
-    
-    function failureCallback(tableName) {
-      return function(_, error) {
-        console.error(`Error mientras se creaba la tabla "${tableName}": `);
-        console.error(error.message);
-      };
-    }
-  
-    function generateTableDefinition(tableName) {
-      switch (tableName) {
-        case 'GRUPOS':
-          return `CREATE TABLE IF NOT EXISTS 'GRUPOS'(
+  let tablesCreatedSuccessfullyCount = 0;
+
+  const tableNames = [
+    'GRUPOS',
+    'TOMAS'
+  ];
+
+  for (const tableName of tableNames) {
+    const tableDefinition = generateTableDefinition(tableName);
+
+    db.transaction(tx => {
+      tx.executeSql(tableDefinition, [], successCallback(tableName), failureCallback(tableName));
+    });
+  }
+
+  function successCallback(tableName) {
+    return function (_, _results) {
+      console.log(`tabla ${tableName} creada exitosamente`);
+      tablesCreatedSuccessfullyCount++;
+
+      if (tablesCreatedSuccessfullyCount === tableNames.length) {
+        console.log('Todas las tablas fueron creadas exitosamente!');
+      }
+    };
+  }
+
+  function failureCallback(tableName) {
+    return function (_, error) {
+      console.error(`Error mientras se creaba la tabla "${tableName}": `);
+      console.error(error.message);
+    };
+  }
+
+  function generateTableDefinition(tableName) {
+    switch (tableName) {
+      case 'GRUPOS':
+        return `CREATE TABLE IF NOT EXISTS 'GRUPOS'(
             id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
             nombre TEXT)`;
-        case 'TOMAS':
-          return `CREATE TABLE IF NOT EXISTS 'TOMAS'(
+      case 'TOMAS':
+        return `CREATE TABLE IF NOT EXISTS 'TOMAS'(
             id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
             nombre_cientifico TEXT,
             familia TEXT,
@@ -90,10 +90,10 @@ export const crearTablas = () => {
             otros_datos TEXT,
             grupo INTEGER NOT NULL,
             FOREIGN KEY("grupo") REFERENCES GRUPOS("id"))`;
-        default:
-          throw new Error(`Nombre de tabla proporcionado no valido: ${tableName}`);
-      }
+      default:
+        throw new Error(`Nombre de tabla proporcionado no valido: ${tableName}`);
     }
+  }
 };
 
 export const insertarGrupos = (nombreGrupo) => {
@@ -117,26 +117,26 @@ export const insertarGrupos = (nombreGrupo) => {
 
 export const consultarIdGrupo = (nombreGrupo) => {
   return new Promise((resolve, reject) => {
-      db.transaction((tx) => {
-          tx.executeSql(
-              'SELECT id FROM GRUPOS WHERE nombre = ?',
-              [nombreGrupo],
-              (tx, results) => {
-                  if (results.rows.length > 0) {
-                      const id = results.rows.item(0).id;
-                      console.log(`ID encontrado para ${nombreGrupo}: ${id}`);
-                      resolve(id);
-                  } else {
-                      console.log(`No se encontró ningún ID para ${nombreGrupo}`);
-                      reject(`No se encontró ningún ID para ${nombreGrupo}`);
-                  }
-              },
-              (error) => {
-                  console.log(`Error al consultar el ID para ${nombreGrupo}: ${error.message}`);
-                  reject(`Error al consultar el ID para ${nombreGrupo}: ${error.message}`);
-              }
-          );
-      });
+    db.transaction((tx) => {
+      tx.executeSql(
+        'SELECT id FROM GRUPOS WHERE nombre = ?',
+        [nombreGrupo],
+        (tx, results) => {
+          if (results.rows.length > 0) {
+            const id = results.rows.item(0).id;
+            console.log(`ID encontrado para ${nombreGrupo}: ${id}`);
+            resolve(id);
+          } else {
+            console.log(`No se encontró ningún ID para ${nombreGrupo}`);
+            reject(`No se encontró ningún ID para ${nombreGrupo}`);
+          }
+        },
+        (error) => {
+          console.log(`Error al consultar el ID para ${nombreGrupo}: ${error.message}`);
+          reject(`Error al consultar el ID para ${nombreGrupo}: ${error.message}`);
+        }
+      );
+    });
   });
 };
 
@@ -230,32 +230,32 @@ export const verTomas = (grupoId) => {
   return new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql('SELECT * FROM TOMAS WHERE grupo = ?',
-      [grupoId],
-      (tx, results) => {
-        const len = results.rows.length;
-        let tomas = [];
-        if (len > 0) {
-          for (let i = 0; i < len; i++) {
-            const row = results.rows.item(i);
-            const tomaObj = {};
-            
-            Object.keys(row).forEach(key => {
-              tomaObj[key] = row[key];
-            });
-            
-            tomas.push(tomaObj);
+        [grupoId],
+        (tx, results) => {
+          const len = results.rows.length;
+          let tomas = [];
+          if (len > 0) {
+            for (let i = 0; i < len; i++) {
+              const row = results.rows.item(i);
+              const tomaObj = {};
+
+              Object.keys(row).forEach(key => {
+                tomaObj[key] = row[key];
+              });
+
+              tomas.push(tomaObj);
+            }
+
+            console.log(`Consulta exitosa, ${len} tomas encontradas`);
+            resolve(tomas);
+          } else {
+            console.log('No se encontraron tomas.');
+            resolve([]);
           }
-          
-          console.log(`Consulta exitosa, ${len} tomas encontradas`);
-          resolve(tomas);
-        } else {
-          console.log('No se encontraron tomas.');
-          resolve([]);
-        }
-      }, error => {
-        console.error('Error al ejecutar la consulta de tomas:', error);
-        reject(error);
-      });
+        }, error => {
+          console.error('Error al ejecutar la consulta de tomas:', error);
+          reject(error);
+        });
     });
   });
 };
