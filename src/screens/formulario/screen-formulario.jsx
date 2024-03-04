@@ -66,7 +66,7 @@ const data_FormaBio = [
     { label: 'Otro...', value: 'otro' },
 ];
 
-const Formulario = ({route}) => {
+const Formulario = ({ route }) => {
 
 
     //funcion para agregar tomas 
@@ -122,50 +122,54 @@ const Formulario = ({route}) => {
 
     //agrega la nueva toma a la lista de tomas 
     const onSubmit = (data) => {
-        //agregar(data);
 
-        consultarIdGrupo(nombreCanal).then((id) => {
-            console.log(id)
+        //id para identificar el grupo de la toma 
+        let grupoID;
 
-            const tomasData = {
-                nombre_cientifico: data.Nombre_cientifico,
-                familia: data.Familia,
-                nombre_local: data.Nombre_local,
-                estado: data.Estado,
-                municipio: data.Municipio,
-                localidad: data.Localidad,
-                altitud: data.Altitud,
-                grados_Latitud: data.Grados_Latitud,
-                minutos_Latitud: data.Minutos_Latitud,
-                hemisferio_Latitud: data.Hemisferio_Latitud,
-                grados_Longitud: data.Grados_Longitud,
-                minutos_Longitud: data.Minutos_Longitud,
-                hemisferio_Longitud: data.Hemisferio_Longitud,
-                x: data.X,
-                y: data.Y,
-                tipo_vegetacion: data.Tipo_vegetacion,
-                informacion_ambiental: data.Informacion_ambiental,
-                suelo: data.Suelo,
-                asociada: data.Asociada,
-                abundancia: data.Abundancia,
-                forma_biologica: data.Forma_biologica,
-                tamano: data.Tamano,
-                flor: data.Flor,
-                fruto: data.Fruto,
-                usos: data.Usos,
-                colector_es: data.Colector_es,
-                no_colecta: data.No_colecta,
-                fecha: data.Fecha.toLocaleDateString("gregory"),
-                determino: data.Determino,
-                otros_datos: data.Otros_datos,
-                grupo: id,
-            };
+        const tomaData = {
+            nombre_cientifico: data.Nombre_cientifico,
+            familia: data.Familia,
+            nombre_local: data.Nombre_local,
+            estado: data.Estado,
+            municipio: data.Municipio,
+            localidad: data.Localidad,
+            altitud: data.Altitud,
+            grados_Latitud: data.Grados_Latitud,
+            minutos_Latitud: data.Minutos_Latitud,
+            hemisferio_Latitud: data.Hemisferio_Latitud,
+            grados_Longitud: data.Grados_Longitud,
+            minutos_Longitud: data.Minutos_Longitud,
+            hemisferio_Longitud: data.Hemisferio_Longitud,
+            x: data.X,
+            y: data.Y,
+            tipo_vegetacion: data.Tipo_vegetacion,
+            informacion_ambiental: data.Informacion_ambiental,
+            suelo: data.Suelo,
+            asociada: data.Asociada,
+            abundancia: data.Abundancia,
+            forma_biologica: data.Forma_biologica,
+            tamano: data.Tamano,
+            flor: data.Flor,
+            fruto: data.Fruto,
+            usos: data.Usos,
+            colector_es: data.Colector_es,
+            no_colecta: data.No_colecta,
+            fecha: data.Fecha.toLocaleDateString("gregory"),
+            determino: data.Determino,
+            otros_datos: data.Otros_datos,
+            grupo: grupoID,
+        };
 
-            insertarTomas(tomasData);
-        }).catch((error) => {
-            console.log(error);
-        });
+        consultarIdGrupo(nombreCanal)
+            .then((id) => {
+                tomaData.grupo = id; // Asignar el id del grupo a tomaData
+                return insertarTomas(tomaData);
+            })
+            .then()
+            .catch((error) => console.error("Error insertar toma: ", error));
     }
+
+
 
     return (
         <View style={{

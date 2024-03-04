@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { ScrollView, View } from 'react-native';
-import { SpeedDial } from "@rneui/themed";
+import { SpeedDial, Text } from "@rneui/themed";
 import styles from "../../styles/style-app";
 import { principal, secundario } from '../../styles/style-colors';
 import Toma from "../../components/Toma";
 import imprimir from "../../components/imprimir/imprimir";
 import BarraBusqueda from "../../components/BarraBusqueda";
-import { verTomas, consultarIdGrupo, editarToma} from "../../services/database/SQLite";
+import { consultarIdGrupo, verTomas } from "../../services/database/SQLite";
 
 
 const Tomas = ({ navigation, route }) => {
@@ -30,62 +30,26 @@ const Tomas = ({ navigation, route }) => {
         setListaTomas([...listaTomas, item]);
     }
 
-    const mostrarTomas = () => {
-        consultarIdGrupo(nombreCanal).then((id) => {
-            //console.log(id);
 
-            verTomas(id).then(tomas => {
-                //Agregar aqui la funcionalidad para utilizar el resultado obtenido
-                console.log(tomas);
-
-                //Metodo para editar una toma
-                //Mover a la pantalla correspondiente
-                /*editarToma({
-                    nombre_cientifico: 'Nuevo nombre científico',
-                    familia: 'Nueva familia',
-                    nombre_local: 'Nuevo nombre local',
-                    estado: 'Estado',
-                    municipio: 'Municipio',
-                    localidad: 'Localidad',
-                    altitud: 1,
-                    grados_Latitud: 2,
-                    minutos_Latitud: 3,
-                    hemisferio_Latitud: null,
-                    grados_Longitud: 4,
-                    minutos_Longitud: 5,
-                    hemisferio_Longitud: null,
-                    x: null,
-                    y: null,
-                    tipo_vegetacion: 'Tipo de Vegetacion',
-                    informacion_ambiental: 'Informacion Ambiental',
-                    suelo: 'Suelo',
-                    asociada: 'Asociada',
-                    abundancia: 'Escasa',
-                    forma_biologica: 'Forma Biologica',
-                    tamano: null,
-                    flor: 'Flor',
-                    fruto: 'Fruto',
-                    usos: 'Usos',
-                    colector_es: 'Colectores',
-                    no_colecta: 'Numero de Colecta',
-                    fecha: null,
-                    determino: 'Determino',
-                    otros_datos: 'Otros Datos',
-                }, tomas[0].id);*/
-            }).catch(error => {
-                // Maneja el error aquí
-                console.error(error);
-            });
-
-        }).catch((error) => {
-            console.log(error);
-        });
-
-        
+    //obtener tomas de la base de datos 
+    const getTomas = () => {
+        consultarIdGrupo(nombreCanal)
+            .then((id) => {
+                verTomas(id)
+                    .then((tomas) => {
+                        console.log(tomas)
+                        setListaTomas(tomas); // Actualiza el estado con las tomas obtenidas
+                    })
+                    .catch((error) => {
+                        console.error("Error obteniendo las tomas: ", error);
+                    });
+            })
+            .catch((error) => console.error("ID error: ", error));
     };
 
-    useEffect(() => { 
-        mostrarTomas();
+
+    useEffect(() => {
+        getTomas();
     }, []);
 
     return (
@@ -94,10 +58,6 @@ const Tomas = ({ navigation, route }) => {
             <BarraBusqueda titulo={'Fecha'} />
 
             <View style={[styles.container, styles.fondoT]}>
-
-                {/* Para acceder a la variable nombre del canal => route.params.nombre */}
-
-                {/* Ejemplo => <Text>{route.params.nombre}</Text>*/}
 
                 <ScrollView>
                     {
