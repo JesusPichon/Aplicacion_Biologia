@@ -6,7 +6,7 @@ import animaciones from '../../components/animaciones/animaciones';
 import Canal from "../../components/Canal";
 import BarraBusqueda from "../../components/BarraBusqueda";
 import { SpeedDial } from "@rneui/themed";
-import { verGrupos, eliminarTomas, eliminarGrupo, consultarIdGrupo} from "../../services/database/SQLite";
+import { verGrupos, eliminarTomas, eliminarGrupo, consultarIdGrupo, consultarNombreGrupo } from "../../services/database/SQLite";
 import  { selectCsv }  from "../../services/functions/import-csv";
 
 const Canales = ({ navigation }) => {
@@ -59,18 +59,56 @@ const Canales = ({ navigation }) => {
         startAnimations();
         obtenerGrupos();
     }, []);
-
+    
+    //agregar canales
+    // CAMBIAR PARA LAS NUEVAS VARIABLES
+    const agregarCanal = (nombreCanal) => {
+        const nuevoCanal = { nombre: nombreCanal };
+        setCanales(canales.concat(nuevoCanal));
+        insertarGrupos(nombreCanal);
+    }
 
     const guardarTexto = () => {
         if (nombreCanal.trim() === '') {
             setError('El nombre del grupo no puede estar vacío');
         } else {
-            // console.log('Texto guardado:', nombreCanal);
-            agregarCanal(nombreCanal);
-            setModalVisible(false);
-            setError(''); // Limpiar el mensaje de error
-            setNombreCanal('');
+            consultarNombreGrupo(nombreCanal)
+                .then(resultado => {
+                    if (resultado) {
+                        console.log('El nombre de grupo ya existe en la tabla GRUPOS.');
+                    } else {
+                        // console.log('Texto guardado:', nombreCanal);
+                        agregarCanal(nombreCanal);
+                        setModalVisible(false);
+                        setError(''); // Limpiar el mensaje de error
+                        setNombreCanal('');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al consultar el nombre de grupo en la tabla GRUPOS:', error);
+                });
         }
+    };
+
+    const borrarGrupo_Tomas = (nombreGrupo) => {
+        // Obtiene primero el ID del grupo a eliminar
+        consultarIdGrupo(nombreGrupo).
+            then((id) => {
+                console.log("Obtiene id");
+                // Elimina las tomas pertenecientes al grupo a eliminar
+                eliminarTomas(id)
+                    .then(() => {
+                        console.log("Entra a eliminar tomas");
+                        // Si las tomas se eliminan exitosamente, se procede a eliminar el grupo
+                        eliminarGrupo(nombreGrupo);
+                    })
+                    .catch((error) => {
+                        console.error('Error al ejecutar eliminarTomas:', error);
+                    });
+            })
+            .catch((error) => {
+                console.error('Error al obtener el ID del grupo:', error);
+            });
     };
 
     const handleTextChange = (text) => {
@@ -152,7 +190,9 @@ const Canales = ({ navigation }) => {
                     title={'eliminar'}
                     onPress={() => {
                         setOpen(!open);
-                        console.log('Aqui va la funcion');
+                        listaBorrarGrupos.forEach((nombreGrupo) => {
+                            borrarGrupo_Tomas(nombreGrupo);
+                        });
                     }} />
 
             </SpeedDial>

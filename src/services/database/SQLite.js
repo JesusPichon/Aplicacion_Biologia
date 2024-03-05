@@ -398,43 +398,53 @@ export const editarToma = (tomasData, id) => {
 };
 
 export const eliminarGrupo = (nombreGrupo) => {
-  db.transaction(
+  return new Promise((resolve, reject) => {
+    db.transaction(
       (tx) => {
-          tx.executeSql(
-              'DELETE FROM GRUPOS WHERE nombre = ?',
-              [nombreGrupo],
-              (_, result) => {
-                  console.log(`${nombreGrupo} eliminado exitosamente`);
-              },
-              (_, error) => {
-                  console.error(`Error al borrar ${nombreGrupo}: `, error);
-              }
-          );
+        tx.executeSql(
+          'DELETE FROM GRUPOS WHERE nombre = ?',
+          [nombreGrupo],
+          (_, result) => {
+            console.log(`${nombreGrupo} eliminado exitosamente`);
+            resolve(); // Resolve the promise on success
+          },
+          (_, error) => {
+            console.error(`Error al borrar ${nombreGrupo}: `, error);
+            reject(error); // Reject the promise on error
+          }
+        );
       },
       (error) => {
-          console.error('Error al ejecutar la consulta: ', error);
+        console.error('Error al ejecutar la consulta: ', error);
+        reject(error); // Reject the promise on error during transaction
       }
-  );
+    );
+  });
 };
 
 export const eliminarTomas = (groupID) => {
-  db.transaction(
+  return new Promise((resolve, reject) => {
+    db.transaction(
       (tx) => {
-          tx.executeSql(
-              'DELETE FROM TOMAS WHERE grupo = ?',
-              [groupID],
-              (_, result) => {
-                  console.log('Las tomas con ID de grupo ', groupID, ' se eliminaron exitosamente');
-              },
-              (_, error) => {
-                  console.error('Error mientras se borraban las tomas: ', error);
-              }
-          );
+        tx.executeSql(
+          'DELETE FROM TOMAS WHERE grupo = ?',
+          [groupID],
+          (_, result) => {
+            console.log('Las tomas con ID de grupo ', groupID, ' se eliminaron exitosamente');
+            resolve(); // Resolve the promise on success
+          },
+          (_, error) => {
+            console.error('Error mientras se borraban las tomas: ', error);
+            reject(error); // Reject the promise on error
+          }
+        );
       },
       (error) => {
-          console.error('Error al ejecutar la consulta: ', error);
+        console.error('Error al ejecutar la consulta: ', error);
+        reject(error); // Reject the promise on error during transaction
       }
-  );
+    );
+  });
 };
 
 
@@ -456,4 +466,28 @@ const borrarGT = (nombreGrupo) => {
       .catch((error) => {
           console.error('Error al obtener el ID del grupo:', error);
       });
+};
+
+export const consultarNombreGrupo = (nombreGrupo) => {
+  return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+          tx.executeSql(
+              'SELECT * FROM GRUPOS WHERE nombre = ?',
+              [nombreGrupo],
+              (tx, results) => {
+                  if (results.rows.length > 0) {
+                      console.log('El nombre de grupo ya existe en la tabla GRUPOS.');
+                      resolve(true);
+                  } else {
+                      console.log('El nombre de grupo no existe en la tabla GRUPOS.');
+                      resolve(false);
+                  }
+              },
+              error => {
+                  console.error('Error al ejecutar la consulta:', error);
+                  reject(error);
+              }
+          );
+      });
+  });
 };
