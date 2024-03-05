@@ -385,9 +385,9 @@ export const editarToma = (tomasData, id) => {
       [...Object.values(tomasData), id], // Convierte el objeto en un array de valores y agrega el grupo para identificar la toma a editar
       (_, results) => {
         if (results.rowsAffected > 0) {
-          console.log(`La información de la toma ha sido actualizada correctamente en la tabla TOMAS.`);
+          console.log(`La información de la toma ha sido actualizada correctamente en la tabla TOMAS.`, results);
         } else {
-          console.log(`Error: No se pudo actualizar la información de la toma en la tabla TOMAS.`);
+          console.log(`Error: No se pudo actualizar la información de la toma en la tabla TOMAS.`, results);
         }
       },
       error => {
