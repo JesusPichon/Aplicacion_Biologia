@@ -24,38 +24,45 @@ import {
 
 
 const InfColecta = ({ navigation, route }) => {
+    function tipoDeCoordenadas(coordenadas) {
+        if (coordenadas !== null && coordenadas !== '') {
+            return 'metric'
+        }else{
+            return 'geographic'
+        }
+    }
     data={
-        Nombre_cientifico: route.params.data.Nombre_cientifico,
-        Familia: route.params.data.Familia,
-        Nombre_local: route.params.data.Nombre_local,
-        Estado: route.params.data.Estado, // Debe coincidir con el value de la opción que deseas seleccionar
-        Municipio: route.params.data.Municipio,
-        Localidad: route.params.data.Localidad,
-        Altitud: route.params.data.Altitud,
-        Grados_Latitud: route.params.data.Grados_Latitud,
-        Minutos_Latitud: route.params.data.Minutos_Latitud,
-        Hemisferio_Latitud: route.params.data.Hemisferio_Latitud,
-        Grados_Longitud: route.params.data.Grados_Longitud,
-        Minutos_Longitud: route.params.data.Minutos_Longitud,
-        Hemisferio_Longitud: route.params.data.Hemisferio_Longitud,
-        X: route.params.data.X,
-        Y: route.params.data.Y,
-        Informacion_ambiental: route.params.data.Informacion_ambiental,
-        Suelo: route.params.data.Suelo,
-        Asociada: route.params.data.Asociada,
-        Abundancia: route.params.data.Abundancia,
-        Forma_biologica: route.params.data.Forma_biologica,
-        Tamano: route.params.data.Tamano,
-        Flor: route.params.data.Flor,
-        Fruto: route.params.data.Fruto,
-        Usos: route.params.data.Usos,
-        Colector_es: route.params.data.Colector_es,
-        No_colecta: route.params.data.No_colecta,
-        Fecha: route.params.data.Fecha,
-        Determino: route.params.data.Determino,
-        Otros_datos: route.params.data.Otros_datos,
-        Tipo_vegetacion: route.params.data.Tipo_vegetacion,
-        option: route.params.data.option,
+        Nombre_cientifico: route.params.data.nombre_cientifico,
+        Familia: route.params.data.familia,
+        Nombre_local: route.params.data.nombre_local,
+        Estado: route.params.data.estado, // Debe coincidir con el value de la opción que deseas seleccionar
+        Municipio: route.params.data.municipio,
+        Localidad: route.params.data.localidad,
+        Altitud: route.params.data.altitud,
+        Grados_Latitud: route.params.data.grados_Latitud,
+        Minutos_Latitud: route.params.data.minutos_Latitud,
+        Hemisferio_Latitud: route.params.data.hemisferio_Latitud,
+        Grados_Longitud: route.params.data.grados_Longitud,
+        Minutos_Longitud: route.params.data.minutos_Longitud,
+        Hemisferio_Longitud: route.params.data.hemisferio_Longitud,
+        X: route.params.data.x,
+        Y: route.params.data.y,
+        Informacion_ambiental: route.params.data.informacion_ambiental,
+        Suelo: route.params.data.suelo,
+        Asociada: route.params.data.asociada,
+        Abundancia: route.params.data.abundancia,
+        Forma_biologica: route.params.data.forma_biologica,
+        Tamano: route.params.data.tamano,
+        Flor: route.params.data.flor,
+        Fruto: route.params.data.fruto,
+        Usos: route.params.data.usos,
+        Colector_es: route.params.data.colector_es,
+        No_colecta: route.params.data.no_colecta,
+        Fecha: route.params.data.fecha,
+        Determino: route.params.data.determino,
+        Otros_datos: route.params.data.otros_datos,
+        Tipo_vegetacion: route.params.data.tipo_vegetacion,
+        option: tipoDeCoordenadas(route.params.data.x),
     }
 
     const [switchStates, setSwitchStates] = useState({}); // Estado para los interruptores
@@ -81,19 +88,16 @@ const InfColecta = ({ navigation, route }) => {
     const getFilteredData = () => {
         const filteredData = {};
         Object.keys(route.params.data).forEach(key => {
-            if (key !== 'X' && key !== 'Y' && key !== 'Grados_Latitud' && key !== 'Minutos_Latitud' && key !== 'Hemisferio_Latitud' && key !== 'Grados_Longitud' && key !== 'Minutos_Longitud' && key !== 'Hemisferio_Longitud') {
-                if (key === 'Fecha' && switchStates[key]) {
-                    // Convertir la fecha a cadena en formato local
-                    filteredData[key] = new Date(route.params.data[key]).toLocaleDateString();
-                } else if (switchStates[key]) {
+            if (key !== 'x' && key !== 'y' && key !== 'grados_Latitud' && key !== 'minutos_Latitud' && key !== 'hemisferio_Latitud' && key !== 'grados_Longitud' && key !== 'minutos_Longitud' && key !== 'hemisferio_Longitud') {
+                if (switchStates[key]) {
                     // Mantener otros datos que no sean fechas o que estén seleccionados por los interruptores
                     filteredData[key] = route.params.data[key];
                 }
             } 
-            if (route.params.data.option === 'metric' && switchStates['Coordenadas']) {
-                filteredData['Coordenadas'] = 'x:' + route.params.data.X + '  y:' +route.params.data.Y;
+            if (data.option === 'metric' && switchStates['Coordenadas']) {
+                filteredData['Coordenadas'] = 'x:' + route.params.data.x + '  y:' +route.params.data.y;
             }else{
-                filteredData['Coordenadas']
+                filteredData['Coordenadas'] = 'Latitud:' + route.params.data.grados_Latitud + '° ' + route.params.data.minutos_Latitud + "' " + route.params.data.hemisferio_Latitud + ' Longitud:' + route.params.data.grados_Longitud + '° ' + route.params.data.minutos_Longitud +  "' " + route.params.data.hemisferio_Longitud
             }
         });
         return filteredData;
@@ -203,13 +207,13 @@ const InfColecta = ({ navigation, route }) => {
                                         return (
                                             <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
                                                 <Text style={[styles.textP, { fontSize: 18, fontWeight: 'bold', width:'30%', borderWidth: 1, borderColor: cuarto, padding: 1 }]}>Coordenadas</Text>
-                                                {route.params.data.option === 'metric' ? (
+                                                {data.option === 'metric' ? (
                                                     <Text style={[styles.textP, { fontSize: 18, fontWeight: 'normal', width:'55%', borderWidth: 1, borderColor: cuarto, padding: 1, textAlign:'center' }]}>
-                                                        {'x:' + route.params.data.X + '  y:' +route.params.data.Y}
+                                                        {'x:' + route.params.data.x + '  y:' +route.params.data.y}
                                                     </Text>
                                                 ) : (
                                                     <Text style={[styles.textP, { fontSize: 18, fontWeight: 'normal', width:'55%', borderWidth: 1, borderColor: cuarto, padding: 1  }]}>
-                                                        {'Latitud:' + route.params.data.Grados_Latitud + '° ' + route.params.data.Minutos_Latitud + "' " + route.params.data.Hemisferio_Latitud + ' Longitud:' + route.params.data.Grados_Longitud + '° ' + route.params.data.Minutos_Longitud +  "' " + route.params.data.Hemisferio_Longitud}
+                                                        {'Latitud:' + route.params.data.grados_Latitud + '° ' + route.params.data.minutos_Latitud + "' " + route.params.data.hemisferio_Latitud + ' Longitud:' + route.params.data.grados_Longitud + '° ' + route.params.data.minutos_Longitud +  "' " + route.params.data.hemisferio_Longitud}
                                                     </Text>
                                                 )}
                                                 <Switch

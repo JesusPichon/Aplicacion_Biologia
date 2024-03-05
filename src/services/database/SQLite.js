@@ -215,6 +215,30 @@ export const verGrupos = () => {
   });
 };
 
+export const verGruposFiltrado = (nombre) => {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql('SELECT nombre FROM GRUPOS WHERE nombre LIKE ?', [`%${nombre}%`], (tx, results) => {
+        const len = results.rows.length;
+        if (len > 0) {
+          const grupos = [];
+          for (let i = 0; i < len; i++) {
+            grupos.push(results.rows.item(i).nombre);
+          }
+          console.log(`Consulta exitosa, ${len} nombres de grupos encontrados`);
+          resolve(grupos); // Resolvemos la promesa con los resultados
+        } else {
+          console.log('No se encontraron resultados.');
+          resolve([]); // Resolvemos la promesa con un array vacío si no hay resultados
+        }
+      }, error => {
+        console.error('Error al ejecutar la consulta:', error);
+        reject(error); // Rechazamos la promesa en caso de error
+      });
+    });
+  });
+};
+
 //Este fragmento de codigo pasarlo a la sección donde se muestran los grupos
 /*verGrupos()
   .then(result => {
@@ -259,6 +283,57 @@ export const verTomas = (grupoId) => {
     });
   });
 };
+
+export const verTomasFiltrado = (grupoId, buscar) => {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      // Obtener los nombres de las columnas de la tabla TOMAS
+      tx.executeSql('PRAGMA table_info(TOMAS)', [], (tx, result) => {
+        const numCols = result.rows.length;
+        const columnNames = [];
+        for (let i = 0; i < numCols; i++) {
+          columnNames.push(result.rows.item(i).name);
+        }
+
+        // Construir la consulta dinámica para buscar en cada columna
+        const placeholders = Array(numCols - 1).fill('?').join(' OR '); // Excluye el campo de ID
+        const query = `SELECT * FROM TOMAS WHERE grupo = ? AND (${columnNames.slice(1).map(name => `${name} LIKE ?`).join(' OR ')})`;
+        const params = [grupoId, ...Array(numCols - 1).fill(`%${buscar}%`)]; // Excluye el campo de ID
+
+        // Ejecutar la consulta SQL
+        tx.executeSql(query, params,
+          (tx, results) => {
+            const len = results.rows.length;
+            let tomas = [];
+            if (len > 0) {
+              for (let i = 0; i < len; i++) {
+                const row = results.rows.item(i);
+                const tomaObj = {};
+                
+                Object.keys(row).forEach(key => {
+                  tomaObj[key] = row[key];
+                });
+                
+                tomas.push(tomaObj);
+              }
+              
+              console.log(`Consulta exitosa, ${len} tomas encontradas`);
+              resolve(tomas);
+            } else {
+              console.log('No se encontraron tomas.');
+              resolve([]);
+            }
+          }, error => {
+            console.error('Error al ejecutar la consulta de tomas:', error);
+            reject(error);
+          });
+      });
+    });
+  });
+};
+
+
+
 
 //Este fragmento de codigo pasarlo a la sección donde se muestran las tomas
 /*verTomas("Poner aqui la variable con el id del grupo del que se quieran mostrar sus tomas")
