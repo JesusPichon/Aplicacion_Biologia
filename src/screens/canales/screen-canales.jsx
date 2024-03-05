@@ -15,6 +15,8 @@ const Canales = ({ navigation }) => {
     const [error, setError] = useState('');
     
 
+    const [refresh, setRefresh] = useState(false);
+
      // animaciones
     const {
         unoAnim,
@@ -101,7 +103,7 @@ const Canales = ({ navigation }) => {
                     .then(() => {
                         console.log("Entra a eliminar tomas");
                         // Si las tomas se eliminan exitosamente, se procede a eliminar el grupo
-                        eliminarGrupo(nombreGrupo);
+                        eliminarGrupo(nombreGrupo).then(() => verCanales());
                     })
                     .catch((error) => {
                         console.error('Error al ejecutar eliminarTomas:', error);
