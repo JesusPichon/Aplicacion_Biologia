@@ -71,12 +71,8 @@ const InfColecta = ({ navigation, route }) => {
 
     // Inicializar el estado de los interruptores con valores predeterminados
     useEffect(() => {
-        const initialSwitchStates = {};
-        Object.keys(route.params.data).forEach(key => {
-            initialSwitchStates[key] = false;
-        });
-        setSwitchStates(initialSwitchStates);
-    }, [route.params.data]);
+       
+    }, []);
 
     // Manejar el cambio de estado de un interruptor específico
     const handleSwitchChange = (field) => {
@@ -89,16 +85,20 @@ const InfColecta = ({ navigation, route }) => {
     // Obtener los datos con solo los campos que tienen interruptores activados
     const getFilteredData = () => {
         const filteredData = {};
-        Object.keys(route.params.data).forEach(key => {
+        console.log('data')
+        console.log(data)
+        console.log('switch')
+        console.log(switchStates)
+        Object.keys(data).forEach(key => {
             if (key !== 'x' && key !== 'y' && key !== 'grados_Latitud' && key !== 'minutos_Latitud' && key !== 'hemisferio_Latitud' && key !== 'grados_Longitud' && key !== 'minutos_Longitud' && key !== 'hemisferio_Longitud') {
                 if (switchStates[key]) {
                     // Mantener otros datos que no sean fechas o que estén seleccionados por los interruptores
-                    filteredData[key] = route.params.data[key];
+                    filteredData[key] = data[key];
                 }
             } 
             if (data.option === 'metric' && switchStates['Coordenadas']) {
                 filteredData['Coordenadas'] = 'x:' + route.params.data.x + '  y:' +route.params.data.y;
-            }else{
+            } if (data.option === 'geographic' && switchStates['Coordenadas']) {
                 filteredData['Coordenadas'] = 'Latitud:' + route.params.data.grados_Latitud + '° ' + route.params.data.minutos_Latitud + "' " + route.params.data.hemisferio_Latitud + ' Longitud:' + route.params.data.grados_Longitud + '° ' + route.params.data.minutos_Longitud +  "' " + route.params.data.hemisferio_Longitud
             }
         });
