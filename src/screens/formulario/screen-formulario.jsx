@@ -18,13 +18,9 @@ import {
 
 const Formulario = ({route}) => {
 
-
-    //funcion para agregar tomas 
+    //nombre del canal donde se agregara la nueva toma 
     const nombreCanal = route.params.nombreCanal;
-    //console.log(nombreCanal);
-
-    //const {agregar} = route.params;
-
+   
     const { control, handleSubmit, formState: { errors }, watch, setValue } = useForm({
         Nombre_cientifico: '',
         Familia: '',
