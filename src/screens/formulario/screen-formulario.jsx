@@ -20,6 +20,7 @@ const Formulario = ({route}) => {
 
     //nombre del canal donde se agregara la nueva toma 
     const nombreCanal = route.params.nombreCanal;
+    const navigation = route.params.navigation;
    
     const { control, handleSubmit, formState: { errors }, watch, setValue } = useForm({
         Nombre_cientifico: '',
@@ -113,6 +114,8 @@ const Formulario = ({route}) => {
             })
             .then()
             .catch((error) => console.error("Error insertar toma: ", error));
+        
+        navigation.goBack();
     }
 
 
@@ -297,6 +300,7 @@ const Formulario = ({route}) => {
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
                     tooltip={"Aqui va un mensaje de ayuda"}
+                    keyboardType={'numeric'}
                 />
                 <FechaComponente
                     control={control}

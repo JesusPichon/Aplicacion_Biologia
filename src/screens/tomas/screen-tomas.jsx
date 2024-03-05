@@ -90,7 +90,7 @@ const Tomas = ({ navigation, route }) => {
                     title={'agregar'}
                     onPress={() => {
                         setOpen(!open);
-                        navigation.navigate('Formulario', { agregar, nombreCanal })
+                        navigation.navigate('Formulario', { navigation, nombreCanal })
                     }} />
 
                 <SpeedDial.Action
