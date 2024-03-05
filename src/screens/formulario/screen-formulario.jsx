@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "../../styles/style-app";
+import styles from "./style-formulario";
 import TextInputCustom from "../../components/textInputCustome";
 import { secundario, tercero } from "../../styles/style-colors";
 import { useForm } from "react-hook-form";
@@ -203,13 +203,6 @@ const Formulario = ({ route }) => {
                     name="Nombre_local"
                     errors={errors}
                 />
-                {/* <TextInputCustom
-                    label="Estado:"
-                    control={control}
-                    name="Estado"
-                    rules={{ required: 'Este campo es requerido.' }}
-                    errors={errors}
-                /> */}
                 <CustomDropdown
                     label="Estado:"
                     data={data_Estados}
@@ -237,12 +230,12 @@ const Formulario = ({ route }) => {
                     errors={errors}
                 />
                 <TextInputCustom
-                    label="Altitud:"
+                    label="Altitud (m.s.n.m):"
                     control={control}
                     name="Altitud"
                     errors={errors}
+                    keyboardType={'numeric'}
                 />
-                <Text style={styles.textP}>Coordenadas:</Text>
                 <InputCoordenadas
                     control={control}
                     rules={reglasCoordenadas}
@@ -314,11 +307,12 @@ const Formulario = ({ route }) => {
                     placeholder={"Selecciona un item"}
                 />
                 <TextInputCustom
-                    label="Tamaño:"
+                    label="Tamaño (m):"
                     control={control}
                     name="Tamano"
                     errors={errors}
                     tooltip={"Aqui va un mensaje de ayuda"}
+                    keyboardType={'numeric'}
                 />
                 <TextInputCustom
                     label="Flor:"
@@ -387,7 +381,6 @@ const Formulario = ({ route }) => {
                 >
                     <Text style={styles.textT}>Guardar</Text>
                 </TouchableOpacity>
-                <Text>   </Text>
             </ScrollView>
             {/* </KeyboardAvoidingView> */}
         </View>
