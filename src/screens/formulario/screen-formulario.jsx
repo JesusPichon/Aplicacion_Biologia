@@ -16,11 +16,10 @@ import {
     KeyboardAvoidingView
 } from "react-native";
 
-const Formulario = ({route}) => {
+const Formulario = ({navigation, route}) => {
 
     //nombre del canal donde se agregara la nueva toma 
     const nombreCanal = route.params.nombreCanal;
-    const navigation = route.params.navigation;
    
     const { control, handleSubmit, formState: { errors }, watch, setValue } = useForm({
         Nombre_cientifico: '',
