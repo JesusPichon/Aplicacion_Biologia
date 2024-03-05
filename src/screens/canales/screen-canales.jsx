@@ -6,7 +6,7 @@ import animaciones from '../../components/animaciones/animaciones';
 import Canal from "../../components/Canal";
 import BarraBusqueda from "../../components/BarraBusqueda";
 import { SpeedDial } from "@rneui/themed";
-import { verGrupos, eliminarTomas, eliminarGrupo, consultarIdGrupo, consultarNombreGrupo } from "../../services/database/SQLite";
+import { insertarGrupos, verGrupos, eliminarTomas, eliminarGrupo, consultarIdGrupo, consultarNombreGrupo } from "../../services/database/SQLite";
 import  { selectCsv }  from "../../services/functions/import-csv";
 
 const Canales = ({ navigation }) => {
@@ -23,6 +23,7 @@ const Canales = ({ navigation }) => {
 
     //lista para guardar los objetos que se van a eliminar 
     const [listaBorrarGrupos, setListaBorrarGrupos] = useState([]);
+    const [canales, setCanales] = useState([]);
 
     //funciones para manejar los objetos de la lista 
     const seleccionar = (canal) => {
@@ -40,7 +41,7 @@ const Canales = ({ navigation }) => {
      //nombre del canal
     const [nombreCanal, setNombreCanal] = useState('');
 
-    const obtenerGrupos = () => {
+    const verCanales = () => {
         verGrupos()
         .then(result => {
             setGrupos(result);
@@ -57,8 +58,8 @@ const Canales = ({ navigation }) => {
 
     useEffect(() => {
         startAnimations();
-        obtenerGrupos();
-    }, []);
+        verCanales();
+    }, [canales]);
     
     //agregar canales
     // CAMBIAR PARA LAS NUEVAS VARIABLES
