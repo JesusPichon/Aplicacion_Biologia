@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Animated, Modal, TextInput, FlatList,TouchableWithoutFeedback} from "react-native";
+import { View, Text, TouchableOpacity, Animated, Modal, TextInput, FlatList, TouchableWithoutFeedback } from "react-native";
 import { principal, secundario } from "../../styles/style-colors";
 import styles from "./style-canales";
 import animaciones from '../../components/animaciones/animaciones';
@@ -7,17 +7,14 @@ import Canal from "../../components/Canal";
 import BarraBusqueda from "../../components/BarraBusqueda";
 import { SpeedDial } from "@rneui/themed";
 import { insertarGrupos, verGrupos, eliminarTomas, eliminarGrupo, consultarIdGrupo, consultarNombreGrupo } from "../../services/database/SQLite";
-import  { selectCsv }  from "../../services/functions/import-csv";
+import { selectCsv } from "../../services/functions/import-csv";
 
 const Canales = ({ navigation }) => {
 
     const [grupos, setGrupos] = useState([]);
     const [error, setError] = useState('');
-    
 
-    const [refresh, setRefresh] = useState(false);
-
-     // animaciones
+    // animaciones
     const {
         unoAnim,
         startAnimations,
@@ -40,18 +37,18 @@ const Canales = ({ navigation }) => {
     const [open, setOpen] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
 
-     //nombre del canal
+    //nombre del canal
     const [nombreCanal, setNombreCanal] = useState('');
 
     const verCanales = () => {
         verGrupos()
-        .then(result => {
-            setGrupos(result);
-        })
-        .catch(error => {
-            console.error('Ocurrió un error al obtener los grupos:', error);
-        });
-        
+            .then(result => {
+                setGrupos(result);
+            })
+            .catch(error => {
+                console.error('Ocurrió un error al obtener los grupos:', error);
+            });
+
     };
 
     const updateGrupos = (nuevosGrupos) => {
@@ -62,7 +59,7 @@ const Canales = ({ navigation }) => {
         startAnimations();
         verCanales();
     }, [canales]);
-    
+
     //agregar canales
     // CAMBIAR PARA LAS NUEVAS VARIABLES
     const agregarCanal = (nombreCanal) => {
@@ -103,7 +100,10 @@ const Canales = ({ navigation }) => {
                     .then(() => {
                         console.log("Entra a eliminar tomas");
                         // Si las tomas se eliminan exitosamente, se procede a eliminar el grupo
-                        eliminarGrupo(nombreGrupo).then(() => verCanales());
+                        eliminarGrupo(nombreGrupo).then(() => {
+                            verCanales();
+                            navigation.replace('Canales');
+                        });
                     })
                     .catch((error) => {
                         console.error('Error al ejecutar eliminarTomas:', error);
@@ -128,16 +128,16 @@ const Canales = ({ navigation }) => {
     return (
         <View style={{ backgroundColor: secundario, flex: 1 }}>
             <Animated.View style={{ opacity: unoAnim }}>
-            <BarraBusqueda titulo={'Buscar grupo'} pantalla={'canales'} onResult={updateGrupos} />
+                <BarraBusqueda titulo={'Buscar grupo'} pantalla={'canales'} onResult={updateGrupos} />
             </Animated.View>
 
 
-              {/* Nueva sección con los botones en fila */}
+            {/* Nueva sección con los botones en fila */}
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={[styles.fusionar, styles.fondoT]}>
                     <Text style={[styles.textP, { textAlign: 'center', fontWeight: 'bold' }]}>EXPORTAR</Text>
                 </TouchableOpacity>
-                <TouchableOpacity 
+                <TouchableOpacity
                     style={[styles.exportar, styles.fondoT]}
                     onPress={selectCsv}>
                     <Text style={[styles.textP, { textAlign: 'center', fontWeight: 'bold' }]}>IMPORTAR</Text>
@@ -146,7 +146,7 @@ const Canales = ({ navigation }) => {
 
             <View style={[styles.container2, styles.fondoT]}>
             </View>
-            
+
             <View style={[styles.container, styles.fondoT, { alignItems: 'center' }]}>
                 <View style={[styles.container1, styles.fondoT]}>
                 </View>
@@ -169,7 +169,7 @@ const Canales = ({ navigation }) => {
                 />
             </View>
 
-                {/* Boton flotante */}
+            {/* Boton flotante */}
             <SpeedDial
                 isOpen={open}
                 icon={{ name: 'add', color: 'white' }}
@@ -200,17 +200,17 @@ const Canales = ({ navigation }) => {
 
             </SpeedDial>
 
-            
-                <Modal
+
+            <Modal
                 animationType="slide"
                 transparent={true}
                 visible={modalVisible}
                 onRequestClose={closeModal}
-                >
+            >
                 <TouchableWithoutFeedback onPress={closeModal}>
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
                         <TouchableWithoutFeedback>
-                            <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10}}>
+                            <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
                                 <TextInput
                                     placeholder="Ingrese el nombre del grupo"
                                     style={{ borderWidth: 1, borderColor: 'gray', padding: 10, marginBottom: 10, borderRadius: 5, color: 'black' }}

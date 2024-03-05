@@ -8,7 +8,7 @@ import InputCoordenadas from "../../components/coordenadas-select/coordenadasCom
 import FechaComponente from "../../components/fecha-select/FechaComponente";
 import  CustomDropdown  from "../../components/listaComponente/ListaComponente";
 import { editarToma } from "../../services/database/SQLite";
-
+import { data_Estados, data_Abundancia, data_FormaBio } from "../formulario/dataDropdowns";
 
 import {
     ScrollView,
@@ -17,57 +17,6 @@ import {
     TouchableOpacity,
     KeyboardAvoidingView
 } from "react-native";
-
-const data_Estados = [
-    { label: 'Aguascalientes', value: 'aguascalientes' },
-    { label: 'Baja California', value: 'baja_california' },
-    { label: 'Baja California Sur', value: 'baja_california_sur' },
-    { label: 'Campeche', value: 'campeche' },
-    { label: 'Chiapas', value: 'chiapas' },
-    { label: 'Chihuahua', value: 'chihuahua' },
-    { label: 'Ciudad de México', value: 'ciudad_de_mexico' },
-    { label: 'Coahuila', value: 'coahuila' },
-    { label: 'Colima', value: 'colima' },
-    { label: 'Durango', value: 'durango' },
-    { label: 'Estado de México', value: 'estado_de_mexico' },
-    { label: 'Guanajuato', value: 'guanajuato' },
-    { label: 'Guerrero', value: 'guerrero' },
-    { label: 'Hidalgo', value: 'hidalgo' },
-    { label: 'Jalisco', value: 'jalisco' },
-    { label: 'Michoacán', value: 'michoacan' },
-    { label: 'Morelos', value: 'morelos' },
-    { label: 'Nayarit', value: 'nayarit' },
-    { label: 'Nuevo León', value: 'nuevo_leon' },
-    { label: 'Oaxaca', value: 'oaxaca' },
-    { label: 'Puebla', value: 'puebla' },
-    { label: 'Querétaro', value: 'queretaro' },
-    { label: 'Quintana Roo', value: 'quintana_roo' },
-    { label: 'San Luis Potosí', value: 'san_luis_potosi' },
-    { label: 'Sinaloa', value: 'sinaloa' },
-    { label: 'Sonora', value: 'sonora' },
-    { label: 'Tabasco', value: 'tabasco' },
-    { label: 'Tamaulipas', value: 'tamaulipas' },
-    { label: 'Tlaxcala', value: 'tlaxcala' },
-    { label: 'Veracruz', value: 'veracruz' },
-    { label: 'Yucatán', value: 'yucatan' },
-    { label: 'Zacatecas', value: 'zacatecas' },
-    { label: 'Otro...', value: 'otro' },
-];
-  
-
-const data_Abundancia = [
-    { label: 'Abundante', value: 'Abundante' },
-    { label: 'Regular', value: 'Regular' },
-    { label: 'Escasa', value: 'Escasa' },
-    { label: 'Otro...', value: 'otro' },
-];
-
-const data_FormaBio = [
-    { label: 'Hierba', value: 'Hierba' },
-    { label: 'Arbusto', value: 'Arbusto' },
-    { label: 'Árbol', value: 'Árbol' },
-    { label: 'Otro...', value: 'otro' },
-];
 
 const FormularioEdit = ({ navigation, route }) => {
     const { control, handleSubmit, formState: { errors }, watch, setValue } = useForm();
