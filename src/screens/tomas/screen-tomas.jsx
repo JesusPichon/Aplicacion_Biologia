@@ -47,6 +47,9 @@ const Tomas = ({ navigation, route }) => {
             .catch((error) => console.error("ID error: ", error));
     };
 
+    const updateTomas = (nuevosTomas) => {
+        setListaTomas(nuevosTomas);
+    };
 
     useEffect(() => {
         getTomas();
@@ -55,7 +58,8 @@ const Tomas = ({ navigation, route }) => {
     return (
         <View style={{ flex: 1, backgroundColor: secundario }}>
 
-            <BarraBusqueda titulo={'Fecha'} />
+            <BarraBusqueda titulo={'Buscar en las tomas'} pantalla={nombreCanal} onResult={updateTomas} />
+
 
             <View style={[styles.container, styles.fondoT]}>
 

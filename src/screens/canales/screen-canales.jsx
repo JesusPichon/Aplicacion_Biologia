@@ -43,6 +43,10 @@ const Canales = ({ navigation }) => {
         
     };
 
+    const updateGrupos = (nuevosGrupos) => {
+        console.log(nuevosGrupos)
+        setGrupos(nuevosGrupos); // Actualizamos los grupos con los resultados de la búsqueda
+    };
     useEffect(() => {
         startAnimations();
         verCanales();
@@ -81,7 +85,7 @@ const Canales = ({ navigation }) => {
     return (
         <View style={{ backgroundColor: secundario, flex: 1 }}>
             <Animated.View style={{ opacity: unoAnim }}>
-                <BarraBusqueda titulo={'Buscar grupo'} />
+            <BarraBusqueda titulo={'Buscar grupo'} pantalla={'canales'} onResult={updateGrupos} />
             </Animated.View>
 
 
