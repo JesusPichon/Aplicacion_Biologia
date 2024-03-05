@@ -1,28 +1,42 @@
-import { View, Text, TouchableOpacity, Animated, ImageBackground } from "react-native";
+import { View, Text, TouchableOpacity, ImageBackground } from "react-native";
 import styles from "../../styles/style-app";
 import stylesCanales from "../../screens/canales/style-canales";
+import { useState } from "react";
+import { principal, secundario } from "../../styles/style-colors";
 
 
-const Canal = ({ animacion, navigation, informacion, nombre }) => {
+const Canal = ({ navigation, informacion, nombre, deseleccionar, seleccionar }) => {
+
+
+    const [isSelected, setSelected] = useState(false);
+
     return (
         //<Animated.View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginBottom: 32, transform: [{ scale: animacion }] }}>
-            <TouchableOpacity 
-                style={[stylesCanales.cardVertical, styles.fondoT, { width: '45%', marginBottom: 20, margin: 10 }]} 
-                onPress={() => { navigation.navigate('Tomas', {nombre}) }}
-                >
-                <View style={[stylesCanales.cardVImagen]}>
-                    <ImageBackground 
-                        source={require('../../assets/images/Campo_flores.jpg')}
-                        resizeMode="cover"
-                        style={styles.image}>
-                    </ImageBackground>
-                </View>
-                <View style={[styles.botongrupo, styles.fondoP]}>
-                    <Text style={[styles.textT, { textAlign: 'center', fontWeight: 'bold' }]}>
-                        {informacion}
-                    </Text>
-                </View>
-            </TouchableOpacity>
+        <TouchableOpacity
+            style={[stylesCanales.cardVertical, styles.fondoT, { width: '45%', marginBottom: 20, margin: 10 }]}
+            onPress={() => { navigation.navigate('Tomas', { nombre }) }}
+            onLongPress={() => {
+                if (isSelected) {
+                    deseleccionar(informacion);
+                } else {
+                    seleccionar(informacion);
+                }
+                setSelected(!isSelected);
+            }}>
+
+            <View style={[stylesCanales.cardVImagen]}>
+                <ImageBackground
+                    source={require('../../assets/images/nature.jpg')}
+                    resizeMode="cover"
+                    style={styles.image}>
+                </ImageBackground>
+            </View>
+            <View style={[styles.botongrupo, {backgroundColor: isSelected ? principal : secundario}]}>
+                <Text style={[styles.textT, { textAlign: 'center', fontWeight: 'bold' }]}>
+                    {informacion}
+                </Text>
+            </View>
+        </TouchableOpacity>
         //</Animated.View>
     );
 }

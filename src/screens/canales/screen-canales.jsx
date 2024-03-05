@@ -5,11 +5,12 @@ import styles from "./style-canales";
 import animaciones from '../../components/animaciones/animaciones';
 import Canal from "../../components/Canal";
 import BarraBusqueda from "../../components/BarraBusqueda";
-import { Button, SpeedDial } from "@rneui/themed";
-import { insertarGrupos, verGrupos } from "../../services/database/SQLite";
-import  { selectCsv }  from "../../services/functions/import-csv"
+import { SpeedDial } from "@rneui/themed";
+import { verGrupos, eliminarTomas, eliminarGrupo, consultarIdGrupo} from "../../services/database/SQLite";
+import  { selectCsv }  from "../../services/functions/import-csv";
 
 const Canales = ({ navigation }) => {
+
     const [grupos, setGrupos] = useState([]);
     const [error, setError] = useState('');
     
@@ -20,8 +21,17 @@ const Canales = ({ navigation }) => {
         startAnimations,
     } = animaciones();
 
-    //lista de tomas inizializada con un objeto vacio
-    const [canales, setCanales] = useState([]);
+    //lista para guardar los objetos que se van a eliminar 
+    const [listaBorrarGrupos, setListaBorrarGrupos] = useState([]);
+
+    //funciones para manejar los objetos de la lista 
+    const seleccionar = (canal) => {
+        setListaBorrarGrupos([...listaBorrarGrupos, canal]);
+    }
+
+    const deseleccionar = (canal) => {
+        setListaBorrarGrupos(listaBorrarGrupos.filter((item) => item !== canal));
+    }
 
     //visualizar modal, speed dial
     const [open, setOpen] = useState(false);
@@ -30,11 +40,9 @@ const Canales = ({ navigation }) => {
      //nombre del canal
     const [nombreCanal, setNombreCanal] = useState('');
 
-    const verCanales = () => {
+    const obtenerGrupos = () => {
         verGrupos()
         .then(result => {
-            //Agregar aqui la funcionalidad para utilizar el resultado obtenido
-            console.log('Grupos obtenidos: ', result);
             setGrupos(result);
         })
         .catch(error => {
@@ -44,20 +52,14 @@ const Canales = ({ navigation }) => {
     };
 
     const updateGrupos = (nuevosGrupos) => {
-        console.log(nuevosGrupos)
         setGrupos(nuevosGrupos); // Actualizamos los grupos con los resultados de la búsqueda
     };
+
     useEffect(() => {
         startAnimations();
-        verCanales();
-    }, [canales]);
+        obtenerGrupos();
+    }, []);
 
-    //agregar canales 
-    const agregarCanal = (nombreCanal) => {
-        const nuevoCanal = { nombre: nombreCanal };
-        setCanales(canales.concat(nuevoCanal));
-        insertarGrupos(nombreCanal);
-    }
 
     const guardarTexto = () => {
         if (nombreCanal.trim() === '') {
@@ -103,24 +105,6 @@ const Canales = ({ navigation }) => {
 
             <View style={[styles.container2, styles.fondoT]}>
             </View>
-
-
-            {/* visualizacion de canales */}
-            {/* <View style={[styles.container, styles.fondoT, { alignItems: 'center' }]}>
-                <View style={[styles.container1, styles.fondoT]}>
-                </View>
-                {grupos.map((canal, index) => {
-                    console.log(grupos)
-                    return (
-                        <Canal
-                            key={index}
-                            animacion={unoAnim}
-                            navigation={navigation}
-                            informacion={grupos[index]}
-                            nombre={grupos[index]} />
-                    )
-                })}
-            </View> */}
             
             <View style={[styles.container, styles.fondoT, { alignItems: 'center' }]}>
                 <View style={[styles.container1, styles.fondoT]}>
@@ -137,7 +121,9 @@ const Canales = ({ navigation }) => {
                             animacion={unoAnim}
                             navigation={navigation}
                             informacion={item}
-                            nombre={item} />
+                            nombre={item}
+                            deseleccionar={deseleccionar}
+                            seleccionar={seleccionar} />
                     )}
                 />
             </View>
@@ -166,35 +152,12 @@ const Canales = ({ navigation }) => {
                     title={'eliminar'}
                     onPress={() => {
                         setOpen(!open);
-                        console.log("Delete Something!!");
+                        console.log('Aqui va la funcion');
                     }} />
 
             </SpeedDial>
 
-                {/* <Modal  //Ventana flotante 
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => setModalVisible(!modalVisible)}>
-
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-                    <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10}}>
-                        <TextInput
-                            placeholder="Ingrese el nombre del grupo"
-                            style={{ borderWidth: 1, borderColor: 'gray', padding: 10, marginBottom: 10, borderRadius: 5, color: 'black' }}
-                            onChangeText={handleTextChange}
-                        />
-                        {error ? <Text style={{ color: 'red' }}>{error}</Text> : null}
-                        <TouchableOpacity
-                            style={{ backgroundColor: principal , padding: 10, borderRadius: 5 }}
-                            onPress={guardarTexto}
-                        >
-                            <Text style={{ color: 'white', textAlign: 'center' }}>Guardar</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                </Modal> */}
-
+            
                 <Modal
                 animationType="slide"
                 transparent={true}
