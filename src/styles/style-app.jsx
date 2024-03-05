@@ -79,12 +79,12 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     bGuardar: {
-        maxWidth: 150,
+        width: '100%',
         borderRadius: 5,
         marginTop: 10,
-        marginBottom: 10,
+        marginBottom: 30,
         paddingHorizontal: 40,
-        alignSelf: 'center'
+        alignSelf: 'center',
     },
     // cartas en vertical (utilizadas para buscar el canal)
     cardVertical: {

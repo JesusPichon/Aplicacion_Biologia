@@ -1,5 +1,10 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { principal, secundario, tercero } from '../../styles/style-colors';
+
+let screenWidth = Dimensions.get('window').width;
+
+// Ajusta estos valores según tus necesidades
+let paddingHorizontal = screenWidth * 0.6; // Esto será el 50% del ancho de la pantalla
 
 const styles = StyleSheet.create({
     // color de las letras
@@ -24,7 +29,7 @@ const styles = StyleSheet.create({
     },
     // contenedor principal
     container: {
-        paddingHorizontal: 20,
+        //paddingHorizontal: 20,
         paddingTop: 0,
         marginTop: 20,
         flex: 1,
@@ -32,14 +37,14 @@ const styles = StyleSheet.create({
         borderTopRight: 30, 
     },
     container1: {
-        paddingHorizontal: 200, // Ajusta el relleno horizontal según tus necesidades
-        paddingTop: 50, // Ajusta el relleno superior según tus necesidades
+        paddingHorizontal: paddingHorizontal, // Ajusta el relleno horizontal según tus necesidades
+        paddingTop: 35, // Ajusta el relleno superior según tus necesidades
         marginTop: -20, // Ajusta el margen superior según tus necesidades
         overflow: 'hidden', // Esto ocultará cualquier contenido que se extienda fuera del contenedor
         transform: [{ skewY: '-3deg' }], // Ajusta el ángulo de inclinación según tus necesidades
       },
       container2: {
-        paddingHorizontal: 200, // Ajusta el relleno horizontal según tus necesidades
+        paddingHorizontal: paddingHorizontal, // Ajusta el relleno horizontal según tus necesidades
         paddingTop: 10, // Ajusta el relleno superior según tus necesidades
         marginTop: 15, // Ajusta el margen superior según tus necesidades
         overflow: 'hidden', // Esto ocultará cualquier contenido que se extienda fuera del contenedor
@@ -92,7 +97,7 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5,
         justifyContent: 'flex-end',
-        overflow: 'hidden'
+        overflow: 'hidden',
     },
     cardVImagen: {
         flex: 1
