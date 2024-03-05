@@ -396,3 +396,64 @@ export const editarToma = (tomasData, id) => {
     );
   });
 };
+
+export const eliminarGrupo = (nombreGrupo) => {
+  db.transaction(
+      (tx) => {
+          tx.executeSql(
+              'DELETE FROM GRUPOS WHERE nombre = ?',
+              [nombreGrupo],
+              (_, result) => {
+                  console.log(`${nombreGrupo} eliminado exitosamente`);
+              },
+              (_, error) => {
+                  console.error(`Error al borrar ${nombreGrupo}: `, error);
+              }
+          );
+      },
+      (error) => {
+          console.error('Error al ejecutar la consulta: ', error);
+      }
+  );
+};
+
+export const eliminarTomas = (groupID) => {
+  db.transaction(
+      (tx) => {
+          tx.executeSql(
+              'DELETE FROM TOMAS WHERE grupo = ?',
+              [groupID],
+              (_, result) => {
+                  console.log('Las tomas con ID de grupo ', groupID, ' se eliminaron exitosamente');
+              },
+              (_, error) => {
+                  console.error('Error mientras se borraban las tomas: ', error);
+              }
+          );
+      },
+      (error) => {
+          console.error('Error al ejecutar la consulta: ', error);
+      }
+  );
+};
+
+
+//ESTE METODO VA EN LA PANTALLA DE LOS GRUPOS
+const borrarGT = (nombreGrupo) => {
+  // Obtiene primero el ID del grupo a eliminar
+  consultarIdGrupo(nombreGrupo)
+      .then((id) => {
+          // Elimina las tomas pertenecientes al grupo a eliminar
+          eliminarTomas(id)
+              .then(() => {
+                  // Si las tomas se eliminan exitosamente, se procede a eliminar el grupo
+                  eliminarGrupo(nombreGrupo);
+              })
+              .catch((error) => {
+                  console.error('Error al ejecutar eliminarTomas:', error);
+              });
+      })
+      .catch((error) => {
+          console.error('Error al obtener el ID del grupo:', error);
+      });
+};
