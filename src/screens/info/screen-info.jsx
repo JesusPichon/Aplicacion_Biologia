@@ -31,6 +31,7 @@ const InfColecta = ({ navigation, route }) => {
             return 'geographic'
         }
     }
+    console.log(route.params.data)
     data={
         Nombre_cientifico: route.params.data.nombre_cientifico,
         Familia: route.params.data.familia,
@@ -63,6 +64,7 @@ const InfColecta = ({ navigation, route }) => {
         Otros_datos: route.params.data.otros_datos,
         Tipo_vegetacion: route.params.data.tipo_vegetacion,
         option: tipoDeCoordenadas(route.params.data.x),
+        id: route.params.data.id,
     }
 
     const [switchStates, setSwitchStates] = useState({}); // Estado para los interruptores

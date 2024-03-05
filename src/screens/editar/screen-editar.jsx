@@ -7,6 +7,8 @@ import { Button} from '@rneui/themed';
 import InputCoordenadas from "../../components/coordenadas-select/coordenadasComponent";
 import FechaComponente from "../../components/fecha-select/FechaComponente";
 import  CustomDropdown  from "../../components/listaComponente/ListaComponente";
+import { editarToma } from "../../services/database/SQLite";
+
 
 import {
     ScrollView,
@@ -67,12 +69,13 @@ const data_FormaBio = [
     { label: 'Otro...', value: 'otro' },
 ];
 
-const FormularioEdit = ({ route }) => {
+const FormularioEdit = ({ navigation, route }) => {
     const { control, handleSubmit, formState: { errors }, watch, setValue } = useForm();
     const [datosEditados, setDatosEditados] = useState({});
     useEffect(() => {
         // Valores de ejemplo, puedes cambiarlos por los valores reales
         const datosIniciales = route.params.data;
+        console.log(datosIniciales)
 
         // Establecer los valores iniciales en el estado del formulario
         Object.keys(datosIniciales).forEach(key => {
@@ -80,9 +83,25 @@ const FormularioEdit = ({ route }) => {
                 // Separar la fecha en partes
                 const partesFecha = datosIniciales[key].split('/');
                 // Crear un objeto Date con el formato MM/DD/AA
-                const fechaAcomodada = new Date(partesFecha[2], partesFecha[0] - 1, partesFecha[1]);
+                const fechaAcomodada = new Date(partesFecha[2], partesFecha[1] - 1, partesFecha[0]);
+
                 setValue(key, fechaAcomodada);
-            }else{
+                //setValue(key, datosIniciales[key]);
+
+            }else if (key === 'Grados_Latitud' || key === 'Minutos_Latitud' || key === 'Grados_Longitud' || key === 'Minutos_Longitud' || key === 'X' || key === 'Y') {
+                let contenido = '';
+                
+                // Separar la fecha en partes
+                if (datosIniciales[key] === '' || datosIniciales[key] === null){
+                    contenido = '';
+                }else{
+                    contenido = datosIniciales[key].toString();
+                }
+
+                setValue(key, contenido);
+                //setValue(key, datosIniciales[key]);
+
+            }else {
                 setValue(key, datosIniciales[key]);
             }
         });
@@ -109,8 +128,86 @@ const FormularioEdit = ({ route }) => {
     const handleEditar = () => {
         const datosEditados = watch(); // Obtener los datos editados del formulario
         setDatosEditados(datosEditados); // Actualizar el estado con los datos editados
-        console.log("Datos editados:", datosEditados); // Mostrar los datos editados por consola
+        editar(datosEditados);
     };
+
+    function editar(datosEditar) {
+        tomasData = {
+            nombre_cientifico: datosEditar.Nombre_cientifico,
+            familia: datosEditar.Familia,
+            nombre_local: datosEditar.Nombre_local,
+            estado: datosEditar.Estado,
+            municipio: datosEditar.Municipio,
+            localidad: datosEditar.Localidad,
+            altitud: datosEditar.Altitud,
+            grados_Latitud: datosEditar.Grados_Latitud,
+            minutos_Latitud: datosEditar.Minutos_Latitud,
+            hemisferio_Latitud: datosEditar.Hemisferio_Latitud,
+            grados_Longitud: datosEditar.Grados_Longitud,
+            minutos_Longitud: datosEditar.Minutos_Longitud,
+            hemisferio_Longitud: datosEditar.Hemisferio_Longitud,
+            x: datosEditar.X,
+            y: datosEditar.Y,
+            tipo_vegetacion: datosEditar.Tipo_vegetacion,
+            informacion_ambiental: datosEditar.Informacion_ambiental,
+            suelo: datosEditar.Suelo,
+            asociada: datosEditar.Asociada,
+            abundancia: datosEditar.Abundancia,
+            forma_biologica: datosEditar.Forma_biologica,
+            tamano: datosEditar.Tamano,
+            flor: datosEditar.Flor,
+            fruto: datosEditar.Fruto,
+            usos: datosEditar.Usos,
+            colector_es: datosEditar.Colector_es,
+            no_colecta: datosEditar.No_colecta,
+            fecha: datosEditar.Fecha.toLocaleDateString("gregory"),
+            determino: datosEditar.Determino,
+            otros_datos: datosEditar.Otros_datos,
+        };
+
+        data = {
+            nombre_cientifico: datosEditar.Nombre_cientifico,
+            familia: datosEditar.Familia,
+            nombre_local: datosEditar.Nombre_local,
+            estado: datosEditar.Estado,
+            municipio: datosEditar.Municipio,
+            localidad: datosEditar.Localidad,
+            altitud: datosEditar.Altitud,
+            grados_Latitud: datosEditar.Grados_Latitud,
+            minutos_Latitud: datosEditar.Minutos_Latitud,
+            hemisferio_Latitud: datosEditar.Hemisferio_Latitud,
+            grados_Longitud: datosEditar.Grados_Longitud,
+            minutos_Longitud: datosEditar.Minutos_Longitud,
+            hemisferio_Longitud: datosEditar.Hemisferio_Longitud,
+            x: datosEditar.X,
+            y: datosEditar.Y,
+            tipo_vegetacion: datosEditar.Tipo_vegetacion,
+            informacion_ambiental: datosEditar.Informacion_ambiental,
+            suelo: datosEditar.Suelo,
+            asociada: datosEditar.Asociada,
+            abundancia: datosEditar.Abundancia,
+            forma_biologica: datosEditar.Forma_biologica,
+            tamano: datosEditar.Tamano,
+            flor: datosEditar.Flor,
+            fruto: datosEditar.Fruto,
+            usos: datosEditar.Usos,
+            colector_es: datosEditar.Colector_es,
+            no_colecta: datosEditar.No_colecta,
+            fecha: datosEditar.Fecha.toLocaleDateString("gregory"),
+            determino: datosEditar.Determino,
+            otros_datos: datosEditar.Otros_datos,
+            id: datosEditar.id,
+        };
+    
+        // Llamar a la función editarToma con los datos editados y el id correspondiente
+        console.log("enviando: ")
+        console.log(data);
+        editarToma(tomasData, datosEditar.id);
+        navigation.navigate('InformacionToma', {data});
+        //console.log("Datos editados:", datos); // Mostrar los datos editados por consola
+    }
+    
+    
 
     return (
         <View style={{
