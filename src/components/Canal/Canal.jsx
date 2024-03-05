@@ -31,7 +31,7 @@ const Canal = ({ navigation, informacion, nombre, deseleccionar, seleccionar }) 
                     style={styles.image}>
                 </ImageBackground>
             </View>
-            <View style={[styles.botongrupo, {backgroundColor: isSelected ? secundario : principal}]}>
+            <View style={[styles.botongrupo, {backgroundColor: isSelected ? 'red' : principal}]}>
                 <Text style={[styles.textT, { textAlign: 'center', fontWeight: 'bold' }]}>
                     {informacion}
                 </Text>
