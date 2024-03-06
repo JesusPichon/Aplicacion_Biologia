@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     container1: {
         paddingHorizontal: paddingHorizontal, // Ajusta el relleno horizontal según tus necesidades
         paddingTop: 35, // Ajusta el relleno superior según tus necesidades
-        marginTop: -20, // Ajusta el margen superior según tus necesidades
+        marginTop: -25, // Ajusta el margen superior según tus necesidades
         overflow: 'hidden', // Esto ocultará cualquier contenido que se extienda fuera del contenedor
         transform: [{ skewY: '-3deg' }], // Ajusta el ángulo de inclinación según tus necesidades
       },
