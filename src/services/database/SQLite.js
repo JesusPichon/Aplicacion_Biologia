@@ -284,53 +284,47 @@ export const verTomas = (grupoId) => {
   });
 };
 
-export const verTomasFiltrado = (grupoId, buscar) => {
+export const verTomasFiltrado = (grupoId, campo, buscar) => {
   return new Promise((resolve, reject) => {
     db.transaction(tx => {
-      // Obtener los nombres de las columnas de la tabla TOMAS
-      tx.executeSql('PRAGMA table_info(TOMAS)', [], (tx, result) => {
-        const numCols = result.rows.length;
-        const columnNames = [];
-        for (let i = 0; i < numCols; i++) {
-          columnNames.push(result.rows.item(i).name);
-        }
+      // Construir la consulta dinámica para buscar en el campo especificado
+      const query = `SELECT * FROM TOMAS WHERE grupo = ? AND ${campo} LIKE ?`;
+      const params = [grupoId, `%${buscar}%`];
 
-        // Construir la consulta dinámica para buscar en cada columna
-        const placeholders = Array(numCols - 1).fill('?').join(' OR '); // Excluye el campo de ID
-        const query = `SELECT * FROM TOMAS WHERE grupo = ? AND (${columnNames.slice(1).map(name => `${name} LIKE ?`).join(' OR ')})`;
-        const params = [grupoId, ...Array(numCols - 1).fill(`%${buscar}%`)]; // Excluye el campo de ID
+      // Ejecutar la consulta SQL
+      tx.executeSql(query, params,
+        (tx, results) => {
+          const len = results.rows.length;
+          let tomas = [];
+          if (len > 0) {
+            for (let i = 0; i < len; i++) {
+              const row = results.rows.item(i);
+              const tomaObj = {};
 
-        // Ejecutar la consulta SQL
-        tx.executeSql(query, params,
-          (tx, results) => {
-            const len = results.rows.length;
-            let tomas = [];
-            if (len > 0) {
-              for (let i = 0; i < len; i++) {
-                const row = results.rows.item(i);
-                const tomaObj = {};
-                
-                Object.keys(row).forEach(key => {
-                  tomaObj[key] = row[key];
-                });
-                
-                tomas.push(tomaObj);
-              }
-              
-              console.log(`Consulta exitosa, ${len} tomas encontradas`);
-              resolve(tomas);
-            } else {
-              console.log('No se encontraron tomas.');
-              resolve([]);
+              // Copiar los datos de la fila a un objeto toma
+              Object.keys(row).forEach(key => {
+                tomaObj[key] = row[key];
+              });
+
+              tomas.push(tomaObj);
             }
-          }, error => {
-            console.error('Error al ejecutar la consulta de tomas:', error);
-            reject(error);
-          });
-      });
+
+            console.log(`Consulta exitosa, ${len} tomas encontradas`);
+            resolve(tomas);
+          } else {
+            console.log('No se encontraron tomas.');
+            resolve([]);
+          }
+        }, 
+        error => {
+          console.error('Error al ejecutar la consulta de tomas:', error);
+          reject(error);
+        }
+      );
     });
   });
 };
+
 
 
 
