@@ -96,22 +96,48 @@ export const crearTablas = () => {
   }
 };
 
+// export const insertarGrupos = (nombreGrupo) => {
+//   db.transaction(tx => {
+//     tx.executeSql(
+//       `INSERT INTO GRUPOS (nombre) VALUES (?)`,
+//       [nombreGrupo],
+//       (_, results) => {
+//         if (results.rowsAffected > 0) {
+//           console.log(`¡El grupo ${nombreGrupo} se ha insertado correctamente en la tabla GRUPOS!`);
+//         } else {
+//           console.log(`Error: No se pudo insertar el grupo ${nombreGrupo} en la tabla GRUPOS.`);
+//         }
+//       },
+//       error => {
+//         console.log(`Error al intentar insertar el grupo ${nombreGrupo}: ${error.message}`);
+//       }
+//     );
+//   });
+// };
+
 export const insertarGrupos = (nombreGrupo) => {
-  db.transaction(tx => {
-    tx.executeSql(
-      `INSERT INTO GRUPOS (nombre) VALUES (?)`,
-      [nombreGrupo],
-      (_, results) => {
-        if (results.rowsAffected > 0) {
-          console.log(`¡El grupo ${nombreGrupo} se ha insertado correctamente en la tabla GRUPOS!`);
-        } else {
-          console.log(`Error: No se pudo insertar el grupo ${nombreGrupo} en la tabla GRUPOS.`);
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `INSERT INTO GRUPOS (nombre) VALUES (?)`,
+        [nombreGrupo],
+        (_, results) => {
+          if (results.rowsAffected > 0) {
+            console.log(`¡El grupo ${nombreGrupo} se ha insertado correctamente en la tabla GRUPOS!`);
+            resolve();
+          } else {
+            const errorMessage = `Error: No se pudo insertar el grupo ${nombreGrupo} en la tabla GRUPOS.`;
+            console.log(errorMessage);
+            reject(new Error(errorMessage));
+          }
+        },
+        error => {
+          const errorMessage = `Error al intentar insertar el grupo ${nombreGrupo}: ${error.message}`;
+          console.log(errorMessage);
+          reject(new Error(errorMessage));
         }
-      },
-      error => {
-        console.log(`Error al intentar insertar el grupo ${nombreGrupo}: ${error.message}`);
-      }
-    );
+      );
+    });
   });
 };
 

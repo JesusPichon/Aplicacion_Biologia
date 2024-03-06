@@ -8,6 +8,7 @@ import BarraBusqueda from "../../components/BarraBusqueda";
 import { SpeedDial } from "@rneui/themed";
 import { insertarGrupos, verGrupos, eliminarTomas, eliminarGrupo, consultarIdGrupo, consultarNombreGrupo } from "../../services/database/SQLite";
 import { selectCsv } from "../../services/functions/import-csv";
+import Snackbar from 'react-native-snackbar';
 
 const Canales = ({ navigation }) => {
 
@@ -62,12 +63,65 @@ const Canales = ({ navigation }) => {
 
     //agregar canales
     // CAMBIAR PARA LAS NUEVAS VARIABLES
+    // const agregarCanal = (nombreCanal) => {
+    //     const nuevoCanal = { nombre: nombreCanal };
+    //     setCanales(canales.concat(nuevoCanal));
+    //     insertarGrupos(nombreCanal);
+    // }
+    // const agregarCanal = (nombreCanal) => {
+    //     const nuevoCanal = { nombre: nombreCanal };
+    //     setCanales(canales.concat(nuevoCanal));
+    //     insertarGrupos(nombreCanal)
+    //     .then(() => {
+    //         Snackbar.show({
+    //             text: 'Grupo creado exitosamente',
+    //             duration: Snackbar.LENGTH_SHORT,
+    //         });
+    //     })
+    //     .catch((error) => {
+    //         console.error('Error al agregar el canal:', error);
+    //         Snackbar.show({
+    //             text: 'Error al crear el grupo',
+    //             duration: Snackbar.LENGTH_SHORT,
+    //         });
+    //     })
+    //     .finally(() => {
+    //         setModalVisible(false);
+    //         setError('');
+    //         setNombreCanal('');
+    //     });
+    // };
     const agregarCanal = (nombreCanal) => {
         const nuevoCanal = { nombre: nombreCanal };
         setCanales(canales.concat(nuevoCanal));
-        insertarGrupos(nombreCanal);
-    }
-
+        insertarGrupos(nombreCanal)
+            .then(() => {
+                console.log('Grupo creado exitosamente vdxvxvf'); // Verificar si este mensaje se muestra en la consola
+                setTimeout(() => {
+                    Snackbar.show({
+                        text: 'Grupo creado exitosamente',
+                        duration: Snackbar.LENGTH_SHORT,
+                    });
+                }, 200); // Esperar 0.2 segundos antes de mostrar la Snackbar
+            })
+            .catch((error) => {
+                console.error('Error al agregar el canal:', error); // Verificar si se muestra el mensaje de error en la consola
+                setTimeout(() => {
+                    Snackbar.show({
+                        text: 'Error al crear el grupo',
+                        duration: Snackbar.LENGTH_SHORT,
+                    });
+                }, 200); // Esperar 0.2 segundos antes de mostrar la Snackbar
+            })
+            .finally(() => {
+                setModalVisible(false);
+                setError('');
+                setNombreCanal('');
+            });
+    };
+    
+    
+    
     const guardarTexto = () => {
         if (nombreCanal.trim() === '') {
             setError('El nombre del grupo no puede estar vacío');
@@ -76,12 +130,13 @@ const Canales = ({ navigation }) => {
                 .then(resultado => {
                     if (resultado) {
                         console.log('El nombre de grupo ya existe en la tabla GRUPOS.');
+                        setError('El nombre de grupo ya existe');
                     } else {
                         // console.log('Texto guardado:', nombreCanal);
                         agregarCanal(nombreCanal);
-                        setModalVisible(false);
-                        setError(''); // Limpiar el mensaje de error
-                        setNombreCanal('');
+                        // setModalVisible(false);
+                        // setError(''); // Limpiar el mensaje de error
+                        // setNombreCanal('');
                     }
                 })
                 .catch(error => {
@@ -103,6 +158,10 @@ const Canales = ({ navigation }) => {
                         eliminarGrupo(nombreGrupo).then(() => {
                             verCanales();
                             navigation.replace('Canales');
+                            Snackbar.show({
+                                text: 'Grupo eliminado exitosamente',
+                                duration: Snackbar.LENGTH_SHORT,
+                            });
                         });
                     })
                     .catch((error) => {
