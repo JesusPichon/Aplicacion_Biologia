@@ -147,7 +147,7 @@ const Canales = ({ navigation }) => {
             <View style={[styles.container2, styles.fondoT]}>
             </View>
 
-            <View style={[styles.container, styles.fondoT, { alignItems: 'center' }]}>
+            <View style={[styles.container, styles.fondoT]}>
                 <View style={[styles.container1, styles.fondoT]}>
                 </View>
 
@@ -158,6 +158,7 @@ const Canales = ({ navigation }) => {
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item, index }) => (
                         <Canal
+                            
                             key={index}
                             animacion={unoAnim}
                             navigation={navigation}
