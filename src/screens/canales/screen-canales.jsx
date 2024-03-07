@@ -24,7 +24,7 @@ const Canales = ({ navigation }) => {
     const [error, setError] = useState('');
 
     //Abrir Speed Dial y Modal
-    const [open, setOpen] = useState(false);
+    const [openButton, setOpenButton] = useState(false);
     const [openModal, setOpenModal] = useState(false)
 
     //guardar el nombre del canal 
@@ -36,12 +36,13 @@ const Canales = ({ navigation }) => {
     //revisar variable 
     const [canales, setCanales] = useState([]);
 
+    useEffect(() => {
+        startAnimations();
+        verCanales();
+    }, []);
 
-    
 
-    
-
-    //funciones para manejar los objetos de la lista 
+    //funciones para manejar el comportamiento de los componentes
     const seleccionar = (canal) => {
         setListaBorrarGrupos([...listaBorrarGrupos, canal]);
     }
@@ -50,8 +51,35 @@ const Canales = ({ navigation }) => {
         setListaBorrarGrupos(listaBorrarGrupos.filter((item) => item !== canal));
     }
 
-    
+    const updateGrupos = (nuevosGrupos) => {
+        setGrupos(nuevosGrupos); // Actualizamos los grupos con los resultados de la búsqueda
+    };
 
+    const handleTextChange = (text) => {
+        setNombreCanal(text);
+        setError(''); // Limpiar el mensaje de error cuando se ingresa texto
+    };
+
+    function handleOpenButton(){
+        setOpenButton(true);
+    }
+
+    function handleCloseButton(){
+        setOpenButton(false);
+    }
+
+    function handleOpenModal() {
+        setOpenModal(true);
+    }
+
+    function handleCloseModal() {
+        setOpenModal(false);
+        setNombreCanal(''); // Limpiar el nombre del canal
+        setError(''); // Limpiar el mensaje de error
+    }
+
+
+    //funciones que utilizan la base de datos
     const verCanales = () => {
         verGrupos()
             .then(result => {
@@ -63,16 +91,7 @@ const Canales = ({ navigation }) => {
 
     };
 
-    const updateGrupos = (nuevosGrupos) => {
-        setGrupos(nuevosGrupos); // Actualizamos los grupos con los resultados de la búsqueda
-    };
 
-    useEffect(() => {
-        startAnimations();
-        verCanales();
-    }, [canales]);
-
-    
     const agregarCanal = (nombreCanal) => {
         const nuevoCanal = { nombre: nombreCanal };
         setCanales(canales.concat(nuevoCanal));
@@ -110,18 +129,13 @@ const Canales = ({ navigation }) => {
             consultarNombreGrupo(nombreCanal)
                 .then(resultado => {
                     if (resultado) {
-                        console.log('El nombre de grupo ya existe en la tabla GRUPOS.');
                         setError('El nombre de grupo ya existe');
                     } else {
-                        // console.log('Texto guardado:', nombreCanal);
                         agregarCanal(nombreCanal);
-                        // setModalVisible(false);
-                        // setError(''); // Limpiar el mensaje de error
-                        // setNombreCanal('');
                     }
                 })
                 .catch(error => {
-                    console.error('Error al consultar el nombre de grupo en la tabla GRUPOS:', error);
+                    throw new Error(error); //Lanzamos el error
                 });
         }
     };
@@ -154,21 +168,7 @@ const Canales = ({ navigation }) => {
             });
     };
 
-    const handleTextChange = (text) => {
-        setNombreCanal(text);
-        setError(''); // Limpiar el mensaje de error cuando se ingresa texto
-    };
-
-    function handleOpenModal(){
-        setOpenModal(true);
-    }
-   
-    function handleCloseModal() {
-        setOpenModal(false);
-        setNombreCanal(''); // Limpiar el nombre del canal
-        setError(''); // Limpiar el mensaje de error
-    }
-
+    
     return (
         <View style={{ backgroundColor: secundario, flex: 1 }}>
             <Animated.View style={{ opacity: unoAnim }}>
@@ -214,21 +214,20 @@ const Canales = ({ navigation }) => {
                 />
             </View>
 
-            {/* Boton flotante */}
             <SpeedDial
-                isOpen={open}
+                isOpen={openButton}
                 icon={{ name: 'add', color: 'white' }}
                 openIcon={{ name: 'close', color: 'white' }}
                 color={principal}
-                onOpen={() => setOpen(!open)}
-                onClose={() => setOpen(!open)}>
+                onOpen={() => handleOpenButton()}
+                onClose={() => handleCloseButton()}>
 
                 <SpeedDial.Action
                     icon={{ name: 'add', color: '#fff' }}
                     color={principal}
                     title={'agregar'}
                     onPress={() => {
-                        setOpen(!open);
+                        handleCloseButton();
                         handleOpenModal();
                     }} />
 
@@ -237,7 +236,7 @@ const Canales = ({ navigation }) => {
                     color={principal}
                     title={'eliminar'}
                     onPress={() => {
-                        setOpen(!open);
+                        handleCloseButton();
                         listaBorrarGrupos.forEach((nombreGrupo) => {
                             borrarGrupo_Tomas(nombreGrupo);
                         });
