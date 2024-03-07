@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Animated, Modal, TextInput, FlatList, TouchableWithoutFeedback } from "react-native";
+import { View, Text, TouchableOpacity, Animated, FlatList } from "react-native";
 import { principal, secundario } from "../../styles/style-colors";
 import styles from "./style-canales";
 import animaciones from '../../components/animaciones/animaciones';
@@ -9,11 +9,9 @@ import { SpeedDial } from "@rneui/themed";
 import { insertarGrupos, verGrupos, eliminarTomas, eliminarGrupo, consultarIdGrupo, consultarNombreGrupo } from "../../services/database/SQLite";
 import { selectCsv } from "../../services/functions/import-csv";
 import Snackbar from 'react-native-snackbar';
+import VentanaFlotante from "../../components/VentanaFlotante";
 
 const Canales = ({ navigation }) => {
-
-    const [grupos, setGrupos] = useState([]);
-    const [error, setError] = useState('');
 
     // animaciones
     const {
@@ -21,9 +19,27 @@ const Canales = ({ navigation }) => {
         startAnimations,
     } = animaciones();
 
+    //grupos y mensajes de error
+    const [grupos, setGrupos] = useState([]);
+    const [error, setError] = useState('');
+
+    //Abrir Speed Dial y Modal
+    const [open, setOpen] = useState(false);
+    const [openModal, setOpenModal] = useState(false)
+
+    //guardar el nombre del canal 
+    const [nombreCanal, setNombreCanal] = useState('');
+
     //lista para guardar los objetos que se van a eliminar 
     const [listaBorrarGrupos, setListaBorrarGrupos] = useState([]);
+
+    //revisar variable 
     const [canales, setCanales] = useState([]);
+
+
+    
+
+    
 
     //funciones para manejar los objetos de la lista 
     const seleccionar = (canal) => {
@@ -34,12 +50,7 @@ const Canales = ({ navigation }) => {
         setListaBorrarGrupos(listaBorrarGrupos.filter((item) => item !== canal));
     }
 
-    //visualizar modal, speed dial
-    const [open, setOpen] = useState(false);
-    const [modalVisible, setModalVisible] = useState(false);
-
-    //nombre del canal
-    const [nombreCanal, setNombreCanal] = useState('');
+    
 
     const verCanales = () => {
         verGrupos()
@@ -61,36 +72,7 @@ const Canales = ({ navigation }) => {
         verCanales();
     }, [canales]);
 
-    //agregar canales
-    // CAMBIAR PARA LAS NUEVAS VARIABLES
-    // const agregarCanal = (nombreCanal) => {
-    //     const nuevoCanal = { nombre: nombreCanal };
-    //     setCanales(canales.concat(nuevoCanal));
-    //     insertarGrupos(nombreCanal);
-    // }
-    // const agregarCanal = (nombreCanal) => {
-    //     const nuevoCanal = { nombre: nombreCanal };
-    //     setCanales(canales.concat(nuevoCanal));
-    //     insertarGrupos(nombreCanal)
-    //     .then(() => {
-    //         Snackbar.show({
-    //             text: 'Grupo creado exitosamente',
-    //             duration: Snackbar.LENGTH_SHORT,
-    //         });
-    //     })
-    //     .catch((error) => {
-    //         console.error('Error al agregar el canal:', error);
-    //         Snackbar.show({
-    //             text: 'Error al crear el grupo',
-    //             duration: Snackbar.LENGTH_SHORT,
-    //         });
-    //     })
-    //     .finally(() => {
-    //         setModalVisible(false);
-    //         setError('');
-    //         setNombreCanal('');
-    //     });
-    // };
+    
     const agregarCanal = (nombreCanal) => {
         const nuevoCanal = { nombre: nombreCanal };
         setCanales(canales.concat(nuevoCanal));
@@ -114,14 +96,13 @@ const Canales = ({ navigation }) => {
                 }, 200); // Esperar 0.2 segundos antes de mostrar la Snackbar
             })
             .finally(() => {
-                setModalVisible(false);
                 setError('');
                 setNombreCanal('');
             });
     };
-    
-    
-    
+
+
+
     const guardarTexto = () => {
         if (nombreCanal.trim() === '') {
             setError('El nombre del grupo no puede estar vacío');
@@ -178,11 +159,15 @@ const Canales = ({ navigation }) => {
         setError(''); // Limpiar el mensaje de error cuando se ingresa texto
     };
 
-    const closeModal = () => {
-        setModalVisible(false);
+    function handleOpenModal(){
+        setOpenModal(true);
+    }
+   
+    function handleCloseModal() {
+        setOpenModal(false);
         setNombreCanal(''); // Limpiar el nombre del canal
         setError(''); // Limpiar el mensaje de error
-    };
+    }
 
     return (
         <View style={{ backgroundColor: secundario, flex: 1 }}>
@@ -217,7 +202,7 @@ const Canales = ({ navigation }) => {
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item, index }) => (
                         <Canal
-                            
+
                             key={index}
                             animacion={unoAnim}
                             navigation={navigation}
@@ -244,7 +229,7 @@ const Canales = ({ navigation }) => {
                     title={'agregar'}
                     onPress={() => {
                         setOpen(!open);
-                        setModalVisible(!modalVisible);
+                        handleOpenModal();
                     }} />
 
                 <SpeedDial.Action
@@ -260,34 +245,12 @@ const Canales = ({ navigation }) => {
 
             </SpeedDial>
 
-
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={closeModal}
-            >
-                <TouchableWithoutFeedback onPress={closeModal}>
-                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-                        <TouchableWithoutFeedback>
-                            <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
-                                <TextInput
-                                    placeholder="Ingrese el nombre del grupo"
-                                    style={{ borderWidth: 1, borderColor: 'gray', padding: 10, marginBottom: 10, borderRadius: 5, color: 'black' }}
-                                    onChangeText={handleTextChange}
-                                />
-                                {error ? <Text style={{ color: 'red' }}>{error}</Text> : null}
-                                <TouchableOpacity
-                                    style={{ backgroundColor: principal, padding: 10, borderRadius: 5 }}
-                                    onPress={guardarTexto}
-                                >
-                                    <Text style={{ color: 'white', textAlign: 'center' }}>Guardar</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </TouchableWithoutFeedback>
-                    </View>
-                </TouchableWithoutFeedback>
-            </Modal>
+            <VentanaFlotante
+                openModal={openModal}
+                handleCloseModal={handleCloseModal}
+                handleTextChange={handleTextChange}
+                errorMessage={error}
+                guardarTexto={guardarTexto} />
 
         </View>
     );
