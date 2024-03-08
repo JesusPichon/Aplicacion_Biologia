@@ -1,11 +1,11 @@
 import { View, Text, TouchableOpacity, ImageBackground } from "react-native";
 import styles from "../../styles/style-app";
-import stylesCanales from "../../screens/canales/style-canales";
+import stylesCanales from "../../screens/grupos/style-canales";
 import { useState } from "react";
 import { principal, secundario } from "../../styles/style-colors";
 
 
-const Canal = ({ navigation, informacion, nombre, deseleccionar, seleccionar }) => {
+const Grupo = ({ navigation, informacion, nombre, deseleccionar, seleccionar }) => {
 
 
     const [isSelected, setSelected] = useState(false);
@@ -42,4 +42,4 @@ const Canal = ({ navigation, informacion, nombre, deseleccionar, seleccionar }) 
 }
 
 
-export default Canal;
+export default Grupo;

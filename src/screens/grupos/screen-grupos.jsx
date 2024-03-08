@@ -1,12 +1,32 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Animated, FlatList } from "react-native";
-import { principal, secundario } from "../../styles/style-colors";
-import styles from "./style-canales";
-import animaciones from '../../components/animaciones/animaciones';
-import { Canal, BarraBusqueda, VentanaFlotante } from "../../components";
-import Snackbar from 'react-native-snackbar';
+import React, {
+    useState,
+    useEffect
+} from "react";
+
+import {
+    View,
+    Text,
+    TouchableOpacity,
+    Animated,
+    FlatList
+} from "react-native";
+
+import {
+    principal,
+    secundario
+} from "../../styles/style-colors";
+
 import { SpeedDial } from "@rneui/themed";
 import { selectCsv } from "../../services/functions/import-csv";
+
+import styles from "./style-canales";
+import animaciones from '../../components/animaciones/animaciones';
+
+import Canal from "../../components/Canal";
+import BarraBusqueda from "../../components/BarraBusqueda";
+import VentanaFlotante from "../../components/VentanaFlotante";
+
+import Snackbar from 'react-native-snackbar';
 import GrupoController from "../../services/controllers/grupoController";
 
 
@@ -49,21 +69,21 @@ const Canales = ({ navigation }) => {
         setGrupos(nuevosGrupos); // Actualizamos los grupos con los resultados de la búsqueda
     };
 
-    const handleTextChange = (text) => { 
-        setNombreCanal(text);
+    const handleTextChange = (text) => {
+        setNombreGrupo(text);
         setError(''); // Limpiar el mensaje de error cuando se ingresa texto
     };
 
     function handleOpenButton(type) { //Abrir y cerrar Speed dial
-        if (type === 'open') 
-            setOpenButton(true); 
+        if (type === 'open')
+            setOpenButton(true);
         if (type === 'close ')
             setOpenButton(false);
     }
 
     function handleOpenModal(type) { //Abrir y cerrar modal
-        if (type === 'open') 
-            setOpenModal(true); 
+        if (type === 'open')
+            setOpenModal(true);
         if (type === 'close ')
             setOpenModal(false);
     }
@@ -81,7 +101,7 @@ const Canales = ({ navigation }) => {
     }
 
     function guardarTexto() {
-
+        
     };
 
     return (
@@ -117,7 +137,6 @@ const Canales = ({ navigation }) => {
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item, index }) => (
                         <Canal
-
                             key={index}
                             animacion={unoAnim}
                             navigation={navigation}
@@ -152,7 +171,7 @@ const Canales = ({ navigation }) => {
                     title={'eliminar'}
                     onPress={() => {
                         handleOpenButton('close');
-                        deleteGroupsSelected();
+                        //deleteGroupsSelected();
                     }} />
 
             </SpeedDial>
@@ -162,7 +181,7 @@ const Canales = ({ navigation }) => {
                 handleCloseModal={handleCloseModal}
                 handleTextChange={handleTextChange}
                 errorMessage={error}
-                guardarTexto={guardarTexto} />
+                saveGroup={guardarTexto} />
 
         </View>
     );

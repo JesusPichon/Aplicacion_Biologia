@@ -1,3 +1,3 @@
-import Canal from "./Canal";
+import Grupo from "./Grupo";
 
-export default Canal;
+export default Grupo;

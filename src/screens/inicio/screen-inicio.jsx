@@ -82,7 +82,7 @@ const Inicio = ({ navigation }) => {
             {/* View del boton */}
             <Animated.View style={{ flex: 1, justifyContent: 'center', opacity: unoAnim }}>
                 <TouchableOpacity onPress={() => {
-                    resetAnimations(navigation, 'Canales');
+                    resetAnimations(navigation, 'Grupos');
                 }}>
                     <Text style={[styles.boton, styles.fondoP, styles.textT, { paddingHorizontal: 25, paddingVertical: 15, fontSize: 18, fontWeight: 'bold' }]}>
                         Entrar

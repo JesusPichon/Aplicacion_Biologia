@@ -1,7 +1,7 @@
 import { Modal, TextInput, TouchableWithoutFeedback, View, TouchableOpacity, Text } from "react-native";
 import { principal } from "../../styles/style-colors";
 
-function VentanaFlotante({openModal, handleCloseModal, handleTextChange,guardarTexto, errorMessage}) {
+function VentanaFlotante({openModal, handleCloseModal, handleTextChange, saveGroup, errorMessage}) {
 
     return (
         <Modal
@@ -25,7 +25,7 @@ function VentanaFlotante({openModal, handleCloseModal, handleTextChange,guardarT
 
                             <TouchableOpacity
                                 style={{ backgroundColor: principal, padding: 10, borderRadius: 5 }}
-                                onPress={guardarTexto}
+                                onPress={saveGroup}
                             >
                                 <Text style={{ color: 'white', textAlign: 'center' }}>Guardar</Text>
                             </TouchableOpacity>
