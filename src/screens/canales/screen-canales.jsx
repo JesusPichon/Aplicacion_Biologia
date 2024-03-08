@@ -3,13 +3,12 @@ import { View, Text, TouchableOpacity, Animated, FlatList } from "react-native";
 import { principal, secundario } from "../../styles/style-colors";
 import styles from "./style-canales";
 import animaciones from '../../components/animaciones/animaciones';
-import Canal from "../../components/Canal";
-import BarraBusqueda from "../../components/BarraBusqueda";
-import { SpeedDial } from "@rneui/themed";
-import { insertarGrupos, verGrupos, eliminarTomas, eliminarGrupo, consultarIdGrupo, consultarNombreGrupo } from "../../services/database/SQLite";
-import { selectCsv } from "../../services/functions/import-csv";
+import { Canal, BarraBusqueda, VentanaFlotante } from "../../components";
 import Snackbar from 'react-native-snackbar';
-import VentanaFlotante from "../../components/VentanaFlotante";
+import { SpeedDial } from "@rneui/themed";
+import { selectCsv } from "../../services/functions/import-csv";
+import GrupoController from "../../services/controllers/grupoController";
+
 
 const Canales = ({ navigation }) => {
 
@@ -21,24 +20,19 @@ const Canales = ({ navigation }) => {
 
     //grupos y mensajes de error
     const [grupos, setGrupos] = useState([]);
+    const [nombreGrupo, setNombreGrupo] = useState('');
+
     const [error, setError] = useState('');
 
     //Abrir Speed Dial y Modal
     const [openButton, setOpenButton] = useState(false);
     const [openModal, setOpenModal] = useState(false)
 
-    //guardar el nombre del canal 
-    const [nombreCanal, setNombreCanal] = useState('');
-
     //lista para guardar los objetos que se van a eliminar 
     const [listaBorrarGrupos, setListaBorrarGrupos] = useState([]);
 
-    //revisar variable 
-    const [canales, setCanales] = useState([]);
-
     useEffect(() => {
         startAnimations();
-        verCanales();
     }, []);
 
 
@@ -55,21 +49,23 @@ const Canales = ({ navigation }) => {
         setGrupos(nuevosGrupos); // Actualizamos los grupos con los resultados de la búsqueda
     };
 
-    const handleTextChange = (text) => {
+    const handleTextChange = (text) => { 
         setNombreCanal(text);
         setError(''); // Limpiar el mensaje de error cuando se ingresa texto
     };
 
-    function handleOpenButton() { //Abrir Speed dial
-        setOpenButton(true);
+    function handleOpenButton(type) { //Abrir y cerrar Speed dial
+        if (type === 'open') 
+            setOpenButton(true); 
+        if (type === 'close ')
+            setOpenButton(false);
     }
 
-    function handleCloseButton() { //Cerrar Speed dial
-        setOpenButton(false);
-    }
-
-    function handleOpenModal() { //Abrir modal
-        setOpenModal(true);
+    function handleOpenModal(type) { //Abrir y cerrar modal
+        if (type === 'open') 
+            setOpenModal(true); 
+        if (type === 'close ')
+            setOpenModal(false);
     }
 
     function handleCloseModal() { //cerrar modal
@@ -84,104 +80,14 @@ const Canales = ({ navigation }) => {
         });
     }
 
+    function guardarTexto() {
 
-    //funciones que utilizan la base de datos
-    const verCanales = () => {
-        verGrupos()
-            .then(result => {
-                setGrupos(result);
-            })
-            .catch(error => {
-                console.error('Ocurrió un error al obtener los grupos:', error);
-            });
     };
-
-
-    const agregarCanal = (nombreCanal) => {
-        const nuevoCanal = { nombre: nombreCanal };
-        setCanales(canales.concat(nuevoCanal));
-
-        insertarGrupos(nombreCanal)
-            .then(() => {
-                console.log('Grupo creado exitosamente vdxvxvf'); // Verificar si este mensaje se muestra en la consola
-                setTimeout(() => {
-                    Snackbar.show({
-                        text: 'Grupo creado exitosamente',
-                        duration: Snackbar.LENGTH_SHORT,
-                    });
-                }, 200); // Esperar 0.2 segundos antes de mostrar la Snackbar
-            })
-            .then(() => {
-
-            })
-            .catch((error) => {
-                console.error('Error al agregar el canal:', error); // Verificar si se muestra el mensaje de error en la consola
-                setTimeout(() => {
-                    Snackbar.show({
-                        text: 'Error al crear el grupo',
-                        duration: Snackbar.LENGTH_SHORT,
-                    });
-                }, 200); // Esperar 0.2 segundos antes de mostrar la Snackbar
-            })
-            .finally(() => {
-                setError('');
-                setNombreCanal('');
-            });
-    };
-
-
-
-    const guardarTexto = () => {
-        if (nombreCanal.trim() === '') {
-            setError('El nombre del grupo no puede estar vacío');
-        } else {
-            consultarNombreGrupo(nombreCanal)
-                .then(resultado => {
-                    if (resultado) {
-                        setError('El nombre de grupo ya existe');
-                    } else {
-                        agregarCanal(nombreCanal);
-                    }
-                })
-                .catch(error => {
-                    throw new Error(error); //Lanzamos el error
-                });
-        }
-    };
-
-    const borrarGrupo_Tomas = (nombreGrupo) => {
-        // Obtiene primero el ID del grupo a eliminar
-        consultarIdGrupo(nombreGrupo).
-            then((id) => {
-                console.log("Obtiene id");
-                // Elimina las tomas pertenecientes al grupo a eliminar
-                eliminarTomas(id)
-                    .then(() => {
-                        console.log("Entra a eliminar tomas");
-                        // Si las tomas se eliminan exitosamente, se procede a eliminar el grupo
-                        eliminarGrupo(nombreGrupo).then(() => {
-                            //verCanales();
-                            navigation.replace('Canales');
-                            Snackbar.show({
-                                text: 'Grupo eliminado exitosamente',
-                                duration: Snackbar.LENGTH_SHORT,
-                            });
-                        });
-                    })
-                    .catch((error) => {
-                        console.error('Error al ejecutar eliminarTomas:', error);
-                    });
-            })
-            .catch((error) => {
-                console.error('Error al obtener el ID del grupo:', error);
-            });
-    };
-
 
     return (
         <View style={{ backgroundColor: secundario, flex: 1 }}>
             <Animated.View style={{ opacity: unoAnim }}>
-                <BarraBusqueda titulo={'Buscar grupo'} pantalla={'default'}/> 
+                <BarraBusqueda titulo={'Buscar grupo'} pantalla={'default'} />
             </Animated.View>
 
 
