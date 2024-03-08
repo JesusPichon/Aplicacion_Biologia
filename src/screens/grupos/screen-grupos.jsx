@@ -42,39 +42,43 @@ const Grupos = ({ navigation }) => {
             const grupos = await controller.obtenerGrupos();
             setGrupos(grupos);
         } catch (error) {
-            console.error("Error al obtener la lista de grupos", error);
+            lanzarAlerta("Error al obtener la lista de grupos");
         }
     }
 
-    const buscarGrupo = async (nombre) => {
+    const eliminarGrupos = async (list) => {
         try {
-            return await controller.searchGroupByName(nombre);
+            controller.deleteGroups(list);
         } catch (error) {
-            console.error("Error al consultar el nombre del grupo en la tabla grupos: ", error);
+            lanzarAlerta('Error elimnando grupos');
         }
     }
 
     const agregarGrupo = async (nombre) => {
         try {
-            return (await controller.addGrupo(nombre));
+            const encontrado = await controller.searchGroupByName(nombre);
+            if (encontrado == true)
+                setError('El nombre del grupo ya existe');
+            else {
+                await controller.addGrupo(nombreGrupo);
+                setOpenModal(false);
+                setError('');
+                setNombreGrupo('');
+                lanzarAlerta('Grupo: ' + nombreGrupo + ' , creado exitosamente!!');
+                await cargarGrupos();
+            }
         } catch (error) {
-            console.error("Error al agregar el grupo dentro de la base de datos: ", error);
+            lanzarAlerta("Error al agregar el grupo dentro de la base de datos");
         }
     }
 
-    useEffect(() => {
-        startAnimations();
-        cargarGrupos();
-    }, []);
 
-
-    //funciones para manejar el comportamiento de los componentes
-    function seleccionar(canal) {
-        setListaBorrarGrupos([...listaBorrarGrupos, canal]);
+    function seleccionar(grupo) { //agregar grupo a la lista de seleccionados 
+        setListaBorrarGrupos([...listaBorrarGrupos, grupo]);
     }
 
-    function deseleccionar(canal) {
-        setListaBorrarGrupos(listaBorrarGrupos.filter((item) => item !== canal));
+    function deseleccionar(grupo) { //quitar grupo de la listad de seleccionados 
+        setListaBorrarGrupos(listaBorrarGrupos.filter((item) => item !== grupo));
     }
 
     function updateGrupos(nuevosGrupos) {
@@ -86,21 +90,27 @@ const Grupos = ({ navigation }) => {
         setError(''); // Limpiar el mensaje de error cuando se ingresa texto
     };
 
-    function deleteGroupsSelected() { //eliminar la lista de grupos
-        listaBorrarGrupos.forEach((name) => {
-            borrarGrupo_Tomas(name);
-        });
-    }
-
     function guardarTexto() { //guarda un nuevo grupo con el nombre que le fue asignado dentro del modal 
         if (nombreGrupo.trim() !== '') {
-            if (buscarGrupo()) {
-                agregarGrupo(nombreGrupo)
-            }else
-                setError('El nombre de grupo ya existe')
-        } else
+            agregarGrupo(nombreGrupo);
+        } else {
             setError('El nombre del grupo no puede estar vacio');
-    };
+        }
+    }
+
+    function lanzarAlerta(mensaje) {
+        setTimeout(() => {
+            Snackbar.show({
+                text: mensaje,
+                duration: Snackbar.LENGTH_SHORT
+            });
+        }, 200);
+    }
+
+    useEffect(() => {
+        startAnimations();
+        cargarGrupos();
+    }, []);
 
     return (
         <View style={{ backgroundColor: secundario, flex: 1 }}>
@@ -167,7 +177,7 @@ const Grupos = ({ navigation }) => {
                     title={'eliminar'}
                     onPress={() => {
                         setOpenButton(false);
-                        //deleteGroupsSelected();
+                        eliminarGrupos(listaBorrarGrupos);
                     }} />
 
             </SpeedDial>
@@ -176,6 +186,7 @@ const Grupos = ({ navigation }) => {
                 openModal={openModal}
                 handleCloseModal={() => {
                     setOpenModal(false);
+                    setError('');
                 }}
                 handleTextChange={handleTextChange}
                 errorMessage={error}
@@ -184,5 +195,6 @@ const Grupos = ({ navigation }) => {
         </View>
     );
 };
+
 
 export default Grupos;

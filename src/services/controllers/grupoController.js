@@ -3,7 +3,8 @@ import {
     eliminarGrupo,
     verGrupos,
     consultarIdGrupo,
-    consultarNombreGrupo
+    consultarNombreGrupo,
+    eliminarTomas
 } from "../database/SQLite";
 
 
@@ -20,7 +21,7 @@ class GrupoController {
 
     async addGrupo(nombreGrupo) { //agregar grupo por nombre  
         try {
-            const result =  await insertarGrupos(nombreGrupo);
+            await insertarGrupos(nombreGrupo);
         } catch (error) {
             throw new Error(error);
         }
@@ -28,8 +29,8 @@ class GrupoController {
 
     async searchGroupByName(nombreGrupo) { //busca el grupo por nombre
         try {
-            const resultado = await consultarNombreGrupo(nombreGrupo);
-            return resultado !== null; 
+            const find = await consultarNombreGrupo(nombreGrupo);
+            return find; 
         } catch (error){
             throw new Error(error);
         }
