@@ -1,36 +1,18 @@
-import React, {
-    useState,
-    useEffect
-} from "react";
-
-import {
-    View,
-    Text,
-    TouchableOpacity,
-    Animated,
-    FlatList
-} from "react-native";
-
-import {
-    principal,
-    secundario
-} from "../../styles/style-colors";
-
+import React, { useState, useEffect } from "react";
+import { View, Text, TouchableOpacity, Animated, FlatList } from "react-native";
+import { principal, secundario } from "../../styles/style-colors";
 import { SpeedDial } from "@rneui/themed";
 import { selectCsv } from "../../services/functions/import-csv";
-
 import styles from "./style-canales";
 import animaciones from '../../components/animaciones/animaciones';
-
-import Canal from "../../components/Canal";
+import Grupo from "../../components/Grupo";
 import BarraBusqueda from "../../components/BarraBusqueda";
 import VentanaFlotante from "../../components/VentanaFlotante";
-
 import Snackbar from 'react-native-snackbar';
 import GrupoController from "../../services/controllers/grupoController";
 
 
-const Canales = ({ navigation }) => {
+const Grupos = ({ navigation }) => {
 
     // animaciones
     const {
@@ -51,25 +33,54 @@ const Canales = ({ navigation }) => {
     //lista para guardar los objetos que se van a eliminar 
     const [listaBorrarGrupos, setListaBorrarGrupos] = useState([]);
 
+    //agregar controller
+    const controller = new GrupoController();
+
+    const cargarGrupos = async () => {
+        try {
+            const grupos = await controller.obtenerGrupos();
+            setGrupos(grupos);
+        } catch (error) {
+            console.error("Error al obtener la lista de grupos", error);
+        }
+    }
+
+    const buscarGrupo = async (nombre) => {
+        try {
+            return (await controller.searchGroupByName(nombre));
+        } catch (error) {
+            console.error("Error al consultar el nombre del grupo en la tabla grupos: ", error);
+        }
+    }
+
+    const agregarGrupo = async (nombre) => {
+        try {
+            return (await controller.addGrupo(nombre));
+        } catch (error) {
+            console.error("Error al agregar el grupo dentro de la base de datos: ", error);
+        }
+    }
+
     useEffect(() => {
         startAnimations();
+        cargarGrupos();
     }, []);
 
 
     //funciones para manejar el comportamiento de los componentes
-    const seleccionar = (canal) => {
+    function seleccionar(canal) {
         setListaBorrarGrupos([...listaBorrarGrupos, canal]);
     }
 
-    const deseleccionar = (canal) => {
+    function deseleccionar(canal) {
         setListaBorrarGrupos(listaBorrarGrupos.filter((item) => item !== canal));
     }
 
-    const updateGrupos = (nuevosGrupos) => {
+    function updateGrupos(nuevosGrupos) {
         setGrupos(nuevosGrupos); // Actualizamos los grupos con los resultados de la búsqueda
     };
 
-    const handleTextChange = (text) => {
+    function handleTextChange(text) {
         setNombreGrupo(text);
         setError(''); // Limpiar el mensaje de error cuando se ingresa texto
     };
@@ -81,16 +92,13 @@ const Canales = ({ navigation }) => {
             setOpenButton(false);
     }
 
-    function handleOpenModal(type) { //Abrir y cerrar modal
-        if (type === 'open')
-            setOpenModal(true);
-        if (type === 'close ')
-            setOpenModal(false);
+    function handleOpenModal() { //Abrir y cerrar modal
+        setOpenModal(true);
     }
 
     function handleCloseModal() { //cerrar modal
         setOpenModal(false);
-        setNombreCanal(''); // Limpiar el nombre del canal
+        setNombreGrupo(''); // Limpiar el nombre del canal
         setError(''); // Limpiar el mensaje de error
     }
 
@@ -101,7 +109,12 @@ const Canales = ({ navigation }) => {
     }
 
     function guardarTexto() {
-        
+        if (nombreGrupo.trim() !== '') {
+            if (!buscarGrupo()) {
+
+            }
+        } else
+            setError('El nombre del grupo no puede estar vacio');
     };
 
     return (
@@ -130,13 +143,12 @@ const Canales = ({ navigation }) => {
                 <View style={[styles.container1, styles.fondoT]}>
                 </View>
 
-                {/* Agregando nombre del canal  */}
                 <FlatList
                     data={grupos}
                     numColumns={2}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item, index }) => (
-                        <Canal
+                        <Grupo
                             key={index}
                             animacion={unoAnim}
                             navigation={navigation}
@@ -144,8 +156,7 @@ const Canales = ({ navigation }) => {
                             nombre={item}
                             deseleccionar={deseleccionar}
                             seleccionar={seleccionar} />
-                    )}
-                />
+                    )} />
             </View>
 
             <SpeedDial
@@ -187,4 +198,4 @@ const Canales = ({ navigation }) => {
     );
 };
 
-export default Canales;
+export default Grupos;
