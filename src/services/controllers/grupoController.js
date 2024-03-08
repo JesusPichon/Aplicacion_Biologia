@@ -12,7 +12,7 @@ class GrupoController {
 
     async obtenerGrupos() { //obtiene los grupos desde la base de datos 
         try {
-            const lista =  await verGrupos();
+            const lista = await verGrupos();
             return lista;
         } catch (error) {
             throw new Error(error);
@@ -30,8 +30,8 @@ class GrupoController {
     async searchGroupByName(nombreGrupo) { //busca el grupo por nombre
         try {
             const find = await consultarNombreGrupo(nombreGrupo);
-            return find; 
-        } catch (error){
+            return find;
+        } catch (error) {
             throw new Error(error);
         }
     }
@@ -51,10 +51,12 @@ class GrupoController {
         }
     }
 
-    deleteGroups(listaGrupos) { //elimina varios grupos de una lista
-        listaGrupos.forEach(nombreGrupo => {
-            this.delateGrupoByName(nombreGrupo);
-        });
+    async deleteGroups(listaGrupos) { //elimina varios grupos de una lista
+        if (listaGrupos.length !== 0) {
+            listaGrupos.forEach(async (nombreGrupo) => {
+                await this.delateGrupoByName(nombreGrupo);
+            });
+        }
     }
 }
 

@@ -48,7 +48,11 @@ const Grupos = ({ navigation }) => {
 
     const eliminarGrupos = async (list) => {
         try {
-            controller.deleteGroups(list);
+            if (list.length !== 0) {
+                await controller.deleteGroups(list);
+                lanzarAlerta("Eliminacion exitosa!");
+                await cargarGrupos();
+            }
         } catch (error) {
             lanzarAlerta('Error elimnando grupos');
         }
@@ -74,7 +78,7 @@ const Grupos = ({ navigation }) => {
 
 
     function seleccionar(grupo) { //agregar grupo a la lista de seleccionados 
-        setListaBorrarGrupos([...listaBorrarGrupos, grupo]);
+        setListaBorrarGrupos(listaBorrarGrupos.concat(grupo));
     }
 
     function deseleccionar(grupo) { //quitar grupo de la listad de seleccionados 
@@ -90,9 +94,9 @@ const Grupos = ({ navigation }) => {
         setError(''); // Limpiar el mensaje de error cuando se ingresa texto
     };
 
-    function guardarTexto() { //guarda un nuevo grupo con el nombre que le fue asignado dentro del modal 
+    async function guardarTexto() { //guarda un nuevo grupo con el nombre que le fue asignado dentro del modal 
         if (nombreGrupo.trim() !== '') {
-            agregarGrupo(nombreGrupo);
+            await agregarGrupo(nombreGrupo);
         } else {
             setError('El nombre del grupo no puede estar vacio');
         }
@@ -110,6 +114,7 @@ const Grupos = ({ navigation }) => {
     useEffect(() => {
         startAnimations();
         cargarGrupos();
+        setListaBorrarGrupos([]);
     }, []);
 
     return (
@@ -175,9 +180,9 @@ const Grupos = ({ navigation }) => {
                     icon={{ name: 'delete', color: '#fff' }}
                     color={principal}
                     title={'eliminar'}
-                    onPress={() => {
+                    onPress={async () => {
                         setOpenButton(false);
-                        eliminarGrupos(listaBorrarGrupos);
+                        await eliminarGrupos(listaBorrarGrupos);
                     }} />
 
             </SpeedDial>
