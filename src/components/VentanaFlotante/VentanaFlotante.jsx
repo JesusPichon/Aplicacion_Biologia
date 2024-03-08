@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Modal, TextInput, TouchableWithoutFeedback, View, TouchableOpacity, Text } from "react-native";
 import { principal } from "../../styles/style-colors";
 

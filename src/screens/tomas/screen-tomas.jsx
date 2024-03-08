@@ -58,7 +58,7 @@
         return (
             <View style={{ flex: 1, backgroundColor: secundario }}>
 
-                <BarraBusqueda titulo={'Buscar en las tomas'} pantalla={nombreCanal} onResult={updateTomas} />
+                <BarraBusqueda titulo={'Buscar en las tomas'} pantalla={'tomas'} onResult={updateTomas} />
 
 
                 <View style={[styles.container, styles.fondoT]}>

@@ -56,7 +56,7 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
     const [search, setSearch] = useState("");
     const [buscando, setBuscando] = useState(false);
 
-    useEffect(() => {
+   {/* useEffect(() => {
         let timerId;
         if (search.trim() !== "") {
             setBuscando(true);
@@ -75,7 +75,7 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
         if (pantalla !== 'canales' && value) {
             peticion(search);
         }
-    }, [value]);
+    }, [value]); */}
 
     const updateSearch = (searchInput) => {
         setSearch(searchInput);
@@ -85,20 +85,20 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
         if (pantalla === "canales") {
             console.log("Buscando: " + buscar);
             verGruposFiltrado(buscar)
-            .then(result => {
-                console.log('Grupos obtenidos: ', result);
-                setBuscando(false);
-                onResult(result); // Pasamos los resultados a la función de devolución de llamada
-            })
-            .catch(error => {
-                setBuscando(false);
-                console.error('Ocurrió un error al obtener los grupos:', error);
-            });
+                .then(result => {
+                    console.log('Grupos obtenidos: ', result);
+                    setBuscando(false);
+                    onResult(result); // Pasamos los resultados a la función de devolución de llamada
+                })
+                .catch(error => {
+                    setBuscando(false);
+                    console.error('Ocurrió un error al obtener los grupos:', error);
+                });
         } else {
             console.log("Buscando: " + buscar);
             consultarIdGrupo(pantalla).then((id) => {
                 console.log("id del grupo: " + id);
-                verTomasFiltrado(id,value,buscar).then(tomas => {
+                verTomasFiltrado(id, value, buscar).then(tomas => {
                     console.log('Tomas obtenidos: ', tomas);
                     setBuscando(false);
                     onResult(tomas); // Pasamos los resultados a la función de devolución de llamada
@@ -117,48 +117,57 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
                 placeholder={titulo}
                 containerStyle={{ backgroundColor: secundario, borderColor: secundario }}
                 inputContainerStyle={{ backgroundColor: 'white', borderRadius: 20 }}
-                inputStyle={{ backgroundColor: 'white' }} 
+                inputStyle={{ backgroundColor: 'white' }}
                 onChangeText={updateSearch}
                 value={search}
                 showLoading={buscando}
             />
         );
-    }else{
+    } if (pantalla === 'tomas') {
         return (
-            <View style={{flexDirection:'row'}}>
-                <View style={{ width: '75%', backgroundColor: '#000', padding:0}}>
+            <View style={{ flexDirection: 'row' }}>
+                <View style={{ width: '75%', backgroundColor: '#000', padding: 0 }}>
                     <SearchBar
                         placeholder={titulo}
-                        containerStyle={{ backgroundColor: secundario, borderColor: secundario, paddingRight:0 }}
+                        containerStyle={{ backgroundColor: secundario, borderColor: secundario, paddingRight: 0 }}
                         inputContainerStyle={{ backgroundColor: 'white', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }}
-                        inputStyle={{ backgroundColor: 'white' }} 
+                        inputStyle={{ backgroundColor: 'white' }}
                         onChangeText={updateSearch}
                         value={search}
                         showLoading={buscando}
                     />
                 </View>
-                    <Dropdown
-                        style={{backgroundColor: principal, width: '25%', marginVertical: 8, marginLeft:-8, borderTopRightRadius: 20, borderBottomRightRadius: 20}}
-                        iconStyle={{tintColor: 'white', width: 20, height: 20, marginRight:5}}
-                        selectedTextStyle={{ marginLeft:5, color: tercero, fontSize: 12 }}
-                        itemTextStyle={{ fontSize: 12, color: tercero}}
-                        itemContainerStyle={{borderWidth:0.2, borderColor: cuarto}}
-                        containerStyle={{ backgroundColor: principal, borderWidth: 1, borderColor: tercero }} // Establece estilos para el contenedor                        label='Selecciona un valor'
-                        activeColor={secundario}
-                        maxHeight={200}
-                        labelField="label"
-                        valueField="value"
-                        data={data_filtro}
-                        value={value}
-                        onFocus={() => setIsFocus(true)}
-                        onBlur={() => setIsFocus(false)}
-                        onChange={item => {
-                            setValue(item.value);
-                            setIsFocus(false);
-                        }}
-                
-                    />
+                <Dropdown
+                    style={{ backgroundColor: principal, width: '25%', marginVertical: 8, marginLeft: -8, borderTopRightRadius: 20, borderBottomRightRadius: 20 }}
+                    iconStyle={{ tintColor: 'white', width: 20, height: 20, marginRight: 5 }}
+                    selectedTextStyle={{ marginLeft: 5, color: tercero, fontSize: 12 }}
+                    itemTextStyle={{ fontSize: 12, color: tercero }}
+                    itemContainerStyle={{ borderWidth: 0.2, borderColor: cuarto }}
+                    containerStyle={{ backgroundColor: principal, borderWidth: 1, borderColor: tercero }} // Establece estilos para el contenedor                        label='Selecciona un valor'
+                    activeColor={secundario}
+                    maxHeight={200}
+                    labelField="label"
+                    valueField="value"
+                    data={data_filtro}
+                    value={value}
+                    onFocus={() => setIsFocus(true)}
+                    onBlur={() => setIsFocus(false)}
+                    onChange={item => {
+                        setValue(item.value);
+                        setIsFocus(false);
+                    }}
+
+                />
             </View>
+        );
+    } if (pantalla === 'default') {
+        return(
+            <SearchBar
+                placeholder={titulo}
+                containerStyle={{ backgroundColor: secundario, borderColor: secundario }}
+                inputContainerStyle={{ backgroundColor: 'white', borderRadius: 20 }}
+                inputStyle={{ backgroundColor: 'white' }}
+            />
         );
     }
 }

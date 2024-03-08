@@ -60,22 +60,28 @@ const Canales = ({ navigation }) => {
         setError(''); // Limpiar el mensaje de error cuando se ingresa texto
     };
 
-    function handleOpenButton(){
+    function handleOpenButton() { //Abrir Speed dial
         setOpenButton(true);
     }
 
-    function handleCloseButton(){
+    function handleCloseButton() { //Cerrar Speed dial
         setOpenButton(false);
     }
 
-    function handleOpenModal() {
+    function handleOpenModal() { //Abrir modal
         setOpenModal(true);
     }
 
-    function handleCloseModal() {
+    function handleCloseModal() { //cerrar modal
         setOpenModal(false);
         setNombreCanal(''); // Limpiar el nombre del canal
         setError(''); // Limpiar el mensaje de error
+    }
+
+    function deleteGroupsSelected() { //eliminar la lista de grupos
+        listaBorrarGrupos.forEach((name) => {
+            borrarGrupo_Tomas(name);
+        });
     }
 
 
@@ -88,13 +94,13 @@ const Canales = ({ navigation }) => {
             .catch(error => {
                 console.error('Ocurrió un error al obtener los grupos:', error);
             });
-
     };
 
 
     const agregarCanal = (nombreCanal) => {
         const nuevoCanal = { nombre: nombreCanal };
         setCanales(canales.concat(nuevoCanal));
+
         insertarGrupos(nombreCanal)
             .then(() => {
                 console.log('Grupo creado exitosamente vdxvxvf'); // Verificar si este mensaje se muestra en la consola
@@ -104,6 +110,9 @@ const Canales = ({ navigation }) => {
                         duration: Snackbar.LENGTH_SHORT,
                     });
                 }, 200); // Esperar 0.2 segundos antes de mostrar la Snackbar
+            })
+            .then(() => {
+
             })
             .catch((error) => {
                 console.error('Error al agregar el canal:', error); // Verificar si se muestra el mensaje de error en la consola
@@ -151,7 +160,7 @@ const Canales = ({ navigation }) => {
                         console.log("Entra a eliminar tomas");
                         // Si las tomas se eliminan exitosamente, se procede a eliminar el grupo
                         eliminarGrupo(nombreGrupo).then(() => {
-                            verCanales();
+                            //verCanales();
                             navigation.replace('Canales');
                             Snackbar.show({
                                 text: 'Grupo eliminado exitosamente',
@@ -168,11 +177,11 @@ const Canales = ({ navigation }) => {
             });
     };
 
-    
+
     return (
         <View style={{ backgroundColor: secundario, flex: 1 }}>
             <Animated.View style={{ opacity: unoAnim }}>
-                <BarraBusqueda titulo={'Buscar grupo'} pantalla={'canales'} onResult={updateGrupos} />
+                <BarraBusqueda titulo={'Buscar grupo'} pantalla={'default'}/> 
             </Animated.View>
 
 
@@ -237,9 +246,7 @@ const Canales = ({ navigation }) => {
                     title={'eliminar'}
                     onPress={() => {
                         handleCloseButton();
-                        listaBorrarGrupos.forEach((nombreGrupo) => {
-                            borrarGrupo_Tomas(nombreGrupo);
-                        });
+                        deleteGroupsSelected();
                     }} />
 
             </SpeedDial>
