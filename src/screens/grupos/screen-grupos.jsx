@@ -24,6 +24,7 @@ const Grupos = ({ navigation }) => {
     const [grupos, setGrupos] = useState([]);
     const [nombreGrupo, setNombreGrupo] = useState('');
 
+    //manejador de errores
     const [error, setError] = useState('');
 
     //Abrir Speed Dial y Modal
@@ -47,7 +48,7 @@ const Grupos = ({ navigation }) => {
 
     const buscarGrupo = async (nombre) => {
         try {
-            return (await controller.searchGroupByName(nombre));
+            return await controller.searchGroupByName(nombre);
         } catch (error) {
             console.error("Error al consultar el nombre del grupo en la tabla grupos: ", error);
         }
@@ -85,34 +86,18 @@ const Grupos = ({ navigation }) => {
         setError(''); // Limpiar el mensaje de error cuando se ingresa texto
     };
 
-    function handleOpenButton(type) { //Abrir y cerrar Speed dial
-        if (type === 'open')
-            setOpenButton(true);
-        if (type === 'close ')
-            setOpenButton(false);
-    }
-
-    function handleOpenModal() { //Abrir y cerrar modal
-        setOpenModal(true);
-    }
-
-    function handleCloseModal() { //cerrar modal
-        setOpenModal(false);
-        setNombreGrupo(''); // Limpiar el nombre del canal
-        setError(''); // Limpiar el mensaje de error
-    }
-
     function deleteGroupsSelected() { //eliminar la lista de grupos
         listaBorrarGrupos.forEach((name) => {
             borrarGrupo_Tomas(name);
         });
     }
 
-    function guardarTexto() {
+    function guardarTexto() { //guarda un nuevo grupo con el nombre que le fue asignado dentro del modal 
         if (nombreGrupo.trim() !== '') {
-            if (!buscarGrupo()) {
-
-            }
+            if (buscarGrupo()) {
+                agregarGrupo(nombreGrupo)
+            }else
+                setError('El nombre de grupo ya existe')
         } else
             setError('El nombre del grupo no puede estar vacio');
     };
@@ -164,16 +149,16 @@ const Grupos = ({ navigation }) => {
                 icon={{ name: 'add', color: 'white' }}
                 openIcon={{ name: 'close', color: 'white' }}
                 color={principal}
-                onOpen={() => handleOpenButton('open')}
-                onClose={() => handleOpenButton('close')}>
+                onOpen={() => setOpenButton(true)}
+                onClose={() => setOpenButton(false)}>
 
                 <SpeedDial.Action
                     icon={{ name: 'add', color: '#fff' }}
                     color={principal}
                     title={'agregar'}
                     onPress={() => {
-                        handleOpenButton('close');
-                        handleOpenModal('open');
+                        setOpenButton(false);
+                        setOpenModal(true);
                     }} />
 
                 <SpeedDial.Action
@@ -181,7 +166,7 @@ const Grupos = ({ navigation }) => {
                     color={principal}
                     title={'eliminar'}
                     onPress={() => {
-                        handleOpenButton('close');
+                        setOpenButton(false);
                         //deleteGroupsSelected();
                     }} />
 
@@ -189,7 +174,9 @@ const Grupos = ({ navigation }) => {
 
             <VentanaFlotante
                 openModal={openModal}
-                handleCloseModal={handleCloseModal}
+                handleCloseModal={() => {
+                    setOpenModal(false);
+                }}
                 handleTextChange={handleTextChange}
                 errorMessage={error}
                 saveGroup={guardarTexto} />

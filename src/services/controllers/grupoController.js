@@ -20,7 +20,7 @@ class GrupoController {
 
     async addGrupo(nombreGrupo) { //agregar grupo por nombre  
         try {
-            return (await insertarGrupos(nombreGrupo));
+            const result =  await insertarGrupos(nombreGrupo);
         } catch (error) {
             throw new Error(error);
         }
