@@ -134,16 +134,16 @@ const Canales = ({ navigation }) => {
                 icon={{ name: 'add', color: 'white' }}
                 openIcon={{ name: 'close', color: 'white' }}
                 color={principal}
-                onOpen={() => handleOpenButton()}
-                onClose={() => handleCloseButton()}>
+                onOpen={() => handleOpenButton('open')}
+                onClose={() => handleOpenButton('close')}>
 
                 <SpeedDial.Action
                     icon={{ name: 'add', color: '#fff' }}
                     color={principal}
                     title={'agregar'}
                     onPress={() => {
-                        handleCloseButton();
-                        handleOpenModal();
+                        handleOpenButton('close');
+                        handleOpenModal('open');
                     }} />
 
                 <SpeedDial.Action
@@ -151,7 +151,7 @@ const Canales = ({ navigation }) => {
                     color={principal}
                     title={'eliminar'}
                     onPress={() => {
-                        handleCloseButton();
+                        handleOpenButton('close');
                         deleteGroupsSelected();
                     }} />
 
