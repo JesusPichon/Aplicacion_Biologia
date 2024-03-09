@@ -188,15 +188,9 @@ const FormularioEdit = ({ navigation, route }) => {
                     label="Nombre Local:"
                     control={control}
                     name="Nombre_local"
+                    tooltip={"Escribelos si te acompañó un guia de la zona y te dijo como le llaman"}
                     errors={errors}
                 />
-                {/* <TextInputCustom
-                    label="Estado:"
-                    control={control}
-                    name="Estado"
-                    rules={{ required: 'Este campo es requerido.' }}
-                    errors={errors}
-                /> */}
                 <CustomDropdown
                     label="Estado:"
                     data={data_Estados}
@@ -206,7 +200,6 @@ const FormularioEdit = ({ navigation, route }) => {
                     control={control}
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
                     placeholder={"Selecciona un Estado"}
                 />
                 <TextInputCustom
@@ -224,24 +217,26 @@ const FormularioEdit = ({ navigation, route }) => {
                     errors={errors}
                 />
                 <TextInputCustom
-                    label="Altitud:"
+                    label="Altitud (m.s.n.m):"
                     control={control}
                     name="Altitud"
                     errors={errors}
+                    keyboardType={'numeric'}
                 />
-                <Text style={styles.textP}>Coordenadas:</Text>
-                <InputCoordenadas 
+                <InputCoordenadas
                     control={control}
                     rules={reglasCoordenadas}
                     errors={errors}
-                    name1="Grados_Latitud" 
+                    name1="Grados_Latitud"
                     name2="Minutos_Latitud"
-                    name3="Hemisferio_Latitud"
-                    name4="Grados_Longitud"
-                    name5="Minutos_Longitud"
-                    name6="Hemisferio_Longitud"
-                    name7="X"
-                    name8="Y"
+                    name3="Segundos_Latitud"
+                    name4="Hemisferio_Latitud"
+                    name5="Grados_Longitud"
+                    name6="Minutos_Longitud"
+                    name7="Segundos_Longitud"
+                    name8="Hemisferio_Longitud"
+                    name9="X"
+                    name10="Y"
                     setValue={setValue}
                     watch={watch}
                 />
@@ -250,7 +245,7 @@ const FormularioEdit = ({ navigation, route }) => {
                     control={control}
                     name="Tipo_vegetacion"
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Menciona el ecosistema en el que estás colectando (p.e. selva, bosque, pastizal)"}
                 />
                 <TextInputCustom
                     label="Información Ambiental:"
@@ -258,7 +253,7 @@ const FormularioEdit = ({ navigation, route }) => {
                     name="Informacion_ambiental"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Anota el estado del tiempo cuando colectaste la planta"}
                 />
                 <TextInputCustom
                     label="Suelo:"
@@ -266,7 +261,7 @@ const FormularioEdit = ({ navigation, route }) => {
                     name="Suelo"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Anota el color, si está mojado o seco y sensación al tacto"}
                 />
                 <TextInputCustom
                     label="Asociada:"
@@ -274,7 +269,7 @@ const FormularioEdit = ({ navigation, route }) => {
                     name="Asociada"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Anota el nombre de las plantas que conoces que están alrededor de la que colectaste"}
                 />
                 <CustomDropdown
                     label="Abundancia:"
@@ -285,7 +280,7 @@ const FormularioEdit = ({ navigation, route }) => {
                     control={control}
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Selecciona la cantidad de plantas que observas"}
                     placeholder={"Selecciona un item"}
                 />
                 <CustomDropdown
@@ -297,37 +292,37 @@ const FormularioEdit = ({ navigation, route }) => {
                     control={control}
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Elige o anota la forma de tu planta"}
                     placeholder={"Selecciona un item"}
                 />
                 <TextInputCustom
-                    label="Tamaño:"
+                    label="Tamaño (m):"
                     control={control}
                     name="Tamano"
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Estima o mide el tamaño "}
+                    keyboardType={'numeric'}
                 />
                 <TextInputCustom
                     label="Flor:"
                     control={control}
                     name="Flor"
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Escribe el color o si conoces información detallada, ponla aquí"}
                 />
                 <TextInputCustom
                     label="Fruto:"
                     control={control}
                     name="Fruto"
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Escribe el color, tipo, si conoces información detallada, ponla aquí "}
                 />
                 <TextInputCustom
                     label="Usos:"
                     control={control}
                     name="Usos"
-                    rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Escribelos si te acompaño un guia de la zona y te dijo como se utiliza "}
                 />
                 <TextInputCustom
                     label="Colector(es):"
@@ -335,7 +330,7 @@ const FormularioEdit = ({ navigation, route }) => {
                     name="Colector_es"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Escribe el nombre y apellido de el colector o los colectores"}
                 />
                 <TextInputCustom
                     label="No. de colecta:"
@@ -343,13 +338,15 @@ const FormularioEdit = ({ navigation, route }) => {
                     name="No_colecta"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Escribe el número de colecta del colector principal"}
+                    keyboardType={'numeric'}
                 />
                 <FechaComponente
                     control={control}
                     name="Fecha"
                     errors={errors}
                     rules={{ required: 'Este campo es requerido.' }}
+                    tooltip={"Selecciona la fecha del día de la colecta (comentario)"}
                 />
                 <TextInputCustom
                     label="Determino:"
@@ -357,7 +354,7 @@ const FormularioEdit = ({ navigation, route }) => {
                     name="Determino"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Nombre y apellido de la persona que te ayudo con el nombre de la app"}
                 />
                 <TextInputCustom
                     label="Otros Datos:"
@@ -366,7 +363,7 @@ const FormularioEdit = ({ navigation, route }) => {
                     errors={errors}
                     multiline={true} // Pernmite multilinea en el textinput
                     maxLines={20} // Indica el numero de lineas maximo en el textinput (Solo si multiline = true)
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Anota información que consideres importante sobre la planta (aroma, liquidos, sensación al tacto, etc. )"}
                 />
                 <Button 
                     type="solid"

@@ -33,6 +33,8 @@ const CustomDropdown = ({ control, name, rules, errors, label, data, allowCustom
                         withOverlay={true}
                         skipAndroidStatusBar={true}
                         backgroundColor='#424242'
+                        height={55}
+                        width={250}
                     >
                             <Icon name="help-outline" size={20} color="#9E9E9E" />
                     </Tooltip>
@@ -46,8 +48,11 @@ const CustomDropdown = ({ control, name, rules, errors, label, data, allowCustom
               <Dropdown
                 style={styles.dropdown}
                 selectedTextStyle={styles.selectedTextStyle}
+                itemTextStyle={styles.itemTextStyle}
+                containerStyle={styles.ContainerStyle}
                 iconColor='#FFF'
                 data={allowCustomOption ? data : data.filter(item => item.value !== 'otro')}
+                ietm
                 search={allowSearchOption}
                 searchPlaceholder="Busqueda..."
                 labelField="label"
@@ -101,11 +106,11 @@ const styles = StyleSheet.create({
       borderColor: false,
       color: tercero,
       paddingHorizontal: 10,
-      marginTop: 10
+      marginTop: 10,
+      fontSize: 16,
     },
     textError: {
         color: 'red',
-        marginLeft: 10,
     },
     dropdown:{
       backgroundColor: 'rgb(128, 155, 174)',
@@ -115,10 +120,18 @@ const styles = StyleSheet.create({
     },
     selectedTextStyle: {
       color: tercero,
+      fontWeight: 'bold'
+    },
+    itemTextStyle: {
+      color: '#838383',
+    },
+    ContainerStyle: {
+      borderRadius: 10,
     },
     tooltipText: {
         color:tercero,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        textAlign: 'center',
     },
   })
 
