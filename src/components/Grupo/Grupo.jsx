@@ -3,27 +3,36 @@ import styles from "../../styles/style-app";
 import stylesCanales from "../../screens/grupos/style-canales";
 import { useState } from "react";
 import { principal } from "../../styles/style-colors";
-import { CheckBox } from "@rneui/themed";
+import Casilla from "../Casilla";
 
 
-const Grupo = ({ navigation, informacion, nombre, deseleccionar, seleccionar }) => {
+const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccionar }) => {
 
+    const [checked, setChecked] = useState(false);
 
-    const [isSelected, setSelected] = useState(false);
-    const [eliminar, setEliminar] = useState(false);
+    function toggleCheckbox(data) { // las casillas que esten marcadas se marcaran como grupos seleccionados 
+        setChecked(!checked);
 
-    function handleSeleccionar() {
-        (isSelected) ? deseleccionar(informacion) : seleccionar(informacion);
-        setSelected(!isSelected);
+        if(!checked){
+            seleccionar(data);
+        }else{
+            deseleccionar(data);
+        }
     }
 
     return (
         <TouchableOpacity
             style={[stylesCanales.cardVertical, styles.fondoT, { width: '45%', marginBottom: 20, margin: 10 }]}
-            onPress={() => { navigation.navigate('Tomas', { nombre }) }}
-            onLongPress={() => handleSeleccionar()}>
+            onPress={() => { navigation.navigate('Tomas', { nombre }) }} >
 
             <View style={[stylesCanales.cardVImagen]}>
+
+                {
+                    mostrarSeleccionar && <Casilla
+                        checked={checked}
+                        toggleCheckbox={() => toggleCheckbox(nombre)}
+                        color={'red'} />
+                }
 
                 <ImageBackground
                     source={require('../../assets/images/nature.jpg')}
@@ -33,20 +42,10 @@ const Grupo = ({ navigation, informacion, nombre, deseleccionar, seleccionar }) 
 
             </View>
 
-            <View style={[styles.botongrupo, { backgroundColor: isSelected ? 'red' : principal }]}>
+            <View style={[styles.botongrupo, {backgroundColor: principal}]}>
                 <Text style={[styles.textT, { textAlign: 'center', fontWeight: 'bold' }]}>
-                    {informacion}
+                    {nombre}
                 </Text>
-
-                {() => {
-                    if (eliminar)
-                        return (
-                            <CheckBox>
-                                
-                            </CheckBox>
-                        );
-                }}
-
             </View>
 
         </TouchableOpacity>
