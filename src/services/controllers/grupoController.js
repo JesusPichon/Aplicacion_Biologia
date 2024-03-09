@@ -56,7 +56,9 @@ class GrupoController {
             listaGrupos.forEach(async (nombreGrupo) => {
                 await this.delateGrupoByName(nombreGrupo);
             });
+            return true;
         }
+        return false;
     }
 }
 

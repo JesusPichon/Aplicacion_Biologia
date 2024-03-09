@@ -50,8 +50,15 @@ const Grupos = ({ navigation }) => {
         try {
             if (list.length !== 0) {
                 await controller.deleteGroups(list);
-                lanzarAlerta("Eliminacion exitosa!");
-                await cargarGrupos();
+
+                setTimeout(async () => {
+                    await cargarGrupos();
+                }, 300);
+
+                if (list.length == 1)
+                    lanzarAlerta('Grupo eliminado con exito');
+                else
+                    lanzarAlerta('Grupos eliminados con exito');
             }
         } catch (error) {
             lanzarAlerta('Error elimnando grupos');
