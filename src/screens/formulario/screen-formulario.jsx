@@ -35,7 +35,7 @@ const Formulario = ({navigation, route}) => {
         Hemisferio_Latitud: '',
         Grados_Longitud: '',
         Minutos_Longitud: '',
-        Segundos_LongitudL: '', //Nueva variable
+        Segundos_Longitud: '', //Nueva variable
         Hemisferio_Longitud: '',
         X: '',
         Y: '',

@@ -37,7 +37,7 @@ const FormularioEdit = ({ navigation, route }) => {
                 setValue(key, fechaAcomodada);
                 //setValue(key, datosIniciales[key]);
 
-            }else if (key === 'Grados_Latitud' || key === 'Minutos_Latitud' || key === 'Grados_Longitud' || key === 'Minutos_Longitud' || key === 'X' || key === 'Y') {
+            }else if (key === 'Grados_Latitud' || key === 'Minutos_Latitud' || key === 'Segundos_Latitud' || key === 'Grados_Longitud' || key === 'Minutos_Longitud' || key === 'Segundos_Longitud' || key === 'X' || key === 'Y') {
                 let contenido = '';
                 
                 // Separar la fecha en partes
@@ -91,9 +91,11 @@ const FormularioEdit = ({ navigation, route }) => {
             altitud: datosEditar.Altitud,
             grados_Latitud: datosEditar.Grados_Latitud,
             minutos_Latitud: datosEditar.Minutos_Latitud,
+            segundos_Latitud: datosEditar.Segundos_Latitud,
             hemisferio_Latitud: datosEditar.Hemisferio_Latitud,
             grados_Longitud: datosEditar.Grados_Longitud,
             minutos_Longitud: datosEditar.Minutos_Longitud,
+            segundos_Longitud: datosEditar.Segundos_Longitud,
             hemisferio_Longitud: datosEditar.Hemisferio_Longitud,
             x: datosEditar.X,
             y: datosEditar.Y,
@@ -124,9 +126,11 @@ const FormularioEdit = ({ navigation, route }) => {
             altitud: datosEditar.Altitud,
             grados_Latitud: datosEditar.Grados_Latitud,
             minutos_Latitud: datosEditar.Minutos_Latitud,
+            segundos_Latitud: datosEditar.Segundos_Latitud,
             hemisferio_Latitud: datosEditar.Hemisferio_Latitud,
             grados_Longitud: datosEditar.Grados_Longitud,
             minutos_Longitud: datosEditar.Minutos_Longitud,
+            segundos_Longitud: datosEditar.Segundos_Longitud,
             hemisferio_Longitud: datosEditar.Hemisferio_Longitud,
             x: datosEditar.X,
             y: datosEditar.Y,

@@ -42,9 +42,11 @@ const InfColecta = ({ navigation, route }) => {
         Altitud: route.params.data.altitud,
         Grados_Latitud: route.params.data.grados_Latitud,
         Minutos_Latitud: route.params.data.minutos_Latitud,
+        Segundos_Latitud: route.params.data.segundos_Latitud,
         Hemisferio_Latitud: route.params.data.hemisferio_Latitud,
         Grados_Longitud: route.params.data.grados_Longitud,
         Minutos_Longitud: route.params.data.minutos_Longitud,
+        Segundos_Longitud: route.params.data.segundos_Longitud,
         Hemisferio_Longitud: route.params.data.hemisferio_Longitud,
         X: route.params.data.x,
         Y: route.params.data.y,
@@ -90,7 +92,7 @@ const InfColecta = ({ navigation, route }) => {
         console.log('switch')
         console.log(switchStates)
         Object.keys(data).forEach(key => {
-            if (key !== 'x' && key !== 'y' && key !== 'grados_Latitud' && key !== 'minutos_Latitud' && key !== 'hemisferio_Latitud' && key !== 'grados_Longitud' && key !== 'minutos_Longitud' && key !== 'hemisferio_Longitud') {
+            if (key !== 'x' && key !== 'y' && key !== 'grados_Latitud' && key !== 'minutos_Latitud' && key !== 'segundos_Latitud' && key !== 'hemisferio_Latitud' && key !== 'grados_Longitud' && key !== 'minutos_Longitud' && key !== 'segundos_Longitud' && key !== 'hemisferio_Longitud') {
                 if (switchStates[key]) {
                     // Mantener otros datos que no sean fechas o que estén seleccionados por los interruptores
                     filteredData[key] = data[key];
@@ -99,7 +101,7 @@ const InfColecta = ({ navigation, route }) => {
             if (data.option === 'metric' && switchStates['Coordenadas']) {
                 filteredData['Coordenadas'] = 'x:' + route.params.data.x + '  y:' +route.params.data.y;
             } if (data.option === 'geographic' && switchStates['Coordenadas']) {
-                filteredData['Coordenadas'] = 'Latitud:' + route.params.data.grados_Latitud + '° ' + route.params.data.minutos_Latitud + "' " + route.params.data.hemisferio_Latitud + ' Longitud:' + route.params.data.grados_Longitud + '° ' + route.params.data.minutos_Longitud +  "' " + route.params.data.hemisferio_Longitud
+                filteredData['Coordenadas'] = 'Latitud:' + route.params.data.grados_Latitud + '° ' + route.params.data.minutos_Latitud + "' " + route.params.data.segundos_Latitud + "'' " + route.params.data.hemisferio_Latitud + ' Longitud:' + route.params.data.grados_Longitud + '° ' + route.params.data.minutos_Longitud +  "' " + route.params.data.segundos_Longitud + "'' " + route.params.data.hemisferio_Longitud;
             }
         });
         return filteredData;
@@ -173,7 +175,7 @@ const InfColecta = ({ navigation, route }) => {
                     <Animated.ScrollView style={{ opacity: unoAnim, marginTop:10}}>
                         <View style={{ rowGap: 25, columnGap: 5, flexDirection: 'column', marginBottom: 30,marginLeft: 10 }}>
                             {Object.entries(data).map(([campo, contenido], index) => {
-                                if (contenido !== null && contenido !== "" && campo !==  'X' && campo !==  'Y' && campo !== 'Grados_Latitud' && campo !== 'Minutos_Latitud' && campo !== 'Hemisferio_Latitud' && campo !== 'Grados_Longitud' && campo !== 'Minutos_Longitud' && campo !== 'Hemisferio_Longitud' && campo !== 'option') {
+                                if (contenido !== null && contenido !== "" && campo !==  'X' && campo !==  'Y' && campo !== 'Grados_Latitud' && campo !== 'Minutos_Latitud' && campo !== 'Segundos_Latitud' && campo !== 'Hemisferio_Latitud' && campo !== 'Grados_Longitud' && campo !== 'Minutos_Longitud' && campo !== 'Segundos_Longitud' && campo !== 'Hemisferio_Longitud' && campo !== 'option') {
                                     var nombreCampo;
                                     if (campo === 'Tamano') {
                                         nombreCampo = 'Tamaño';
@@ -215,7 +217,7 @@ const InfColecta = ({ navigation, route }) => {
                                                     </Text>
                                                 ) : (
                                                     <Text style={[styles.textP, { fontSize: 18, fontWeight: 'normal', width:'55%', borderWidth: 1, borderColor: cuarto, padding: 1  }]}>
-                                                        {'Latitud:' + route.params.data.grados_Latitud + '° ' + route.params.data.minutos_Latitud + "' " + route.params.data.hemisferio_Latitud + ' Longitud:' + route.params.data.grados_Longitud + '° ' + route.params.data.minutos_Longitud +  "' " + route.params.data.hemisferio_Longitud}
+                                                        {'Latitud:' + route.params.data.grados_Latitud + '° ' + route.params.data.minutos_Latitud + "' " + route.params.data.segundos_Latitud + "'' " + route.params.data.hemisferio_Latitud + ' Longitud:' + route.params.data.grados_Longitud + '° ' + route.params.data.minutos_Longitud +  "' " + route.params.data.segundos_Longitud + "'' " + route.params.data.hemisferio_Longitud}
                                                     </Text>
                                                 )}
                                                 <Switch

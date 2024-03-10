@@ -67,9 +67,11 @@ export const crearTablas = () => {
             altitud INTEGER, --Revisar si se puden poner decimales 
             grados_Latitud INTEGER,
             minutos_Latitud INTEGER,
+            segundos_Latitud INTEGER,
             hemisferio_Latitud INTEGER,
             grados_Longitud INTEGER,
             minutos_Longitud INTEGER,
+            segundos_Longitud INTEGER,
             hemisferio_Longitud INTEGER,
             x REAL,
             y REAL,
@@ -179,9 +181,11 @@ export const insertarTomas = (tomasData) => {
         altitud,
         grados_Latitud,
         minutos_Latitud,
+        segundos_Latitud,
         hemisferio_Latitud,
         grados_Longitud,
         minutos_Longitud,
+        segundos_Longitud,
         hemisferio_Longitud,
         x,
         y,
@@ -201,7 +205,7 @@ export const insertarTomas = (tomasData) => {
         determino,
         otros_datos,
         grupo)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [...Object.values(tomasData)], // Convierte el objeto en un array de valores
       (_, results) => {
         if (results.rowsAffected > 0) {
@@ -380,8 +384,10 @@ export const editarToma = (tomasData, id) => {
         altitud = ?,
         grados_Latitud = ?,
         minutos_Latitud = ?,
+        segundos_Latitud = ?,
         hemisferio_Latitud = ?,
         grados_Longitud = ?,
+        segundos_Longitud = ?,
         minutos_Longitud = ?,
         hemisferio_Longitud = ?,
         x = ?,
