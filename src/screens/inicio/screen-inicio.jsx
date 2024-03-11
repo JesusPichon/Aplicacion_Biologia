@@ -48,7 +48,7 @@ const Inicio = ({ navigation }) => {
 
 
     useEffect(() => { 
-        borrarTablas('TOMAS');
+        //borrarTablas('TOMAS');
         crearTablas();
         requestWritePermission();
         startAnimations();

@@ -22,24 +22,12 @@ const imprimir = async (listaFichas) => {
         <div style="
             margin-top: 5px;
             width: 100%;
-            height: 15%;
+            height: 20%;
             display: flex;
             flex-direction: row;
             justify-content: space-evenly;
         ">
-            <div style="
-                text-align: center;
-                font-weight: bold;
-                font-size: 18px;
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-evenly;
-                font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            ">
-                <div>Benemérita Universidad Autónoma de Puebla</div>
-                <div>Facultad de Ciencias Biológas</div>
-            </div>
+          <img src="https://i.imgur.com/PG2ahE3.jpeg" style="width: 100%; height: 100%;" />
         </div>
         <!-- cuerpo -->
         <div style="
@@ -49,7 +37,7 @@ const imprimir = async (listaFichas) => {
             column-gap: 10px;
             row-gap: 6px;
             width: 100%;
-            justify-content: space-between;
+            justify-content: space-around;
             align-items: space-between;
         ">  
             ${Object.entries(listaFichas)
@@ -57,10 +45,10 @@ const imprimir = async (listaFichas) => {
                   if (value != ''){
                     if (key === 'direccion') {
                       return Object.entries(value)
-                        .map(([dirKey, dirValue]) => `<div style="display: flex;"><div style="font-weight: bold;">${dirKey}:</div><div> ${dirValue}</div></div>`)
+                        .map(([dirKey, dirValue]) => `<div style="display: flex;"><div style="font-weight: bold;">${dirKey}:</div><div style="border-bottom: 1px solid #000; min-width: 100px;"> ${dirValue}</div></div>`)
                         .join('');
                     } else {
-                      return `<div style="display: flex;"><div style="font-weight: bold;">${key}:</div><div> ${value}</div></div>`;
+                      return `<div style="display: flex;"><div style="font-weight: bold;">${key}:</div><div style="border-bottom: 1px solid #000; min-width: 100px;"> ${value}</div></div>`;
                     }
                   }
                 })

@@ -21,14 +21,15 @@ import {
 const FormularioEdit = ({ navigation, route }) => {
     const { control, handleSubmit, formState: { errors }, watch, setValue } = useForm();
     const [datosEditados, setDatosEditados] = useState({});
+
     useEffect(() => {
-        // Valores de ejemplo, puedes cambiarlos por los valores reales
         const datosIniciales = route.params.data;
         console.log(datosIniciales)
 
         // Establecer los valores iniciales en el estado del formulario
         Object.keys(datosIniciales).forEach(key => {
             if (key === 'Fecha') {
+                console.log(datosIniciales[key])
                 // Separar la fecha en partes
                 const partesFecha = datosIniciales[key].split('/');
                 // Crear un objeto Date con el formato MM/DD/AA
@@ -37,7 +38,7 @@ const FormularioEdit = ({ navigation, route }) => {
                 setValue(key, fechaAcomodada);
                 //setValue(key, datosIniciales[key]);
 
-            }else if (key === 'Grados_Latitud' || key === 'Minutos_Latitud' || key === 'Segundos_Latitud' || key === 'Grados_Longitud' || key === 'Minutos_Longitud' || key === 'Segundos_Longitud' || key === 'X' || key === 'Y') {
+            }else if (key === 'Grados_Latitud' || key === 'Minutos_Latitud' || key === 'Segundos_Latitud' || key === 'Grados_Longitud' || key === 'Minutos_Longitud' || key === 'Segundos_Longitud' || key === 'X' || key === 'Y' || key === 'Altitud' || key === 'Tamano') {
                 let contenido = '';
                 
                 // Separar la fecha en partes

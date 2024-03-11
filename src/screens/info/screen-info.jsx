@@ -5,11 +5,6 @@ import imprimir from '../../components/imprimir/imprimirUno';
 import animaciones from '../../components/animaciones/animaciones';
 import { Button} from '@rneui/themed';
 import { value, Switch } from "@rneui/base";
-// notas para la reunion
-// * ¿donde salio "option"?
-// * ¿se modifico el formulario?
-//      agregar tipo de vegetacion
-// * que chinge a su ------- madre el de web semantica
 
 import {
     Text,
@@ -175,7 +170,7 @@ const InfColecta = ({ navigation, route }) => {
                     <Animated.ScrollView style={{ opacity: unoAnim, marginTop:10}}>
                         <View style={{ rowGap: 25, columnGap: 5, flexDirection: 'column', marginBottom: 30,marginLeft: 10 }}>
                             {Object.entries(data).map(([campo, contenido], index) => {
-                                if (contenido !== null && contenido !== "" && campo !==  'X' && campo !==  'Y' && campo !== 'Grados_Latitud' && campo !== 'Minutos_Latitud' && campo !== 'Segundos_Latitud' && campo !== 'Hemisferio_Latitud' && campo !== 'Grados_Longitud' && campo !== 'Minutos_Longitud' && campo !== 'Segundos_Longitud' && campo !== 'Hemisferio_Longitud' && campo !== 'option') {
+                                if (contenido !== null && contenido !== "" && campo !==  'X' && campo !==  'Y' && campo !== 'Grados_Latitud' && campo !== 'Minutos_Latitud' && campo !== 'Segundos_Latitud' && campo !== 'Hemisferio_Latitud' && campo !== 'Grados_Longitud' && campo !== 'Minutos_Longitud' && campo !== 'Segundos_Longitud' && campo !== 'Hemisferio_Longitud' && campo !== 'option' && campo !== 'id') {
                                     var nombreCampo;
                                     if (campo === 'Tamano') {
                                         nombreCampo = 'Tamaño';
