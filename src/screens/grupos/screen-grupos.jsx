@@ -127,7 +127,7 @@ const Grupos = ({ navigation }) => {
     return (
         <View style={{ backgroundColor: secundario, flex: 1 }}>
             <Animated.View style={{ opacity: unoAnim }}>
-                <BarraBusqueda titulo={'Buscar grupo'} pantalla={'default'} />
+                <BarraBusqueda titulo={'Buscar grupo'} pantalla={'grupos'} onResult={updateGrupos}  />
             </Animated.View>
 
 
