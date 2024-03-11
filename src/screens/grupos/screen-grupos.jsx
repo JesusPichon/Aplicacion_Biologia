@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Animated, FlatList } from "react-native";
 import { principal, secundario } from "../../styles/style-colors";
-import { SpeedDial } from "@rneui/themed";
 import { selectCsv } from "../../services/functions/import-csv";
 import styles from "./style-canales";
 import animaciones from '../../components/animaciones/animaciones';
 import Grupo from "../../components/Grupo";
 import BarraBusqueda from "../../components/BarraBusqueda";
 import VentanaFlotante from "../../components/VentanaFlotante";
+import BotonAcciones from "../../components/BotonAcciones";
 import Snackbar from 'react-native-snackbar';
 import GrupoController from "../../services/controllers/grupoController";
+
 
 
 const Grupos = ({ navigation }) => {
@@ -24,21 +25,59 @@ const Grupos = ({ navigation }) => {
     const [grupos, setGrupos] = useState([]);
     const [nombreGrupo, setNombreGrupo] = useState('');
 
-    //manejador de errores
-    const [error, setError] = useState('');
+    const [error, setError] = useState(''); //manejador de errores
 
     //Abrir Speed Dial y Modal
     const [openButton, setOpenButton] = useState(false);
     const [openModal, setOpenModal] = useState(false)
 
-    //lista para guardar los objetos que se van a eliminar 
-    const [listaBorrarGrupos, setListaBorrarGrupos] = useState([]);
+    const [listaBorrarGrupos, setListaBorrarGrupos] = useState([]); //lista para guardar los objetos que se van a eliminar 
 
-    //agregar controller
-    const controller = new GrupoController();
+    const controller = new GrupoController(); //agregar controller
 
-    //nuevo hook para seleccionar 
-    const [showCheckBox, setShowCheckBox] = useState(false);
+    const [showCheckBox, setShowCheckBox] = useState(false);//hook para seleccionar
+
+    const listActionsVerified = [{ //lista de acciones para verificar la opcion de eliminar 
+        icon: { name: 'done', color: 'white' },
+        title: 'aceptar',
+        func: async () => {
+            //console.log('aceptar');
+            setShowCheckBox(false);
+            setOpenButton(false);
+            await eliminarGrupos(listaBorrarGrupos);
+            setActions(listActionsDefault);
+            console.log("lista borrar : ", listaBorrarGrupos);
+        }
+    }, {
+        icon: { name: 'cancel', color: 'white' },
+        title: 'cancelar',
+        func: () => {
+            console.log('eliminar')
+            setShowCheckBox(false);
+            setOpenButton(false);
+            setActions(listActionsDefault);
+        }
+    }];
+
+    const listActionsDefault = [{ //lista de acciones por default 
+        icon: { name: 'add', color: 'white' },
+        title: 'agregar',
+        func: () => {
+            setOpenButton(false);
+            setOpenModal(true);
+        }
+    },
+    {
+        icon: { name: 'print', color: 'white' },
+        title: 'eliminar',
+        func: () => {
+            setShowCheckBox(true);
+            setOpenButton(false);
+            setActions(listActionsVerified);
+        }
+    }];
+
+    const [actions, setActions] = useState(listActionsDefault); //Asignar las acciones al boton flotante de forma dinamica 
 
     const cargarGrupos = async () => {
         try {
@@ -123,7 +162,7 @@ const Grupos = ({ navigation }) => {
         }
     }
 
-    
+
     useEffect(() => {
         startAnimations();
         cargarGrupos();
@@ -133,7 +172,7 @@ const Grupos = ({ navigation }) => {
     return (
         <View style={{ backgroundColor: secundario, flex: 1 }}>
             <Animated.View style={{ opacity: unoAnim }}>
-                <BarraBusqueda titulo={'Buscar grupo'} pantalla={'grupos'} onResult={updateGrupos}  />
+                <BarraBusqueda titulo={'Buscar grupo'} pantalla={'grupos'} onResult={updateGrupos} />
             </Animated.View>
 
 
@@ -172,34 +211,13 @@ const Grupos = ({ navigation }) => {
                     )} />
             </View>
 
-            <SpeedDial
+            <BotonAcciones
                 isOpen={openButton}
                 icon={{ name: 'add', color: 'white' }}
                 openIcon={{ name: 'close', color: 'white' }}
-                color={principal}
-                onOpen={() => setOpenButton(true)}
-                onClose={() => setOpenButton(false)}>
-
-                <SpeedDial.Action
-                    icon={{ name: 'add', color: '#fff' }}
-                    color={principal}
-                    title={'agregar'}
-                    onPress={() => {
-                        setOpenButton(false);
-                        setOpenModal(true);
-                    }} />
-
-                <SpeedDial.Action
-                    icon={{ name: 'delete', color: '#fff' }}
-                    color={principal}
-                    title={'eliminar'}
-                    onPress={async () => {
-                        setOpenButton(false);
-                        setShowCheckBox(true);
-                        //await eliminarGrupos(listaBorrarGrupos);
-                    }} />
-
-            </SpeedDial>
+                onOpen={() => { setOpenButton(true) }}
+                onClose={() => { setOpenButton(false) }}
+                acciones={actions} />
 
             <VentanaFlotante
                 openModal={openModal}
