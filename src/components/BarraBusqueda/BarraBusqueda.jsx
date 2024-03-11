@@ -56,7 +56,7 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
     const [search, setSearch] = useState("");
     const [buscando, setBuscando] = useState(false);
 
-   {/* useEffect(() => {
+    useEffect(() => {
         let timerId;
         if (search.trim() !== "") {
             setBuscando(true);
@@ -75,14 +75,14 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
         if (pantalla !== 'canales' && value) {
             peticion(search);
         }
-    }, [value]); */}
+    }, [value]);
 
     const updateSearch = (searchInput) => {
         setSearch(searchInput);
     };
 
     const peticion = (buscar) => {
-        if (pantalla === "canales") {
+        if (pantalla === "grupos") {
             console.log("Buscando: " + buscar);
             verGruposFiltrado(buscar)
                 .then(result => {
@@ -111,7 +111,7 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
         }
     };
 
-    if (pantalla === 'canales') {
+    if (pantalla === 'grupos') {
         return (
             <SearchBar
                 placeholder={titulo}
@@ -123,7 +123,7 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
                 showLoading={buscando}
             />
         );
-    } if (pantalla === 'tomas') {
+    } else {
         return (
             <View style={{ flexDirection: 'row' }}>
                 <View style={{ width: '75%', backgroundColor: '#000', padding: 0 }}>
@@ -159,15 +159,6 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
 
                 />
             </View>
-        );
-    } if (pantalla === 'default') {
-        return(
-            <SearchBar
-                placeholder={titulo}
-                containerStyle={{ backgroundColor: secundario, borderColor: secundario }}
-                inputContainerStyle={{ backgroundColor: 'white', borderRadius: 20 }}
-                inputStyle={{ backgroundColor: 'white' }}
-            />
         );
     }
 }
