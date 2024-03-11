@@ -13,7 +13,6 @@ import GrupoController from "../../services/controllers/grupoController";
 
 
 const Grupos = ({ navigation }) => {
-
     // animaciones
     const {
         unoAnim,
@@ -23,6 +22,9 @@ const Grupos = ({ navigation }) => {
     //grupos y mensajes de error
     const [grupos, setGrupos] = useState([]);
     const [nombreGrupo, setNombreGrupo] = useState('');
+
+    //Estado de la funcionalidad importar
+    const [isImporting, setIsImporting] = useState(false);
 
     //manejador de errores
     const [error, setError] = useState('');
@@ -83,7 +85,6 @@ const Grupos = ({ navigation }) => {
         }
     }
 
-
     function seleccionar(grupo) { //agregar grupo a la lista de seleccionados 
         setListaBorrarGrupos(listaBorrarGrupos.concat(grupo));
     }
@@ -118,6 +119,31 @@ const Grupos = ({ navigation }) => {
         }, 200);
     }
 
+    const handleCloseModal = () => {
+        if (isImporting && nombreGrupo === '') {
+            lanzarAlerta('La operación de importación se ha cancelado porque no se ingresó un nombre de grupo');
+            setOpenModal(false);
+            setIsImporting(false);
+        } else {
+            setOpenModal(false);
+            setError('');
+            setIsImporting(false);
+        }
+    }    
+
+    const handleImport = async () => {
+        try {
+            const data = await selectCsv();
+            lanzarAlerta("CSV importado correctamente, Cree nuevo grupo");
+            setIsImporting(true);
+            setOpenModal(true);
+            //console.log(data);
+            //A qui va funcion que usa data para la consulta SQL
+        } catch (error) {
+            lanzarAlerta(error);
+        }
+    }
+
     useEffect(() => {
         startAnimations();
         cargarGrupos();
@@ -138,10 +164,7 @@ const Grupos = ({ navigation }) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[styles.exportar, styles.fondoT]}
-                    onPress={() => {
-                        selectCsv();
-                        //setOpenModal(true);
-                    }}>
+                    onPress={handleImport}>
                     <Text style={[styles.textP, { textAlign: 'center', fontWeight: 'bold' }]}>IMPORTAR</Text>
                 </TouchableOpacity>
             </View>
@@ -199,10 +222,7 @@ const Grupos = ({ navigation }) => {
 
             <VentanaFlotante
                 openModal={openModal}
-                handleCloseModal={() => {
-                    setOpenModal(false);
-                    setError('');
-                }}
+                handleCloseModal={handleCloseModal}
                 handleTextChange={handleTextChange}
                 errorMessage={error}
                 saveGroup={guardarTexto} />
