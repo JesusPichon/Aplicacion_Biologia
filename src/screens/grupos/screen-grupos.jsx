@@ -138,7 +138,10 @@ const Grupos = ({ navigation }) => {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[styles.exportar, styles.fondoT]}
-                    onPress={selectCsv}>
+                    onPress={() => {
+                        selectCsv();
+                        //setOpenModal(true);
+                    }}>
                     <Text style={[styles.textP, { textAlign: 'center', fontWeight: 'bold' }]}>IMPORTAR</Text>
                 </TouchableOpacity>
             </View>
