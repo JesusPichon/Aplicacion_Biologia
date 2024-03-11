@@ -37,6 +37,9 @@ const Grupos = ({ navigation }) => {
     //agregar controller
     const controller = new GrupoController();
 
+    //nuevo hook para seleccionar 
+    const [showCheckBox, setShowCheckBox] = useState(false);
+
     const cargarGrupos = async () => {
         try {
             const grupos = await controller.obtenerGrupos();
@@ -86,10 +89,12 @@ const Grupos = ({ navigation }) => {
 
     function seleccionar(grupo) { //agregar grupo a la lista de seleccionados 
         setListaBorrarGrupos(listaBorrarGrupos.concat(grupo));
+        console.log("Seleccionados: ", listaBorrarGrupos);
     }
 
     function deseleccionar(grupo) { //quitar grupo de la listad de seleccionados 
         setListaBorrarGrupos(listaBorrarGrupos.filter((item) => item !== grupo));
+        console.log("Seleccionados: ", listaBorrarGrupos);
     }
 
     function updateGrupos(nuevosGrupos) {
@@ -101,14 +106,6 @@ const Grupos = ({ navigation }) => {
         setError(''); // Limpiar el mensaje de error cuando se ingresa texto
     };
 
-    async function guardarTexto() { //guarda un nuevo grupo con el nombre que le fue asignado dentro del modal 
-        if (nombreGrupo.trim() !== '') {
-            await agregarGrupo(nombreGrupo);
-        } else {
-            setError('El nombre del grupo no puede estar vacio');
-        }
-    }
-
     function lanzarAlerta(mensaje) {
         setTimeout(() => {
             Snackbar.show({
@@ -118,6 +115,15 @@ const Grupos = ({ navigation }) => {
         }, 200);
     }
 
+    async function guardarTexto() { //guarda un nuevo grupo con el nombre que le fue asignado dentro del modal 
+        if (nombreGrupo.trim() !== '') {
+            await agregarGrupo(nombreGrupo);
+        } else {
+            setError('El nombre del grupo no puede estar vacio');
+        }
+    }
+
+    
     useEffect(() => {
         startAnimations();
         cargarGrupos();
@@ -159,8 +165,8 @@ const Grupos = ({ navigation }) => {
                             key={index}
                             animacion={unoAnim}
                             navigation={navigation}
-                            informacion={item}
                             nombre={item}
+                            mostrarSeleccionar={showCheckBox}
                             deseleccionar={deseleccionar}
                             seleccionar={seleccionar} />
                     )} />
@@ -189,7 +195,8 @@ const Grupos = ({ navigation }) => {
                     title={'eliminar'}
                     onPress={async () => {
                         setOpenButton(false);
-                        await eliminarGrupos(listaBorrarGrupos);
+                        setShowCheckBox(true);
+                        //await eliminarGrupos(listaBorrarGrupos);
                     }} />
 
             </SpeedDial>
