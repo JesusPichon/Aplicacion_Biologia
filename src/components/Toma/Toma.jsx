@@ -1,27 +1,13 @@
 import { Image } from "@rneui/base";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { principal, secundario } from "../../styles/style-colors";
+import { View, Text,TouchableOpacity } from "react-native";
+import style_toma from "./style-toma";
+
 import { useState } from "react";
 
 
 const Toma = ({ navigation, data , seleccionar, deseleccionar }) => {
 
   const [isSelected, setSelected] = useState(false);
-
-
-  const style_toma = StyleSheet.create({
-    view_toma: {
-      flexDirection: 'row',
-      margin: 5,
-      backgroundColor: isSelected ? secundario : principal,
-      borderRadius: 16,
-    },
-
-    text_card: {
-      fontSize: 13,
-      color: 'white'
-    },
-  });
 
   return (
     <TouchableOpacity
