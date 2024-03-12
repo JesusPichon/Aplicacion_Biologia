@@ -11,20 +11,16 @@ const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccio
 
     const [checked, setChecked] = useState(false);
 
-    function toggleCheckbox(data) { // las casillas que esten marcadas se marcaran como grupos seleccionados 
-        setChecked(!checked);
-
-        if(!checked){
-            seleccionar(data);
-        }else{
-            deseleccionar(data);
-        }
-    }
 
     return (
         <TouchableOpacity
             style={[stylesCanales.cardVertical, styles.fondoT, { width: '45%', marginBottom: 20, margin: 10 }]}
-            onPress={() => { navigation.navigate('Tomas', { nombre }) }} >
+            onPress={() => {
+                if (mostrarSeleccionar == false)
+                    navigation.navigate('Tomas', { nombre })
+                else
+                    setChecked(!checked); // cambiar el valor del checkbox si se preciona el grupo 
+            }} >
 
             <View style={[stylesCanales.cardVImagen]}>
 
@@ -44,7 +40,7 @@ const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccio
 
             </View>
 
-            <View style={[styles.botongrupo, {backgroundColor: principal}]}>
+            <View style={[styles.botongrupo, { backgroundColor: checked ? "red": principal}]}>
                 <Text style={[styles.textT, { textAlign: 'center', fontWeight: 'bold' }]}>
                     {nombre}
                 </Text>

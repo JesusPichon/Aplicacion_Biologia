@@ -44,7 +44,7 @@ const Grupos = ({ navigation }) => {
             //console.log('aceptar');
             setShowCheckBox(false);
             setOpenButton(false);
-            await eliminarGrupos(listaBorrarGrupos);
+            //await eliminarGrupos(listaBorrarGrupos);
             setActions(listActionsDefault);
             console.log("lista borrar : ", listaBorrarGrupos);
         }
@@ -125,17 +125,6 @@ const Grupos = ({ navigation }) => {
         }
     }
 
-
-    function seleccionar(grupo) { //agregar grupo a la lista de seleccionados 
-        setListaBorrarGrupos(listaBorrarGrupos.concat(grupo));
-        console.log("Seleccionados: ", listaBorrarGrupos);
-    }
-
-    function deseleccionar(grupo) { //quitar grupo de la listad de seleccionados 
-        setListaBorrarGrupos(listaBorrarGrupos.filter((item) => item !== grupo));
-        console.log("Seleccionados: ", listaBorrarGrupos);
-    }
-
     function updateGrupos(nuevosGrupos) {
         setGrupos(nuevosGrupos); // Actualizamos los grupos con los resultados de la búsqueda
     };
@@ -205,9 +194,7 @@ const Grupos = ({ navigation }) => {
                             animacion={unoAnim}
                             navigation={navigation}
                             nombre={item}
-                            mostrarSeleccionar={showCheckBox}
-                            deseleccionar={deseleccionar}
-                            seleccionar={seleccionar} />
+                            mostrarSeleccionar={showCheckBox} />
                     )} />
             </View>
 
