@@ -7,9 +7,9 @@ import animaciones from '../../components/animaciones/animaciones';
 import Grupo from "../../components/Grupo";
 import BarraBusqueda from "../../components/BarraBusqueda";
 import VentanaFlotante from "../../components/VentanaFlotante";
-import BotonAcciones from "../../components/BotonAcciones";
 import Snackbar from 'react-native-snackbar';
 import GrupoController from "../../services/controllers/grupoController";
+import { SpeedDial } from "@rneui/themed";
 
 
 
@@ -21,63 +21,18 @@ const Grupos = ({ navigation }) => {
         startAnimations,
     } = animaciones();
 
-    //grupos y mensajes de error
-    const [grupos, setGrupos] = useState([]);
+    
+    const [grupos, setGrupos] = useState([]); //lista de grupos 
+    const [listaBorrarGrupos, setListaBorrarGrupos] = useState([]); //lista para guardar los objetos que se van a eliminar 
     const [nombreGrupo, setNombreGrupo] = useState('');
 
     const [error, setError] = useState(''); //manejador de errores
 
-    //Abrir Speed Dial y Modal
     const [openButton, setOpenButton] = useState(false);
-    const [openModal, setOpenModal] = useState(false)
-
-    const [listaBorrarGrupos, setListaBorrarGrupos] = useState([]); //lista para guardar los objetos que se van a eliminar 
+    const [openModal, setOpenModal] = useState(false);
+    const [showCheckBox, setShowCheckBox] = useState(false); //mostrar casillas de seleccion 
 
     const controller = new GrupoController(); //agregar controller
-
-    const [showCheckBox, setShowCheckBox] = useState(false);//hook para seleccionar
-
-    const listActionsVerified = [{ //lista de acciones para verificar la opcion de eliminar 
-        icon: { name: 'done', color: 'white' },
-        title: 'aceptar',
-        func: async () => {
-            //console.log('aceptar');
-            setShowCheckBox(false);
-            setOpenButton(false);
-            //await eliminarGrupos(listaBorrarGrupos);
-            setActions(listActionsDefault);
-            console.log("lista borrar : ", listaBorrarGrupos);
-        }
-    }, {
-        icon: { name: 'cancel', color: 'white' },
-        title: 'cancelar',
-        func: () => {
-            console.log('eliminar')
-            setShowCheckBox(false);
-            setOpenButton(false);
-            setActions(listActionsDefault);
-        }
-    }];
-
-    const listActionsDefault = [{ //lista de acciones por default 
-        icon: { name: 'add', color: 'white' },
-        title: 'agregar',
-        func: () => {
-            setOpenButton(false);
-            setOpenModal(true);
-        }
-    },
-    {
-        icon: { name: 'print', color: 'white' },
-        title: 'eliminar',
-        func: () => {
-            setShowCheckBox(true);
-            setOpenButton(false);
-            setActions(listActionsVerified);
-        }
-    }];
-
-    const [actions, setActions] = useState(listActionsDefault); //Asignar las acciones al boton flotante de forma dinamica 
 
     const cargarGrupos = async () => {
         try {
@@ -123,6 +78,16 @@ const Grupos = ({ navigation }) => {
         } catch (error) {
             lanzarAlerta("Error al agregar el grupo dentro de la base de datos");
         }
+    }
+
+    function seleccionar(nombre) {
+        setListaBorrarGrupos(listaBorrarGrupos.concat(nombre));
+    }
+
+    function deseleccionar(nombre) {
+        setListaBorrarGrupos(listaBorrarGrupos.filter((item) => {
+            item !== nombre;
+        }))
     }
 
     function updateGrupos(nuevosGrupos) {
@@ -194,17 +159,66 @@ const Grupos = ({ navigation }) => {
                             animacion={unoAnim}
                             navigation={navigation}
                             nombre={item}
+                            seleccionar={seleccionar}
+                            deseleccionar={deseleccionar}
                             mostrarSeleccionar={showCheckBox} />
                     )} />
             </View>
 
-            <BotonAcciones
+            <SpeedDial
                 isOpen={openButton}
-                icon={{ name: 'add', color: 'white' }}
-                openIcon={{ name: 'close', color: 'white' }}
-                onOpen={() => { setOpenButton(true) }}
-                onClose={() => { setOpenButton(false) }}
-                acciones={actions} />
+                icon={{ name: 'edit', color: '#fff' }}
+                openIcon={{ name: 'close', color: '#fff' }}
+                onOpen={() => setOpenButton(!openButton)}
+                onClose={() => setOpenButton(!openButton)}
+                color={principal}>
+
+                {
+                    !showCheckBox && <SpeedDial.Action //Implementacion de la opcion agregar grupo
+                        icon={{ name: 'add', color: '#fff' }}
+                        title="Add"
+                        color={principal}
+                        onPress={() => {
+                            setOpenButton(false);
+                            setOpenModal(true);
+                        }} />
+                }
+
+                {
+                    !showCheckBox && <SpeedDial.Action //implementacion de la opcion eliminar grupo 
+                        icon={{ name: 'delete', color: '#fff' }}
+                        title="Delete"
+                        color={principal}
+                        onPress={() => {
+                            setShowCheckBox(true);
+                            setOpenButton(false);
+                        }} />
+                }
+
+                {
+                    showCheckBox && <SpeedDial.Action //confirmacion de la opcion eliminar 
+                        icon={{ name: 'done', color: '#fff' }}
+                        title="Acept"
+                        color={principal}
+                        onPress={async () => {
+                            setShowCheckBox(false);
+                            setOpenButton(false);
+                            await eliminarGrupos(listaBorrarGrupos);
+                        }} />
+                }
+
+                {
+                    showCheckBox && <SpeedDial.Action //cancelar la opcion de eliminar 
+                        icon={{ name: 'cancel', color: '#fff' }}
+                        title="Cancel"
+                        color={principal}
+                        onPress={() => {
+                            setShowCheckBox(false);
+                            setOpenButton(false);
+                            setListaBorrarGrupos([]);
+                        }} />
+                }
+            </SpeedDial>
 
             <VentanaFlotante
                 openModal={openModal}
@@ -215,7 +229,6 @@ const Grupos = ({ navigation }) => {
                 handleTextChange={handleTextChange}
                 errorMessage={error}
                 saveGroup={guardarTexto} />
-
         </View>
     );
 };

@@ -7,19 +7,24 @@ import { CheckBox } from "@rneui/themed";
 
 
 
-const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccionar }) => {
+const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccionar}) => {
 
     const [checked, setChecked] = useState(false);
-
 
     return (
         <TouchableOpacity
             style={[stylesCanales.cardVertical, styles.fondoT, { width: '45%', marginBottom: 20, margin: 10 }]}
             onPress={() => {
                 if (mostrarSeleccionar == false)
-                    navigation.navigate('Tomas', { nombre })
-                else
-                    setChecked(!checked); // cambiar el valor del checkbox si se preciona el grupo 
+                    navigation.navigate('Tomas', { nombre });
+                else {
+                    if (checked)
+                        deseleccionar(nombre);
+                    else
+                        seleccionar(nombre);
+
+                    setChecked(!checked);
+                }
             }} >
 
             <View style={[stylesCanales.cardVImagen]}>
@@ -28,8 +33,7 @@ const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccio
                     mostrarSeleccionar && <CheckBox
                         title={'eliminar'}
                         checkedColor="red"
-                        checked={checked}
-                        onPress={() => {setChecked(!checked)}} />
+                        checked={checked} />
                 }
 
                 <ImageBackground
@@ -40,7 +44,7 @@ const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccio
 
             </View>
 
-            <View style={[styles.botongrupo, { backgroundColor: checked ? "red": principal}]}>
+            <View style={[styles.botongrupo, { backgroundColor: principal}]}>
                 <Text style={[styles.textT, { textAlign: 'center', fontWeight: 'bold' }]}>
                     {nombre}
                 </Text>
