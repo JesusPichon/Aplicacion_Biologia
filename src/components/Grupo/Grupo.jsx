@@ -3,7 +3,8 @@ import styles from "../../styles/style-app";
 import stylesCanales from "../../screens/grupos/style-canales";
 import { useState } from "react";
 import { principal } from "../../styles/style-colors";
-import Casilla from "../Casilla";
+import { CheckBox } from "@rneui/themed";
+
 
 
 const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccionar }) => {
@@ -28,10 +29,11 @@ const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccio
             <View style={[stylesCanales.cardVImagen]}>
 
                 {
-                    mostrarSeleccionar && <Casilla
+                    mostrarSeleccionar && <CheckBox
+                        title={'eliminar'}
+                        checkedColor="red"
                         checked={checked}
-                        toggleCheckbox={() => toggleCheckbox(nombre)}
-                        color={'red'} />
+                        onPress={() => {setChecked(!checked)}} />
                 }
 
                 <ImageBackground
