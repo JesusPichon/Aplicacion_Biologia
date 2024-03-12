@@ -5,6 +5,7 @@ import imprimir from '../../components/imprimir/imprimirUno';
 import animaciones from '../../components/animaciones/animaciones';
 import { Button} from '@rneui/themed';
 import { value, Switch } from "@rneui/base";
+import { selectImg } from '../../components/imprimir/seleccionarImagen'
 
 import {
     Text,
@@ -19,6 +20,14 @@ import {
 
 
 const InfColecta = ({ navigation, route }) => {
+    const handleSelectImg = async () => {
+        try {
+            await selectImg();
+        } catch (error) {
+            console.error('Error al seleccionar la imagen:', error);
+        }
+    };
+
     function tipoDeCoordenadas(coordenadas) {
         if (coordenadas !== null && coordenadas !== '') {
             return 'metric'
@@ -152,7 +161,7 @@ const InfColecta = ({ navigation, route }) => {
                                 radius={"md"} 
                                 type="solid"
                                 //onPress={() => console.log(getFilteredData())}
-                                onPress={() => imprimir(getFilteredData())}
+                                onPress={() => handleSelectImg()}
                                 title="  Imprimir" 
                                 buttonStyle={{ backgroundColor: tercero}}
                                 icon={{name: 'print', color: principal}}

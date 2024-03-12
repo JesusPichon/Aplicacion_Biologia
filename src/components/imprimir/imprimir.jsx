@@ -31,7 +31,7 @@ const imprimir = async (listaFichas) => {
           flex-direction: row;
           justify-content: space-evenly;
       ">
-        <img src="https://i.imgur.com/PG2ahE3.jpeg" style="width: 100%; height: 100%;" />
+        <img src="content://media/picker/0/com.android.providers.media.photopicker/media/1000018611" style="width: 100%; height: 100%;" />
       </div>
       <!-- cuerpo -->
       <div style="

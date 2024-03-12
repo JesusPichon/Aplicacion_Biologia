@@ -9,12 +9,13 @@ import {
     View,
     TouchableWithoutFeedback,
     ImageBackground,
+    Image,
 } from "react-native";
 
 const Nosotros = () => {
     const SobreNosotros = [
-        { titulo: 'Nombre bien mamalon', contenido: 'una descripcion de quienes somos' },
-        { titulo: 'Facultad de Biologia', contenido: 'una descripcion' },
+        { titulo: 'Nombre bien mamalon', contenido: 'una descripcion de quienes somos'},
+        { titulo: 'Facultad de Biologia', contenido: 'una descripcion'},
     ];
 
     const Preguntas = [
@@ -28,6 +29,18 @@ const Nosotros = () => {
         { pregunta: 'Naranja, ¿es un color o una fruta?', respuesta: 'La fruta naranja obtuvo su nombre del color, ya que la fruta es conocida por su característico tono anaranjado.' },
         { pregunta: 'Naranja, ¿es un color o una fruta?', respuesta: 'La fruta naranja obtuvo su nombre del color, ya que la fruta es conocida por su característico tono anaranjado.' },
     ];
+
+    const renderImagen = (titulo) => {
+        switch (titulo) {
+            case 'Nombre bien mamalon':
+                console.log(imagenEquipo)
+                return <Image style={{width: 50, height: 50, marginBottom:10}} source={require('../../assets/images/flor.png')} />;
+           
+            default:
+                return ''; // Otra imagen por defecto o null si no hay ninguna
+        }
+    };
+
 
     const [expandedIndex, setExpandedIndex] = useState(null);
 
@@ -46,6 +59,10 @@ const Nosotros = () => {
                             </View>
                             <View style={{ marginVertical: 10, paddingHorizontal: 10, paddingVertical: 5 }}>
                                 <Text style={{ fontSize: 16, fontWeight: 'bold', color: tercero }}>{item.contenido}</Text>
+                            </View>
+                            <View style={{alignItems: 'center'}}>
+                                { renderImagen(item.titulo)
+                                }
                             </View>
                         </ImageBackground>
                     </View>
