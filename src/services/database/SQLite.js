@@ -448,6 +448,7 @@ export const eliminarGrupo = (nombreGrupo) => {
   });
 };
 
+//Elimina todas las tomas de un grupo
 export const eliminarTomas = (groupID) => {
   return new Promise((resolve, reject) => {
     db.transaction(
@@ -461,6 +462,32 @@ export const eliminarTomas = (groupID) => {
           },
           (_, error) => {
             console.error('Error mientras se borraban las tomas: ', error);
+            reject(error); // Reject the promise on error
+          }
+        );
+      },
+      (error) => {
+        console.error('Error al ejecutar la consulta: ', error);
+        reject(error); // Reject the promise on error during transaction
+      }
+    );
+  });
+};
+
+//Elimina una toma de un grupo
+export const eliminarToma = (idGrupo, idToma) => {
+  return new Promise((resolve, reject) => {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          'DELETE FROM TOMAS WHERE grupo = ? AND id = ?',
+          [idGrupo, idToma],
+          (_, result) => {
+            console.log('La toma con ID ', idToma, ' se eliminó exitosamente');
+            resolve(); // Resolve the promise on success
+          },
+          (_, error) => {
+            console.error('Error mientras se borraba la toma: ', error);
             reject(error); // Reject the promise on error
           }
         );

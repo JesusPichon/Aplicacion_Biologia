@@ -11,13 +11,14 @@ import VentanaFlotante from "../../components/VentanaFlotante";
 import Snackbar from 'react-native-snackbar';
 import GrupoController from "../../services/controllers/grupoController";
 
-
 const Grupos = ({ navigation }) => {
     // animaciones
     const {
         unoAnim,
         startAnimations,
     } = animaciones();
+
+    const [data, setData] = useState([]);
 
     //grupos y mensajes de error
     const [grupos, setGrupos] = useState([]);
@@ -73,12 +74,15 @@ const Grupos = ({ navigation }) => {
             if (encontrado == true)
                 setError('El nombre del grupo ya existe');
             else {
-                await controller.addGrupo(nombreGrupo);
+                await controller.addGrupo(nombre);
                 setOpenModal(false);
                 setError('');
                 setNombreGrupo('');
-                lanzarAlerta('Grupo: ' + nombreGrupo + ' , creado exitosamente!!');
+                lanzarAlerta('Grupo: ' + nombre + ' , creado exitosamente!!');
                 await cargarGrupos();
+                if (isImporting === true) {
+                    controller.importTomas(nombre, data);
+                }          
             }
         } catch (error) {
             lanzarAlerta("Error al agregar el grupo dentro de la base de datos");
@@ -104,7 +108,7 @@ const Grupos = ({ navigation }) => {
 
     async function guardarTexto() { //guarda un nuevo grupo con el nombre que le fue asignado dentro del modal 
         if (nombreGrupo.trim() !== '') {
-            await agregarGrupo(nombreGrupo);
+            await agregarGrupo(nombreGrupo.toUpperCase()); //Cambia el nombre a mayusculas
         } else {
             setError('El nombre del grupo no puede estar vacio');
         }
@@ -133,12 +137,17 @@ const Grupos = ({ navigation }) => {
 
     const handleImport = async () => {
         try {
-            const data = await selectCsv();
+            const datos = await selectCsv();
+            setData(datos);
             lanzarAlerta("CSV importado correctamente, Cree nuevo grupo");
             setIsImporting(true);
             setOpenModal(true);
             //console.log(data);
             //A qui va funcion que usa data para la consulta SQL
+
+            //id para identificar el grupo de la toma 
+            
+
         } catch (error) {
             lanzarAlerta(error);
         }
@@ -148,7 +157,7 @@ const Grupos = ({ navigation }) => {
         startAnimations();
         cargarGrupos();
         setListaBorrarGrupos([]);
-    }, []);
+    }, [data]);
 
     return (
         <View style={{ backgroundColor: secundario, flex: 1 }}>

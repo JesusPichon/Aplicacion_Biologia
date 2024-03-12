@@ -6,7 +6,7 @@
     import Toma from "../../components/Toma";
     import imprimir from "../../components/imprimir/imprimir";
     import BarraBusqueda from "../../components/BarraBusqueda";
-    import { consultarIdGrupo, verTomas } from "../../services/database/SQLite";
+    import { consultarIdGrupo, verTomas, eliminarToma } from "../../services/database/SQLite";
 
     const Tomas = ({ navigation, route }) => {
 
@@ -46,6 +46,23 @@
                         });
                 })
                 .catch((error) => console.error("ID error: ", error));
+        };
+
+        //Elimina tomas de la base de datos
+        //Elimina usa sola, entonces para borrar varias al mismo tiempo, en donde se llame a borrarToma,
+        //debe estar dentro de un ForEach para repetir el metodo las veces necesarias
+        const borrarToma = (idToma) => {
+            consultarIdGrupo(nombreCanal)
+                .then((idGrupo) => {
+                    eliminarToma(idGrupo, idToma) //Reemplazar idToma por el campo id de la toma a eliminar
+                        .then((tomas) => {
+                            console.log("Toma eliminada");
+                        })
+                        .catch((error) => {
+                            console.error("Error al eliminar la toma: ", error);
+                        });
+                })
+                .catch((error) => console.error("Error en Id de Grupo: ", error));
         };
 
         useEffect(() => {
