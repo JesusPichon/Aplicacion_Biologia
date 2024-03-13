@@ -2,13 +2,14 @@
     import { ScrollView, View } from 'react-native';
     import { SpeedDial} from "@rneui/themed";
     import styles from "../../styles/style-app";
-    import { principal, secundario } from '../../styles/style-colors';
+    import { principal, secundario, tercero } from '../../styles/style-colors';
     import Toma from "../../components/Toma";
-    import imprimir from "../../components/imprimir/imprimir";
     import BarraBusqueda from "../../components/BarraBusqueda";
+    import {imprimirTomas} from "../../components/imprimir/imprimirSeleccionando"
     import { consultarIdGrupo, verTomas } from "../../services/database/SQLite";
 
     const Tomas = ({ navigation, route }) => {
+        
 
         //variable que obtine el nombre del canal 
         const nombreCanal = route.params.nombre;
@@ -102,8 +103,9 @@
                         color={principal}
                         title={'imprimir'}
                         onPress={() => {
+                            console.log(listPrint)
                             setOpen(!open);
-                            imprimir(listPrint);
+                            imprimirTomas(listPrint)
                         }} />
 
                 </SpeedDial>
