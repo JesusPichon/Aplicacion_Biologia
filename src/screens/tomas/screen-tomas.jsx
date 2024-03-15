@@ -1,135 +1,164 @@
-    import { useState, useEffect } from "react";
-    import { ScrollView, View } from 'react-native';
-    import { SpeedDial} from "@rneui/themed";
-    import styles from "../../styles/style-app";
-    import { principal, secundario, tercero } from '../../styles/style-colors';
-    import Toma from "../../components/Toma";
-    import BarraBusqueda from "../../components/BarraBusqueda";
-    import {imprimirTomas} from "../../components/imprimir/imprimirSeleccionando"
-    import { consultarIdGrupo, verTomas } from "../../services/database/SQLite";
+import { useState, useEffect } from "react";
+import { FlatList, View } from 'react-native';
+import { SpeedDial } from "@rneui/themed";
+import styles from "../../styles/style-app";
+import { principal, secundario } from '../../styles/style-colors';
+import Toma from "../../components/Toma";
+import imprimir from "../../components/imprimir/imprimir";
+import BarraBusqueda from "../../components/BarraBusqueda";
+import TomaController from "../../services/controllers/tomaController";
+import Snackbar from 'react-native-snackbar';
 
-    const Tomas = ({ navigation, route }) => {
-        
 
-        //variable que obtine el nombre del canal 
-        const nombreCanal = route.params.nombre;
+const Tomas = ({ navigation, route }) => {
 
-        const [listaTomas, setListaTomas] = useState([]);
-        const [listPrint, setListPrint] = useState([]);
-        const [open, setOpen] = useState(false);
+    const nombreGrupo = route.params.nombre; //variable que obtine el nombre del canal 
 
-        const seleccionar = (toma) => {
-            setListPrint([...listPrint, toma]);
+    const [listTomas, setListTomas] = useState([]);
+    const [listSelect, setListSelect] = useState([]);
+
+    const [openButton, setOpenButton] = useState(false);
+    const [showCheckBox, setShowCheckBox] = useState(false);
+
+    const controller = new TomaController(); //
+
+
+    const cargarTomas = async () => { //carga las tomas con ayuda del controller 
+        try {
+            const tomas = await controller.obtenerTomas(nombreGrupo);
+            setListTomas(tomas);
+        } catch (error) {
+            lanzarAlerta("Error al obtener la lista de tomas.");
         }
+    }
 
-        const deseleccionar = (toma) => {
-            setListPrint(listPrint.filter((item) => item !== toma));
+    const eliminarToma = async () => { 
+        try {
+            console.log('eliminando una toma')
+        } catch (error) {
+            lanzarAlerta('Error, no se pudo eliminar la toma.')
         }
+    }
 
-        const updateTomas = (nuevosTomas) => {
-            setListaTomas(nuevosTomas);
-        };
+    const seleccionar = (toma) => { //agregar una tomas a la lista de tomas seleccionadas 
+        setListSelect([...listSelect, toma]);
+    }
 
-        const refrescarTomas = () => {
-            getTomas();
-        }
+    const deseleccionar = (toma) => { // quitar un tomas de la lista de tomas seleccionadas 
+        setListSelect(listSelect.filter((item) => item !== toma));
+    }
 
-        //obtener tomas de la base de datos 
-        const getTomas = () => {
-            consultarIdGrupo(nombreCanal)
-                .then((id) => {
-                    verTomas(id)
-                        .then((tomas) => {
-                            setListaTomas(tomas); // Actualiza el estado con las tomas obtenidas
-                        })
-                        .catch((error) => {
-                            console.error("Error obteniendo las tomas: ", error);
-                        });
-                })
-                .catch((error) => console.error("ID error: ", error));
-        };
+    const updateTomas = (nuevasTomas) => {
+        setListTomas(nuevasTomas);
+    };
 
-        //Elimina tomas de la base de datos
-        //Elimina usa sola, entonces para borrar varias al mismo tiempo, en donde se llame a borrarToma,
-        //debe estar dentro de un ForEach para repetir el metodo las veces necesarias
-        const borrarToma = (idToma) => {
-            consultarIdGrupo(nombreCanal)
-                .then((idGrupo) => {
-                    eliminarToma(idGrupo, idToma) //Reemplazar idToma por el campo id de la toma a eliminar
-                        .then((tomas) => {
-                            console.log("Toma eliminada");
-                        })
-                        .catch((error) => {
-                            console.error("Error al eliminar la toma: ", error);
-                        });
-                })
-                .catch((error) => console.error("Error en Id de Grupo: ", error));
-        };
-
-        useEffect(() => {
-            const unsubscribe = navigation.addListener('focus', () => {
-                refrescarTomas();
+    function lanzarAlerta(mensaje) {
+        setTimeout(() => {
+            Snackbar.show({
+                text: mensaje,
+                duration: Snackbar.LENGTH_SHORT
             });
-            return unsubscribe;
-        }, [navigation]);
-
-        return (
-            <View style={{ flex: 1, backgroundColor: secundario }}>
-
-                <BarraBusqueda titulo={'Buscar en las tomas'} pantalla={'tomas'} onResult={updateTomas} />
+        }, 200);
+    }
 
 
-                <View style={[styles.container, styles.fondoT]}>
+    useEffect(() => {
+        cargarTomas();
+        setListSelect([]);
+    }, []);
 
-                    <ScrollView>
-                        {
-                            listaTomas.map((item, index) => {
-                                return (
-                                    <Toma
-                                        key={index}
-                                        data={item}
-                                        navigation={navigation}
-                                        seleccionar={seleccionar}
-                                        deseleccionar={deseleccionar} />
-                                );
-                            })
-                        }
-                    </ScrollView>
-                </View>
+    return (
+        <View style={{ flex: 1, backgroundColor: secundario }}>
 
-                <SpeedDial
-                    isOpen={open}
-                    icon={{ name: 'add', color: 'white' }}
-                    openIcon={{ name: 'close', color: 'white' }}
-                    color={principal}
-                    onOpen={() => setOpen(!open)}
-                    onClose={() => setOpen(!open)}>
+            <BarraBusqueda
+                titulo={'Buscar en las tomas'}
+                pantalla={nombreGrupo} // colocar el nombre del grupo
+                onResult={updateTomas} />
 
+            <View style={[styles.container, styles.fondoT]}>
 
-                    <SpeedDial.Action
+                <FlatList
+                    data={listTomas}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item, index }) => (
+                        <Toma
+                            key={index}
+                            data={item}
+                            navigation={navigation}
+                            seleccionar={seleccionar}
+                            deseleccionar={deseleccionar} />
+                    )} />
+            </View>
+
+            <SpeedDial
+                isOpen={openButton}
+                icon={{ name: 'add', color: 'white' }}
+                openIcon={{ name: 'close', color: 'white' }}
+                color={principal}
+                onOpen={() => setOpenButton(!openButton)}
+                onClose={() => setOpenButton(!openButton)}>
+
+                {
+                    !showCheckBox && <SpeedDial.Action
                         icon={{ name: 'add', color: '#fff' }}
                         color={principal}
                         title={'agregar'}
                         onPress={() => {
-                            setOpen(!open);
-                            navigation.navigate('Formulario', {nombreCanal});
+                            setOpenButton(!openButton);
+                            navigation.navigate('Formulario', { nombreGrupo });
                         }} />
+                }
 
-                    <SpeedDial.Action
+                {
+                    !showCheckBox && <SpeedDial.Action
+                        icon={{ name: 'delete', color: '#fff' }}
+                        color={principal}
+                        title={'eliminar'}
+                        onPress={() => {
+                            setOpenButton(!openButton);
+                            console.log("Eliminando tomas ")
+                        }} />
+                }
+
+                {
+                    !showCheckBox && <SpeedDial.Action
                         icon={{ name: 'print', color: '#fff' }}
                         color={principal}
                         title={'imprimir'}
                         onPress={() => {
-                            console.log(listPrint)
-                            setOpen(!open);
-                            imprimirTomas(listPrint)
+                            setOpenButton(!openButton);
+                            imprimir(listSelect);
                         }} />
+                }
 
-                </SpeedDial>
+                {
+                    showCheckBox && <SpeedDial.Action //confirmacion de la opcion eliminar 
+                        icon={{ name: 'done', color: '#fff' }}
+                        title="Acept"
+                        color={principal}
+                        onPress={() => {
+                            setShowCheckBox(false);
+                            setOpenButton(false);
+                            // implementar funcion de eliminar tomas 
+                        }} />
+                }
 
-            </View>
-        );
-    }
+                {
+                    showCheckBox && <SpeedDial.Action //cancelar la opcion de eliminar 
+                        icon={{ name: 'cancel', color: '#fff' }}
+                        title="Cancel"
+                        color={principal}
+                        onPress={() => {
+                            setShowCheckBox(false);
+                            setOpenButton(false);
+                        }} />
+                }
+
+            </SpeedDial>
+
+        </View>
+    );
+}
 
 
-    export default Tomas;
+export default Tomas;

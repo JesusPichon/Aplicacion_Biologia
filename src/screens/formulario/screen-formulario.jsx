@@ -19,7 +19,7 @@ import {
 const Formulario = ({navigation, route}) => {
 
     //nombre del canal donde se agregara la nueva toma 
-    const nombreCanal = route.params.nombreCanal;
+    const nombreCanal = route.params.nombreGrupo;
    
     const { control, handleSubmit, formState: { errors }, watch, setValue } = useForm({
         Nombre_cientifico: '',
