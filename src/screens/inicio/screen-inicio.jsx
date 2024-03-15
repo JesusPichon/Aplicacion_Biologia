@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import styles from '../../styles/style-app';
 import animaciones from '../../components/animaciones/animaciones';
 import { tercero } from '../../styles/style-colors';
-import { crearTablas, borrarTablas } from '../../services/database/SQLite';
+import { crearTablas} from '../../services/database/SQLite';
 import { PermissionsAndroid } from 'react-native';
 import {
     Text,
@@ -48,6 +48,7 @@ const Inicio = ({ navigation }) => {
 
 
     useEffect(() => { 
+        //borrarTablas('TOMAS');
         crearTablas();
         requestWritePermission();
         startAnimations();

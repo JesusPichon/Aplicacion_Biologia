@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import styles from "../../styles/style-app";
 import { cuarto, principal, secundario, tercero } from '../../styles/style-colors';
-import imprimir from '../../components/imprimir/imprimirUno';
 import animaciones from '../../components/animaciones/animaciones';
 import { Button} from '@rneui/themed';
 import { value, Switch } from "@rneui/base";
-// notas para la reunion
-// * ¿donde salio "option"?
-// * ¿se modifico el formulario?
-//      agregar tipo de vegetacion
-// * que chinge a su ------- madre el de web semantica
+import {imprimirTomas} from "../../components/imprimir/imprimirSeleccionando"
 
 import {
     Text,
@@ -24,6 +19,18 @@ import {
 
 
 const InfColecta = ({ navigation, route }) => {
+    const [listPrint, setListPrint] = useState([]);
+
+    const imprimir = async () => {
+        setListPrint([getFilteredData()]);
+    };
+    
+    useEffect(() => {
+        if (listPrint.length > 0) {
+            imprimirTomas(listPrint);
+        }
+    }, [listPrint]);
+
     function tipoDeCoordenadas(coordenadas) {
         if (coordenadas !== null && coordenadas !== '') {
             return 'metric'
@@ -31,7 +38,7 @@ const InfColecta = ({ navigation, route }) => {
             return 'geographic'
         }
     }
-    console.log(route.params.data)
+
     data={
         Nombre_cientifico: route.params.data.nombre_cientifico,
         Familia: route.params.data.familia,
@@ -71,10 +78,6 @@ const InfColecta = ({ navigation, route }) => {
 
     const [switchStates, setSwitchStates] = useState({}); // Estado para los interruptores
 
-    // Inicializar el estado de los interruptores con valores predeterminados
-    useEffect(() => {
-       
-    }, []);
 
     // Manejar el cambio de estado de un interruptor específico
     const handleSwitchChange = (field) => {
@@ -157,7 +160,7 @@ const InfColecta = ({ navigation, route }) => {
                                 radius={"md"} 
                                 type="solid"
                                 //onPress={() => console.log(getFilteredData())}
-                                onPress={() => imprimir(getFilteredData())}
+                                onPress={() => imprimir()}
                                 title="  Imprimir" 
                                 buttonStyle={{ backgroundColor: tercero}}
                                 icon={{name: 'print', color: principal}}
@@ -171,11 +174,10 @@ const InfColecta = ({ navigation, route }) => {
 
             <Animated.View style={{ flex: 8, overflow: 'visible', flexDirection:"row", zIndex: 1, transform: [{ translateY: translateAnimUP }] }}>
                 <SafeAreaView style={[styles.fondoT, { flex: 18}]}>
-                    <View style={{ height: 10, width:'120%', backgroundColor: secundario, transform: [{ rotate: '-1deg' }, {translateY: -5}, {translateX: -10}] }}></View>
                     <Animated.ScrollView style={{ opacity: unoAnim, marginTop:10}}>
                         <View style={{ rowGap: 25, columnGap: 5, flexDirection: 'column', marginBottom: 30,marginLeft: 10 }}>
                             {Object.entries(data).map(([campo, contenido], index) => {
-                                if (contenido !== null && contenido !== "" && campo !==  'X' && campo !==  'Y' && campo !== 'Grados_Latitud' && campo !== 'Minutos_Latitud' && campo !== 'Segundos_Latitud' && campo !== 'Hemisferio_Latitud' && campo !== 'Grados_Longitud' && campo !== 'Minutos_Longitud' && campo !== 'Segundos_Longitud' && campo !== 'Hemisferio_Longitud' && campo !== 'option') {
+                                if (contenido !== null && contenido !== "" && campo !==  'X' && campo !==  'Y' && campo !== 'Grados_Latitud' && campo !== 'Minutos_Latitud' && campo !== 'Segundos_Latitud' && campo !== 'Hemisferio_Latitud' && campo !== 'Grados_Longitud' && campo !== 'Minutos_Longitud' && campo !== 'Segundos_Longitud' && campo !== 'Hemisferio_Longitud' && campo !== 'option' && campo !== 'id') {
                                     var nombreCampo;
                                     if (campo === 'Tamano') {
                                         nombreCampo = 'Tamaño';
