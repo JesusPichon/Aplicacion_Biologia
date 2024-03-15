@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Animated, FlatList } from "react-native";
 import { principal, secundario } from "../../styles/style-colors";
-import { SpeedDial } from "@rneui/themed";
 import { selectCsv } from "../../services/functions/import-csv";
 import styles from "./style-canales";
 import animaciones from '../../components/animaciones/animaciones';
@@ -10,7 +9,8 @@ import BarraBusqueda from "../../components/BarraBusqueda";
 import VentanaFlotante from "../../components/VentanaFlotante";
 import Snackbar from 'react-native-snackbar';
 import GrupoController from "../../services/controllers/grupoController";
-import {  verTomas } from "../../services/database/SQLite";
+import { SpeedDial } from "@rneui/themed";
+import { verTomas } from "../../services/database/SQLite";
 import { readString, jsonToCSV } from 'react-native-csv';
 
 const Grupos = ({ navigation }) => {
@@ -25,6 +25,7 @@ const Grupos = ({ navigation }) => {
     //grupos y mensajes de error
     const [grupos, setGrupos] = useState([]);
     const [nombreGrupo, setNombreGrupo] = useState('');
+    const [listaBorrarGrupos, setListaBorrarGrupos] = useState([]);
 
     //Estado de la funcionalidad importar
     const [isImporting, setIsImporting] = useState(false);
@@ -32,15 +33,11 @@ const Grupos = ({ navigation }) => {
     //manejador de errores
     const [error, setError] = useState('');
 
-    //Abrir Speed Dial y Modal
     const [openButton, setOpenButton] = useState(false);
-    const [openModal, setOpenModal] = useState(false)
+    const [openModal, setOpenModal] = useState(false);
+    const [showCheckBox, setShowCheckBox] = useState(false); //mostrar casillas de seleccion 
 
-    //lista para guardar los objetos que se van a eliminar 
-    const [listaBorrarGrupos, setListaBorrarGrupos] = useState([]);
-
-    //agregar controller
-    const controller = new GrupoController();
+    const controller = new GrupoController(); //agregar controller
 
     const cargarGrupos = async () => {
         try {
@@ -84,7 +81,7 @@ const Grupos = ({ navigation }) => {
                 await cargarGrupos();
                 if (isImporting === true) {
                     controller.importTomas(nombre, data);
-                }          
+                }
             }
         } catch (error) {
             lanzarAlerta("Error al agregar el grupo dentro de la base de datos");
@@ -95,8 +92,14 @@ const Grupos = ({ navigation }) => {
         setListaBorrarGrupos(listaBorrarGrupos.concat(grupo));
     }
 
-    function deseleccionar(grupo) { //quitar grupo de la listad de seleccionados 
-        setListaBorrarGrupos(listaBorrarGrupos.filter((item) => item !== grupo));
+    function seleccionar(nombre) {
+        setListaBorrarGrupos(listaBorrarGrupos.concat(nombre));
+    }
+
+    function deseleccionar(nombre) {
+        setListaBorrarGrupos(listaBorrarGrupos.filter((item) => {
+            item !== nombre;
+        }))
     }
 
     function updateGrupos(nuevosGrupos) {
@@ -125,6 +128,15 @@ const Grupos = ({ navigation }) => {
         }, 200);
     }
 
+    async function guardarTexto() { //guarda un nuevo grupo con el nombre que le fue asignado dentro del modal 
+        if (nombreGrupo.trim() !== '') {
+            await agregarGrupo(nombreGrupo);
+        } else {
+            setError('El nombre del grupo no puede estar vacio');
+        }
+    }
+
+
     const handleCloseModal = () => {
         if (isImporting && nombreGrupo === '') {
             lanzarAlerta('La operación de importación se ha cancelado porque no se ingresó un nombre de grupo');
@@ -135,7 +147,7 @@ const Grupos = ({ navigation }) => {
             setError('');
             setIsImporting(false);
         }
-    }    
+    }
 
     const handleImport = async () => {
         try {
@@ -148,7 +160,7 @@ const Grupos = ({ navigation }) => {
             //A qui va funcion que usa data para la consulta SQL
 
             //id para identificar el grupo de la toma 
-            
+
 
         } catch (error) {
             lanzarAlerta(error);
@@ -167,7 +179,7 @@ const Grupos = ({ navigation }) => {
             throw error; // Lanza el error para que sea manejado en la función exportar
         }
     }
-    
+
     const formatData = (data) => {
         return new Promise((resolve, reject) => {
             try {
@@ -217,7 +229,7 @@ const Grupos = ({ navigation }) => {
         });
     }
 
-    const exportar = async () => {  
+    const exportar = async () => {
         try {
             const datosConsulta = await getRawData();
 
@@ -237,7 +249,7 @@ const Grupos = ({ navigation }) => {
             console.error("Error al exportar: ", error);
         }
     }
-    
+
 
     useEffect(() => {
         startAnimations();
@@ -248,7 +260,7 @@ const Grupos = ({ navigation }) => {
     return (
         <View style={{ backgroundColor: secundario, flex: 1 }}>
             <Animated.View style={{ opacity: unoAnim }}>
-                <BarraBusqueda titulo={'Buscar grupo'} pantalla={'grupos'} onResult={updateGrupos}  />
+                <BarraBusqueda titulo={'Buscar grupo'} pantalla={'grupos'} onResult={updateGrupos} />
             </Animated.View>
 
 
@@ -280,39 +292,66 @@ const Grupos = ({ navigation }) => {
                             key={index}
                             animacion={unoAnim}
                             navigation={navigation}
-                            informacion={item}
                             nombre={item}
+                            seleccionar={seleccionar}
                             deseleccionar={deseleccionar}
-                            seleccionar={seleccionar} />
+                            mostrarSeleccionar={showCheckBox} />
                     )} />
             </View>
 
             <SpeedDial
                 isOpen={openButton}
-                icon={{ name: 'add', color: 'white' }}
-                openIcon={{ name: 'close', color: 'white' }}
-                color={principal}
-                onOpen={() => setOpenButton(true)}
-                onClose={() => setOpenButton(false)}>
+                icon={{ name: 'edit', color: '#fff' }}
+                openIcon={{ name: 'close', color: '#fff' }}
+                onOpen={() => setOpenButton(!openButton)}
+                onClose={() => setOpenButton(!openButton)}
+                color={principal}>
 
-                <SpeedDial.Action
-                    icon={{ name: 'add', color: '#fff' }}
-                    color={principal}
-                    title={'agregar'}
-                    onPress={() => {
-                        setOpenButton(false);
-                        setOpenModal(true);
-                    }} />
+                {
+                    !showCheckBox && <SpeedDial.Action //Implementacion de la opcion agregar grupo
+                        icon={{ name: 'add', color: '#fff' }}
+                        title="Add"
+                        color={principal}
+                        onPress={() => {
+                            setOpenButton(false);
+                            setOpenModal(true);
+                        }} />
+                }
 
-                <SpeedDial.Action
-                    icon={{ name: 'delete', color: '#fff' }}
-                    color={principal}
-                    title={'eliminar'}
-                    onPress={async () => {
-                        setOpenButton(false);
-                        await eliminarGrupos(listaBorrarGrupos);
-                    }} />
+                {
+                    !showCheckBox && <SpeedDial.Action //implementacion de la opcion eliminar grupo 
+                        icon={{ name: 'delete', color: '#fff' }}
+                        title="Delete"
+                        color={principal}
+                        onPress={() => {
+                            setShowCheckBox(true);
+                            setOpenButton(false);
+                        }} />
+                }
 
+                {
+                    showCheckBox && <SpeedDial.Action //confirmacion de la opcion eliminar 
+                        icon={{ name: 'done', color: '#fff' }}
+                        title="Acept"
+                        color={principal}
+                        onPress={async () => {
+                            setShowCheckBox(false);
+                            setOpenButton(false);
+                            await eliminarGrupos(listaBorrarGrupos);
+                        }} />
+                }
+
+                {
+                    showCheckBox && <SpeedDial.Action //cancelar la opcion de eliminar 
+                        icon={{ name: 'cancel', color: '#fff' }}
+                        title="Cancel"
+                        color={principal}
+                        onPress={() => {
+                            setShowCheckBox(false);
+                            setOpenButton(false);
+                            setListaBorrarGrupos([]);
+                        }} />
+                }
             </SpeedDial>
 
             <VentanaFlotante
@@ -321,10 +360,10 @@ const Grupos = ({ navigation }) => {
                 handleTextChange={handleTextChange}
                 errorMessage={error}
                 saveGroup={guardarTexto} />
-
         </View>
     );
-};
+}
+
 
 
 export default Grupos;

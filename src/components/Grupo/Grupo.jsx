@@ -2,42 +2,55 @@ import { View, Text, TouchableOpacity, ImageBackground } from "react-native";
 import styles from "../../styles/style-app";
 import stylesCanales from "../../screens/grupos/style-canales";
 import { useState } from "react";
-import { principal, secundario } from "../../styles/style-colors";
+import { principal } from "../../styles/style-colors";
+import { CheckBox } from "@rneui/themed";
 
 
-const Grupo = ({ navigation, informacion, nombre, deseleccionar, seleccionar }) => {
 
+const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccionar}) => {
 
-    const [isSelected, setSelected] = useState(false);
+    const [checked, setChecked] = useState(false);
 
     return (
-        //<Animated.View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginBottom: 32, transform: [{ scale: animacion }] }}>
         <TouchableOpacity
             style={[stylesCanales.cardVertical, styles.fondoT, { width: '45%', marginBottom: 20, margin: 10 }]}
-            onPress={() => { navigation.navigate('Tomas', { nombre }) }}
-            onLongPress={() => {
-                if (isSelected) {
-                    deseleccionar(informacion);
-                } else {
-                    seleccionar(informacion);
+            onPress={() => {
+                if (mostrarSeleccionar == false)
+                    navigation.navigate('Tomas', { nombre });
+                else {
+                    if (checked)
+                        deseleccionar(nombre);
+                    else
+                        seleccionar(nombre);
+
+                    setChecked(!checked);
                 }
-                setSelected(!isSelected);
-            }}>
+            }} >
 
             <View style={[stylesCanales.cardVImagen]}>
+
+                {
+                    mostrarSeleccionar && <CheckBox
+                        title={'eliminar'}
+                        checkedColor="red"
+                        checked={checked} />
+                }
+
                 <ImageBackground
                     source={require('../../assets/images/nature.jpg')}
                     resizeMode="cover"
                     style={styles.image}>
                 </ImageBackground>
+
             </View>
-            <View style={[styles.botongrupo, {backgroundColor: isSelected ? 'red' : principal}]}>
+
+            <View style={[styles.botongrupo, { backgroundColor: principal}]}>
                 <Text style={[styles.textT, { textAlign: 'center', fontWeight: 'bold' }]}>
-                    {informacion}
+                    {nombre}
                 </Text>
             </View>
+
         </TouchableOpacity>
-        //</Animated.View>
     );
 }
 
