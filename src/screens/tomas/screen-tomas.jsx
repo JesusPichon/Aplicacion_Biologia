@@ -4,7 +4,7 @@ import { SpeedDial } from "@rneui/themed";
 import styles from "../../styles/style-app";
 import { principal, secundario } from '../../styles/style-colors';
 import Toma from "../../components/Toma";
-import imprimir from "../../components/imprimir/imprimir";
+import {imprimirTomas } from "../../components/imprimir/imprimirSeleccionando";
 import BarraBusqueda from "../../components/BarraBusqueda";
 import TomaController from "../../services/controllers/tomaController";
 import Snackbar from 'react-native-snackbar';
@@ -182,7 +182,7 @@ const Tomas = ({ navigation, route }) => {
                                 // implementar funcion de eliminar tomas 
                                 eliminarTomas(listSelectDelete);
                             } else {
-                                imprimir(listSelectPrint);
+                                imprimirTomas(listSelectPrint);
                             }
                         }} />
                 }
