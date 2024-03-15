@@ -372,7 +372,7 @@ const FormularioEdit = ({ navigation, route }) => {
                 />
                 <Button 
                     type="solid"
-                    onPress={handleEditar}
+                    onPress={handleSubmit(handleEditar)}
                     title="  Editar" 
                     buttonStyle={{ backgroundColor: principal}}
                     icon={{name: 'edit', color: tercero}}
