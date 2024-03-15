@@ -1,6 +1,7 @@
 import {
     consultarIdGrupo,
-    verTomas
+    verTomas,
+    eliminarToma
 } from "../../services/database/SQLite";
 
 class TomaController {
@@ -13,6 +14,15 @@ class TomaController {
             return listaTomas;
 
         } catch (error) {
+            throw new Error(error);
+        }
+    }
+
+    async eliminarToma(nombreGrupo, idToma) {
+        try{
+            const idGrupo = await consultarIdGrupo(nombreGrupo);
+            eliminarToma(idGrupo, idToma);
+        }catch(error){
             throw new Error(error);
         }
     }

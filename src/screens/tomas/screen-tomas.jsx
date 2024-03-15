@@ -35,9 +35,26 @@ const Tomas = ({ navigation, route }) => {
         }
     }
 
-    const eliminarToma = async () => {
+    const eliminarTomas = async (lista) => {
         try {
-            console.log('eliminando una toma')
+            if (lista.length !== 0) {
+
+                lista.forEach(async (toma) => {
+                    await controller.eliminarToma(nombreGrupo, toma.id);
+                });
+
+                setTimeout(async () => {
+                    await cargarTomas();
+                }, 300);
+
+                if (lista.length == 1)
+                    lanzarAlerta('Toma eliminada con exito');
+                else
+                    lanzarAlerta('Tomas eliminadas con exito');
+
+                setListSelectDelete([]);
+            }
+
         } catch (error) {
             lanzarAlerta('Error, no se pudo eliminar la toma.')
         }
@@ -163,7 +180,7 @@ const Tomas = ({ navigation, route }) => {
                             setOpenButton(false);
                             if (eliminar) {
                                 // implementar funcion de eliminar tomas 
-                                
+                                eliminarTomas(listSelectDelete);
                             } else {
                                 imprimir(listSelectPrint);
                             }

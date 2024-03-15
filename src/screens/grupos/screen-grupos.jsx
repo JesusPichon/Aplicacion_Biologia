@@ -61,6 +61,8 @@ const Grupos = ({ navigation }) => {
                     lanzarAlerta('Grupo eliminado con exito');
                 else
                     lanzarAlerta('Grupos eliminados con exito');
+
+                setListaBorrarGrupos([]);
             }
         } catch (error) {
             lanzarAlerta('Error elimnando grupos');
