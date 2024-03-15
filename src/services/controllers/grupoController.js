@@ -37,8 +37,13 @@ class GrupoController {
         }
     }
 
-    searchGroupByID() {
-        console.log("buscando grupo por id");
+    async searchGroupByID(nombreGrupo) { //buscar id del grupo 
+        try {
+            const id = await consultarIdGrupo(nombreGrupo);
+            return id;
+        }catch(error){
+            throw new Error(error);
+        }
     }
 
     async delateGrupoByName(nombreGrupo) { // elimina un grupo y el conjunto de sus tomas de ese grupo 
