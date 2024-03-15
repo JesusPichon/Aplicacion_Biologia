@@ -278,13 +278,8 @@ const Grupos = ({ navigation }) => {
                 </TouchableOpacity>
             </View>
 
-            <View style={[styles.container2, styles.fondoT]}>
-            </View>
-
             <View style={[styles.container, styles.fondoT]}>
-                <View style={[styles.container1, styles.fondoT]}>
-                </View>
-
+                
                 <FlatList
                     data={grupos}
                     numColumns={2}
