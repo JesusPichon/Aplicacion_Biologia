@@ -15,10 +15,13 @@ const Tomas = ({ navigation, route }) => {
     const nombreGrupo = route.params.nombre; //variable que obtine el nombre del canal 
 
     const [listTomas, setListTomas] = useState([]);
-    const [listSelect, setListSelect] = useState([]);
+    const [listSelectPrint, setListSelectPrint] = useState([])
+    const [listSelectDelete, setListSelectDelete] = useState([]);
 
     const [openButton, setOpenButton] = useState(false);
     const [showCheckBox, setShowCheckBox] = useState(false);
+
+    const [eliminar, setEliminar] = useState(false); //elige la opcion eliminar tomas 
 
     const controller = new TomaController(); //
 
@@ -32,7 +35,7 @@ const Tomas = ({ navigation, route }) => {
         }
     }
 
-    const eliminarToma = async () => { 
+    const eliminarToma = async () => {
         try {
             console.log('eliminando una toma')
         } catch (error) {
@@ -40,12 +43,20 @@ const Tomas = ({ navigation, route }) => {
         }
     }
 
-    const seleccionar = (toma) => { //agregar una tomas a la lista de tomas seleccionadas 
-        setListSelect([...listSelect, toma]);
+    const seleccionarImprimir = (toma) => { //agregar una tomas a la lista de tomas seleccionadas a la lista de imprimir
+        setListSelectPrint([...listSelectPrint, toma]);
     }
 
-    const deseleccionar = (toma) => { // quitar un tomas de la lista de tomas seleccionadas 
-        setListSelect(listSelect.filter((item) => item !== toma));
+    const deseleccionarImprimir = (toma) => { // quitar un tomas de la lista de tomas seleccionadas a la lista de imprimir 
+        setListSelectPrint(listSelectPrint.filter((item) => item !== toma));
+    }
+
+    const seleccionarEliminar = (toma) => { //agregar una tomas a la lista de tomas seleccionadas a la lista de eliminar 
+        setListSelectDelete([...listSelectDelete, toma]);
+    }
+
+    const deseleccionarEliminar = (toma) => { // quitar un tomas de la lista de tomas seleccionadas a la lista de eliminar 
+        setListSelectDelete(listSelectDelete.filter((item) => item !== toma));
     }
 
     const updateTomas = (nuevasTomas) => {
@@ -63,9 +74,14 @@ const Tomas = ({ navigation, route }) => {
 
 
     useEffect(() => {
-        cargarTomas();
-        setListSelect([]);
-    }, []);
+        const unsubscribe = navigation.addListener('focus', () => {
+            cargarTomas();
+            setListSelectPrint([]);
+            setListSelectDelete([]);
+            setEliminar(false);
+        });
+        return unsubscribe;
+    }, [navigation]);
 
     return (
         <View style={{ flex: 1, backgroundColor: secundario }}>
@@ -85,8 +101,12 @@ const Tomas = ({ navigation, route }) => {
                             key={index}
                             data={item}
                             navigation={navigation}
-                            seleccionar={seleccionar}
-                            deseleccionar={deseleccionar} />
+                            seleccionarImprimir={seleccionarImprimir}
+                            deseleccionarImprimir={deseleccionarImprimir}
+                            seleccionarEliminar={seleccionarEliminar}
+                            deseleccionarEliminar={deseleccionarEliminar}
+                            showCheckBox={showCheckBox}
+                            eliminar={eliminar} />
                     )} />
             </View>
 
@@ -116,7 +136,8 @@ const Tomas = ({ navigation, route }) => {
                         title={'eliminar'}
                         onPress={() => {
                             setOpenButton(!openButton);
-                            console.log("Eliminando tomas ")
+                            setShowCheckBox(true); //muestra los checkbox para elegir las tomas que deseas eliminar 
+                            setEliminar(true);
                         }} />
                 }
 
@@ -125,9 +146,10 @@ const Tomas = ({ navigation, route }) => {
                         icon={{ name: 'print', color: '#fff' }}
                         color={principal}
                         title={'imprimir'}
-                        onPress={() => {
+                        onPress={() => { // cambiar la logica para mandar a imprimir 
                             setOpenButton(!openButton);
-                            imprimir(listSelect);
+                            setShowCheckBox(true);
+                            setEliminar(false);
                         }} />
                 }
 
@@ -139,7 +161,12 @@ const Tomas = ({ navigation, route }) => {
                         onPress={() => {
                             setShowCheckBox(false);
                             setOpenButton(false);
-                            // implementar funcion de eliminar tomas 
+                            if (eliminar) {
+                                // implementar funcion de eliminar tomas 
+                                
+                            } else {
+                                imprimir(listSelectPrint);
+                            }
                         }} />
                 }
 
@@ -151,6 +178,7 @@ const Tomas = ({ navigation, route }) => {
                         onPress={() => {
                             setShowCheckBox(false);
                             setOpenButton(false);
+                            setEliminar(false);
                         }} />
                 }
 
