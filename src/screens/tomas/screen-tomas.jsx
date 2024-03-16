@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { FlatList, View } from 'react-native';
-import { SpeedDial } from "@rneui/themed";
+import { SpeedDial, ButtonGroup, LinearProgress } from '@rneui/themed';
 import styles from "../../styles/style-app";
 import { principal, secundario } from '../../styles/style-colors';
 import Toma from "../../components/Toma";
@@ -14,9 +14,17 @@ const Tomas = ({ navigation, route }) => {
 
     const nombreGrupo = route.params.nombre; //variable que obtine el nombre del canal 
 
+    const numeroTomas = 10;
+    const [progreso, setProgreso] = useState(0);
+    const [desabilitar, setDesabilitar] = useState([0,1,2,3,4,5,6]);
+    const [buscar, setBuscar] = useState("");
+    const [campo, setCampo] = useState("nombre_cientifico");
+    const [page, setPage] = useState(1);
     const [listTomas, setListTomas] = useState([]);
     const [listSelectPrint, setListSelectPrint] = useState([])
     const [listSelectDelete, setListSelectDelete] = useState([]);
+    const [botones, setBotones] = useState();
+    const [numPaginas, setNumPaginas] = useState(1);
 
     const [openButton, setOpenButton] = useState(false);
     const [showCheckBox, setShowCheckBox] = useState(false);
@@ -25,15 +33,102 @@ const Tomas = ({ navigation, route }) => {
 
     const controller = new TomaController(); //
 
+    function rellenarBotones() {
+        let temp=[];
+        let calculos;
+        temp.push("<<<");
+        calculos = page-2;
+        temp.push((calculos>0 && calculos<=numPaginas) ? calculos.toString() : "-");
+        calculos = page-1;
+        temp.push((calculos>0 && calculos<=numPaginas) ? calculos.toString() : "-");
+        calculos = page;
+        temp.push((calculos>0 && calculos<=numPaginas) ? calculos.toString() : "-");
+        calculos = page+1;
+        temp.push((calculos>0 && calculos<=numPaginas) ? calculos.toString() : "-");
+        calculos = page+2;
+        temp.push((calculos>0 && calculos<=numPaginas) ? calculos.toString() : "-");
+        temp.push(">>>");
+        console.log('numero de paginas: ' + numPaginas);
+        return temp;
+    };
 
-    const cargarTomas = async () => { //carga las tomas con ayuda del controller 
+    function cambioPagina(boton) {
+        switch (boton) {
+            case 0:
+                if (page - 5 > 0) {
+                    setProgreso(0);
+                    setDesabilitar([0,1,2,3,4,5,6]);
+                    setPage(page-5);
+                }
+                break;
+            case 1:
+                if (page - 2 > 0) {
+                    setProgreso(0);
+                    setDesabilitar([0,1,2,3,4,5,6]);
+                    setPage(page-2);
+                }
+                break;
+            case 2:
+                if (page - 1 > 0) {
+                    setProgreso(0);
+                    setDesabilitar([0,1,2,3,4,5,6]);
+                    setPage(page-1);
+                }
+                break;
+            case 4:
+                if (page + 1 <= numPaginas) {
+                    setProgreso(0);
+                    setDesabilitar([0,1,2,3,4,5,6]);
+                    setPage(page+1);
+                }
+                break;
+            case 5:
+                if (page + 2 <= numPaginas) {
+                    setProgreso(0);
+                    setDesabilitar([0,1,2,3,4,5,6]);
+                    setPage(page+2);
+                }
+                break;
+            case 6:
+                if (page + 5 <= numPaginas) {
+                    setProgreso(0);
+                    setDesabilitar([0,1,2,3,4,5,6]);
+                    setPage(page+5);
+                }
+                break;
+            
+        
+            default:
+                break;
+        }
+    }
+
+    const cargarTomas = async (pageNumber) => {
         try {
-            const tomas = await controller.obtenerTomas(nombreGrupo);
+            const tomas = await controller.obtenerTomas(nombreGrupo, pageNumber, numeroTomas, buscar, campo);
             setListTomas(tomas);
+            setProgreso(1);
+            setDesabilitar([]);
         } catch (error) {
             lanzarAlerta("Error al obtener la lista de tomas.");
         }
     }
+
+    const tomasTotales = async () => {
+        try {
+            const tomas = await controller.obtenerTomasTotales(nombreGrupo, buscar, campo);
+            console.log(tomas);
+            setNumPaginas(Math.ceil(tomas / numeroTomas));
+        } catch (error) {
+            lanzarAlerta("Error al obtener la lista de tomas totales.");
+        }
+    }
+
+    useEffect(() => {
+        cargarTomas(page);
+        tomasTotales();
+        setBotones(rellenarBotones()); // Esto se ejecutará cada vez que numPaginas cambie
+    }, [numPaginas, page]);
 
     const eliminarTomas = async (lista) => {
         try {
@@ -44,7 +139,7 @@ const Tomas = ({ navigation, route }) => {
                 });
 
                 setTimeout(async () => {
-                    await cargarTomas();
+                    await cargarTomas(page);
                 }, 300);
 
                 if (lista.length == 1)
@@ -76,8 +171,9 @@ const Tomas = ({ navigation, route }) => {
         setListSelectDelete(listSelectDelete.filter((item) => item !== toma));
     }
 
-    const updateTomas = (nuevasTomas) => {
-        setListTomas(nuevasTomas);
+    const updateTomas = (dataRecibida) => {
+        setBuscar(dataRecibida[0]);
+        setCampo(dataRecibida[1]);
     };
 
     function lanzarAlerta(mensaje) {
@@ -89,16 +185,14 @@ const Tomas = ({ navigation, route }) => {
         }, 200);
     }
 
-
     useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            cargarTomas();
+            setPage(1);
+            cargarTomas(1);
+            tomasTotales();
             setListSelectPrint([]);
             setListSelectDelete([]);
             setEliminar(false);
-        });
-        return unsubscribe;
-    }, [navigation]);
+    }, [navigation, buscar]);
 
     return (
         <View style={{ flex: 1, backgroundColor: secundario }}>
@@ -110,28 +204,30 @@ const Tomas = ({ navigation, route }) => {
 
             <View style={[styles.container, styles.fondoT]}>
 
-                <FlatList
-                    data={listTomas}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item, index }) => (
-                        <Toma
-                            key={index}
-                            data={item}
-                            navigation={navigation}
-                            seleccionarImprimir={seleccionarImprimir}
-                            deseleccionarImprimir={deseleccionarImprimir}
-                            seleccionarEliminar={seleccionarEliminar}
-                            deseleccionarEliminar={deseleccionarEliminar}
-                            showCheckBox={showCheckBox}
-                            eliminar={eliminar} />
-                    )} />
-            </View>
+            <FlatList
+                data={listTomas}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item, index }) => (
+                    <Toma
+                        key={index}
+                        data={item}
+                        navigation={navigation}
+                        seleccionarImprimir={seleccionarImprimir}
+                        deseleccionarImprimir={deseleccionarImprimir}
+                        seleccionarEliminar={seleccionarEliminar}
+                        deseleccionarEliminar={deseleccionarEliminar}
+                        showCheckBox={showCheckBox}
+                        eliminar={eliminar} />
+                )}
+                
+            />
 
             <SpeedDial
                 isOpen={openButton}
                 icon={{ name: 'add', color: 'white' }}
                 openIcon={{ name: 'close', color: 'white' }}
-                color={principal}
+                color={secundario}
+                containerStyle={{marginBottom:45}}
                 onOpen={() => setOpenButton(!openButton)}
                 onClose={() => setOpenButton(!openButton)}>
 
@@ -199,7 +295,28 @@ const Tomas = ({ navigation, route }) => {
                         }} />
                 }
 
-            </SpeedDial>
+            </SpeedDial>        
+            <ButtonGroup
+            buttons={botones}
+            selectedIndex={3}
+            disabled={desabilitar}
+            onPress={(value) => {
+                setProgreso(0);
+                cambioPagina(value);
+            }}
+            containerStyle={{ marginBottom: 0, height: 30, marginHorizontal: 'auto', opacity: openButton ? 0.1 : 1, display: showCheckBox ? 'none' : 'block' }}
+            selectedButtonStyle={{ backgroundColor: secundario}}
+            />
+            <LinearProgress
+                style={{ marginBottom: 5, display: showCheckBox ? 'none' : 'block' }}
+                color={secundario}
+                animation={100}
+                value={progreso}
+                variant="determinate"
+            />
+            </View>
+
+            
 
         </View>
     );

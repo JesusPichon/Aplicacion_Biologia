@@ -280,45 +280,83 @@ export const verGruposFiltrado = (nombre) => {
   });*/
 ////////////////////////////////////////////////////////////////////////////
 
-export const verTomas = (grupoId) => {
+export const verTomas = (grupoId, pageNumber, numTomas, filtrar, campo) => {
+  const itemsPerPage = numTomas; // Define la cantidad de elementos por página
+  const offset = (pageNumber - 1) * itemsPerPage; // Calcula el offset para la paginación
+
   return new Promise((resolve, reject) => {
-    db.transaction(tx => {
-      tx.executeSql('SELECT * FROM TOMAS WHERE grupo = ?',
-        [grupoId],
-        (tx, results) => {
-          const len = results.rows.length;
-          let tomas = [];
-          if (len > 0) {
-            for (let i = 0; i < len; i++) {
-              const row = results.rows.item(i);
-              const tomaObj = {};
+      db.transaction(tx => {
+        const query = `SELECT * FROM TOMAS WHERE grupo = ? AND ${campo} LIKE ? LIMIT ? OFFSET ?`;
+        const params = [grupoId, `%${filtrar}%`, itemsPerPage, offset]
+          tx.executeSql(
+              query,
+              params,
+              (tx, results) => {
+                  const len = results.rows.length;
+                  let tomas = [];
+                  if (len > 0) {
+                      for (let i = 0; i < len; i++) {
+                          const row = results.rows.item(i);
+                          const tomaObj = {};
 
-              Object.keys(row).forEach(key => {
-                tomaObj[key] = row[key];
-              });
+                          Object.keys(row).forEach(key => {
+                              tomaObj[key] = row[key];
+                          });
 
-              tomas.push(tomaObj);
-            }
+                          tomas.push(tomaObj);
+                      }
 
-            console.log(`Consulta exitosa, ${len} tomas encontradas`);
-            resolve(tomas);
-          } else {
-            console.log('No se encontraron tomas.');
-            resolve([]);
-          }
-        }, error => {
-          console.error('Error al ejecutar la consulta de tomas:', error);
-          reject(error);
-        });
-    });
+                      console.log(`Consulta exitosa, ${len} tomas encontradas`);
+                      resolve(tomas);
+                  } else {
+                      console.log('No se encontraron tomas.');
+                      resolve([]);
+                  }
+              },
+              error => {
+                  console.error('Error al ejecutar la consulta de tomas:', error);
+                  reject(error);
+              }
+          );
+      });
   });
 };
+
+export const verTomasTotales = (grupoId, filtrar, campo) => {
+  return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+          const query = `SELECT COUNT(*) AS total_tomas FROM TOMAS WHERE grupo = ? AND ${campo} LIKE ?`;
+          const params = [grupoId, `%${filtrar}%`];
+          tx.executeSql(
+              query,
+              params,
+              (tx, results) => {
+                  const len = results.rows.length;
+                  if (len > 0) {
+                      const totalTomas = results.rows.item(0).total_tomas;
+                      console.log(`Consulta exitosa, total de tomas: ${totalTomas}`);
+                      resolve(totalTomas);
+                  } else {
+                      console.log('No se encontraron tomas.');
+                      resolve(0);
+                  }
+              },
+              error => {
+                  console.error('Error al ejecutar la consulta de tomas totales:', error);
+                  reject(error);
+              }
+          );
+      });
+  });
+};
+
+
 
 export const verTomasFiltrado = (grupoId, campo, buscar) => {
   return new Promise((resolve, reject) => {
     db.transaction(tx => {
       // Construir la consulta dinámica para buscar en el campo especificado
-      const query = `SELECT * FROM TOMAS WHERE grupo = ? AND ${campo} LIKE ?`;
+      const query = `SELECT * FROM TOMAS WHERE grupo = ? AND ${campo} LIKE ? `;
       const params = [grupoId, `%${buscar}%`];
 
       // Ejecutar la consulta SQL

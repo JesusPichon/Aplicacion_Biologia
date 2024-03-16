@@ -64,8 +64,7 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
                 peticion(search);
             }, 500);
         } else {
-            console.log("vacio")
-            peticion("");
+            peticion(search);
         }
 
         return () => clearTimeout(timerId);
@@ -86,7 +85,6 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
             console.log("Buscando: " + buscar);
             verGruposFiltrado(buscar)
                 .then(result => {
-                    console.log('Grupos obtenidos: ', result);
                     setBuscando(false);
                     onResult(result); // Pasamos los resultados a la función de devolución de llamada
                 })
@@ -96,10 +94,12 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
                 });
         } else {
             console.log("Buscando: " + buscar);
+            onResult([buscar, value]);
+            setBuscando(false);
+            /*
             consultarIdGrupo(pantalla).then((id) => {
                 console.log("id del grupo: " + id);
                 verTomasFiltrado(id, value, buscar).then(tomas => {
-                    console.log('Tomas obtenidos: ', tomas);
                     setBuscando(false);
                     onResult(tomas); // Pasamos los resultados a la función de devolución de llamada
                 }).catch(error => {
@@ -107,7 +107,7 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
                 });
             }).catch((error) => {
                 console.log(error);
-            });
+            });*/
         }
     };
 
