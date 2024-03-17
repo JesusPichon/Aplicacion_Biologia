@@ -5,6 +5,8 @@ import RNFS from 'react-native-fs';
 //Funciones para exportar
 const controller = new GrupoController(); //agregar controller
 
+export const columnasComillas = [true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true];
+
 export const getRawData = async (nombreGrupo) => {
     try {
         const id = await controller.searchGroupByID(nombreGrupo);
@@ -54,8 +56,9 @@ export const formatData = (data) => {
                     no_colecta: toma.no_colecta,
                     fecha: toma.fecha,
                     determino: toma.determino,
-                    otros_datos: toma.otros_datos
+                    otros_datos: toma.otros_datos.replace(/(?:\r\n|\r|\n)/g, '\\n')
                 };
+                
                 return tomaData;
             });
             //setDatosCSV(nuevoDatosCsv); // Actualiza el estado con los datos formateados

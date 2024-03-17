@@ -22,6 +22,9 @@ const Inicio = ({ navigation }) => {
         resetAnimations,
     } = animaciones();
 
+    const Cadena1 = "Esto\nes\nuna\nPrueba";
+    const CadenaNormalizada = Cadena1.replace(/(?:\r\n|\r|\n)/g, '\\n');
+    const CadenaDesNormalizada = CadenaNormalizada.replace(/(?:\\n)/g, '\n');
 
     //Permisos de escritura para la aplicacion 
     const requestWritePermission = async () => {
@@ -52,6 +55,9 @@ const Inicio = ({ navigation }) => {
         crearTablas();
         requestWritePermission();
         startAnimations();
+        console.log(Cadena1);
+        console.log(CadenaNormalizada);
+        console.log(CadenaDesNormalizada);
     }, []);
 
 

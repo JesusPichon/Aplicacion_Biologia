@@ -12,7 +12,7 @@ import GrupoController from "../../services/controllers/grupoController";
 import { SpeedDial } from "@rneui/themed";
 import { verTomasExportar, verTomasTotales } from "../../services/database/SQLite";
 import { readString, jsonToCSV } from 'react-native-csv';
-import { getRawData, formatData, guardarArchivoCSV } from "../../services/functions/export-csv";
+import { getRawData, formatData, guardarArchivoCSV, columnasComillas } from "../../services/functions/export-csv";
 
 const Grupos = ({ navigation }) => {
     // animaciones
@@ -173,7 +173,7 @@ const Grupos = ({ navigation }) => {
             //console.log(datosConsulta);
             const datosFormateados = await formatData(datosConsulta);
             //console.log(datosFormateados);
-            const csv = jsonToCSV(datosFormateados);
+            const csv = jsonToCSV(datosFormateados,{quotes: columnasComillas});
             //console.log(csv);
 
             guardarArchivoCSV(nombreGrupo, csv);

@@ -107,7 +107,7 @@ class GrupoController {
                         no_colecta: toma.no_colecta,
                         fecha: toma.fecha,
                         determino: toma.determino,
-                        otros_datos: toma.otros_datos,
+                        otros_datos: toma.otros_datos.replace(/(?:\\n)/g, '\n'),
                         grupo: grupoID,
                     };
                     insertarTomas(tomaData);

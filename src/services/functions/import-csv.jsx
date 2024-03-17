@@ -21,8 +21,8 @@ export const selectCsv = async () => {
             const fileContent = await RNFS.readFile(result.uri);
 
             // Procesar el contenido del archivo CSV
-            const data = readString(fileContent, { delimiter: ',', header: true });
-            //console.log(data);
+            const data = readString(fileContent, { delimiter: ',', header: true, newline: ''});
+            console.log(data);
 
             // Resuelve la promesa con los datos leídos
             resolve(data.data);
