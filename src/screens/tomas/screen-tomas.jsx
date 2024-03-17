@@ -16,7 +16,6 @@ const Tomas = ({ navigation, route }) => {
 
     const numeroTomas = 10;
     const [progreso, setProgreso] = useState(0);
-    const [desabilitar, setDesabilitar] = useState([0,1,2,3,4,5,6]);
     const [buscar, setBuscar] = useState("");
     const [campo, setCampo] = useState("nombre_cientifico");
     const [page, setPage] = useState(1);
@@ -36,70 +35,45 @@ const Tomas = ({ navigation, route }) => {
     function rellenarBotones() {
         let temp=[];
         let calculos;
-        temp.push("<<<");
-        calculos = page-2;
-        temp.push((calculos>0 && calculos<=numPaginas) ? calculos.toString() : "-");
-        calculos = page-1;
-        temp.push((calculos>0 && calculos<=numPaginas) ? calculos.toString() : "-");
-        calculos = page;
-        temp.push((calculos>0 && calculos<=numPaginas) ? calculos.toString() : "-");
-        calculos = page+1;
-        temp.push((calculos>0 && calculos<=numPaginas) ? calculos.toString() : "-");
-        calculos = page+2;
-        temp.push((calculos>0 && calculos<=numPaginas) ? calculos.toString() : "-");
-        temp.push(">>>");
-        console.log('numero de paginas: ' + numPaginas);
+        let i = 0;
+        while (i < 7){
+            if (i === 0) {
+                if (page - 5 > 0) {
+                    temp.push("<<<");
+                }else{
+                    temp.push("-");
+                }
+            }else if (i === 6) {
+                if (page + 5 <= numPaginas) {
+                    temp.push(">>>");
+                }else{
+                    temp.push("-");
+                }
+            }else{
+                calculos = page + i - 3;
+                if (calculos > 0 && calculos <= numPaginas) {
+                    temp.push(calculos);
+                }else{
+                    temp.push("-");
+                }
+            }
+            i++;
+        }
         return temp;
     };
 
     function cambioPagina(boton) {
-        switch (boton) {
-            case 0:
-                if (page - 5 > 0) {
-                    setProgreso(0);
-                    setDesabilitar([0,1,2,3,4,5,6]);
-                    setPage(page-5);
-                }
-                break;
-            case 1:
-                if (page - 2 > 0) {
-                    setProgreso(0);
-                    setDesabilitar([0,1,2,3,4,5,6]);
-                    setPage(page-2);
-                }
-                break;
-            case 2:
-                if (page - 1 > 0) {
-                    setProgreso(0);
-                    setDesabilitar([0,1,2,3,4,5,6]);
-                    setPage(page-1);
-                }
-                break;
-            case 4:
-                if (page + 1 <= numPaginas) {
-                    setProgreso(0);
-                    setDesabilitar([0,1,2,3,4,5,6]);
-                    setPage(page+1);
-                }
-                break;
-            case 5:
-                if (page + 2 <= numPaginas) {
-                    setProgreso(0);
-                    setDesabilitar([0,1,2,3,4,5,6]);
-                    setPage(page+2);
-                }
-                break;
-            case 6:
-                if (page + 5 <= numPaginas) {
-                    setProgreso(0);
-                    setDesabilitar([0,1,2,3,4,5,6]);
-                    setPage(page+5);
-                }
-                break;
-            
-        
-            default:
-                break;
+        if (boton === 0) {
+            temp = page - 5;
+        }else if (boton === 6) {
+            temp = page + 5;
+        }else{
+            temp = boton - 3 + page;
+        }
+        console.log(temp);
+        if (temp >= 1 && temp <= numPaginas) {
+            setProgreso(0);
+            setPage(temp);
         }
     }
 
@@ -107,8 +81,9 @@ const Tomas = ({ navigation, route }) => {
         try {
             const tomas = await controller.obtenerTomas(nombreGrupo, pageNumber, numeroTomas, buscar, campo);
             setListTomas(tomas);
+            setListSelectPrint([]);
+            setListSelectDelete([]);
             setProgreso(1);
-            setDesabilitar([]);
         } catch (error) {
             lanzarAlerta("Error al obtener la lista de tomas.");
         }
@@ -123,12 +98,6 @@ const Tomas = ({ navigation, route }) => {
             lanzarAlerta("Error al obtener la lista de tomas totales.");
         }
     }
-
-    useEffect(() => {
-        cargarTomas(page);
-        tomasTotales();
-        setBotones(rellenarBotones()); // Esto se ejecutará cada vez que numPaginas cambie
-    }, [numPaginas, page]);
 
     const eliminarTomas = async (lista) => {
         try {
@@ -174,6 +143,7 @@ const Tomas = ({ navigation, route }) => {
     const updateTomas = (dataRecibida) => {
         setBuscar(dataRecibida[0]);
         setCampo(dataRecibida[1]);
+        setProgreso(0);
     };
 
     function lanzarAlerta(mensaje) {
@@ -186,13 +156,19 @@ const Tomas = ({ navigation, route }) => {
     }
 
     useEffect(() => {
-            setPage(1);
-            cargarTomas(1);
-            tomasTotales();
-            setListSelectPrint([]);
-            setListSelectDelete([]);
-            setEliminar(false);
+        cargarTomas(page);
+        setBotones(rellenarBotones());
+        setEliminar(false);
+    }, [page, numPaginas]);
+
+    useEffect(() => {
+        setPage(1);
+        cargarTomas(1);
+        tomasTotales();
+        setBotones(rellenarBotones());
+        setEliminar(false);
     }, [navigation, buscar]);
+
 
     return (
         <View style={{ flex: 1, backgroundColor: secundario }}>
@@ -299,9 +275,7 @@ const Tomas = ({ navigation, route }) => {
             <ButtonGroup
             buttons={botones}
             selectedIndex={3}
-            disabled={desabilitar}
             onPress={(value) => {
-                setProgreso(0);
                 cambioPagina(value);
             }}
             containerStyle={{ marginBottom: 0, height: 30, marginHorizontal: 'auto', opacity: openButton ? 0.1 : 1, display: showCheckBox ? 'none' : 'block' }}
@@ -310,7 +284,7 @@ const Tomas = ({ navigation, route }) => {
             <LinearProgress
                 style={{ marginBottom: 5, display: showCheckBox ? 'none' : 'block' }}
                 color={secundario}
-                animation={100}
+                animation={150}
                 value={progreso}
                 variant="determinate"
             />

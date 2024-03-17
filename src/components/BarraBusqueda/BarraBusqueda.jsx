@@ -62,7 +62,7 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
             setBuscando(true);
             timerId = setTimeout(() => {
                 peticion(search);
-            }, 500);
+            }, 200);
         } else {
             peticion(search);
         }
