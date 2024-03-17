@@ -10,8 +10,9 @@ import VentanaFlotante from "../../components/VentanaFlotante";
 import Snackbar from 'react-native-snackbar';
 import GrupoController from "../../services/controllers/grupoController";
 import { SpeedDial } from "@rneui/themed";
-import { verTomas } from "../../services/database/SQLite";
+import { verTomasExportar, verTomasTotales } from "../../services/database/SQLite";
 import { readString, jsonToCSV } from 'react-native-csv';
+import { getRawData, formatData, guardarArchivoCSV } from "../../services/functions/export-csv";
 
 const Grupos = ({ navigation }) => {
     // animaciones
@@ -35,7 +36,10 @@ const Grupos = ({ navigation }) => {
 
     const [openButton, setOpenButton] = useState(false);
     const [openModal, setOpenModal] = useState(false);
-    const [showCheckBox, setShowCheckBox] = useState(false); //mostrar casillas de seleccion 
+    const [showCheckBox, setShowCheckBox] = useState(false); //mostrar casillas de seleccion
+    
+    // Estados de la funcionalidad de exportar
+    const [exportando, setExportando] = useState(false); // Nuevo estado para controlar si se está exportando un grupo
 
     const controller = new GrupoController(); //agregar controller
 
@@ -138,7 +142,6 @@ const Grupos = ({ navigation }) => {
         }
     }
 
-
     const handleCloseModal = () => {
         if (isImporting && nombreGrupo === '') {
             lanzarAlerta('La operación de importación se ha cancelado porque no se ingresó un nombre de grupo');
@@ -159,116 +162,63 @@ const Grupos = ({ navigation }) => {
             setIsImporting(true);
             setOpenModal(true);
             //console.log(data);
-            //A qui va funcion que usa data para la consulta SQL
-
-            //id para identificar el grupo de la toma 
-
-
         } catch (error) {
             lanzarAlerta(error);
         }
     }
 
-    //Funciones para exportar
-    const getRawData = async () => {
+    const handleExport = async () => {
         try {
-            const tomas = await verTomas(81);
-            //console.log(tomas);
-            //setListaTomas(tomas); // Actualiza el estado con las tomas obtenidas
-            return tomas; // Resuelve la promesa con los datos obtenidos
-        } catch (error) {
-            console.error("Error obteniendo las tomas: ", error);
-            throw error; // Lanza el error para que sea manejado en la función exportar
-        }
-    }
-
-    const formatData = (data) => {
-        return new Promise((resolve, reject) => {
-            try {
-                const nuevoDatosCsv = data.map((toma) => {
-                    const tomaData = {
-                        nombre_cientifico: toma.nombre_cientifico,
-                        familia: toma.familia,
-                        nombre_local: toma.nombre_local,
-                        estado: toma.estado,
-                        municipio: toma.municipio,
-                        localidad: toma.localidad,
-                        altitud: toma.altitud,
-                        grados_Latitud: toma.grados_Latitud,
-                        minutos_Latitud: toma.minutos_Latitud,
-                        segundos_Latitud: toma.segundos_Latitud, // Nueva Variable
-                        hemisferio_Latitud: toma.hemisferio_Latitud,
-                        grados_Longitud: toma.grados_Longitud,
-                        minutos_Longitud: toma.minutos_Longitud,
-                        segundos_Longitud: toma.segundos_Longitud, // Nueva Variable
-                        hemisferio_Longitud: toma.hemisferio_Longitud,
-                        x: toma.x,
-                        y: toma.y,
-                        tipo_vegetacion: toma.tipo_vegetacion,
-                        informacion_ambiental: toma.informacion_ambiental,
-                        suelo: toma.suelo,
-                        asociada: toma.asociada,
-                        abundancia: toma.abundancia,
-                        forma_biologica: toma.forma_biologica,
-                        tamano: toma.tamano,
-                        flor: toma.flor,
-                        fruto: toma.fruto,
-                        usos: toma.usos,
-                        colector_es: toma.colector_es,
-                        no_colecta: toma.no_colecta,
-                        fecha: toma.fecha,
-                        determino: toma.determino,
-                        otros_datos: toma.otros_datos
-                    };
-                    return tomaData;
-                });
-                //setDatosCSV(nuevoDatosCsv); // Actualiza el estado con los datos formateados
-                resolve(nuevoDatosCsv); // Resuelve la promesa con los datos formateados
-            } catch (error) {
-                console.error("Error formateando datos: ", error);
-                reject(error); // Rechaza la promesa si hay un error
-            }
-        });
-    }
-
-    const exportar = async () => {
-        try {
-            const datosConsulta = await getRawData();
-
+            const datosConsulta = await getRawData(nombreGrupo);
             //console.log(datosConsulta);
-
             const datosFormateados = await formatData(datosConsulta);
-
             //console.log(datosFormateados);
-
             const csv = jsonToCSV(datosFormateados);
+            //console.log(csv);
 
-            console.log(csv);
+            guardarArchivoCSV(nombreGrupo, csv);
 
-
-
+            setExportando(false);
+            setNombreGrupo('');
         } catch (error) {
             console.error("Error al exportar: ", error);
         }
-    }
+    };
 
+    const seleccionarGrupoExportar = (nombre) => {
+        // Guardar el grupo seleccionado para exportar
+        // Realizar la lógica de exportación con el grupo seleccionado
+        setNombreGrupo(nombre);
+        setShowCheckBox(false);
+    };
 
+    const modoExportar = (nombre) => {
+        // Cambiar al modo de exportación y mostrar las casillas de selección
+        setExportando(true);
+        setShowCheckBox(true);
+    };
+    
     useEffect(() => {
         startAnimations();
         cargarGrupos();
         setListaBorrarGrupos([]);
     }, [data]);
 
+    useEffect(() => {
+        // Esta función se ejecutará cada vez que se actualice nombreGrupo
+        if (nombreGrupo.trim() !== '' && exportando) {
+            handleExport(); // Iniciar el proceso de exportación cuando nombreGrupo se actualice
+        }
+    }, [nombreGrupo, exportando]); // Observar cambios en nombreGrupo y exportando
+
     return (
         <View style={{ backgroundColor: secundario, flex: 1 }}>
             <Animated.View style={{ opacity: unoAnim }}>
                 <BarraBusqueda titulo={'Buscar grupo'} pantalla={'grupos'} onResult={updateGrupos} />
             </Animated.View>
-
-
             {/* Nueva sección con los botones en fila */}
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={[styles.fusionar, styles.fondoT]} onPress={exportar}>
+                <TouchableOpacity style={[styles.fusionar, styles.fondoT]} onPress={modoExportar}>
                     <Text style={[styles.textP, { textAlign: 'center', fontWeight: 'bold' }]}>EXPORTAR</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -292,7 +242,9 @@ const Grupos = ({ navigation }) => {
                             nombre={item}
                             seleccionar={seleccionar}
                             deseleccionar={deseleccionar}
-                            mostrarSeleccionar={showCheckBox} />
+                            mostrarSeleccionar={showCheckBox}
+                            exportando={exportando}
+                            seleccionarGrupoExportar={seleccionarGrupoExportar} />
                     )} />
             </View>
 
@@ -302,52 +254,65 @@ const Grupos = ({ navigation }) => {
                 openIcon={{ name: 'close', color: '#fff' }}
                 onOpen={() => setOpenButton(!openButton)}
                 onClose={() => setOpenButton(!openButton)}
-                color={principal}>
-
+                color={principal}
+            >
                 {
-                    !showCheckBox && <SpeedDial.Action //Implementacion de la opcion agregar grupo
-                        icon={{ name: 'add', color: '#fff' }}
-                        title="Add"
-                        color={principal}
-                        onPress={() => {
-                            setOpenButton(false);
-                            setOpenModal(true);
-                        }} />
+                    !showCheckBox && !exportando && (
+                        <SpeedDial.Action
+                            icon={{ name: 'add', color: '#fff' }}
+                            title="Add"
+                            color={principal}
+                            onPress={() => {
+                                setOpenButton(false);
+                                setOpenModal(true);
+                            }}
+                        />
+                    )
                 }
-
                 {
-                    !showCheckBox && <SpeedDial.Action //implementacion de la opcion eliminar grupo 
-                        icon={{ name: 'delete', color: '#fff' }}
-                        title="Delete"
-                        color={principal}
-                        onPress={() => {
-                            setShowCheckBox(true);
-                            setOpenButton(false);
-                        }} />
+                    !showCheckBox && !exportando && (
+                        <SpeedDial.Action
+                            icon={{ name: 'delete', color: '#fff' }}
+                            title="Delete"
+                            color={principal}
+                            onPress={() => {
+                                setShowCheckBox(true);
+                                setOpenButton(false);
+                            }}
+                        />
+                    )
                 }
-
                 {
-                    showCheckBox && <SpeedDial.Action //confirmacion de la opcion eliminar 
-                        icon={{ name: 'done', color: '#fff' }}
-                        title="Acept"
-                        color={principal}
-                        onPress={async () => {
-                            setShowCheckBox(false);
-                            setOpenButton(false);
-                            await eliminarGrupos(listaBorrarGrupos);
-                        }} />
+                    (showCheckBox && !exportando) && (
+                        <SpeedDial.Action
+                            icon={{ name: 'done', color: '#fff' }}
+                            title="Acept"
+                            color={principal}
+                            onPress={async () => {
+                                setShowCheckBox(false);
+                                setOpenButton(false);
+                                await eliminarGrupos(listaBorrarGrupos);
+                            }}
+                        />
+                    )
                 }
-
                 {
-                    showCheckBox && <SpeedDial.Action //cancelar la opcion de eliminar 
-                        icon={{ name: 'cancel', color: '#fff' }}
-                        title="Cancel"
-                        color={principal}
-                        onPress={() => {
-                            setShowCheckBox(false);
-                            setOpenButton(false);
-                            setListaBorrarGrupos([]);
-                        }} />
+                    (showCheckBox) && (
+                        <SpeedDial.Action
+                            icon={{ name: 'cancel', color: '#fff' }}
+                            title="Cancel"
+                            color={principal}
+                            onPress={() => {
+                                setShowCheckBox(false);
+                                setOpenButton(false);
+                                setListaBorrarGrupos([]);
+                                if (exportando) {
+                                    setNombreGrupo('');
+                                    setExportando(false);
+                                }
+                            }}
+                        />
+                    )
                 }
             </SpeedDial>
 
@@ -360,7 +325,5 @@ const Grupos = ({ navigation }) => {
         </View>
     );
 }
-
-
 
 export default Grupos;

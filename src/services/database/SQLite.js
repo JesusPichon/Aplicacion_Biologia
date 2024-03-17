@@ -393,6 +393,40 @@ export const verTomasFiltrado = (grupoId, campo, buscar) => {
   });
 };
 
+export const verTomasExportar = (grupoId) => {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql('SELECT * FROM TOMAS WHERE grupo = ?',
+        [grupoId],
+        (tx, results) => {
+          const len = results.rows.length;
+          let tomas = [];
+          if (len > 0) {
+            for (let i = 0; i < len; i++) {
+              const row = results.rows.item(i);
+              const tomaObj = {};
+
+              Object.keys(row).forEach(key => {
+                tomaObj[key] = row[key];
+              });
+
+              tomas.push(tomaObj);
+            }
+
+            console.log(`Consulta exitosa, ${len} tomas encontradas`);
+            resolve(tomas);
+          } else {
+            console.log('No se encontraron tomas.');
+            resolve([]);
+          }
+        }, error => {
+          console.error('Error al ejecutar la consulta de tomas:', error);
+          reject(error);
+        });
+    });
+  });
+};
+
 
 
 

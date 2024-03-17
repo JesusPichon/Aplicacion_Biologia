@@ -7,31 +7,40 @@ import { CheckBox } from "@rneui/themed";
 
 
 
-const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccionar}) => {
+const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccionar, exportando, seleccionarGrupoExportar}) => {
 
     const [checked, setChecked] = useState(false);
 
+    const handleSeleccionarGrupo = () => {
+        if (mostrarSeleccionar == true && !exportando) {
+            if (checked) {
+                deseleccionar(nombre);
+            } else {
+                seleccionar(nombre);
+            }
+            setChecked(!checked);
+        } else if (exportando){
+            seleccionarGrupoExportar(nombre);
+            //setChecked(!checked);
+            setChecked(false); // Ocultar las casillas de selección
+        }
+    
+        if (!mostrarSeleccionar) {
+            navigation.navigate('Tomas', { nombre });
+            //setChecked(false);
+        }
+    };
+    
     return (
         <TouchableOpacity
             style={[stylesCanales.cardVertical, styles.fondoT, { width: '45%', marginBottom: 20, margin: 10 }]}
-            onPress={() => {
-                if (mostrarSeleccionar == false)
-                    navigation.navigate('Tomas', { nombre });
-                else {
-                    if (checked)
-                        deseleccionar(nombre);
-                    else
-                        seleccionar(nombre);
-
-                    setChecked(!checked);
-                }
-            }} >
+            onPress={handleSeleccionarGrupo}>
 
             <View style={[stylesCanales.cardVImagen]}>
 
                 {
                     mostrarSeleccionar && <CheckBox
-                        title={'eliminar'}
+                        title={exportando ?  'Exportar' : 'Eliminar'}
                         checkedColor="red"
                         checked={checked} />
                 }
