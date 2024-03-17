@@ -74,7 +74,7 @@ class GrupoController {
                 grupoID = id; // Asignar el id del grupo a tomaData
                 //console.log(data);
                 data.forEach((toma) => {
-                    console.log(toma);
+                    //console.log(toma);
                     const tomaData = {
                         nombre_cientifico: toma.nombre_cientifico,
                         familia: toma.familia,

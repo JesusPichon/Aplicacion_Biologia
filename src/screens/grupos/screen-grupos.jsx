@@ -87,6 +87,7 @@ const Grupos = ({ navigation }) => {
                 await cargarGrupos();
                 if (isImporting === true) {
                     controller.importTomas(nombre, data);
+                    setIsImporting(false);
                 }
             }
         } catch (error) {
@@ -176,12 +177,20 @@ const Grupos = ({ navigation }) => {
             const csv = jsonToCSV(datosFormateados,{quotes: columnasComillas});
             //console.log(csv);
 
-            guardarArchivoCSV(nombreGrupo, csv);
+            guardarArchivoCSV(nombreGrupo, csv)
+                .then((mensaje) => {
+                    lanzarAlerta(mensaje); // Imprimirá "Archivo guardado exitosamente" si la operación fue exitosa
+                })
+                .catch((error) => {
+                    lanzarAlerta(error); // Imprimirá "Error al guardar el archivo" si ocurrió algún error
+                });
 
             setExportando(false);
             setNombreGrupo('');
+
         } catch (error) {
-            console.error("Error al exportar: ", error);
+            //console.error("Error al exportar: ", error);
+            lanzarAlerta("Error al exportar: " + error);
         }
     };
 
@@ -193,9 +202,13 @@ const Grupos = ({ navigation }) => {
     };
 
     const modoExportar = (nombre) => {
-        // Cambiar al modo de exportación y mostrar las casillas de selección
-        setExportando(true);
-        setShowCheckBox(true);
+        if(grupos.length == 0){
+            lanzarAlerta("No hay grupos para Exportar");
+        }else{
+            // Cambiar al modo de exportación y mostrar las casillas de selección
+            setExportando(true);    
+            setShowCheckBox(true);
+        }
     };
     
     useEffect(() => {
@@ -309,6 +322,7 @@ const Grupos = ({ navigation }) => {
                                 if (exportando) {
                                     setNombreGrupo('');
                                     setExportando(false);
+                                    lanzarAlerta('Exportar Cancelado');
                                 }
                             }}
                         />

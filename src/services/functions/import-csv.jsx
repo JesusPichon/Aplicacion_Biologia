@@ -22,7 +22,7 @@ export const selectCsv = async () => {
 
             // Procesar el contenido del archivo CSV
             const data = readString(fileContent, { delimiter: ',', header: true, newline: ''});
-            console.log(data);
+            //console.log(data);
 
             // Resuelve la promesa con los datos leídos
             resolve(data.data);

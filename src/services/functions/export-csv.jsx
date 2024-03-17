@@ -15,7 +15,7 @@ export const getRawData = async (nombreGrupo) => {
         //setListaTomas(tomas); // Actualiza el estado con las tomas obtenidas
         return tomas; // Resuelve la promesa con los datos obtenidos
     } catch (error) {
-        console.error("Error obteniendo las tomas: ", error);
+        //console.error("Error obteniendo las tomas: ", error);
         throw error; // Lanza el error para que sea manejado en la función exportar
     }
 }
@@ -70,13 +70,29 @@ export const formatData = (data) => {
     });
 }
 
-export const guardarArchivoCSV = async (nombreArchivo, contenidoCSV) => {
-    try {
+// export const guardarArchivoCSV = async (nombreArchivo, contenidoCSV) => {
+//     try {
+//         const rutaArchivo = `${RNFS.DownloadDirectoryPath}/${nombreArchivo}.csv`;
+
+//         await RNFS.writeFile(rutaArchivo, contenidoCSV, 'utf8');
+//         console.log('Archivo guardado exitosamente en la carpeta de descargas:', rutaArchivo);
+//     } catch (error) {
+//         console.error('Error al guardar el archivo en la carpeta de descargas:', error);
+//     }
+// };
+
+export const guardarArchivoCSV = (nombreArchivo, contenidoCSV) => {
+    return new Promise((resolve, reject) => {
         const rutaArchivo = `${RNFS.DownloadDirectoryPath}/${nombreArchivo}.csv`;
 
-        await RNFS.writeFile(rutaArchivo, contenidoCSV, 'utf8');
-        console.log('Archivo guardado exitosamente en la carpeta de descargas:', rutaArchivo);
-    } catch (error) {
-        console.error('Error al guardar el archivo en la carpeta de descargas:', error);
-    }
+        RNFS.writeFile(rutaArchivo, contenidoCSV, 'utf8')
+            .then(() => {
+                //console.log('Archivo guardado exitosamente en la carpeta de descargas:', rutaArchivo);
+                resolve('Archivo guardado exitosamente en la carpeta Descargas \n' + rutaArchivo);
+            })
+            .catch((error) => {
+                //console.error('Error al guardar el archivo en la carpeta de descargas:', error);
+                reject('Error al guardar el archivo');
+            });
+    });
 };
