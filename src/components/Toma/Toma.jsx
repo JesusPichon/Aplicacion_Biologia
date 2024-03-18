@@ -65,7 +65,7 @@ const Toma = ({ navigation, data, seleccionarImprimir, deseleccionarImprimir, se
 
           {
             showCheckBox && <CheckBox
-              title={eliminar ? "eliminar" : "imprimir"}
+              title={eliminar ? "Eliminar" : "Imprimir"}
               checkedColor={eliminar ? "red" : "blue"}
               checked={checked}
               containerStyle={{backgroundColor: principal}}

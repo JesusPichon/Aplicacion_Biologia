@@ -274,7 +274,7 @@ const Grupos = ({ navigation }) => {
                     !showCheckBox && !exportando && (
                         <SpeedDial.Action
                             icon={{ name: 'add', color: '#fff' }}
-                            title="Add"
+                            title="Agregar"
                             color={principal}
                             onPress={() => {
                                 setOpenButton(false);
@@ -287,7 +287,7 @@ const Grupos = ({ navigation }) => {
                     !showCheckBox && !exportando && (
                         <SpeedDial.Action
                             icon={{ name: 'delete', color: '#fff' }}
-                            title="Delete"
+                            title="Eliminar"
                             color={principal}
                             onPress={() => {
                                 setShowCheckBox(true);
@@ -300,7 +300,7 @@ const Grupos = ({ navigation }) => {
                     (showCheckBox && !exportando) && (
                         <SpeedDial.Action
                             icon={{ name: 'done', color: '#fff' }}
-                            title="Acept"
+                            title="Aceptar"
                             color={principal}
                             onPress={async () => {
                                 setShowCheckBox(false);
@@ -314,7 +314,7 @@ const Grupos = ({ navigation }) => {
                     (showCheckBox) && (
                         <SpeedDial.Action
                             icon={{ name: 'cancel', color: '#fff' }}
-                            title="Cancel"
+                            title="Cancelar"
                             color={principal}
                             onPress={() => {
                                 setShowCheckBox(false);
