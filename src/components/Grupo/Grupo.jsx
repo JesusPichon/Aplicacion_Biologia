@@ -19,18 +19,15 @@ const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccio
                 seleccionar(nombre);
             }
             setChecked(!checked);
-        } else if (exportando){
+        } else if (exportando) {
             seleccionarGrupoExportar(nombre);
-            //setChecked(!checked);
             setChecked(false); // Ocultar las casillas de selección
         }
-    
-        if (!mostrarSeleccionar) {
+
+        if (!mostrarSeleccionar)
             navigation.navigate('Tomas', { nombre });
-            //setChecked(false);
-        }
     };
-    
+
     return (
         <TouchableOpacity
             style={[stylesCanales.cardVertical, styles.fondoT, { width: '45%', marginBottom: 20, margin: 10 }]}
@@ -40,7 +37,7 @@ const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccio
 
                 {
                     mostrarSeleccionar && <CheckBox
-                        title={exportando ?  'Exportar' : 'Eliminar'}
+                        title={exportando ? 'Exportar' : 'Eliminar'}
                         checkedColor="red"
                         checked={checked} />
                 }
@@ -53,7 +50,7 @@ const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccio
 
             </View>
 
-            <View style={[styles.botongrupo, { backgroundColor: principal}]}>
+            <View style={[styles.botongrupo, { backgroundColor: principal }]}>
                 <Text style={[styles.textT, { textAlign: 'center', fontWeight: 'bold' }]}>
                     {nombre}
                 </Text>

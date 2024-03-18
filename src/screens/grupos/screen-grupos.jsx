@@ -118,14 +118,6 @@ const Grupos = ({ navigation }) => {
         setError(''); // Limpiar el mensaje de error cuando se ingresa texto
     };
 
-    async function guardarTexto() { //guarda un nuevo grupo con el nombre que le fue asignado dentro del modal 
-        if (nombreGrupo.trim() !== '') {
-            await agregarGrupo(nombreGrupo.toUpperCase()); //Cambia el nombre a mayusculas
-        } else {
-            setError('El nombre del grupo no puede estar vacio');
-        }
-    }
-
     function lanzarAlerta(mensaje) {
         setTimeout(() => {
             Snackbar.show({
@@ -133,6 +125,15 @@ const Grupos = ({ navigation }) => {
                 duration: Snackbar.LENGTH_SHORT
             });
         }, 200);
+    }
+
+    
+    async function guardarTexto() { //guarda un nuevo grupo con el nombre que le fue asignado dentro del modal 
+        if (nombreGrupo.trim() !== '') {
+            await agregarGrupo(nombreGrupo.toUpperCase()); //Cambia el nombre a mayusculas
+        } else {
+            setError('El nombre del grupo no puede estar vacio');
+        }
     }
 
     async function guardarTexto() { //guarda un nuevo grupo con el nombre que le fue asignado dentro del modal 
@@ -324,6 +325,7 @@ const Grupos = ({ navigation }) => {
                                     setExportando(false);
                                     lanzarAlerta('Exportar Cancelado');
                                 }
+                                navigation.replace('Grupos');
                             }}
                         />
                     )
