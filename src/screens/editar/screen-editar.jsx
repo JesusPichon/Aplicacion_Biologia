@@ -24,12 +24,12 @@ const FormularioEdit = ({ navigation, route }) => {
 
     useEffect(() => {
         const datosIniciales = route.params.data;
-        console.log(datosIniciales)
+        //console.log(datosIniciales)
 
         // Establecer los valores iniciales en el estado del formulario
         Object.keys(datosIniciales).forEach(key => {
             if (key === 'Fecha') {
-                console.log(datosIniciales[key])
+                //console.log(datosIniciales[key])
                 // Separar la fecha en partes
                 const partesFecha = datosIniciales[key].split('/');
                 // Crear un objeto Date con el formato MM/DD/AA
@@ -154,8 +154,8 @@ const FormularioEdit = ({ navigation, route }) => {
         };
     
         // Llamar a la función editarToma con los datos editados y el id correspondiente
-        console.log("enviando: ")
-        console.log(data);
+     //   console.log("enviando: ")
+      //  console.log(data);
         editarToma(tomasData, datosEditar.id);
         navigation.navigate('InformacionToma', {data});
         //console.log("Datos editados:", datos); // Mostrar los datos editados por consola
