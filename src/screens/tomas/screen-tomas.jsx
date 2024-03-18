@@ -189,6 +189,23 @@ const Tomas = ({ navigation, route }) => {
                 onResult={updateTomas} />
 
             <View style={[styles.container, styles.fondoT]}>
+                <LinearProgress
+                    style={{ marginBottom: 0, display: showCheckBox ? 'none' : 'block', width: '100%' }}
+                    color={principal}
+                    animation={100}
+                    value={progreso}
+                    variant="determinate"
+                />
+                <ButtonGroup
+                    buttons={botones}
+                    selectedIndex={3}
+                    onPress={(value) => {
+                        setProgreso(0);
+                        cambioPagina(value);
+                    }}
+                    containerStyle={{ marginTop: 0, height: 30, marginHorizontal: 'auto', opacity: openButton ? 0.1 : 1, display: showCheckBox ? 'none' : 'block', width: '100%', borderBottomLeftRadius: 10, borderBottomRightRadius: 10}}
+                    selectedButtonStyle={{ backgroundColor: principal }}
+                />
 
                 <FlatList
                     data={listTomas}
@@ -207,23 +224,7 @@ const Tomas = ({ navigation, route }) => {
                     )}
 
                 />
-                <ButtonGroup
-                    buttons={botones}
-                    selectedIndex={3}
-                    onPress={(value) => {
-                        setProgreso(0);
-                        cambioPagina(value);
-                    }}
-                    containerStyle={{ marginBottom: 0, height: 30, marginHorizontal: 'auto', opacity: openButton ? 0.1 : 1, display: showCheckBox ? 'none' : 'block' }}
-                    selectedButtonStyle={{ backgroundColor: principal }}
-                />
-                <LinearProgress
-                    style={{ marginBottom: 5, display: showCheckBox ? 'none' : 'block' }}
-                    color={principal}
-                    animation={100}
-                    value={progreso}
-                    variant="determinate"
-                />
+                
             </View>
 
             <SpeedDial
@@ -231,7 +232,6 @@ const Tomas = ({ navigation, route }) => {
                 icon={{ name: 'edit', color: 'white' }}
                 openIcon={{ name: 'close', color: 'white' }}
                 color={secundario}
-                containerStyle={{ marginBottom: 45 }}
                 onOpen={() => setOpenButton(!openButton)}
                 onClose={() => setOpenButton(!openButton)}>
 

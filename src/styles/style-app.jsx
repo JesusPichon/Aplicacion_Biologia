@@ -44,10 +44,10 @@ const styles = StyleSheet.create({
     },
     // contenedor principal
     container: {
-        borderTopRightRadius: 75,
-        borderTopLeftRadius: 75,
+        borderTopRightRadius: 20,
+        borderTopLeftRadius: 20,
         paddingHorizontal: 20,
-        paddingTop: 40,
+        paddingTop: 10,
         marginTop: 20,
         flex: 1
     },
