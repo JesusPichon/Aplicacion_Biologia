@@ -1,15 +1,19 @@
 import { View, Text, TouchableOpacity, ImageBackground } from "react-native";
 import styles from "../../styles/style-app";
 import stylesCanales from "../../screens/grupos/style-canales";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { principal } from "../../styles/style-colors";
 import { CheckBox } from "@rneui/themed";
 
 
 
-const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccionar, exportando, seleccionarGrupoExportar}) => {
+const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccionar, exportando, seleccionarGrupoExportar }) => {
 
     const [checked, setChecked] = useState(false);
+
+    useEffect(() => {
+        setChecked(false);
+    },[mostrarSeleccionar]);
 
     const handleSeleccionarGrupo = () => {
         if (mostrarSeleccionar == true && !exportando) {
