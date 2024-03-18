@@ -11,18 +11,16 @@ export const selectImg = async () => {
         if (Array.isArray(res) && res.length > 0 && res[0].uri) {
             // Obtener la dirección de la primera imagen seleccionada
             const imageUri = res[0].uri;
-            console.log('Dirección de la imagen:', imageUri);
+            //console.log('Dirección de la imagen:', imageUri);
 
             // Leer el contenido del archivo (no es necesario para imágenes)
 
             return imageUri; // Devolver la URI de la imagen
-        } else {
-            console.log('No se ha seleccionado ninguna imagen');
         }
 
     } catch (err) {
         if (DocumentPicker.isCancel(err)) {
-            console.log('Operación cancelada');
+            //console.log('Operación cancelada');
         } else {
             throw err;
         }

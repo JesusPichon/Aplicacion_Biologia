@@ -17,7 +17,7 @@ export const imprimirTomas = async (data) => {
             textColor: tercero,
         });
         const imageUri = await selectImg(); // Espera a que selectImg() se complete y obtiene la URI de la imagen
-        console.log(imageUri)
+        //console.log(imageUri)
         imprimir(data, imageUri); // Llama a imprimir() con los datos y la URI de la imagen
     } catch (error) {
         console.error('Error al seleccionar la imagen:', error);

@@ -3,7 +3,7 @@ import imagenLocal from '../../assets/images/logoEquipo.jpg';
 // medidas recomendadas para la imagen width: 755px; height: 60px;
 
 const imprimir = async (listaFichas, imagen) => {
-  console.log(listaFichas)
+  //console.log(listaFichas)
 
   let htmlContent = `
     <html>
