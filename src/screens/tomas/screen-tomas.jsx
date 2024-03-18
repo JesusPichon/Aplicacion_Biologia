@@ -225,81 +225,6 @@ const Tomas = ({ navigation, route }) => {
                     )}
 
                 />
-
-                <SpeedDial
-                    isOpen={openButton}
-                    icon={{ name: 'add', color: 'white' }}
-                    openIcon={{ name: 'close', color: 'white' }}
-                    color={secundario}
-                    containerStyle={{ marginBottom: 45 }}
-                    onOpen={() => setOpenButton(!openButton)}
-                    onClose={() => setOpenButton(!openButton)}>
-
-                    {
-                        !showCheckBox && <SpeedDial.Action
-                            icon={{ name: 'add', color: '#fff' }}
-                            color={principal}
-                            title={'agregar'}
-                            onPress={() => {
-                                setOpenButton(!openButton);
-                                navigation.navigate('Formulario', { nombreGrupo });
-                            }} />
-                    }
-
-                    {
-                        !showCheckBox && <SpeedDial.Action
-                            icon={{ name: 'delete', color: '#fff' }}
-                            color={principal}
-                            title={'eliminar'}
-                            onPress={() => {
-                                setOpenButton(!openButton);
-                                setShowCheckBox(true); //muestra los checkbox para elegir las tomas que deseas eliminar 
-                                setEliminar(true);
-                            }} />
-                    }
-
-                    {
-                        !showCheckBox && <SpeedDial.Action
-                            icon={{ name: 'print', color: '#fff' }}
-                            color={principal}
-                            title={'imprimir'}
-                            onPress={() => { // cambiar la logica para mandar a imprimir 
-                                setOpenButton(!openButton);
-                                setShowCheckBox(true);
-                                setEliminar(false);
-                            }} />
-                    }
-
-                    {
-                        showCheckBox && <SpeedDial.Action //confirmacion de la opcion eliminar 
-                            icon={{ name: 'done', color: '#fff' }}
-                            title="Acept"
-                            color={principal}
-                            onPress={() => {
-                                setShowCheckBox(false);
-                                setOpenButton(false);
-                                if (eliminar) {
-                                    // implementar funcion de eliminar tomas 
-                                    eliminarTomas(listSelectDelete);
-                                } else {
-                                    imprimirTomas(listSelectPrint);
-                                }
-                            }} />
-                    }
-
-                    {
-                        showCheckBox && <SpeedDial.Action //cancelar la opcion de eliminar 
-                            icon={{ name: 'cancel', color: '#fff' }}
-                            title="Cancel"
-                            color={principal}
-                            onPress={() => {
-                                setShowCheckBox(false);
-                                setOpenButton(false);
-                                setEliminar(false);
-                            }} />
-                    }
-
-                </SpeedDial>
                 <ButtonGroup
                     buttons={botones}
                     selectedIndex={3}
@@ -309,18 +234,91 @@ const Tomas = ({ navigation, route }) => {
                         cambioPagina(value);
                     }}
                     containerStyle={{ marginBottom: 0, height: 30, marginHorizontal: 'auto', opacity: openButton ? 0.1 : 1, display: showCheckBox ? 'none' : 'block' }}
-                    selectedButtonStyle={{ backgroundColor: secundario }}
+                    selectedButtonStyle={{ backgroundColor: principal }}
                 />
                 <LinearProgress
                     style={{ marginBottom: 5, display: showCheckBox ? 'none' : 'block' }}
-                    color={secundario}
+                    color={principal}
                     animation={100}
                     value={progreso}
                     variant="determinate"
                 />
             </View>
 
+            <SpeedDial
+                isOpen={openButton}
+                icon={{ name: 'add', color: 'white' }}
+                openIcon={{ name: 'close', color: 'white' }}
+                color={principal}
+                containerStyle={{ marginBottom: 45 }}
+                onOpen={() => setOpenButton(!openButton)}
+                onClose={() => setOpenButton(!openButton)}>
 
+                {
+                    !showCheckBox && <SpeedDial.Action
+                        icon={{ name: 'add', color: '#fff' }}
+                        color={principal}
+                        title={'agregar'}
+                        onPress={() => {
+                            setOpenButton(!openButton);
+                            navigation.navigate('Formulario', { nombreGrupo });
+                        }} />
+                }
+
+                {
+                    !showCheckBox && <SpeedDial.Action
+                        icon={{ name: 'delete', color: '#fff' }}
+                        color={principal}
+                        title={'eliminar'}
+                        onPress={() => {
+                            setOpenButton(!openButton);
+                            setShowCheckBox(true); //muestra los checkbox para elegir las tomas que deseas eliminar 
+                            setEliminar(true);
+                        }} />
+                }
+
+                {
+                    !showCheckBox && <SpeedDial.Action
+                        icon={{ name: 'print', color: '#fff' }}
+                        color={principal}
+                        title={'imprimir'}
+                        onPress={() => { // cambiar la logica para mandar a imprimir 
+                            setOpenButton(!openButton);
+                            setShowCheckBox(true);
+                            setEliminar(false);
+                        }} />
+                }
+
+                {
+                    showCheckBox && <SpeedDial.Action //confirmacion de la opcion eliminar 
+                        icon={{ name: 'done', color: '#fff' }}
+                        title="Acept"
+                        color={principal}
+                        onPress={() => {
+                            setShowCheckBox(false);
+                            setOpenButton(false);
+                            if (eliminar) {
+                                // implementar funcion de eliminar tomas 
+                                eliminarTomas(listSelectDelete);
+                            } else {
+                                imprimirTomas(listSelectPrint);
+                            }
+                        }} />
+                }
+
+                {
+                    showCheckBox && <SpeedDial.Action //cancelar la opcion de eliminar 
+                        icon={{ name: 'cancel', color: '#fff' }}
+                        title="Cancel"
+                        color={principal}
+                        onPress={() => {
+                            setShowCheckBox(false);
+                            setOpenButton(false);
+                            setEliminar(false);
+                        }} />
+                }
+
+            </SpeedDial>
 
         </View>
     );

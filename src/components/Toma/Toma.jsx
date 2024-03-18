@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import style_toma from "./style-toma";
 import { CheckBox } from "@rneui/themed";
 import { useState, useEffect } from "react";
+import { principal } from "../../styles/style-colors";
 
 
 const Toma = ({ navigation, data, seleccionarImprimir, deseleccionarImprimir, seleccionarEliminar, deseleccionarEliminar, showCheckBox, eliminar }) => {
@@ -67,6 +68,8 @@ const Toma = ({ navigation, data, seleccionarImprimir, deseleccionarImprimir, se
               title={eliminar ? "eliminar" : "imprimir"}
               checkedColor={eliminar ? "red" : "blue"}
               checked={checked}
+              containerStyle={{backgroundColor: principal}}
+              textStyle={{color: "white"}}
             />
           }
 
