@@ -211,7 +211,6 @@ const Tomas = ({ navigation, route }) => {
                 <ButtonGroup
                     buttons={botones}
                     selectedIndex={3}
-                    disabled={desabilitar}
                     onPress={(value) => {
                         setProgreso(0);
                         cambioPagina(value);
