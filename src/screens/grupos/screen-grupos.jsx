@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Animated, FlatList } from "react-native";
-import { principal, secundario } from "../../styles/style-colors";
+import { cuarto, principal, secundario } from "../../styles/style-colors";
 import { selectCsv } from "../../services/functions/import-csv";
 import styles from "./style-canales";
 import animaciones from '../../components/animaciones/animaciones';
@@ -268,14 +268,14 @@ const Grupos = ({ navigation }) => {
                 openIcon={{ name: 'close', color: '#fff' }}
                 onOpen={() => setOpenButton(!openButton)}
                 onClose={() => setOpenButton(!openButton)}
-                color={principal}
+                color={secundario}
             >
                 {
                     !showCheckBox && !exportando && (
                         <SpeedDial.Action
                             icon={{ name: 'add', color: '#fff' }}
                             title="Agregar"
-                            color={principal}
+                            color={secundario}
                             onPress={() => {
                                 setOpenButton(false);
                                 setOpenModal(true);
@@ -288,7 +288,7 @@ const Grupos = ({ navigation }) => {
                         <SpeedDial.Action
                             icon={{ name: 'delete', color: '#fff' }}
                             title="Eliminar"
-                            color={principal}
+                            color={secundario}
                             onPress={() => {
                                 setShowCheckBox(true);
                                 setOpenButton(false);
@@ -301,7 +301,7 @@ const Grupos = ({ navigation }) => {
                         <SpeedDial.Action
                             icon={{ name: 'done', color: '#fff' }}
                             title="Aceptar"
-                            color={principal}
+                            color={secundario}
                             onPress={async () => {
                                 setShowCheckBox(false);
                                 setOpenButton(false);
@@ -315,7 +315,7 @@ const Grupos = ({ navigation }) => {
                         <SpeedDial.Action
                             icon={{ name: 'cancel', color: '#fff' }}
                             title="Cancelar"
-                            color={principal}
+                            color={secundario}
                             onPress={() => {
                                 setShowCheckBox(false);
                                 setOpenButton(false);

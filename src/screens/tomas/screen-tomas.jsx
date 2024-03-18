@@ -249,7 +249,7 @@ const Tomas = ({ navigation, route }) => {
                 isOpen={openButton}
                 icon={{ name: 'edit', color: 'white' }}
                 openIcon={{ name: 'close', color: 'white' }}
-                color={principal}
+                color={secundario}
                 containerStyle={{ marginBottom: 45 }}
                 onOpen={() => setOpenButton(!openButton)}
                 onClose={() => setOpenButton(!openButton)}>
@@ -257,7 +257,7 @@ const Tomas = ({ navigation, route }) => {
                 {
                     !showCheckBox && <SpeedDial.Action
                         icon={{ name: 'add', color: '#fff' }}
-                        color={principal}
+                        color={secundario}
                         title={'Agregar'}
                         onPress={() => {
                             setOpenButton(!openButton);
@@ -268,7 +268,7 @@ const Tomas = ({ navigation, route }) => {
                 {
                     !showCheckBox && <SpeedDial.Action
                         icon={{ name: 'delete', color: '#fff' }}
-                        color={principal}
+                        color={secundario}
                         title={'Eliminar'}
                         onPress={() => {
                             setOpenButton(!openButton);
@@ -280,7 +280,7 @@ const Tomas = ({ navigation, route }) => {
                 {
                     !showCheckBox && <SpeedDial.Action
                         icon={{ name: 'print', color: '#fff' }}
-                        color={principal}
+                        color={secundario}
                         title={'Imprimir'}
                         onPress={() => { // cambiar la logica para mandar a imprimir 
                             setOpenButton(!openButton);
@@ -293,7 +293,7 @@ const Tomas = ({ navigation, route }) => {
                     showCheckBox && <SpeedDial.Action //confirmacion de la opcion eliminar 
                         icon={{ name: 'done', color: '#fff' }}
                         title="Aceptar"
-                        color={principal}
+                        color={secundario}
                         onPress={() => {
                             setShowCheckBox(false);
                             setOpenButton(false);
@@ -310,7 +310,7 @@ const Tomas = ({ navigation, route }) => {
                     showCheckBox && <SpeedDial.Action //cancelar la opcion de eliminar 
                         icon={{ name: 'cancel', color: '#fff' }}
                         title="Cancelar"
-                        color={principal}
+                        color={secundario}
                         onPress={() => {
                             setShowCheckBox(false);
                             setOpenButton(false);
