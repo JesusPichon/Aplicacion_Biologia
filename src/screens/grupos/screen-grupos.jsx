@@ -325,7 +325,6 @@ const Grupos = ({ navigation }) => {
                                     setExportando(false);
                                     lanzarAlerta('Exportar Cancelado');
                                 }
-                                //navigation.replace('Grupos');
                             }}
                         />
                     )
