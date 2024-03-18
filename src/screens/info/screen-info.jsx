@@ -90,10 +90,10 @@ const InfColecta = ({ navigation, route }) => {
     // Obtener los datos con solo los campos que tienen interruptores activados
     const getFilteredData = () => {
         const filteredData = {};
-        console.log('data')
-        console.log(data)
-        console.log('switch')
-        console.log(switchStates)
+        //console.log.log('data')
+        //console.log.log(data)
+        //console.log.log('switch')
+        //console.log.log(switchStates)
         Object.keys(data).forEach(key => {
             if (key !== 'x' && key !== 'y' && key !== 'grados_Latitud' && key !== 'minutos_Latitud' && key !== 'segundos_Latitud' && key !== 'hemisferio_Latitud' && key !== 'grados_Longitud' && key !== 'minutos_Longitud' && key !== 'segundos_Longitud' && key !== 'hemisferio_Longitud') {
                 if (switchStates[key]) {
