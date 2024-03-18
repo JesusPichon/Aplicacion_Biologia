@@ -72,7 +72,7 @@ const FormularioEdit = ({ navigation, route }) => {
     };
       
     const onSubmit = (data) => {
-        console.log(data);
+        //console.log(data);
     };
 
     const handleEditar = () => {
