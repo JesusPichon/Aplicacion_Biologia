@@ -51,7 +51,7 @@ class GrupoController {
             const id = await consultarIdGrupo(nombreGrupo);
             await eliminarTomas(id);
             await eliminarGrupo(nombreGrupo);
-            console.log('Grupo eliminado correctamente');
+            //console.log('Grupo eliminado correctamente');
         } catch (error) {
             console.error('El grupo no se pudo eliminar: ', error);
         }

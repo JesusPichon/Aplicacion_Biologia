@@ -35,11 +35,12 @@ const Inicio = ({ navigation }) => {
                     buttonPositive: 'OK',
                 },
             );
-            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            /*if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                 console.log('Permiso concedido');
             } else {
                 console.log('Permiso denegado');
-            }
+            }*/
+            granted;
         } catch (err) {
             console.warn(err);
         }
