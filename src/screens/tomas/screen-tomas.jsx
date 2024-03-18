@@ -4,7 +4,7 @@ import { SpeedDial, ButtonGroup, LinearProgress } from '@rneui/themed';
 import styles from "../../styles/style-app";
 import { principal, secundario } from '../../styles/style-colors';
 import Toma from "../../components/Toma";
-import {imprimirTomas } from "../../components/imprimir/imprimirSeleccionando";
+import { imprimirTomas } from "../../components/imprimir/imprimirSeleccionando";
 import BarraBusqueda from "../../components/BarraBusqueda";
 import TomaController from "../../services/controllers/tomaController";
 import Snackbar from 'react-native-snackbar';
@@ -16,7 +16,7 @@ const Tomas = ({ navigation, route }) => {
 
     const numeroTomas = 10;
     const [progreso, setProgreso] = useState(0);
-    const [desabilitar, setDesabilitar] = useState([0,1,2,3,4,5,6]);
+    const [desabilitar, setDesabilitar] = useState([0, 1, 2, 3, 4, 5, 6]);
     const [buscar, setBuscar] = useState("");
     const [campo, setCampo] = useState("nombre_cientifico");
     const [page, setPage] = useState(1);
@@ -34,19 +34,19 @@ const Tomas = ({ navigation, route }) => {
     const controller = new TomaController(); //
 
     function rellenarBotones() {
-        let temp=[];
+        let temp = [];
         let calculos;
         temp.push("<<<");
-        calculos = page-2;
-        temp.push((calculos>0 && calculos<=numPaginas) ? calculos.toString() : "-");
-        calculos = page-1;
-        temp.push((calculos>0 && calculos<=numPaginas) ? calculos.toString() : "-");
+        calculos = page - 2;
+        temp.push((calculos > 0 && calculos <= numPaginas) ? calculos.toString() : "-");
+        calculos = page - 1;
+        temp.push((calculos > 0 && calculos <= numPaginas) ? calculos.toString() : "-");
         calculos = page;
-        temp.push((calculos>0 && calculos<=numPaginas) ? calculos.toString() : "-");
-        calculos = page+1;
-        temp.push((calculos>0 && calculos<=numPaginas) ? calculos.toString() : "-");
-        calculos = page+2;
-        temp.push((calculos>0 && calculos<=numPaginas) ? calculos.toString() : "-");
+        temp.push((calculos > 0 && calculos <= numPaginas) ? calculos.toString() : "-");
+        calculos = page + 1;
+        temp.push((calculos > 0 && calculos <= numPaginas) ? calculos.toString() : "-");
+        calculos = page + 2;
+        temp.push((calculos > 0 && calculos <= numPaginas) ? calculos.toString() : "-");
         temp.push(">>>");
         console.log('numero de paginas: ' + numPaginas);
         return temp;
@@ -57,47 +57,47 @@ const Tomas = ({ navigation, route }) => {
             case 0:
                 if (page - 5 > 0) {
                     setProgreso(0);
-                    setDesabilitar([0,1,2,3,4,5,6]);
-                    setPage(page-5);
+                    setDesabilitar([0, 1, 2, 3, 4, 5, 6]);
+                    setPage(page - 5);
                 }
                 break;
             case 1:
                 if (page - 2 > 0) {
                     setProgreso(0);
-                    setDesabilitar([0,1,2,3,4,5,6]);
-                    setPage(page-2);
+                    setDesabilitar([0, 1, 2, 3, 4, 5, 6]);
+                    setPage(page - 2);
                 }
                 break;
             case 2:
                 if (page - 1 > 0) {
                     setProgreso(0);
-                    setDesabilitar([0,1,2,3,4,5,6]);
-                    setPage(page-1);
+                    setDesabilitar([0, 1, 2, 3, 4, 5, 6]);
+                    setPage(page - 1);
                 }
                 break;
             case 4:
                 if (page + 1 <= numPaginas) {
                     setProgreso(0);
-                    setDesabilitar([0,1,2,3,4,5,6]);
-                    setPage(page+1);
+                    setDesabilitar([0, 1, 2, 3, 4, 5, 6]);
+                    setPage(page + 1);
                 }
                 break;
             case 5:
                 if (page + 2 <= numPaginas) {
                     setProgreso(0);
-                    setDesabilitar([0,1,2,3,4,5,6]);
-                    setPage(page+2);
+                    setDesabilitar([0, 1, 2, 3, 4, 5, 6]);
+                    setPage(page + 2);
                 }
                 break;
             case 6:
                 if (page + 5 <= numPaginas) {
                     setProgreso(0);
-                    setDesabilitar([0,1,2,3,4,5,6]);
-                    setPage(page+5);
+                    setDesabilitar([0, 1, 2, 3, 4, 5, 6]);
+                    setPage(page + 5);
                 }
                 break;
-            
-        
+
+
             default:
                 break;
         }
@@ -125,10 +125,14 @@ const Tomas = ({ navigation, route }) => {
     }
 
     useEffect(() => {
-        cargarTomas(page);
-        tomasTotales();
-        setBotones(rellenarBotones()); // Esto se ejecutará cada vez que numPaginas cambie
-    }, [numPaginas, page]);
+        const unsubscribe = navigation.addListener('focus', () => {
+            cargarTomas(page);
+            tomasTotales();
+            setBotones(rellenarBotones()); // Esto se ejecutará cada vez que numPaginas cambie
+        });
+
+        return unsubscribe;
+    }, [navigation, numPaginas, page]);
 
     const eliminarTomas = async (lista) => {
         try {
@@ -186,12 +190,12 @@ const Tomas = ({ navigation, route }) => {
     }
 
     useEffect(() => {
-            setPage(1);
-            cargarTomas(1);
-            tomasTotales();
-            setListSelectPrint([]);
-            setListSelectDelete([]);
-            setEliminar(false);
+        setPage(1);
+        cargarTomas(1);
+        tomasTotales();
+        setListSelectPrint([]);
+        setListSelectDelete([]);
+        setEliminar(false);
     }, [navigation, buscar]);
 
     return (
@@ -204,119 +208,119 @@ const Tomas = ({ navigation, route }) => {
 
             <View style={[styles.container, styles.fondoT]}>
 
-            <FlatList
-                data={listTomas}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item, index }) => (
-                    <Toma
-                        key={index}
-                        data={item}
-                        navigation={navigation}
-                        seleccionarImprimir={seleccionarImprimir}
-                        deseleccionarImprimir={deseleccionarImprimir}
-                        seleccionarEliminar={seleccionarEliminar}
-                        deseleccionarEliminar={deseleccionarEliminar}
-                        showCheckBox={showCheckBox}
-                        eliminar={eliminar} />
-                )}
-                
-            />
+                <FlatList
+                    data={listTomas}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item, index }) => (
+                        <Toma
+                            key={index}
+                            data={item}
+                            navigation={navigation}
+                            seleccionarImprimir={seleccionarImprimir}
+                            deseleccionarImprimir={deseleccionarImprimir}
+                            seleccionarEliminar={seleccionarEliminar}
+                            deseleccionarEliminar={deseleccionarEliminar}
+                            showCheckBox={showCheckBox}
+                            eliminar={eliminar} />
+                    )}
 
-            <SpeedDial
-                isOpen={openButton}
-                icon={{ name: 'add', color: 'white' }}
-                openIcon={{ name: 'close', color: 'white' }}
-                color={secundario}
-                containerStyle={{marginBottom:45}}
-                onOpen={() => setOpenButton(!openButton)}
-                onClose={() => setOpenButton(!openButton)}>
+                />
 
-                {
-                    !showCheckBox && <SpeedDial.Action
-                        icon={{ name: 'add', color: '#fff' }}
-                        color={principal}
-                        title={'agregar'}
-                        onPress={() => {
-                            setOpenButton(!openButton);
-                            navigation.navigate('Formulario', { nombreGrupo });
-                        }} />
-                }
+                <SpeedDial
+                    isOpen={openButton}
+                    icon={{ name: 'add', color: 'white' }}
+                    openIcon={{ name: 'close', color: 'white' }}
+                    color={secundario}
+                    containerStyle={{ marginBottom: 45 }}
+                    onOpen={() => setOpenButton(!openButton)}
+                    onClose={() => setOpenButton(!openButton)}>
 
-                {
-                    !showCheckBox && <SpeedDial.Action
-                        icon={{ name: 'delete', color: '#fff' }}
-                        color={principal}
-                        title={'eliminar'}
-                        onPress={() => {
-                            setOpenButton(!openButton);
-                            setShowCheckBox(true); //muestra los checkbox para elegir las tomas que deseas eliminar 
-                            setEliminar(true);
-                        }} />
-                }
+                    {
+                        !showCheckBox && <SpeedDial.Action
+                            icon={{ name: 'add', color: '#fff' }}
+                            color={principal}
+                            title={'agregar'}
+                            onPress={() => {
+                                setOpenButton(!openButton);
+                                navigation.navigate('Formulario', { nombreGrupo });
+                            }} />
+                    }
 
-                {
-                    !showCheckBox && <SpeedDial.Action
-                        icon={{ name: 'print', color: '#fff' }}
-                        color={principal}
-                        title={'imprimir'}
-                        onPress={() => { // cambiar la logica para mandar a imprimir 
-                            setOpenButton(!openButton);
-                            setShowCheckBox(true);
-                            setEliminar(false);
-                        }} />
-                }
+                    {
+                        !showCheckBox && <SpeedDial.Action
+                            icon={{ name: 'delete', color: '#fff' }}
+                            color={principal}
+                            title={'eliminar'}
+                            onPress={() => {
+                                setOpenButton(!openButton);
+                                setShowCheckBox(true); //muestra los checkbox para elegir las tomas que deseas eliminar 
+                                setEliminar(true);
+                            }} />
+                    }
 
-                {
-                    showCheckBox && <SpeedDial.Action //confirmacion de la opcion eliminar 
-                        icon={{ name: 'done', color: '#fff' }}
-                        title="Acept"
-                        color={principal}
-                        onPress={() => {
-                            setShowCheckBox(false);
-                            setOpenButton(false);
-                            if (eliminar) {
-                                // implementar funcion de eliminar tomas 
-                                eliminarTomas(listSelectDelete);
-                            } else {
-                                imprimirTomas(listSelectPrint);
-                            }
-                        }} />
-                }
+                    {
+                        !showCheckBox && <SpeedDial.Action
+                            icon={{ name: 'print', color: '#fff' }}
+                            color={principal}
+                            title={'imprimir'}
+                            onPress={() => { // cambiar la logica para mandar a imprimir 
+                                setOpenButton(!openButton);
+                                setShowCheckBox(true);
+                                setEliminar(false);
+                            }} />
+                    }
 
-                {
-                    showCheckBox && <SpeedDial.Action //cancelar la opcion de eliminar 
-                        icon={{ name: 'cancel', color: '#fff' }}
-                        title="Cancel"
-                        color={principal}
-                        onPress={() => {
-                            setShowCheckBox(false);
-                            setOpenButton(false);
-                            setEliminar(false);
-                        }} />
-                }
+                    {
+                        showCheckBox && <SpeedDial.Action //confirmacion de la opcion eliminar 
+                            icon={{ name: 'done', color: '#fff' }}
+                            title="Acept"
+                            color={principal}
+                            onPress={() => {
+                                setShowCheckBox(false);
+                                setOpenButton(false);
+                                if (eliminar) {
+                                    // implementar funcion de eliminar tomas 
+                                    eliminarTomas(listSelectDelete);
+                                } else {
+                                    imprimirTomas(listSelectPrint);
+                                }
+                            }} />
+                    }
 
-            </SpeedDial>        
-            <ButtonGroup
-            buttons={botones}
-            selectedIndex={3}
-            disabled={desabilitar}
-            onPress={(value) => {
-                setProgreso(0);
-                cambioPagina(value);
-            }}
-            containerStyle={{ marginBottom: 0, height: 30, marginHorizontal: 'auto', opacity: openButton ? 0.1 : 1, display: showCheckBox ? 'none' : 'block' }}
-            selectedButtonStyle={{ backgroundColor: secundario}}
-            />
-            <LinearProgress
-                style={{ marginBottom: 5, display: showCheckBox ? 'none' : 'block' }}
-                color={secundario}
-                animation={100}
-                value={progreso}
-                variant="determinate"
-            />
+                    {
+                        showCheckBox && <SpeedDial.Action //cancelar la opcion de eliminar 
+                            icon={{ name: 'cancel', color: '#fff' }}
+                            title="Cancel"
+                            color={principal}
+                            onPress={() => {
+                                setShowCheckBox(false);
+                                setOpenButton(false);
+                                setEliminar(false);
+                            }} />
+                    }
+
+                </SpeedDial>
+                <ButtonGroup
+                    buttons={botones}
+                    selectedIndex={3}
+                    disabled={desabilitar}
+                    onPress={(value) => {
+                        setProgreso(0);
+                        cambioPagina(value);
+                    }}
+                    containerStyle={{ marginBottom: 0, height: 30, marginHorizontal: 'auto', opacity: openButton ? 0.1 : 1, display: showCheckBox ? 'none' : 'block' }}
+                    selectedButtonStyle={{ backgroundColor: secundario }}
+                />
+                <LinearProgress
+                    style={{ marginBottom: 5, display: showCheckBox ? 'none' : 'block' }}
+                    color={secundario}
+                    animation={100}
+                    value={progreso}
+                    variant="determinate"
+                />
             </View>
 
-            
+
 
         </View>
     );
