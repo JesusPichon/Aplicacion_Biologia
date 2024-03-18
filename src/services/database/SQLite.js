@@ -291,8 +291,10 @@ export const verTomas = (grupoId, pageNumber, numTomas, filtrar, campo) => {
 
         // Agregar la condición de filtrado si el filtro no es una cadena vacía
         if (filtrar !== "") {
-          query += ` AND ${campo} LIKE ?`;
+          query += ` AND ${campo} LIKE ? ORDER BY id DESC`;
           params.push(`%${filtrar}%`);
+        }else {
+          query += `ORDER BY id DESC`;
         }
 
         query += ` LIMIT ? OFFSET ?`;
