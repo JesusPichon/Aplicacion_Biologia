@@ -14,30 +14,30 @@ import {
 
 const Nosotros = () => {
     const SobreNosotros = [
-        { titulo: 'Nombre bien mamalon', contenido: 'una descripcion de quienes somos'},
+        { titulo: 'Interfaz Infinita', contenido: 'Un grupo de estudiantes apasionados por la tecnología, trabajando juntos para explorar nuevas ideas y crear experiencias digitales innovadoras que desafíen los límites de la creatividad y la tecnología'},
         { titulo: 'Facultad de Biologia', contenido: 'una descripcion'},
     ];
 
     const Preguntas = [
-        { pregunta: '¿Quién vive en una piña debajo del mar?', respuesta: 'Bob Esponja' },
-        { pregunta: 'Naranja, ¿es un color o una fruta?', respuesta: 'La fruta naranja obtuvo su nombre del color, ya que la fruta es conocida por su característico tono anaranjado.' },
-        { pregunta: 'Naranja, ¿es un color o una fruta?', respuesta: 'La fruta naranja obtuvo su nombre del color, ya que la fruta es conocida por su característico tono anaranjado.' },
-        { pregunta: 'Naranja, ¿es un color o una fruta?', respuesta: 'La fruta naranja obtuvo su nombre del color, ya que la fruta es conocida por su característico tono anaranjado.' },
-        { pregunta: 'Naranja, ¿es un color o una fruta?', respuesta: 'La fruta naranja obtuvo su nombre del color, ya que la fruta es conocida por su característico tono anaranjado.' },
-        { pregunta: 'Naranja, ¿es un color o una fruta?', respuesta: 'La fruta naranja obtuvo su nombre del color, ya que la fruta es conocida por su característico tono anaranjado.' },
-        { pregunta: 'Naranja, ¿es un color o una fruta?', respuesta: 'La fruta naranja obtuvo su nombre del color, ya que la fruta es conocida por su característico tono anaranjado.' },
-        { pregunta: 'Naranja, ¿es un color o una fruta?', respuesta: 'La fruta naranja obtuvo su nombre del color, ya que la fruta es conocida por su característico tono anaranjado.' },
-        { pregunta: 'Naranja, ¿es un color o una fruta?', respuesta: 'La fruta naranja obtuvo su nombre del color, ya que la fruta es conocida por su característico tono anaranjado.' },
+        { pregunta: '¿Cuál es el tamaño de la imagen para las impresiones?', respuesta: 'Puedes utilizar cualquier imagen, pero recomendamos 755px de ancho y 60px de alto o cualquier escala de estas medidas para evitar errores visuales. También puedes optar por no elegir ninguna imagen.' },
+        { pregunta: '¿Puedo seleccionar qué campos imprimir de mi toma?', respuesta: 'Sí, solo selecciona la toma y te mandará a una nueva pantalla donde podrás seleccionar qué campos quieres imprimir y posteriormente selecciona imprimir.' },
+        { pregunta: '¿Puede correr DOOM?', respuesta: 'Lamentablemente no ... Por el momento :)' },
     ];
 
     const renderImagen = (titulo) => {
+        console.log(titulo);
         switch (titulo) {
-            case 'Nombre bien mamalon':
+            case 1:
                 console.log(imagenEquipo)
-                return <Image style={{width: 50, height: 50, marginBottom:10}} source={require('../../assets/images/flor.png')} />;
+                return (
+                    <View>
+                        <Image style={{marginBottom:10}} source={require('../../assets/images/res1.jpg')} />
+                        <Image style={{marginBottom:10}} source={require('../../assets/images/res2.jpg')} />
+                    </View>
+                );
            
             default:
-                return ''; // Otra imagen por defecto o null si no hay ninguna
+                return null; // Retornar null en lugar de una cadena vacía
         }
     };
 
@@ -60,10 +60,6 @@ const Nosotros = () => {
                             <View style={{ marginVertical: 10, paddingHorizontal: 10, paddingVertical: 5 }}>
                                 <Text style={{ fontSize: 16, fontWeight: 'bold', color: tercero }}>{item.contenido}</Text>
                             </View>
-                            <View style={{alignItems: 'center'}}>
-                                { renderImagen(item.titulo)
-                                }
-                            </View>
                         </ImageBackground>
                     </View>
                 ))
@@ -77,7 +73,12 @@ const Nosotros = () => {
                     <View style={{ backgroundColor: cuarto, marginVertical: 5, padding: 10 }}>
                         <Text style={{ fontSize: 20, fontWeight: 'bold', color: tercero }}>{pregunta.pregunta}</Text>
                         {expandedIndex === index && (
-                            <Text style={{ fontSize: 15, marginTop: 10, color: tercero }}>{pregunta.respuesta}</Text>
+                            <View style={{alignItems: 'center'}}>
+                                <Text style={{ fontSize: 15, marginTop: 10, color: tercero }}>{pregunta.respuesta}</Text>
+                                { 
+                                renderImagen(index)
+                                }
+                            </View>
                         )}
                     </View>
                 </TouchableWithoutFeedback>

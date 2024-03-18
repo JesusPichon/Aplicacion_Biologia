@@ -286,8 +286,17 @@ export const verTomas = (grupoId, pageNumber, numTomas, filtrar, campo) => {
 
   return new Promise((resolve, reject) => {
       db.transaction(tx => {
-        const query = `SELECT * FROM TOMAS WHERE grupo = ? AND ${campo} LIKE ? LIMIT ? OFFSET ?`;
-        const params = [grupoId, `%${filtrar}%`, itemsPerPage, offset]
+        let query = `SELECT * FROM TOMAS WHERE grupo = ?`;
+        let params = [grupoId];
+
+        // Agregar la condición de filtrado si el filtro no es una cadena vacía
+        if (filtrar !== "") {
+          query += ` AND ${campo} LIKE ?`;
+          params.push(`%${filtrar}%`);
+        }
+
+        query += ` LIMIT ? OFFSET ?`;
+        params.push(itemsPerPage, offset);
           tx.executeSql(
               query,
               params,

@@ -1,12 +1,8 @@
 import styles from '../../styles/style-app';
-import { principal, secundario, tercero, cuarto } from '../../styles/style-colors';
+import { principal } from '../../styles/style-colors';
 import Nosotros from '../../components/FAQ/Nosotros';
 import {
-    Text,
     View,
-    TouchableWithoutFeedback,
-    Animated,
-    ImageBackground,
     StatusBar,
     SafeAreaView,
     ScrollView,
