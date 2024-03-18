@@ -25,10 +25,10 @@ const Nosotros = () => {
     ];
 
     const renderImagen = (titulo) => {
-        console.log(titulo);
+        //console.log(titulo);
         switch (titulo) {
             case 1:
-                console.log(imagenEquipo)
+                //console.log(imagenEquipo)
                 return (
                     <View>
                         <Image style={{marginBottom:10}} source={require('../../assets/images/res1.jpg')} />
