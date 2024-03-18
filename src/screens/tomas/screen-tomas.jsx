@@ -70,7 +70,7 @@ const Tomas = ({ navigation, route }) => {
         } else {
             temp = boton - 3 + page;
         }
-        console.log(temp);
+        //console.log(temp);
         if (temp >= 1 && temp <= numPaginas) {
             setProgreso(0);
             setPage(temp);
@@ -92,7 +92,7 @@ const Tomas = ({ navigation, route }) => {
     const tomasTotales = async () => {
         try {
             const tomas = await controller.obtenerTomasTotales(nombreGrupo, buscar, campo);
-            console.log(tomas);
+            //console.log(tomas);
             setNumPaginas(Math.ceil(tomas / numeroTomas));
         } catch (error) {
             lanzarAlerta("Error al obtener la lista de tomas totales.");
