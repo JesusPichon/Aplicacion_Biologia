@@ -82,7 +82,7 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
 
     const peticion = (buscar) => {
         if (pantalla === "grupos") {
-            console.log("Buscando: " + buscar);
+            //console.log("Buscando: " + buscar);
             verGruposFiltrado(buscar)
                 .then(result => {
                     setBuscando(false);
@@ -93,7 +93,7 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
                     console.error('Ocurrió un error al obtener los grupos:', error);
                 });
         } else {
-            console.log("Buscando: " + buscar);
+            //console.log("Buscando: " + buscar);
             onResult([buscar, value]);
             setBuscando(false);
             /*
