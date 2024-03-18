@@ -54,7 +54,7 @@ const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccio
 
             </View>
 
-            <View style={[styles.botongrupo, { backgroundColor: principal }]}>
+            <View style={[styles.botongrupo, { backgroundColor: checked ? "red" : principal }]}>
                 <Text style={[styles.textT, { textAlign: 'center', fontWeight: 'bold' }]}>
                     {nombre}
                 </Text>
