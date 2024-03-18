@@ -36,24 +36,24 @@ const Tomas = ({ navigation, route }) => {
         let temp = [];
         let calculos;
         let i = 0;
-        while (i < 7){
+        while (i < 7) {
             if (i === 0) {
                 if (page - 5 > 0) {
                     temp.push("<<<");
-                }else{
+                } else {
                     temp.push("-");
                 }
-            }else if (i === 6) {
+            } else if (i === 6) {
                 if (page + 5 <= numPaginas) {
                     temp.push(">>>");
-                }else{
+                } else {
                     temp.push("-");
                 }
-            }else{
+            } else {
                 calculos = page + i - 3;
                 if (calculos > 0 && calculos <= numPaginas) {
                     temp.push(calculos);
-                }else{
+                } else {
                     temp.push("-");
                 }
             }
@@ -65,9 +65,9 @@ const Tomas = ({ navigation, route }) => {
     function cambioPagina(boton) {
         if (boton === 0) {
             temp = page - 5;
-        }else if (boton === 6) {
+        } else if (boton === 6) {
             temp = page + 5;
-        }else{
+        } else {
             temp = boton - 3 + page;
         }
         console.log(temp);
@@ -98,16 +98,6 @@ const Tomas = ({ navigation, route }) => {
             lanzarAlerta("Error al obtener la lista de tomas totales.");
         }
     }
-
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            cargarTomas(page);
-            tomasTotales();
-            setBotones(rellenarBotones()); // Esto se ejecutará cada vez que numPaginas cambie
-        });
-
-        return unsubscribe;
-    }, [navigation, numPaginas, page]);
 
     const eliminarTomas = async (lista) => {
         try {
@@ -167,10 +157,19 @@ const Tomas = ({ navigation, route }) => {
 
     useEffect(() => {
         cargarTomas(page);
-        setBotones(rellenarBotones());
-        setEliminar(false);
-    }, [page, numPaginas]);
+        tomasTotales();
+        setBotones(rellenarBotones()); // Esto se ejecutará cada vez que numPaginas cambie
 
+        const unsubscribe = navigation.addListener('focus', () => {
+            cargarTomas(page);
+            tomasTotales();
+            setBotones(rellenarBotones()); // Esto se ejecutará cada vez que se agregue una toma nueva 
+        });
+
+        return unsubscribe;
+    }, [navigation, numPaginas, page]);
+
+    
     useEffect(() => {
         setPage(1);
         cargarTomas(1);
