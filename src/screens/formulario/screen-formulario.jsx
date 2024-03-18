@@ -68,6 +68,14 @@ const Formulario = ({navigation, route}) => {
         }
     };
 
+    const reglasNoColecta = {
+        required: 'Este campo es requerido.',
+        pattern: {
+            value: /^[0-9]+$/, // Permite solo números, punto decimal y signo negativo
+            message: 'Solo se permiten números.'
+        },
+    }
+
     //agrega la nueva toma a la lista de tomas 
     const onSubmit = (data) => {
 
@@ -300,7 +308,7 @@ const Formulario = ({navigation, route}) => {
                     label="No. de colecta:"
                     control={control}
                     name="No_colecta"
-                    rules={{ required: 'Este campo es requerido.' }}
+                    rules={reglasNoColecta}
                     errors={errors}
                     tooltip={"Escribe el número de colecta del colector principal"}
                     keyboardType={'numeric'}
