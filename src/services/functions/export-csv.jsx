@@ -83,7 +83,18 @@ export const formatData = (data) => {
 
 export const guardarArchivoCSV = (nombreArchivo, contenidoCSV) => {
     return new Promise((resolve, reject) => {
-        const rutaArchivo = `${RNFS.DownloadDirectoryPath}/${nombreArchivo}.csv`;
+        const now = new Date();
+
+        // Formatea la fecha y hora 
+        const year = now.getFullYear();
+        const month = (now.getMonth() + 1).toString().padStart(2, '0'); // Añade un cero al mes si es necesario
+        const day = now.getDate().toString().padStart(2, '0');
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        const seconds = now.getSeconds().toString().padStart(2, '0');
+        
+        const rutaArchivo = `${RNFS.DownloadDirectoryPath}/${nombreArchivo}_${year}-${month}-${day}_${hours}-${minutes}-${seconds}.csv`;
+        
 
         RNFS.writeFile(rutaArchivo, contenidoCSV, 'utf8')
             .then(() => {
