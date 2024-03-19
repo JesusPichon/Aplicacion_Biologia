@@ -32,6 +32,8 @@ const TextInputCustome = ({ label, control, name, rules, errors, multiline, maxL
                             withOverlay={true}
                             skipAndroidStatusBar={true}
                             backgroundColor='#424242'
+                            height={75}
+                            width={250}
                         >
                                 <Icon name="help-outline" size={20} color="#9E9E9E" />
                         </Tooltip>
@@ -83,6 +85,7 @@ const styles = StyleSheet.create({
         color: tercero,
         paddingLeft: 10,
         fontWeight: 'bold',
+        fontSize: 16,
     },
     textInputMultiLine: {
         backgroundColor: 'rgb(128, 155, 174)',
@@ -92,6 +95,7 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         fontWeight: 'bold',
         height: 150,
+        fontSize: 16,
     },
     textError: {
         color: 'red',

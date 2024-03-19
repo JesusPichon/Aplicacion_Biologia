@@ -2,9 +2,10 @@ import React from "react";
 import Inicio from "./screens/inicio";
 import Formulario from "./screens/formulario";
 import InformacionToma from "./screens/info";
-import Canales from "./screens/canales";
+import Grupos from "./screens/grupos";
 import Tomas from "./screens/tomas";
 import Editar from "./screens/editar";
+import FAQ from "./screens/FAQ/screen-FAQ";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -19,8 +20,9 @@ const App = () => {
         <Stack.Screen name="Formulario" component={Formulario} />
         <Stack.Screen name="Tomas" component={Tomas} />
         <Stack.Screen name="InformacionToma" component={InformacionToma} />
-        <Stack.Screen name="Canales" component={Canales} />
+        <Stack.Screen name="Grupos" component={Grupos} />
         <Stack.Screen name="Editar" component={Editar} />
+        <Stack.Screen name="FAQ" component={FAQ} />
       </Stack.Navigator>
     </NavigationContainer>
   );

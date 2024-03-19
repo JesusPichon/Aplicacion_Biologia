@@ -8,7 +8,7 @@ let db = openDatabase({
 export const borrarTablas = (nombreTabla) => {
   db.transaction(tx => {
     tx.executeSql(`DROP TABLE IF EXISTS ${nombreTabla}`, [], (_, result) => {
-      console.log(`Tabla ${nombreTabla} eliminada correctamente.`);
+      //console.log(`Tabla ${nombreTabla} eliminada correctamente.`);
     }, (_, error) => {
       console.error(`Error al eliminar la tabla ${nombreTabla}: ${error.message}`);
     });
@@ -33,11 +33,11 @@ export const crearTablas = () => {
 
   function successCallback(tableName) {
     return function (_, _results) {
-      console.log(`tabla ${tableName} creada exitosamente`);
+      //console.log(`tabla ${tableName} creada exitosamente`);
       tablesCreatedSuccessfullyCount++;
 
       if (tablesCreatedSuccessfullyCount === tableNames.length) {
-        console.log('Todas las tablas fueron creadas exitosamente!');
+        //console.log('Todas las tablas fueron creadas exitosamente!');
       }
     };
   }
@@ -67,9 +67,11 @@ export const crearTablas = () => {
             altitud INTEGER, --Revisar si se puden poner decimales 
             grados_Latitud INTEGER,
             minutos_Latitud INTEGER,
+            segundos_Latitud INTEGER,
             hemisferio_Latitud INTEGER,
             grados_Longitud INTEGER,
             minutos_Longitud INTEGER,
+            segundos_Longitud INTEGER,
             hemisferio_Longitud INTEGER,
             x REAL,
             y REAL,
@@ -96,22 +98,48 @@ export const crearTablas = () => {
   }
 };
 
+// export const insertarGrupos = (nombreGrupo) => {
+//   db.transaction(tx => {
+//     tx.executeSql(
+//       `INSERT INTO GRUPOS (nombre) VALUES (?)`,
+//       [nombreGrupo],
+//       (_, results) => {
+//         if (results.rowsAffected > 0) {
+//           console.log(`¡El grupo ${nombreGrupo} se ha insertado correctamente en la tabla GRUPOS!`);
+//         } else {
+//           console.log(`Error: No se pudo insertar el grupo ${nombreGrupo} en la tabla GRUPOS.`);
+//         }
+//       },
+//       error => {
+//         console.log(`Error al intentar insertar el grupo ${nombreGrupo}: ${error.message}`);
+//       }
+//     );
+//   });
+// };
+
 export const insertarGrupos = (nombreGrupo) => {
-  db.transaction(tx => {
-    tx.executeSql(
-      `INSERT INTO GRUPOS (nombre) VALUES (?)`,
-      [nombreGrupo],
-      (_, results) => {
-        if (results.rowsAffected > 0) {
-          console.log(`¡El grupo ${nombreGrupo} se ha insertado correctamente en la tabla GRUPOS!`);
-        } else {
-          console.log(`Error: No se pudo insertar el grupo ${nombreGrupo} en la tabla GRUPOS.`);
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `INSERT INTO GRUPOS (nombre) VALUES (?)`,
+        [nombreGrupo],
+        (_, results) => {
+          if (results.rowsAffected > 0) {
+            //console.log(`¡El grupo ${nombreGrupo} se ha insertado correctamente en la tabla GRUPOS!`);
+            resolve();
+          } else {
+            const errorMessage = `Error: No se pudo insertar el grupo ${nombreGrupo} en la tabla GRUPOS.`;
+            console.error(errorMessage);
+            reject(new Error(errorMessage));
+          }
+        },
+        error => {
+          const errorMessage = `Error al intentar insertar el grupo ${nombreGrupo}: ${error.message}`;
+          console.error(errorMessage);
+          reject(new Error(errorMessage));
         }
-      },
-      error => {
-        console.log(`Error al intentar insertar el grupo ${nombreGrupo}: ${error.message}`);
-      }
-    );
+      );
+    });
   });
 };
 
@@ -124,15 +152,15 @@ export const consultarIdGrupo = (nombreGrupo) => {
         (tx, results) => {
           if (results.rows.length > 0) {
             const id = results.rows.item(0).id;
-            console.log(`ID encontrado para ${nombreGrupo}: ${id}`);
+            //console.log(`ID encontrado para ${nombreGrupo}: ${id}`);
             resolve(id);
           } else {
-            console.log(`No se encontró ningún ID para ${nombreGrupo}`);
+            //console.log(`No se encontró ningún ID para ${nombreGrupo}`);
             reject(`No se encontró ningún ID para ${nombreGrupo}`);
           }
         },
         (error) => {
-          console.log(`Error al consultar el ID para ${nombreGrupo}: ${error.message}`);
+          //console.log(`Error al consultar el ID para ${nombreGrupo}: ${error.message}`);
           reject(`Error al consultar el ID para ${nombreGrupo}: ${error.message}`);
         }
       );
@@ -153,9 +181,11 @@ export const insertarTomas = (tomasData) => {
         altitud,
         grados_Latitud,
         minutos_Latitud,
+        segundos_Latitud,
         hemisferio_Latitud,
         grados_Longitud,
         minutos_Longitud,
+        segundos_Longitud,
         hemisferio_Longitud,
         x,
         y,
@@ -175,17 +205,17 @@ export const insertarTomas = (tomasData) => {
         determino,
         otros_datos,
         grupo)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [...Object.values(tomasData)], // Convierte el objeto en un array de valores
       (_, results) => {
         if (results.rowsAffected > 0) {
-          console.log(`La toma ha sido insertada correctamente en la tabla TOMAS.`);
+          //console.log(`La toma ha sido insertada correctamente en la tabla TOMAS.`);
         } else {
-          console.log(`Error: La toma no se pudo insertar en la tabla TOMAS.`);
+          console.error(`Error: La toma no se pudo insertar en la tabla TOMAS.`);
         }
       },
       error => {
-        console.log(`Error al intentar insertar la toma: ${error.message}`);
+        console.error(`Error al intentar insertar la toma: ${error.message}`);
       }
     );
   });
@@ -201,10 +231,10 @@ export const verGrupos = () => {
           for (let i = 0; i < len; i++) {
             grupos.push(results.rows.item(i).nombre);
           }
-          console.log(`Consulta exitosa, ${len} nombres de grupos encontrados`);
+          //console.log(`Consulta exitosa, ${len} nombres de grupos encontrados`);
           resolve(grupos);
         } else {
-          console.log('No se encontraron resultados.');
+          //console.log('No se encontraron resultados.');
           resolve([]);
         }
       }, error => {
@@ -225,10 +255,10 @@ export const verGruposFiltrado = (nombre) => {
           for (let i = 0; i < len; i++) {
             grupos.push(results.rows.item(i).nombre);
           }
-          console.log(`Consulta exitosa, ${len} nombres de grupos encontrados`);
+          //console.log(`Consulta exitosa, ${len} nombres de grupos encontrados`);
           resolve(grupos); // Resolvemos la promesa con los resultados
         } else {
-          console.log('No se encontraron resultados.');
+          //console.log('No se encontraron resultados.');
           resolve([]); // Resolvemos la promesa con un array vacío si no hay resultados
         }
       }, error => {
@@ -250,7 +280,131 @@ export const verGruposFiltrado = (nombre) => {
   });*/
 ////////////////////////////////////////////////////////////////////////////
 
-export const verTomas = (grupoId) => {
+export const verTomas = (grupoId, pageNumber, numTomas, filtrar, campo) => {
+  const itemsPerPage = numTomas; // Define la cantidad de elementos por página
+  const offset = (pageNumber - 1) * itemsPerPage; // Calcula el offset para la paginación
+
+  return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+        let query = `SELECT * FROM TOMAS WHERE grupo = ?`;
+        let params = [grupoId];
+
+        // Agregar la condición de filtrado si el filtro no es una cadena vacía
+        if (filtrar !== "") {
+          query += ` AND ${campo} LIKE ? ORDER BY id DESC`;
+          params.push(`%${filtrar}%`);
+        }else {
+          query += `ORDER BY id DESC`;
+        }
+
+        query += ` LIMIT ? OFFSET ?`;
+        params.push(itemsPerPage, offset);
+          tx.executeSql(
+              query,
+              params,
+              (tx, results) => {
+                  const len = results.rows.length;
+                  let tomas = [];
+                  if (len > 0) {
+                      for (let i = 0; i < len; i++) {
+                          const row = results.rows.item(i);
+                          const tomaObj = {};
+
+                          Object.keys(row).forEach(key => {
+                              tomaObj[key] = row[key];
+                          });
+
+                          tomas.push(tomaObj);
+                      }
+
+                      //console.log(`Consulta exitosa, ${len} tomas encontradas`);
+                      resolve(tomas);
+                  } else {
+                      //console.log('No se encontraron tomas.');
+                      resolve([]);
+                  }
+              },
+              error => {
+                  console.error('Error al ejecutar la consulta de tomas:', error);
+                  reject(error);
+              }
+          );
+      });
+  });
+};
+
+export const verTomasTotales = (grupoId, filtrar, campo) => {
+  return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+          const query = `SELECT COUNT(*) AS total_tomas FROM TOMAS WHERE grupo = ? AND ${campo} LIKE ?`;
+          const params = [grupoId, `%${filtrar}%`];
+          tx.executeSql(
+              query,
+              params,
+              (tx, results) => {
+                  const len = results.rows.length;
+                  if (len > 0) {
+                      const totalTomas = results.rows.item(0).total_tomas;
+                      //console.log(`Consulta exitosa, total de tomas: ${totalTomas}`);
+                      resolve(totalTomas);
+                  } else {
+                      //console.log('No se encontraron tomas.');
+                      resolve(0);
+                  }
+              },
+              error => {
+                  console.error('Error al ejecutar la consulta de tomas totales:', error);
+                  reject(error);
+              }
+          );
+      });
+  });
+};
+
+
+
+export const verTomasFiltrado = (grupoId, campo, buscar) => {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      // Construir la consulta dinámica para buscar en el campo especificado
+      const query = `SELECT * FROM TOMAS WHERE grupo = ? AND ${campo} LIKE ? `;
+      const params = [grupoId, `%${buscar}%`];
+
+      // Ejecutar la consulta SQL
+      tx.executeSql(query, params,
+        (tx, results) => {
+          const len = results.rows.length;
+          let tomas = [];
+          if (len > 0) {
+            for (let i = 0; i < len; i++) {
+              const row = results.rows.item(i);
+              const tomaObj = {};
+
+              // Copiar los datos de la fila a un objeto toma
+              Object.keys(row).forEach(key => {
+                tomaObj[key] = row[key];
+              });
+
+              tomas.push(tomaObj);
+            }
+
+            //console.log(`Consulta exitosa, ${len} tomas encontradas`);
+            resolve(tomas);
+          } else {
+            //console.log('No se encontraron tomas.');
+            resolve([]);
+          }
+        }, 
+        error => {
+          console.error('Error al ejecutar la consulta de tomas:', error);
+          reject(error);
+        }
+      );
+    });
+  });
+};
+
+export const verTomasExportar = (grupoId) => {
   return new Promise((resolve, reject) => {
     db.transaction(tx => {
       tx.executeSql('SELECT * FROM TOMAS WHERE grupo = ?',
@@ -270,10 +424,10 @@ export const verTomas = (grupoId) => {
               tomas.push(tomaObj);
             }
 
-            console.log(`Consulta exitosa, ${len} tomas encontradas`);
+            //console.log(`Consulta exitosa, ${len} tomas encontradas`);
             resolve(tomas);
           } else {
-            console.log('No se encontraron tomas.');
+            //console.log('No se encontraron tomas.');
             resolve([]);
           }
         }, error => {
@@ -284,53 +438,6 @@ export const verTomas = (grupoId) => {
   });
 };
 
-export const verTomasFiltrado = (grupoId, buscar) => {
-  return new Promise((resolve, reject) => {
-    db.transaction(tx => {
-      // Obtener los nombres de las columnas de la tabla TOMAS
-      tx.executeSql('PRAGMA table_info(TOMAS)', [], (tx, result) => {
-        const numCols = result.rows.length;
-        const columnNames = [];
-        for (let i = 0; i < numCols; i++) {
-          columnNames.push(result.rows.item(i).name);
-        }
-
-        // Construir la consulta dinámica para buscar en cada columna
-        const placeholders = Array(numCols - 1).fill('?').join(' OR '); // Excluye el campo de ID
-        const query = `SELECT * FROM TOMAS WHERE grupo = ? AND (${columnNames.slice(1).map(name => `${name} LIKE ?`).join(' OR ')})`;
-        const params = [grupoId, ...Array(numCols - 1).fill(`%${buscar}%`)]; // Excluye el campo de ID
-
-        // Ejecutar la consulta SQL
-        tx.executeSql(query, params,
-          (tx, results) => {
-            const len = results.rows.length;
-            let tomas = [];
-            if (len > 0) {
-              for (let i = 0; i < len; i++) {
-                const row = results.rows.item(i);
-                const tomaObj = {};
-                
-                Object.keys(row).forEach(key => {
-                  tomaObj[key] = row[key];
-                });
-                
-                tomas.push(tomaObj);
-              }
-              
-              console.log(`Consulta exitosa, ${len} tomas encontradas`);
-              resolve(tomas);
-            } else {
-              console.log('No se encontraron tomas.');
-              resolve([]);
-            }
-          }, error => {
-            console.error('Error al ejecutar la consulta de tomas:', error);
-            reject(error);
-          });
-      });
-    });
-  });
-};
 
 
 
@@ -360,8 +467,10 @@ export const editarToma = (tomasData, id) => {
         altitud = ?,
         grados_Latitud = ?,
         minutos_Latitud = ?,
+        segundos_Latitud = ?,
         hemisferio_Latitud = ?,
         grados_Longitud = ?,
+        segundos_Longitud = ?,
         minutos_Longitud = ?,
         hemisferio_Longitud = ?,
         x = ?,
@@ -385,14 +494,136 @@ export const editarToma = (tomasData, id) => {
       [...Object.values(tomasData), id], // Convierte el objeto en un array de valores y agrega el grupo para identificar la toma a editar
       (_, results) => {
         if (results.rowsAffected > 0) {
-          console.log(`La información de la toma ha sido actualizada correctamente en la tabla TOMAS.`);
+          //console.log(`La información de la toma ha sido actualizada correctamente en la tabla TOMAS.`, results);
         } else {
-          console.log(`Error: No se pudo actualizar la información de la toma en la tabla TOMAS.`);
+          //console.log(`Error: No se pudo actualizar la información de la toma en la tabla TOMAS.`, results);
         }
       },
       error => {
-        console.log(`Error al intentar editar la toma: ${error.message}`);
+        console.error(`Error al intentar editar la toma: ${error.message}`);
       }
     );
+  });
+};
+
+export const eliminarGrupo = (nombreGrupo) => {
+  return new Promise((resolve, reject) => {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          'DELETE FROM GRUPOS WHERE nombre = ?',
+          [nombreGrupo],
+          (_, result) => {
+            //console.log(`${nombreGrupo} eliminado exitosamente`);
+            resolve(); // Resolve the promise on success
+          },
+          (_, error) => {
+            console.error(`Error al borrar ${nombreGrupo}: `, error);
+            reject(error); // Reject the promise on error
+          }
+        );
+      },
+      (error) => {
+        console.error('Error al ejecutar la consulta: ', error);
+        reject(error); // Reject the promise on error during transaction
+      }
+    );
+  });
+};
+
+//Elimina todas las tomas de un grupo
+export const eliminarTomas = (groupID) => {
+  return new Promise((resolve, reject) => {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          'DELETE FROM TOMAS WHERE grupo = ?',
+          [groupID],
+          (_, result) => {
+            //console.log('Las tomas con ID de grupo ', groupID, ' se eliminaron exitosamente');
+            resolve(); // Resolve the promise on success
+          },
+          (_, error) => {
+            console.error('Error mientras se borraban las tomas: ', error);
+            reject(error); // Reject the promise on error
+          }
+        );
+      },
+      (error) => {
+        console.error('Error al ejecutar la consulta: ', error);
+        reject(error); // Reject the promise on error during transaction
+      }
+    );
+  });
+};
+
+//Elimina una toma de un grupo
+export const eliminarToma = (idGrupo, idToma) => {
+  return new Promise((resolve, reject) => {
+    db.transaction(
+      (tx) => {
+        tx.executeSql(
+          'DELETE FROM TOMAS WHERE grupo = ? AND id = ?',
+          [idGrupo, idToma],
+          (_, result) => {
+            //console.log('La toma con ID ', idToma, ' se eliminó exitosamente');
+            resolve(); // Resolve the promise on success
+          },
+          (_, error) => {
+            console.error('Error mientras se borraba la toma: ', error);
+            reject(error); // Reject the promise on error
+          }
+        );
+      },
+      (error) => {
+        console.error('Error al ejecutar la consulta: ', error);
+        reject(error); // Reject the promise on error during transaction
+      }
+    );
+  });
+};
+
+
+//ESTE METODO VA EN LA PANTALLA DE LOS GRUPOS
+const borrarGT = (nombreGrupo) => {
+  // Obtiene primero el ID del grupo a eliminar
+  consultarIdGrupo(nombreGrupo)
+      .then((id) => {
+          // Elimina las tomas pertenecientes al grupo a eliminar
+          eliminarTomas(id)
+              .then(() => {
+                  // Si las tomas se eliminan exitosamente, se procede a eliminar el grupo
+                  eliminarGrupo(nombreGrupo);
+              })
+              .catch((error) => {
+                  console.error('Error al ejecutar eliminarTomas:', error);
+              });
+      })
+      .catch((error) => {
+          console.error('Error al obtener el ID del grupo:', error);
+      });
+};
+
+export const consultarNombreGrupo = (nombreGrupo) => {
+  return new Promise((resolve, reject) => {
+      db.transaction(tx => {
+          tx.executeSql(
+              'SELECT * FROM GRUPOS WHERE nombre = ?',
+              [nombreGrupo],
+              (tx, results) => {
+                  if (results.rows.length > 0) {
+                      //console.log('El nombre de grupo ya existe en la tabla GRUPOS.');
+                      resolve(true);
+                  } else {
+                      //console.log('El nombre de grupo no existe en la tabla GRUPOS.');
+                      resolve(false);
+                  }
+              },
+              error => {
+                  console.error('Error al ejecutar la consulta:', error);
+                  reject(error);
+              }
+          );
+      });
   });
 };

@@ -7,6 +7,7 @@ import InputCoordenadas from "../../components/coordenadas-select/coordenadasCom
 import FechaComponente from "../../components/fecha-select/FechaComponente";
 import CustomDropdown from "../../components/listaComponente/ListaComponente";
 import { insertarTomas, consultarIdGrupo } from "../../services/database/SQLite";
+import { data_Estados, data_Abundancia, data_FormaBio } from "./dataDropdowns";
 import {
     ScrollView,
     Text,
@@ -15,66 +16,11 @@ import {
     KeyboardAvoidingView
 } from "react-native";
 
-const data_Estados = [
-    { label: 'Aguascalientes', value: 'aguascalientes' },
-    { label: 'Baja California', value: 'baja_california' },
-    { label: 'Baja California Sur', value: 'baja_california_sur' },
-    { label: 'Campeche', value: 'campeche' },
-    { label: 'Chiapas', value: 'chiapas' },
-    { label: 'Chihuahua', value: 'chihuahua' },
-    { label: 'Ciudad de México', value: 'ciudad_de_mexico' },
-    { label: 'Coahuila', value: 'coahuila' },
-    { label: 'Colima', value: 'colima' },
-    { label: 'Durango', value: 'durango' },
-    { label: 'Estado de México', value: 'estado_de_mexico' },
-    { label: 'Guanajuato', value: 'guanajuato' },
-    { label: 'Guerrero', value: 'guerrero' },
-    { label: 'Hidalgo', value: 'hidalgo' },
-    { label: 'Jalisco', value: 'jalisco' },
-    { label: 'Michoacán', value: 'michoacan' },
-    { label: 'Morelos', value: 'morelos' },
-    { label: 'Nayarit', value: 'nayarit' },
-    { label: 'Nuevo León', value: 'nuevo_leon' },
-    { label: 'Oaxaca', value: 'oaxaca' },
-    { label: 'Puebla', value: 'puebla' },
-    { label: 'Querétaro', value: 'queretaro' },
-    { label: 'Quintana Roo', value: 'quintana_roo' },
-    { label: 'San Luis Potosí', value: 'san_luis_potosi' },
-    { label: 'Sinaloa', value: 'sinaloa' },
-    { label: 'Sonora', value: 'sonora' },
-    { label: 'Tabasco', value: 'tabasco' },
-    { label: 'Tamaulipas', value: 'tamaulipas' },
-    { label: 'Tlaxcala', value: 'tlaxcala' },
-    { label: 'Veracruz', value: 'veracruz' },
-    { label: 'Yucatán', value: 'yucatan' },
-    { label: 'Zacatecas', value: 'zacatecas' },
-    { label: 'Otro...', value: 'otro' },
-];
+const Formulario = ({navigation, route}) => {
 
-
-const data_Abundancia = [
-    { label: 'Abundante', value: 'Abundante' },
-    { label: 'Regular', value: 'Regular' },
-    { label: 'Escasa', value: 'Escasa' },
-    { label: 'Otro...', value: 'otro' },
-];
-
-const data_FormaBio = [
-    { label: 'Hierba', value: 'Hierba' },
-    { label: 'Arbusto', value: 'Arbusto' },
-    { label: 'Árbol', value: 'Árbol' },
-    { label: 'Otro...', value: 'otro' },
-];
-
-const Formulario = ({ route }) => {
-
-
-    //funcion para agregar tomas 
-    const nombreCanal = route.params.nombreCanal;
-    //console.log(nombreCanal);
-
-    //const {agregar} = route.params;
-
+    //nombre del canal donde se agregara la nueva toma 
+    const nombreCanal = route.params.nombreGrupo;
+   
     const { control, handleSubmit, formState: { errors }, watch, setValue } = useForm({
         Nombre_cientifico: '',
         Familia: '',
@@ -85,9 +31,11 @@ const Formulario = ({ route }) => {
         Altitud: '',
         Grados_Latitud: '',
         Minutos_Latitud: '',
+        Segundos_Latitud: '', //Nueva variable
         Hemisferio_Latitud: '',
         Grados_Longitud: '',
         Minutos_Longitud: '',
+        Segundos_Longitud: '', //Nueva variable
         Hemisferio_Longitud: '',
         X: '',
         Y: '',
@@ -120,6 +68,14 @@ const Formulario = ({ route }) => {
         }
     };
 
+    const reglasNoColecta = {
+        required: 'Este campo es requerido.',
+        pattern: {
+            value: /^[0-9]+$/, // Permite solo números, punto decimal y signo negativo
+            message: 'Solo se permiten números.'
+        },
+    }
+
     //agrega la nueva toma a la lista de tomas 
     const onSubmit = (data) => {
 
@@ -136,9 +92,11 @@ const Formulario = ({ route }) => {
             altitud: data.Altitud,
             grados_Latitud: data.Grados_Latitud,
             minutos_Latitud: data.Minutos_Latitud,
+            segundos_Latitud: data.Segundos_Latitud, // Nueva Variable
             hemisferio_Latitud: data.Hemisferio_Latitud,
             grados_Longitud: data.Grados_Longitud,
             minutos_Longitud: data.Minutos_Longitud,
+            segundos_Longitud: data.Segundos_Longitud, // Nueva Variable
             hemisferio_Longitud: data.Hemisferio_Longitud,
             x: data.X,
             y: data.Y,
@@ -165,8 +123,9 @@ const Formulario = ({ route }) => {
                 tomaData.grupo = id; // Asignar el id del grupo a tomaData
                 return insertarTomas(tomaData);
             })
-            .then()
             .catch((error) => console.error("Error insertar toma: ", error));
+        
+        navigation.goBack();
     }
 
 
@@ -201,6 +160,7 @@ const Formulario = ({ route }) => {
                     label="Nombre Local:"
                     control={control}
                     name="Nombre_local"
+                    tooltip={"Escribelos si te acompañó un guia de la zona y te dijo como le llaman"}
                     errors={errors}
                 />
                 <CustomDropdown
@@ -212,7 +172,6 @@ const Formulario = ({ route }) => {
                     control={control}
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
                     placeholder={"Selecciona un Estado"}
                 />
                 <TextInputCustom
@@ -242,12 +201,14 @@ const Formulario = ({ route }) => {
                     errors={errors}
                     name1="Grados_Latitud"
                     name2="Minutos_Latitud"
-                    name3="Hemisferio_Latitud"
-                    name4="Grados_Longitud"
-                    name5="Minutos_Longitud"
-                    name6="Hemisferio_Longitud"
-                    name7="X"
-                    name8="Y"
+                    name3="Segundos_Latitud"
+                    name4="Hemisferio_Latitud"
+                    name5="Grados_Longitud"
+                    name6="Minutos_Longitud"
+                    name7="Segundos_Longitud"
+                    name8="Hemisferio_Longitud"
+                    name9="X"
+                    name10="Y"
                     setValue={setValue}
                     watch={watch}
                 />
@@ -256,7 +217,7 @@ const Formulario = ({ route }) => {
                     control={control}
                     name="Tipo_vegetacion"
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Menciona el ecosistema en el que estás colectando (p.e. selva, bosque, pastizal)"}
                 />
                 <TextInputCustom
                     label="Información Ambiental:"
@@ -264,7 +225,7 @@ const Formulario = ({ route }) => {
                     name="Informacion_ambiental"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Anota el estado del tiempo cuando colectaste la planta"}
                 />
                 <TextInputCustom
                     label="Suelo:"
@@ -272,7 +233,7 @@ const Formulario = ({ route }) => {
                     name="Suelo"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Anota el color, si está mojado o seco y sensación al tacto"}
                 />
                 <TextInputCustom
                     label="Asociada:"
@@ -280,7 +241,7 @@ const Formulario = ({ route }) => {
                     name="Asociada"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Anota el nombre de las plantas que conoces que están alrededor de la que colectaste"}
                 />
                 <CustomDropdown
                     label="Abundancia:"
@@ -291,7 +252,7 @@ const Formulario = ({ route }) => {
                     control={control}
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Selecciona la cantidad de plantas que observas"}
                     placeholder={"Selecciona un item"}
                 />
                 <CustomDropdown
@@ -303,7 +264,7 @@ const Formulario = ({ route }) => {
                     control={control}
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Elige o anota la forma de tu planta"}
                     placeholder={"Selecciona un item"}
                 />
                 <TextInputCustom
@@ -311,7 +272,7 @@ const Formulario = ({ route }) => {
                     control={control}
                     name="Tamano"
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Estima o mide el tamaño "}
                     keyboardType={'numeric'}
                 />
                 <TextInputCustom
@@ -319,22 +280,21 @@ const Formulario = ({ route }) => {
                     control={control}
                     name="Flor"
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Escribe el color o si conoces información detallada, ponla aquí"}
                 />
                 <TextInputCustom
                     label="Fruto:"
                     control={control}
                     name="Fruto"
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Escribe el color, tipo, si conoces información detallada, ponla aquí "}
                 />
                 <TextInputCustom
                     label="Usos:"
                     control={control}
                     name="Usos"
-                    rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Escribelos si te acompaño un guia de la zona y te dijo como se utiliza "}
                 />
                 <TextInputCustom
                     label="Colector(es):"
@@ -342,21 +302,23 @@ const Formulario = ({ route }) => {
                     name="Colector_es"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Escribe el nombre y apellido de el colector o los colectores"}
                 />
                 <TextInputCustom
                     label="No. de colecta:"
                     control={control}
                     name="No_colecta"
-                    rules={{ required: 'Este campo es requerido.' }}
+                    rules={reglasNoColecta}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Escribe el número de colecta del colector principal"}
+                    keyboardType={'numeric'}
                 />
                 <FechaComponente
                     control={control}
                     name="Fecha"
                     errors={errors}
                     rules={{ required: 'Este campo es requerido.' }}
+                    tooltip={"Selecciona la fecha del día de la colecta (comentario)"}
                 />
                 <TextInputCustom
                     label="Determino:"
@@ -364,7 +326,7 @@ const Formulario = ({ route }) => {
                     name="Determino"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Nombre y apellido de la persona que te ayudo con el nombre de la app"}
                 />
                 <TextInputCustom
                     label="Otros Datos:"
@@ -373,7 +335,7 @@ const Formulario = ({ route }) => {
                     errors={errors}
                     multiline={true} // Pernmite multilinea en el textinput
                     maxLines={20} // Indica el numero de lineas maximo en el textinput (Solo si multiline = true)
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Anota información que consideres importante sobre la planta (aroma, liquidos, sensación al tacto, etc. )"}
                 />
                 <TouchableOpacity
                     style={[styles.bGuardar, styles.fondoP]}

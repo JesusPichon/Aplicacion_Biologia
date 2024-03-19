@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import styles from "../../styles/style-app";
 import { cuarto, principal, secundario, tercero } from '../../styles/style-colors';
-import imprimir from '../../components/imprimir/imprimirUno';
 import animaciones from '../../components/animaciones/animaciones';
 import { Button} from '@rneui/themed';
 import { value, Switch } from "@rneui/base";
-// notas para la reunion
-// * ¿donde salio "option"?
-// * ¿se modifico el formulario?
-//      agregar tipo de vegetacion
-// * que chinge a su ------- madre el de web semantica
+import {imprimirTomas} from "../../components/imprimir/imprimirSeleccionando"
 
 import {
     Text,
@@ -24,6 +19,18 @@ import {
 
 
 const InfColecta = ({ navigation, route }) => {
+    const [listPrint, setListPrint] = useState([]);
+
+    const imprimir = async () => {
+        setListPrint([getFilteredData()]);
+    };
+    
+    useEffect(() => {
+        if (listPrint.length > 0) {
+            imprimirTomas(listPrint);
+        }
+    }, [listPrint]);
+
     function tipoDeCoordenadas(coordenadas) {
         if (coordenadas !== null && coordenadas !== '') {
             return 'metric'
@@ -31,6 +38,7 @@ const InfColecta = ({ navigation, route }) => {
             return 'geographic'
         }
     }
+
     data={
         Nombre_cientifico: route.params.data.nombre_cientifico,
         Familia: route.params.data.familia,
@@ -41,9 +49,11 @@ const InfColecta = ({ navigation, route }) => {
         Altitud: route.params.data.altitud,
         Grados_Latitud: route.params.data.grados_Latitud,
         Minutos_Latitud: route.params.data.minutos_Latitud,
+        Segundos_Latitud: route.params.data.segundos_Latitud,
         Hemisferio_Latitud: route.params.data.hemisferio_Latitud,
         Grados_Longitud: route.params.data.grados_Longitud,
         Minutos_Longitud: route.params.data.minutos_Longitud,
+        Segundos_Longitud: route.params.data.segundos_Longitud,
         Hemisferio_Longitud: route.params.data.hemisferio_Longitud,
         X: route.params.data.x,
         Y: route.params.data.y,
@@ -63,18 +73,11 @@ const InfColecta = ({ navigation, route }) => {
         Otros_datos: route.params.data.otros_datos,
         Tipo_vegetacion: route.params.data.tipo_vegetacion,
         option: tipoDeCoordenadas(route.params.data.x),
+        id: route.params.data.id,
     }
 
     const [switchStates, setSwitchStates] = useState({}); // Estado para los interruptores
 
-    // Inicializar el estado de los interruptores con valores predeterminados
-    useEffect(() => {
-        const initialSwitchStates = {};
-        Object.keys(route.params.data).forEach(key => {
-            initialSwitchStates[key] = false;
-        });
-        setSwitchStates(initialSwitchStates);
-    }, [route.params.data]);
 
     // Manejar el cambio de estado de un interruptor específico
     const handleSwitchChange = (field) => {
@@ -87,17 +90,21 @@ const InfColecta = ({ navigation, route }) => {
     // Obtener los datos con solo los campos que tienen interruptores activados
     const getFilteredData = () => {
         const filteredData = {};
-        Object.keys(route.params.data).forEach(key => {
-            if (key !== 'x' && key !== 'y' && key !== 'grados_Latitud' && key !== 'minutos_Latitud' && key !== 'hemisferio_Latitud' && key !== 'grados_Longitud' && key !== 'minutos_Longitud' && key !== 'hemisferio_Longitud') {
+        //console.log.log('data')
+        //console.log.log(data)
+        //console.log.log('switch')
+        //console.log.log(switchStates)
+        Object.keys(data).forEach(key => {
+            if (key !== 'x' && key !== 'y' && key !== 'grados_Latitud' && key !== 'minutos_Latitud' && key !== 'segundos_Latitud' && key !== 'hemisferio_Latitud' && key !== 'grados_Longitud' && key !== 'minutos_Longitud' && key !== 'segundos_Longitud' && key !== 'hemisferio_Longitud') {
                 if (switchStates[key]) {
                     // Mantener otros datos que no sean fechas o que estén seleccionados por los interruptores
-                    filteredData[key] = route.params.data[key];
+                    filteredData[key] = data[key];
                 }
             } 
             if (data.option === 'metric' && switchStates['Coordenadas']) {
                 filteredData['Coordenadas'] = 'x:' + route.params.data.x + '  y:' +route.params.data.y;
-            }else{
-                filteredData['Coordenadas'] = 'Latitud:' + route.params.data.grados_Latitud + '° ' + route.params.data.minutos_Latitud + "' " + route.params.data.hemisferio_Latitud + ' Longitud:' + route.params.data.grados_Longitud + '° ' + route.params.data.minutos_Longitud +  "' " + route.params.data.hemisferio_Longitud
+            } if (data.option === 'geographic' && switchStates['Coordenadas']) {
+                filteredData['Coordenadas'] = 'Latitud:' + route.params.data.grados_Latitud + '° ' + route.params.data.minutos_Latitud + "' " + route.params.data.segundos_Latitud + "'' " + route.params.data.hemisferio_Latitud + ' Longitud:' + route.params.data.grados_Longitud + '° ' + route.params.data.minutos_Longitud +  "' " + route.params.data.segundos_Longitud + "'' " + route.params.data.hemisferio_Longitud;
             }
         });
         return filteredData;
@@ -153,7 +160,7 @@ const InfColecta = ({ navigation, route }) => {
                                 radius={"md"} 
                                 type="solid"
                                 //onPress={() => console.log(getFilteredData())}
-                                onPress={() => imprimir(getFilteredData())}
+                                onPress={() => imprimir()}
                                 title="  Imprimir" 
                                 buttonStyle={{ backgroundColor: tercero}}
                                 icon={{name: 'print', color: principal}}
@@ -167,11 +174,10 @@ const InfColecta = ({ navigation, route }) => {
 
             <Animated.View style={{ flex: 8, overflow: 'visible', flexDirection:"row", zIndex: 1, transform: [{ translateY: translateAnimUP }] }}>
                 <SafeAreaView style={[styles.fondoT, { flex: 18}]}>
-                    <View style={{ height: 10, width:'120%', backgroundColor: secundario, transform: [{ rotate: '-1deg' }, {translateY: -5}, {translateX: -10}] }}></View>
                     <Animated.ScrollView style={{ opacity: unoAnim, marginTop:10}}>
                         <View style={{ rowGap: 25, columnGap: 5, flexDirection: 'column', marginBottom: 30,marginLeft: 10 }}>
                             {Object.entries(data).map(([campo, contenido], index) => {
-                                if (contenido !== null && contenido !== "" && campo !==  'X' && campo !==  'Y' && campo !== 'Grados_Latitud' && campo !== 'Minutos_Latitud' && campo !== 'Hemisferio_Latitud' && campo !== 'Grados_Longitud' && campo !== 'Minutos_Longitud' && campo !== 'Hemisferio_Longitud' && campo !== 'option') {
+                                if (contenido !== null && contenido !== "" && campo !==  'X' && campo !==  'Y' && campo !== 'Grados_Latitud' && campo !== 'Minutos_Latitud' && campo !== 'Segundos_Latitud' && campo !== 'Hemisferio_Latitud' && campo !== 'Grados_Longitud' && campo !== 'Minutos_Longitud' && campo !== 'Segundos_Longitud' && campo !== 'Hemisferio_Longitud' && campo !== 'option' && campo !== 'id') {
                                     var nombreCampo;
                                     if (campo === 'Tamano') {
                                         nombreCampo = 'Tamaño';
@@ -213,7 +219,7 @@ const InfColecta = ({ navigation, route }) => {
                                                     </Text>
                                                 ) : (
                                                     <Text style={[styles.textP, { fontSize: 18, fontWeight: 'normal', width:'55%', borderWidth: 1, borderColor: cuarto, padding: 1  }]}>
-                                                        {'Latitud:' + route.params.data.grados_Latitud + '° ' + route.params.data.minutos_Latitud + "' " + route.params.data.hemisferio_Latitud + ' Longitud:' + route.params.data.grados_Longitud + '° ' + route.params.data.minutos_Longitud +  "' " + route.params.data.hemisferio_Longitud}
+                                                        {'Latitud:' + route.params.data.grados_Latitud + '° ' + route.params.data.minutos_Latitud + "' " + route.params.data.segundos_Latitud + "'' " + route.params.data.hemisferio_Latitud + ' Longitud:' + route.params.data.grados_Longitud + '° ' + route.params.data.minutos_Longitud +  "' " + route.params.data.segundos_Longitud + "'' " + route.params.data.hemisferio_Longitud}
                                                     </Text>
                                                 )}
                                                 <Switch

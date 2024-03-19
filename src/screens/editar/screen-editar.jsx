@@ -7,6 +7,8 @@ import { Button} from '@rneui/themed';
 import InputCoordenadas from "../../components/coordenadas-select/coordenadasComponent";
 import FechaComponente from "../../components/fecha-select/FechaComponente";
 import  CustomDropdown  from "../../components/listaComponente/ListaComponente";
+import { editarToma } from "../../services/database/SQLite";
+import { data_Estados, data_Abundancia, data_FormaBio } from "../formulario/dataDropdowns";
 
 import {
     ScrollView,
@@ -16,73 +18,40 @@ import {
     KeyboardAvoidingView
 } from "react-native";
 
-const data_Estados = [
-    { label: 'Aguascalientes', value: 'aguascalientes' },
-    { label: 'Baja California', value: 'baja_california' },
-    { label: 'Baja California Sur', value: 'baja_california_sur' },
-    { label: 'Campeche', value: 'campeche' },
-    { label: 'Chiapas', value: 'chiapas' },
-    { label: 'Chihuahua', value: 'chihuahua' },
-    { label: 'Ciudad de México', value: 'ciudad_de_mexico' },
-    { label: 'Coahuila', value: 'coahuila' },
-    { label: 'Colima', value: 'colima' },
-    { label: 'Durango', value: 'durango' },
-    { label: 'Estado de México', value: 'estado_de_mexico' },
-    { label: 'Guanajuato', value: 'guanajuato' },
-    { label: 'Guerrero', value: 'guerrero' },
-    { label: 'Hidalgo', value: 'hidalgo' },
-    { label: 'Jalisco', value: 'jalisco' },
-    { label: 'Michoacán', value: 'michoacan' },
-    { label: 'Morelos', value: 'morelos' },
-    { label: 'Nayarit', value: 'nayarit' },
-    { label: 'Nuevo León', value: 'nuevo_leon' },
-    { label: 'Oaxaca', value: 'oaxaca' },
-    { label: 'Puebla', value: 'puebla' },
-    { label: 'Querétaro', value: 'queretaro' },
-    { label: 'Quintana Roo', value: 'quintana_roo' },
-    { label: 'San Luis Potosí', value: 'san_luis_potosi' },
-    { label: 'Sinaloa', value: 'sinaloa' },
-    { label: 'Sonora', value: 'sonora' },
-    { label: 'Tabasco', value: 'tabasco' },
-    { label: 'Tamaulipas', value: 'tamaulipas' },
-    { label: 'Tlaxcala', value: 'tlaxcala' },
-    { label: 'Veracruz', value: 'veracruz' },
-    { label: 'Yucatán', value: 'yucatan' },
-    { label: 'Zacatecas', value: 'zacatecas' },
-    { label: 'Otro...', value: 'otro' },
-];
-  
-
-const data_Abundancia = [
-    { label: 'Abundante', value: 'Abundante' },
-    { label: 'Regular', value: 'Regular' },
-    { label: 'Escasa', value: 'Escasa' },
-    { label: 'Otro...', value: 'otro' },
-];
-
-const data_FormaBio = [
-    { label: 'Hierba', value: 'Hierba' },
-    { label: 'Arbusto', value: 'Arbusto' },
-    { label: 'Árbol', value: 'Árbol' },
-    { label: 'Otro...', value: 'otro' },
-];
-
-const FormularioEdit = ({ route }) => {
+const FormularioEdit = ({ navigation, route }) => {
     const { control, handleSubmit, formState: { errors }, watch, setValue } = useForm();
     const [datosEditados, setDatosEditados] = useState({});
+
     useEffect(() => {
-        // Valores de ejemplo, puedes cambiarlos por los valores reales
         const datosIniciales = route.params.data;
+        //console.log(datosIniciales)
 
         // Establecer los valores iniciales en el estado del formulario
         Object.keys(datosIniciales).forEach(key => {
             if (key === 'Fecha') {
+                //console.log(datosIniciales[key])
                 // Separar la fecha en partes
                 const partesFecha = datosIniciales[key].split('/');
                 // Crear un objeto Date con el formato MM/DD/AA
-                const fechaAcomodada = new Date(partesFecha[2], partesFecha[0] - 1, partesFecha[1]);
+                const fechaAcomodada = new Date(partesFecha[2], partesFecha[1] - 1, partesFecha[0]);
+
                 setValue(key, fechaAcomodada);
-            }else{
+                //setValue(key, datosIniciales[key]);
+
+            }else if (key === 'Grados_Latitud' || key === 'Minutos_Latitud' || key === 'Segundos_Latitud' || key === 'Grados_Longitud' || key === 'Minutos_Longitud' || key === 'Segundos_Longitud' || key === 'X' || key === 'Y' || key === 'Altitud' || key === 'Tamano') {
+                let contenido = '';
+                
+                // Separar la fecha en partes
+                if (datosIniciales[key] === '' || datosIniciales[key] === null){
+                    contenido = '';
+                }else{
+                    contenido = datosIniciales[key].toString();
+                }
+
+                setValue(key, contenido);
+                //setValue(key, datosIniciales[key]);
+
+            }else {
                 setValue(key, datosIniciales[key]);
             }
         });
@@ -103,14 +72,96 @@ const FormularioEdit = ({ route }) => {
     };
       
     const onSubmit = (data) => {
-        console.log(data);
+        //console.log(data);
     };
 
     const handleEditar = () => {
         const datosEditados = watch(); // Obtener los datos editados del formulario
         setDatosEditados(datosEditados); // Actualizar el estado con los datos editados
-        console.log("Datos editados:", datosEditados); // Mostrar los datos editados por consola
+        editar(datosEditados);
     };
+
+    function editar(datosEditar) {
+        tomasData = {
+            nombre_cientifico: datosEditar.Nombre_cientifico,
+            familia: datosEditar.Familia,
+            nombre_local: datosEditar.Nombre_local,
+            estado: datosEditar.Estado,
+            municipio: datosEditar.Municipio,
+            localidad: datosEditar.Localidad,
+            altitud: datosEditar.Altitud,
+            grados_Latitud: datosEditar.Grados_Latitud,
+            minutos_Latitud: datosEditar.Minutos_Latitud,
+            segundos_Latitud: datosEditar.Segundos_Latitud,
+            hemisferio_Latitud: datosEditar.Hemisferio_Latitud,
+            grados_Longitud: datosEditar.Grados_Longitud,
+            minutos_Longitud: datosEditar.Minutos_Longitud,
+            segundos_Longitud: datosEditar.Segundos_Longitud,
+            hemisferio_Longitud: datosEditar.Hemisferio_Longitud,
+            x: datosEditar.X,
+            y: datosEditar.Y,
+            tipo_vegetacion: datosEditar.Tipo_vegetacion,
+            informacion_ambiental: datosEditar.Informacion_ambiental,
+            suelo: datosEditar.Suelo,
+            asociada: datosEditar.Asociada,
+            abundancia: datosEditar.Abundancia,
+            forma_biologica: datosEditar.Forma_biologica,
+            tamano: datosEditar.Tamano,
+            flor: datosEditar.Flor,
+            fruto: datosEditar.Fruto,
+            usos: datosEditar.Usos,
+            colector_es: datosEditar.Colector_es,
+            no_colecta: datosEditar.No_colecta,
+            fecha: datosEditar.Fecha.toLocaleDateString("gregory"),
+            determino: datosEditar.Determino,
+            otros_datos: datosEditar.Otros_datos,
+        };
+
+        data = {
+            nombre_cientifico: datosEditar.Nombre_cientifico,
+            familia: datosEditar.Familia,
+            nombre_local: datosEditar.Nombre_local,
+            estado: datosEditar.Estado,
+            municipio: datosEditar.Municipio,
+            localidad: datosEditar.Localidad,
+            altitud: datosEditar.Altitud,
+            grados_Latitud: datosEditar.Grados_Latitud,
+            minutos_Latitud: datosEditar.Minutos_Latitud,
+            segundos_Latitud: datosEditar.Segundos_Latitud,
+            hemisferio_Latitud: datosEditar.Hemisferio_Latitud,
+            grados_Longitud: datosEditar.Grados_Longitud,
+            minutos_Longitud: datosEditar.Minutos_Longitud,
+            segundos_Longitud: datosEditar.Segundos_Longitud,
+            hemisferio_Longitud: datosEditar.Hemisferio_Longitud,
+            x: datosEditar.X,
+            y: datosEditar.Y,
+            tipo_vegetacion: datosEditar.Tipo_vegetacion,
+            informacion_ambiental: datosEditar.Informacion_ambiental,
+            suelo: datosEditar.Suelo,
+            asociada: datosEditar.Asociada,
+            abundancia: datosEditar.Abundancia,
+            forma_biologica: datosEditar.Forma_biologica,
+            tamano: datosEditar.Tamano,
+            flor: datosEditar.Flor,
+            fruto: datosEditar.Fruto,
+            usos: datosEditar.Usos,
+            colector_es: datosEditar.Colector_es,
+            no_colecta: datosEditar.No_colecta,
+            fecha: datosEditar.Fecha.toLocaleDateString("gregory"),
+            determino: datosEditar.Determino,
+            otros_datos: datosEditar.Otros_datos,
+            id: datosEditar.id,
+        };
+    
+        // Llamar a la función editarToma con los datos editados y el id correspondiente
+     //   console.log("enviando: ")
+      //  console.log(data);
+        editarToma(tomasData, datosEditar.id);
+        navigation.navigate('InformacionToma', {data});
+        //console.log("Datos editados:", datos); // Mostrar los datos editados por consola
+    }
+    
+    
 
     return (
         <View style={{
@@ -142,15 +193,9 @@ const FormularioEdit = ({ route }) => {
                     label="Nombre Local:"
                     control={control}
                     name="Nombre_local"
+                    tooltip={"Escribelos si te acompañó un guia de la zona y te dijo como le llaman"}
                     errors={errors}
                 />
-                {/* <TextInputCustom
-                    label="Estado:"
-                    control={control}
-                    name="Estado"
-                    rules={{ required: 'Este campo es requerido.' }}
-                    errors={errors}
-                /> */}
                 <CustomDropdown
                     label="Estado:"
                     data={data_Estados}
@@ -160,7 +205,6 @@ const FormularioEdit = ({ route }) => {
                     control={control}
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
                     placeholder={"Selecciona un Estado"}
                 />
                 <TextInputCustom
@@ -178,24 +222,26 @@ const FormularioEdit = ({ route }) => {
                     errors={errors}
                 />
                 <TextInputCustom
-                    label="Altitud:"
+                    label="Altitud (m.s.n.m):"
                     control={control}
                     name="Altitud"
                     errors={errors}
+                    keyboardType={'numeric'}
                 />
-                <Text style={styles.textP}>Coordenadas:</Text>
-                <InputCoordenadas 
+                <InputCoordenadas
                     control={control}
                     rules={reglasCoordenadas}
                     errors={errors}
-                    name1="Grados_Latitud" 
+                    name1="Grados_Latitud"
                     name2="Minutos_Latitud"
-                    name3="Hemisferio_Latitud"
-                    name4="Grados_Longitud"
-                    name5="Minutos_Longitud"
-                    name6="Hemisferio_Longitud"
-                    name7="X"
-                    name8="Y"
+                    name3="Segundos_Latitud"
+                    name4="Hemisferio_Latitud"
+                    name5="Grados_Longitud"
+                    name6="Minutos_Longitud"
+                    name7="Segundos_Longitud"
+                    name8="Hemisferio_Longitud"
+                    name9="X"
+                    name10="Y"
                     setValue={setValue}
                     watch={watch}
                 />
@@ -204,7 +250,7 @@ const FormularioEdit = ({ route }) => {
                     control={control}
                     name="Tipo_vegetacion"
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Menciona el ecosistema en el que estás colectando (p.e. selva, bosque, pastizal)"}
                 />
                 <TextInputCustom
                     label="Información Ambiental:"
@@ -212,7 +258,7 @@ const FormularioEdit = ({ route }) => {
                     name="Informacion_ambiental"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Anota el estado del tiempo cuando colectaste la planta"}
                 />
                 <TextInputCustom
                     label="Suelo:"
@@ -220,7 +266,7 @@ const FormularioEdit = ({ route }) => {
                     name="Suelo"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Anota el color, si está mojado o seco y sensación al tacto"}
                 />
                 <TextInputCustom
                     label="Asociada:"
@@ -228,7 +274,7 @@ const FormularioEdit = ({ route }) => {
                     name="Asociada"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Anota el nombre de las plantas que conoces que están alrededor de la que colectaste"}
                 />
                 <CustomDropdown
                     label="Abundancia:"
@@ -239,7 +285,7 @@ const FormularioEdit = ({ route }) => {
                     control={control}
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Selecciona la cantidad de plantas que observas"}
                     placeholder={"Selecciona un item"}
                 />
                 <CustomDropdown
@@ -251,37 +297,37 @@ const FormularioEdit = ({ route }) => {
                     control={control}
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Elige o anota la forma de tu planta"}
                     placeholder={"Selecciona un item"}
                 />
                 <TextInputCustom
-                    label="Tamaño:"
+                    label="Tamaño (m):"
                     control={control}
                     name="Tamano"
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Estima o mide el tamaño "}
+                    keyboardType={'numeric'}
                 />
                 <TextInputCustom
                     label="Flor:"
                     control={control}
                     name="Flor"
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Escribe el color o si conoces información detallada, ponla aquí"}
                 />
                 <TextInputCustom
                     label="Fruto:"
                     control={control}
                     name="Fruto"
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Escribe el color, tipo, si conoces información detallada, ponla aquí "}
                 />
                 <TextInputCustom
                     label="Usos:"
                     control={control}
                     name="Usos"
-                    rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Escribelos si te acompaño un guia de la zona y te dijo como se utiliza "}
                 />
                 <TextInputCustom
                     label="Colector(es):"
@@ -289,7 +335,7 @@ const FormularioEdit = ({ route }) => {
                     name="Colector_es"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Escribe el nombre y apellido de el colector o los colectores"}
                 />
                 <TextInputCustom
                     label="No. de colecta:"
@@ -297,13 +343,15 @@ const FormularioEdit = ({ route }) => {
                     name="No_colecta"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Escribe el número de colecta del colector principal"}
+                    keyboardType={'numeric'}
                 />
                 <FechaComponente
                     control={control}
                     name="Fecha"
                     errors={errors}
                     rules={{ required: 'Este campo es requerido.' }}
+                    tooltip={"Selecciona la fecha del día de la colecta (comentario)"}
                 />
                 <TextInputCustom
                     label="Determino:"
@@ -311,7 +359,7 @@ const FormularioEdit = ({ route }) => {
                     name="Determino"
                     rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Nombre y apellido de la persona que te ayudo con el nombre de la app"}
                 />
                 <TextInputCustom
                     label="Otros Datos:"
@@ -320,11 +368,11 @@ const FormularioEdit = ({ route }) => {
                     errors={errors}
                     multiline={true} // Pernmite multilinea en el textinput
                     maxLines={20} // Indica el numero de lineas maximo en el textinput (Solo si multiline = true)
-                    tooltip={"Aqui va un mensaje de ayuda"}
+                    tooltip={"Anota información que consideres importante sobre la planta (aroma, liquidos, sensación al tacto, etc. )"}
                 />
                 <Button 
                     type="solid"
-                    onPress={handleEditar}
+                    onPress={handleSubmit(handleEditar)}
                     title="  Editar" 
                     buttonStyle={{ backgroundColor: principal}}
                     icon={{name: 'edit', color: tercero}}

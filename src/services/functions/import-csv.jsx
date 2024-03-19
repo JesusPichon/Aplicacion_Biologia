@@ -5,38 +5,35 @@ import RNFS from 'react-native-fs';
 import { readString, jsonToCSV } from 'react-native-csv';
 
 export const selectCsv = async () => {   
-    try {
-        const results = await DocumentPicker.pick({
-        type: [DocumentPicker.types.allFiles],
-        allowMultiSelection: true
-        });
+    return new Promise(async (resolve, reject) => {
+        try {
+            const result = await DocumentPicker.pickSingle({
+            type: [DocumentPicker.types.allFiles],
+            });
 
-        for (let res of results) {
-        if (res.type && !res.type.endsWith('text/comma-separated-values')) {
-            Alert.alert('Por favor, selecciona solo archivos .csv');
-            return;
-        }
+            if (result.type && !result.type.endsWith('text/comma-separated-values')) {
+                Alert.alert('Por favor, selecciona solo archivos .csv');
+                reject('Tipo de archivo no válido');
+                return;
+            }
 
-        // Leer el contenido del archivo
-        const fileContent = await RNFS.readFile(res.uri);
-        console.log(fileContent);
+            // Leer el contenido del archivo
+            const fileContent = await RNFS.readFile(result.uri);
 
-        // Procesar el contenido del archivo CSV
-        const data = readString(fileContent, { delimiter: ',', header: false });
-        console.log(data);
+            // Procesar el contenido del archivo CSV
+            const data = readString(fileContent, { delimiter: ',', header: true, newline: ''});
+            //console.log(data);
 
-        // const csv = jsonToCSV(data.data);
+            // Resuelve la promesa con los datos leídos
+            resolve(data.data);
 
-        // console.log(csv);
-
-        //console.log(data.data[0]);
-        }
-
-    } catch (err) {
-        if (DocumentPicker.isCancel(err)) {
-        console.log('Operación cancelada');
-        } else {
-        throw err;
-        }
-    }    
+        } catch (err) {
+            if (DocumentPicker.isCancel(err)) {
+                //console.log('Operación cancelada');
+                reject('Importar CSV cancelado');
+            } else {
+                reject(err);
+            }
+        }    
+    });
 }
