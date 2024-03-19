@@ -2,7 +2,7 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 
 # Getting app
 
-![Uploading frame (1).png…]()
+link => https://drive.google.com/drive/folders/1KLzOWDxnv1MkAu5TmuwjoV5SCoWBfS9h?usp=drive_link
 
 # Getting Started
 
