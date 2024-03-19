@@ -17,6 +17,7 @@ function VentanaFlotante({openModal, handleCloseModal, handleTextChange, saveGro
                         <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
                             <TextInput
                                 placeholder="Ingrese el nombre del grupo"
+                                placeholderTextColor="gray" // Cambia el color aquí
                                 style={{ borderWidth: 1, borderColor: 'gray', padding: 10, marginBottom: 10, borderRadius: 5, color: 'black' }}
                                 onChangeText={handleTextChange}
                             />
