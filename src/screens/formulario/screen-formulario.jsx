@@ -324,7 +324,6 @@ const Formulario = ({navigation, route}) => {
                     label="Determino:"
                     control={control}
                     name="Determino"
-                    rules={{ required: 'Este campo es requerido.' }}
                     errors={errors}
                     tooltip={"Nombre y apellido de la persona que te ayudo con el nombre de la app"}
                 />
