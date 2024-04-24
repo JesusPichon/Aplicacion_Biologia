@@ -91,6 +91,7 @@ export const crearTablas = () => {
             determino TEXT,
             otros_datos TEXT,
             grupo INTEGER NOT NULL,
+            imagen TEXT,
             FOREIGN KEY("grupo") REFERENCES GRUPOS("id"))`;
       default:
         throw new Error(`Nombre de tabla proporcionado no valido: ${tableName}`);
@@ -625,5 +626,41 @@ export const consultarNombreGrupo = (nombreGrupo) => {
               }
           );
       });
+  });
+};
+
+export const actualizarTabla = (tabla, nuevoCampo, tipoCampo) => {
+  db.transaction((tx) => {
+    tx.executeSql(
+      `PRAGMA table_info(${tabla});`,
+      [],
+      (tx, result) => {
+        let columnExists = false;
+        for (let i = 0; i < result.rows.length; i++) {
+          if (result.rows.item(i).name === nuevoCampo) {
+            columnExists = true;
+            break;
+          }
+        }
+
+        if (!columnExists) {
+          tx.executeSql(
+            `ALTER TABLE ${tabla} ADD COLUMN ${nuevoCampo} ${tipoCampo};`,
+            [],
+            (tx, result) => {
+              console.log(`Campo ${nuevoCampo} agregado con éxito`);
+            },
+            (error) => {
+              console.error(`Error al agregar el campo ${nuevoCampo}: `, error);
+            }
+          );
+        } else {
+          console.log(`El campo ${nuevoCampo} ya existe en la tabla`);
+        }
+      },
+      (error) => {
+        console.error(`Error al verificar la existencia del campo ${nuevoCampo}: `, error);
+      }
+    );
   });
 };
