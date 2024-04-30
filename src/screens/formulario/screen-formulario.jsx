@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./style-formulario";
 import TextInputCustom from "../../components/textInputCustome";
 import { secundario, tercero } from "../../styles/style-colors";
@@ -15,6 +15,7 @@ import {
     TouchableOpacity,
     KeyboardAvoidingView
 } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Formulario = ({navigation, route}) => {
 
@@ -128,7 +129,65 @@ const Formulario = ({navigation, route}) => {
         navigation.goBack();
     }
 
+    const getData = async () => {
+        try {
+          const jsonValue = await AsyncStorage.getItem('@form_default')
+          return jsonValue != null ? JSON.parse(jsonValue) : null;
+        } catch(e) {
+          // error reading value
+        }
+      }
 
+      useEffect(() => {
+        // Llamar a getData para obtener los datos
+        getData().then(default_data => {
+            console.log(default_data); // {campo1: 'valor predeterminado 1', campo2: 'valor predeterminado 2'}
+            if (default_data !== null) {
+                Object.keys(default_data).forEach(key => {
+                    if (key === 'Fecha') {
+                      //console.log(datosIniciales[key])
+                      // Separar la fecha en partes
+                      const partesFecha = default_data[key].split('/');
+                      // Crear un objeto Date con el formato MM/DD/AA
+                      const fechaAcomodada = new Date(
+                        partesFecha[2],
+                        partesFecha[1] - 1,
+                        partesFecha[0],
+                      );
+          
+                      setValue(key, fechaAcomodada);
+                      //setValue(key, datosIniciales[key]);
+                    } else if (
+                      key === 'Grados_Latitud' ||
+                      key === 'Minutos_Latitud' ||
+                      key === 'Segundos_Latitud' ||
+                      key === 'Grados_Longitud' ||
+                      key === 'Minutos_Longitud' ||
+                      key === 'Segundos_Longitud' ||
+                      key === 'X' ||
+                      key === 'Y' ||
+                      key === 'Altitud' ||
+                      key === 'Tamano'
+                    ) {
+                      let contenido = '';
+          
+                      // Separar la fecha en partes
+                      if (default_data[key] === '' || default_data[key] === null) {
+                        contenido = '';
+                      } else {
+                        contenido = default_data[key].toString();
+                      }
+          
+                      setValue(key, contenido);
+                      //setValue(key, datosIniciales[key]);
+                    } else {
+                      setValue(key, default_data[key]);
+                    }
+                  });
+              }
+        });
+    }, []);
+    
 
     return (
         <View style={{
