@@ -6,6 +6,7 @@ import Grupos from "./screens/grupos";
 import Tomas from "./screens/tomas";
 import Editar from "./screens/editar";
 import FAQ from "./screens/FAQ/screen-FAQ";
+import CamposPred from "./screens/campos-predeterminados/screen-camposPred";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -23,6 +24,7 @@ const App = () => {
         <Stack.Screen name="Grupos" component={Grupos} />
         <Stack.Screen name="Editar" component={Editar} />
         <Stack.Screen name="FAQ" component={FAQ} />
+        <Stack.Screen name="CamposPred" component={CamposPred}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
