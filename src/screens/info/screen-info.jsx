@@ -5,6 +5,7 @@ import animaciones from '../../components/animaciones/animaciones';
 import { Button} from '@rneui/themed';
 import { value, Switch } from "@rneui/base";
 import {imprimirTomas} from "../../components/imprimir/imprimirSeleccionando"
+import {selectImg} from "../../components/imprimir/seleccionarImagen"
 
 import {
     Text,
@@ -23,6 +24,16 @@ const InfColecta = ({ navigation, route }) => {
 
     const imprimir = async () => {
         setListPrint([getFilteredData()]);
+    };
+
+    const cambiarImagen = async () => {
+        try {
+            const imagenUri = await selectImg(); // Llama a la función selectImg y espera su resultado
+            console.log('URI de la imagen seleccionada:', imagenUri);
+            // Aquí puedes realizar las operaciones necesarias con la URI de la imagen seleccionada
+        } catch (error) {
+            console.error('Error al seleccionar la imagen:', error);
+        }
     };
     
     useEffect(() => {
@@ -164,6 +175,19 @@ const InfColecta = ({ navigation, route }) => {
                                 title="  Imprimir" 
                                 buttonStyle={{ backgroundColor: tercero}}
                                 icon={{name: 'print', color: principal}}
+                                titleStyle={{ color: principal }}
+                            />
+                        </View>
+                        <View style={{ flex: 1, marginLeft: 5 }}>
+                            <Button 
+                                radius={"md"} 
+                                type="solid"
+                                //onPress={() => console.log(getFilteredData())}
+                                //boton para cambiar la imagen
+                                onPress={cambiarImagen}
+                                title="Cambiar Imagen" 
+                                buttonStyle={{ backgroundColor: tercero}}
+                                icon={{name: 'edit', color: principal}}
                                 titleStyle={{ color: principal }}
                             />
                         </View>

@@ -15,9 +15,18 @@ import {
     TouchableOpacity,
     KeyboardAvoidingView
 } from "react-native";
+import {selectImg} from "../../components/imprimir/seleccionarImagen"
 
 const Formulario = ({navigation, route}) => {
-
+    const AgregarImagen = async () => {
+        try {
+            const imagenUri = await selectImg(); // Llama a la función selectImg y espera su resultado
+            console.log('URI de la imagen seleccionada:', imagenUri);
+            // Aquí puedes realizar las operaciones necesarias con la URI de la imagen seleccionada
+        } catch (error) {
+            console.error('Error al seleccionar la imagen:', error);
+        }
+    };
     //nombre del canal donde se agregara la nueva toma 
     const nombreCanal = route.params.nombreGrupo;
    
@@ -336,6 +345,12 @@ const Formulario = ({navigation, route}) => {
                     maxLines={20} // Indica el numero de lineas maximo en el textinput (Solo si multiline = true)
                     tooltip={"Anota información que consideres importante sobre la planta (aroma, liquidos, sensación al tacto, etc. )"}
                 />
+                <TouchableOpacity
+                    style={[styles.bGuardar, styles.fondoP]}
+                    onPress={AgregarImagen}
+                >
+                    <Text style={styles.textT}>Agregar Imagen</Text>
+                </TouchableOpacity>
                 <TouchableOpacity
                     style={[styles.bGuardar, styles.fondoP]}
                     onPress={handleSubmit(onSubmit)}
