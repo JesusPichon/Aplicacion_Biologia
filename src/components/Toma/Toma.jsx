@@ -42,7 +42,8 @@ const Toma = ({ navigation, data, seleccionarImprimir, deseleccionarImprimir, se
         <View style={{ flex: 1 }}>
 
           <Image
-            source={require('../../assets/images/nature.jpg')}
+            //Asigna la imagen por default en caso de que el usuario no haya seleccionado una imagen
+            source={data.imagen !== null ? { uri: data.imagen } : require('../../assets/images/nature.jpg')}
             style={{
               width: 150,
               height: showCheckBox ? 180 : 160, //hacer mas grande la imagen si se muestra el checkbox 

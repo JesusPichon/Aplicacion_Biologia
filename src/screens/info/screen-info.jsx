@@ -6,7 +6,7 @@ import { Button} from '@rneui/themed';
 import { value, Switch } from "@rneui/base";
 import {imprimirTomas} from "../../components/imprimir/imprimirSeleccionando"
 import {selectImg} from "../../components/imprimir/seleccionarImagen"
-
+import { actualizarIMG} from "../../services/database/SQLite";
 import {
     Text,
     View,
@@ -31,6 +31,7 @@ const InfColecta = ({ navigation, route }) => {
             const imagenUri = await selectImg(); // Llama a la función selectImg y espera su resultado
             console.log('URI de la imagen seleccionada:', imagenUri);
             // Aquí puedes realizar las operaciones necesarias con la URI de la imagen seleccionada
+            actualizarIMG(route.params.data.id, imagenUri);
         } catch (error) {
             console.error('Error al seleccionar la imagen:', error);
         }

@@ -205,8 +205,9 @@ export const insertarTomas = (tomasData) => {
         fecha,
         determino,
         otros_datos,
-        grupo)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        grupo,
+        imagen)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [...Object.values(tomasData)], // Convierte el objeto en un array de valores
       (_, results) => {
         if (results.rowsAffected > 0) {
@@ -660,6 +661,23 @@ export const actualizarTabla = (tabla, nuevoCampo, tipoCampo) => {
       },
       (error) => {
         console.error(`Error al verificar la existencia del campo ${nuevoCampo}: `, error);
+      }
+    );
+  });
+};
+
+// Método para actualizar la URI de una imagen en la tabla TOMAS
+export const actualizarIMG = (id, uri) => {
+  db.transaction((tx) => {
+    tx.executeSql(
+      'UPDATE TOMAS SET imagen = ? WHERE id = ?',
+      [uri, id],
+      (tx, results) => {
+        if (results.rowsAffected > 0) {
+          console.log('URI de la imagen actualizada con éxito en TOMAS.');
+        } else {
+          console.log('Error al actualizar la URI de la imagen en TOMAS.');
+        }
       }
     );
   });

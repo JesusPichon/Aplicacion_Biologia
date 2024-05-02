@@ -18,11 +18,12 @@ import {
 import {selectImg} from "../../components/imprimir/seleccionarImagen"
 
 const Formulario = ({navigation, route}) => {
+    let imagenUri = null; //El valor es null en caso de que el usuario no seleccione alguna imagen
+
     const AgregarImagen = async () => {
         try {
-            const imagenUri = await selectImg(); // Llama a la función selectImg y espera su resultado
+            imagenUri = await selectImg(); // Llama a la función selectImg y espera su resultado
             console.log('URI de la imagen seleccionada:', imagenUri);
-            // Aquí puedes realizar las operaciones necesarias con la URI de la imagen seleccionada
         } catch (error) {
             console.error('Error al seleccionar la imagen:', error);
         }
@@ -125,11 +126,13 @@ const Formulario = ({navigation, route}) => {
             determino: data.Determino,
             otros_datos: data.Otros_datos,
             grupo: grupoID,
+            imagen: imagenUri,
         };
 
         consultarIdGrupo(nombreCanal)
             .then((id) => {
                 tomaData.grupo = id; // Asignar el id del grupo a tomaData
+                console.log(tomaData.imagen);
                 return insertarTomas(tomaData);
             })
             .catch((error) => console.error("Error insertar toma: ", error));
