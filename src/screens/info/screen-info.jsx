@@ -5,7 +5,6 @@ import animaciones from '../../components/animaciones/animaciones';
 import { Button} from '@rneui/themed';
 import { value, Switch } from "@rneui/base";
 import {imprimirTomas} from "../../components/imprimir/imprimirSeleccionando"
-import {selectImg} from "../../components/imprimir/seleccionarImagen"
 import seleccion from '../../components/Selecionar-Imagenes/selecion';
 import { actualizarIMG} from "../../services/database/SQLite";
 import {

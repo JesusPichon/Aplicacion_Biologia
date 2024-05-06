@@ -16,13 +16,14 @@ import {
     KeyboardAvoidingView
 } from "react-native";
 import {selectImg} from "../../components/imprimir/seleccionarImagen"
+import seleccion from "../../components/Selecionar-Imagenes/selecion";
 
 const Formulario = ({navigation, route}) => {
     let imagenUri = null; //El valor es null en caso de que el usuario no seleccione alguna imagen
 
     const AgregarImagen = async () => {
         try {
-            imagenUri = await selectImg(); // Llama a la función selectImg y espera su resultado
+            imagenUri = await seleccion(); // Llama a la función selectImg y espera su resultado
             console.log('URI de la imagen seleccionada:', imagenUri);
         } catch (error) {
             console.error('Error al seleccionar la imagen:', error);
