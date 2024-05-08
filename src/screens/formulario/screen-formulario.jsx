@@ -16,12 +16,16 @@ import {
     KeyboardAvoidingView
 } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useCache } from "../../services/storage/CacheContext";
 
 const Formulario = ({navigation, route}) => {
 
-    //nombre del canal donde se agregara la nueva toma 
+    const { cacheData, setCacheData } = useCache();
+
+    //nombre del canal donde se agregará la nueva toma 
     const nombreCanal = route.params.nombreGrupo;
    
+    // Variables que almacenan los valores de los campos
     const { control, handleSubmit, formState: { errors }, watch, setValue } = useForm({
         Nombre_cientifico: '',
         Familia: '',
@@ -32,11 +36,11 @@ const Formulario = ({navigation, route}) => {
         Altitud: '',
         Grados_Latitud: '',
         Minutos_Latitud: '',
-        Segundos_Latitud: '', //Nueva variable
+        Segundos_Latitud: '', 
         Hemisferio_Latitud: '',
         Grados_Longitud: '',
         Minutos_Longitud: '',
-        Segundos_Longitud: '', //Nueva variable
+        Segundos_Longitud: '', 
         Hemisferio_Longitud: '',
         X: '',
         Y: '',
@@ -57,6 +61,7 @@ const Formulario = ({navigation, route}) => {
         Otros_datos: '',
     });
 
+    // Reglas que se aplican a los campos de coordenadas
     const reglasCoordenadas = {
         required: 'Este campo es requerido.',
         pattern: {
@@ -69,6 +74,7 @@ const Formulario = ({navigation, route}) => {
         }
     };
 
+    // Reglas que se aplican al campo No. Colecta
     const reglasNoColecta = {
         required: 'Este campo es requerido.',
         pattern: {
@@ -77,7 +83,7 @@ const Formulario = ({navigation, route}) => {
         },
     }
 
-    //agrega la nueva toma a la lista de tomas 
+    // Funcion que agrega la nueva toma a la lista de tomas 
     const onSubmit = (data) => {
 
         //id para identificar el grupo de la toma 
@@ -93,11 +99,11 @@ const Formulario = ({navigation, route}) => {
             altitud: data.Altitud,
             grados_Latitud: data.Grados_Latitud,
             minutos_Latitud: data.Minutos_Latitud,
-            segundos_Latitud: data.Segundos_Latitud, // Nueva Variable
+            segundos_Latitud: data.Segundos_Latitud, 
             hemisferio_Latitud: data.Hemisferio_Latitud,
             grados_Longitud: data.Grados_Longitud,
             minutos_Longitud: data.Minutos_Longitud,
-            segundos_Longitud: data.Segundos_Longitud, // Nueva Variable
+            segundos_Longitud: data.Segundos_Longitud, 
             hemisferio_Longitud: data.Hemisferio_Longitud,
             x: data.X,
             y: data.Y,
@@ -129,66 +135,14 @@ const Formulario = ({navigation, route}) => {
         navigation.goBack();
     }
 
-    const getData = async () => {
-        try {
-          const jsonValue = await AsyncStorage.getItem('@form_default')
-          return jsonValue != null ? JSON.parse(jsonValue) : null;
-        } catch(e) {
-          // error reading value
-        }
-      }
-
-      useEffect(() => {
-        // Llamar a getData para obtener los datos
-        getData().then(default_data => {
-            console.log(default_data); // {campo1: 'valor predeterminado 1', campo2: 'valor predeterminado 2'}
-            if (default_data !== null) {
-                Object.keys(default_data).forEach(key => {
-                    if (key === 'Fecha') {
-                      //console.log(datosIniciales[key])
-                      // Separar la fecha en partes
-                      const partesFecha = default_data[key].split('/');
-                      // Crear un objeto Date con el formato MM/DD/AA
-                      const fechaAcomodada = new Date(
-                        partesFecha[2],
-                        partesFecha[1] - 1,
-                        partesFecha[0],
-                      );
-          
-                      setValue(key, fechaAcomodada);
-                      //setValue(key, datosIniciales[key]);
-                    } else if (
-                      key === 'Grados_Latitud' ||
-                      key === 'Minutos_Latitud' ||
-                      key === 'Segundos_Latitud' ||
-                      key === 'Grados_Longitud' ||
-                      key === 'Minutos_Longitud' ||
-                      key === 'Segundos_Longitud' ||
-                      key === 'X' ||
-                      key === 'Y' ||
-                      key === 'Altitud' ||
-                      key === 'Tamano'
-                    ) {
-                      let contenido = '';
-          
-                      // Separar la fecha en partes
-                      if (default_data[key] === '' || default_data[key] === null) {
-                        contenido = '';
-                      } else {
-                        contenido = default_data[key].toString();
-                      }
-          
-                      setValue(key, contenido);
-                      //setValue(key, datosIniciales[key]);
-                    } else {
-                      setValue(key, default_data[key]);
-                    }
-                  });
-              }
+    useEffect(() => {
+    if (cacheData) {
+        Object.keys(cacheData).forEach(key => {
+        setValue(key, cacheData[key]);
         });
-    }, []);
+    }
+    }, [cacheData]);
     
-
     return (
         <View style={{
             backgroundColor: secundario,
@@ -391,7 +345,7 @@ const Formulario = ({navigation, route}) => {
                     control={control}
                     name="Otros_datos"
                     errors={errors}
-                    multiline={true} // Pernmite multilinea en el textinput
+                    multiline={true} // Permite multilinea en el textinput
                     maxLines={20} // Indica el numero de lineas maximo en el textinput (Solo si multiline = true)
                     tooltip={"Anota información que consideres importante sobre la planta (aroma, liquidos, sensación al tacto, etc. )"}
                 />
