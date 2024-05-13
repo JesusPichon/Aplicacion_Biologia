@@ -21,7 +21,7 @@ const Nosotros = () => {
     const Preguntas = [
         { pregunta: '¿Cuál es el tamaño de la imagen para las impresiones?', respuesta: 'Puedes utilizar cualquier imagen, pero recomendamos 755px de ancho y 60px de alto o cualquier escala de estas medidas para evitar errores visuales. También puedes optar por no elegir ninguna imagen.' },
         { pregunta: '¿Puedo seleccionar qué campos imprimir de mi toma?', respuesta: 'Sí, solo selecciona la toma y te mandará a una nueva pantalla donde podrás seleccionar qué campos quieres imprimir y posteriormente selecciona imprimir.' },
-        { pregunta: '¿Puede correr DOOM?', respuesta: 'Lamentablemente no ... Por el momento :)' },
+        { pregunta: '¿Es obligatorio elegir una imagen al momento de crear mi toma?', respuesta: 'No, es opcional elegir una imagen, pero en caso de no hacerlo, se cargará por defecto una imagen. En el caso de que la imagen seleccionada se borre del dispositivo, se cargará otra imagen alusiva al error.' },
     ];
 
     const renderImagen = (titulo) => {
