@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         paddingHorizontal: 20,
         paddingTop: 10,
-        paddingBottom: 10,
+        //paddingBottom: 10,
         margin: 20,
         flex: 1
     },
@@ -18,24 +18,11 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: 'bold',
         fontSize: 20,
-        marginBottom: 10
-    },
-    bGuardar: {
-        width: '100%',
-        borderRadius: 5,
-        marginTop: 10,
-        marginBottom: 30,
-        paddingHorizontal: 40,
-        alignSelf: 'center',
+        marginBottom: 10,
+        marginTop: 10
     },
     fondoP: {
         backgroundColor: principal,
-    },
-    textT: {
-        color: tercero,
-        textAlign: 'center', 
-        fontWeight: 'bold',
-        fontSize: 18
     },
 });
 
