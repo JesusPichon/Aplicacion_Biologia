@@ -4,15 +4,26 @@ import style_toma from "./style-toma";
 import { CheckBox } from "@rneui/themed";
 import { useState, useEffect } from "react";
 import { principal } from "../../styles/style-colors";
-
+import Snackbar from 'react-native-snackbar';
 
 const Toma = ({ navigation, data, seleccionarImprimir, deseleccionarImprimir, seleccionarEliminar, deseleccionarEliminar, showCheckBox, eliminar }) => {
 
   const [checked, setChecked] = useState(false);
 
+  const [showNoImage, setShowNoImage] = useState(false); //Estado para saber cuando hay un error al mostrar la imagen
+
   useEffect(() => {
     setChecked(false);
   }, [showCheckBox])
+
+  function lanzarAlerta(mensaje) {
+    setTimeout(() => {
+        Snackbar.show({
+            text: mensaje,
+            duration: Snackbar.LENGTH_SHORT
+        });
+    }, 200);
+  }
 
   return (
 
@@ -41,15 +52,25 @@ const Toma = ({ navigation, data, seleccionarImprimir, deseleccionarImprimir, se
 
         <View style={{ flex: 1 }}>
 
-          <Image
-            //Asigna la imagen por default en caso de que el usuario no haya seleccionado una imagen
-            source={data.imagen !== null ? { uri: data.imagen } : require('../../assets/images/nature.jpg')}
-            style={{
-              width: 150,
-              height: showCheckBox ? 180 : 160, //hacer mas grande la imagen si se muestra el checkbox 
-              borderRadius: 10
-            }}
-          />
+        <Image
+          source={
+            data.imagen !== null && !showNoImage //Si el campo imagen en la BD es distinto de null y la imagen correspondiente existe en el télefono
+              ? { uri: data.imagen } //Se carga dicha imagen en la toma
+              : data.imagen === null //Si el campo imagen en la BD es null
+                ? require('../../assets/images/nature.jpg') //Carga una imagen por default
+                //En caso de que el campo imagen no sea null pero su imagen correspondiente ya no exista en el telefono
+                : require('../../assets/images/no_image.jpg') //Se carga una imagen alusiva al error "No Image"
+          }
+          style={{
+            width: 150,
+            height: showCheckBox ? 180 : 160,
+            borderRadius: 10
+          }}
+          onError={() => {
+            setShowNoImage(true); //Se actualiza el estado a verdadero, indicando un error al cargar la imagen
+            lanzarAlerta('No se encontró la imagen en el dispositivo'); //Se lanza la alerta para notificar al usuario
+          }}
+        />
 
         </View>
 
