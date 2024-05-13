@@ -7,6 +7,7 @@ import { value, Switch } from "@rneui/base";
 import {imprimirTomas} from "../../components/imprimir/imprimirSeleccionando"
 import seleccion from '../../components/Selecionar-Imagenes/selecion';
 import { actualizarIMG} from "../../services/database/SQLite";
+import Snackbar from 'react-native-snackbar';
 import {
     Text,
     View,
@@ -26,14 +27,28 @@ const InfColecta = ({ navigation, route }) => {
         setListPrint([getFilteredData()]);
     };
 
+    function lanzarAlerta(mensaje) {
+        setTimeout(() => {
+            Snackbar.show({
+                text: mensaje,
+                duration: Snackbar.LENGTH_SHORT
+            });
+        }, 200);
+    }
+
     const cambiarImagen = async () => {
         try {
             const imagenUri = await seleccion(); // Llama a la función seleccion y espera su resultado
-            console.log('URI de la imagen seleccionada:', imagenUri);
-            // Realiza las operaciones necesarias con la URI de la imagen seleccionada
-            await actualizarIMG(route.params.data.id, imagenUri);
+            //console.log('URI de la imagen seleccionada:', imagenUri);
+            if(imagenUri != null) {
+                // Realiza las operaciones necesarias con la URI de la imagen seleccionada
+                await actualizarIMG(route.params.data.id, imagenUri);
+                lanzarAlerta('Imagen actualizada correctamente');
+            } else {
+                lanzarAlerta('Selección cancelada, inténtelo de nuevo');
+            }
         } catch (error) {
-            console.error('Error al seleccionar la imagen:', error);
+            lanzarAlerta('Error al seleccionar la imagen:', error);
         }
     };
 
@@ -167,13 +182,13 @@ const InfColecta = ({ navigation, route }) => {
                                 titleStyle={{ color: principal }}
                             />
                         </View>
-                        <View style={{ flex: 1, marginLeft: 5 }}>
+                        <View style={{ flex: 1, marginLeft: 5, marginRight: 5 }}>
                             <Button 
                                 radius={"md"} 
                                 type="solid"
                                 //onPress={() => console.log(getFilteredData())}
                                 onPress={() => imprimir()}
-                                title="  Imprimir" 
+                                title="Imprimir" 
                                 buttonStyle={{ backgroundColor: tercero}}
                                 icon={{name: 'print', color: principal}}
                                 titleStyle={{ color: principal }}
@@ -188,8 +203,8 @@ const InfColecta = ({ navigation, route }) => {
                                 onPress={cambiarImagen}
                                 title="Cambiar Imagen" 
                                 buttonStyle={{ backgroundColor: tercero}}
-                                icon={{name: 'edit', color: principal}}
-                                titleStyle={{ color: principal }}
+                                icon={{name: 'image', color: principal}}
+                                titleStyle={{ color: principal, fontSize: 13 }}
                             />
                         </View>
                     </Animated.View>
