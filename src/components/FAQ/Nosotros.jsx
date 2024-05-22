@@ -14,8 +14,8 @@ import {
 
 const Nosotros = () => {
     const SobreNosotros = [
-        { titulo: 'Interfaz Infinita', contenido: 'Un grupo de estudiantes apasionados por la tecnología, trabajando juntos para explorar nuevas ideas y crear experiencias digitales innovadoras que desafíen los límites de la creatividad y la tecnología'},
-        { titulo: 'Facultad de Biologia', contenido: 'una descripcion'},
+        { titulo: 'Facultad de Ciencias de la Computación', contenido: 'Como estudiantes de la Ingeniería en Ciencias de la Computación, somos programadores apasionados por el desarrollo y la innovación tecnológica. En conjunto, creamos esta aplicación, que esperamos, sea de gran beneficio para la investigación biológica. \n\nJesús Pichón Ramírez\nContacto: jesus.pichon@alumno.buap.mx\n\nAbner Pino Federico\nContacto: abner.pino@alumno.buap.mx\n\nSergio Rivera Vidal\nContacto: sergio.riverav@alumno.buap.mx\n\nIrvyn Xicale Cabrera\nContacto: irvyn.xicale@.alumno.buap.mx\n\nChristian Santiago Rodríguez\nContacto: christian.santiagor@alumno.buap.mx'},
+        { titulo: 'Facultad de Ciencias Biológicas', contenido: 'El Dr. Carlos Alberto Ruiz Jiménez estuvo al frente de este programa de Servicio Social llamado "DESARROLLO DE APLICACIONES WEB Y MÓVILES PARA LA INVESTIGACIÓN BIOLÓGICA". \n\nContacto: carlos.ruizj@correo.buap.mx'},
     ];
 
     const Preguntas = [
