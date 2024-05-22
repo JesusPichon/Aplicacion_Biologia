@@ -5,8 +5,8 @@ const styles = StyleSheet.create({
     containerF: {
         borderRadius: 15,
         paddingHorizontal: 20,
-        paddingTop: 10,
-        paddingBottom: 10,
+        paddingTop: 20,
+        paddingBottom: 20,
         margin: 20,
         flex: 1
     },
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
         color: tercero,
         textAlign: 'center', 
         fontWeight: 'bold',
-        fontSize: 15,
+        fontSize: 14,
     },
     containerButton:{
         flexDirection: 'row', 
