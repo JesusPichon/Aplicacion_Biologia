@@ -237,6 +237,17 @@ const Tomas = ({ navigation, route }) => {
 
                 {
                     !showCheckBox && <SpeedDial.Action
+                        icon={{ name: 'edit', color: '#fff' }}
+                        color={secundario}
+                        title={'Campos Predeterminados'}
+                        onPress={() => {
+                            setOpenButton(!openButton);
+                            navigation.navigate('CamposPred');
+                        }} />
+                }
+
+                {
+                    !showCheckBox && <SpeedDial.Action
                         icon={{ name: 'add', color: '#fff' }}
                         color={secundario}
                         title={'Agregar'}
