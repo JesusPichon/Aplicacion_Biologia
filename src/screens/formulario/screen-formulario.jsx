@@ -383,7 +383,7 @@ const Formulario = ({navigation, route}) => {
                             titleStyle={{ color: tercero, fontSize: 15 }}
                         />
                         {/* Texto para mostrar el estado de la imagen */}
-                        <Text>{mensajeImagen}</Text>
+                        <Text style={styles.text}>{mensajeImagen}</Text>
                     </View>
                     <View style={{ flex: 1, marginTop: 30, marginBottom: 20}}>
                         <Button

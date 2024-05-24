@@ -24,6 +24,10 @@ const styles = StyleSheet.create({
     fondoP: {
         backgroundColor: principal,
     },
+    text: {
+        color: 'black', // Cambia el color de la letra a negro
+        
+    },
 });
 
 

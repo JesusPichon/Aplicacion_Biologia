@@ -674,9 +674,9 @@ export const actualizarIMG = (id, uri) => {
       [uri, id],
       (tx, results) => {
         if (results.rowsAffected > 0) {
-          console.log('URI de la imagen actualizada con éxito en TOMAS.');
+         // console.log('URI de la imagen actualizada con éxito en TOMAS.');
         } else {
-          console.log('Error al actualizar la URI de la imagen en TOMAS.');
+          //console.log('Error al actualizar la URI de la imagen en TOMAS.');
         }
       }
     );
