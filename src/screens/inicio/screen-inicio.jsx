@@ -12,6 +12,8 @@ import {
     StatusBar,
     ImageBackground
 } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useCache } from "./../../services/storage/CacheContext";
 
 
 const Inicio = ({ navigation }) => {
@@ -46,11 +48,26 @@ const Inicio = ({ navigation }) => {
         }
     };
 
+    const { cacheData, setCacheData } = useCache();
+
+    const getData = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem('@form_default');
+        if (jsonValue !== null) {
+          const defaultData = JSON.parse(jsonValue);
+          setCacheData(defaultData);
+        }
+      } catch (e) {
+        console.error('Error al recuperar datos de AsyncStorage:', e);
+      }
+    };
 
     useEffect(() => { 
         crearTablas();
         requestWritePermission();
         startAnimations();
+        getData();
+        console.log(cacheData);
     }, []);
 
 
