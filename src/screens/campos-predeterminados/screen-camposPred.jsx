@@ -82,7 +82,7 @@ const CamposPred = ({navigation, route}) => {
 
   //agrega la nueva toma a la lista de tomas
   const onSubmit = data => {
-    console.log('Valores predeterminados guardados');
+    //console.log('Valores predeterminados guardados');
     //console.log(data);
     // Validar si todos los campos están vacíos
     const areAllEmpty = Object.values(data).every(value => value === '' || value === undefined);
@@ -117,7 +117,7 @@ const CamposPred = ({navigation, route}) => {
 
   useEffect(() => {
     if (cacheData) {
-      console.log(cacheData);
+      //console.log(cacheData);
       Object.keys(cacheData).forEach(key => {
         setValue(key, cacheData[key]);
       });
@@ -197,6 +197,8 @@ const CamposPred = ({navigation, route}) => {
           errors={errors}
           tooltip={'Anota el color, si está mojado o seco y sensación al tacto'}
         />
+        <Text></Text>
+        <Text></Text>
       </ScrollView>
       <View style={styles.containerButton}>
         <TouchableOpacity

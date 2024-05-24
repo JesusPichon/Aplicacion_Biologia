@@ -67,7 +67,7 @@ const Inicio = ({ navigation }) => {
         requestWritePermission();
         startAnimations();
         getData();
-        console.log(cacheData);
+        //console.log(cacheData);
     }, []);
 
 
