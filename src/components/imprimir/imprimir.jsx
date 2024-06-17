@@ -3,6 +3,10 @@ import imagenLocal from '../../assets/images/logoEquipo.jpg';
 // medidas recomendadas para la imagen width: 755px; height: 60px;
 
 const imprimir = async (listaFichas, imagen) => {
+  const orderedKeys = [
+    'nombre_cientifico', 'familia', 'nombre_local', 'localidad', 'municipio', 'estado', 'altitud', 'x', 'tipo_vegetacion', 'informacion_ambiental', 'suelo', 'asociada', 'abundancia', 'forma_biologica', 'tamano', 'otros_datos', 'flor', 'fruto', 'usos', 'colector_es', 'no_colecta','fecha', 'determino'
+  ];
+
   //console.log(listaFichas)
 
   let htmlContent = `
@@ -45,39 +49,37 @@ const imprimir = async (listaFichas, imagen) => {
         justify-content: space-between;
         align-items: center;
       ">  
-          ${Object.entries(formData)
-              .map(([key, value]) => {
-                if (value != '' && key != 'id' && key != 'grupo' && key != 'hemisferio_Latitud' && key != 'grados_Latitud' && key != 'minutos_Latitud' && key != 'segundos_Latitud' && key != 'hemisferio_Longitud' && key != 'grados_Longitud' && key != 'minutos_Longitud' && key != 'segundos_Longitud' && key != 'x' && key != 'y'){
-                  const upperCaseKey = key.charAt(0).toUpperCase() + key.slice(1).toLowerCase();;
-                  if (key === 'tamano' || key === 'Tamano') {
-                    return `<div style="display: flex;"><div style="font-weight: bold;">Tamaño:</div><div style="border-bottom: 1px solid #000; min-width: 100px;"> ${value} m</div></div>`;
-                  } else if (key === 'forma_biologica' || key === 'Forma_biologica') {
-                    return `<div style="display: flex;"><div style="font-weight: bold;">Forma biologica:</div><div style="border-bottom: 1px solid #000; min-width: 100px;"> ${value}</div></div>`;
-                  } else if (key === 'tipo_vegetacion' || key === 'Tipo_vegetacion') {
-                    return `<div style="display: flex;"><div style="font-weight: bold;">Tipo de vegetación:</div><div style="border-bottom: 1px solid #000; min-width: 100px;"> ${value}</div></div>`;
-                  } else if (key === 'informacion_ambiental' || key === 'Informacion_ambiental') {
-                    return `<div style="display: flex;"><div style="font-weight: bold;">Información ambiental:</div><div style="border-bottom: 1px solid #000; min-width: 100px;"> ${value}</div></div>`;
-                  } else if (key === 'otros_datos' || key === 'Otros_datos') {
-                    return `<div style="display: flex;"><div style="font-weight: bold;">Otros datos:</div><div style="border-bottom: 1px solid #000; min-width: 100px;"> ${value}</div></div>`;
-                  } else if (key === 'nombre_cientifico' || key === 'Nombre_cientifico') {
-                    return `<div style="display: flex;"><div style="font-weight: bold;">Nombre cientifico:</div><div style="border-bottom: 1px solid #000; min-width: 100px;"> ${value}</div></div>`;
-                  } else if (key === 'nombre_local' || key === 'Nombre_local') {
-                    return `<div style="display: flex;"><div style="font-weight: bold;">Nombre local:</div><div style="border-bottom: 1px solid #000; min-width: 100px;"> ${value}</div></div>`;
-                  } else if (key === 'altitud' || key === 'Altitud') {
-                    return `<div style="display: flex;"><div style="font-weight: bold;">${upperCaseKey}:</div><div style="border-bottom: 1px solid #000; min-width: 100px;"> ${value} m s.n.m</div></div>`;
-                  } else {
-                    return `<div style="display: flex;"><div style="font-weight: bold;">${upperCaseKey}:</div><div style="border-bottom: 1px solid #000; min-width: 100px;"> ${value}</div></div>`;
-                  }
-                }
-                if (key === 'x') {
-                  if (value === '' || value === null) {
-                    return `<div style="display: flex;"><div style="font-weight: bold;">Coordenadas:</div><div style="border-bottom: 1px solid #000; min-width: 100px;"> latitud:${formData.grados_Latitud}°${formData.minutos_Latitud}'${formData.segundos_Latitud}'' ${formData.hemisferio_Latitud} longitud:${formData.grados_Longitud}°${formData.minutos_Longitud}'${formData.segundos_Longitud}'' ${formData.hemisferio_Longitud}</div></div>`
-                  }else{
-                    return `<div style="display: flex;"><div style="font-weight: bold;">Coordenadas:</div><div style="border-bottom: 1px solid #000; min-width: 100px;"> x:${formData.x} y:${formData.y}</div></div>`
-                  }
-                }
-              })
-              .join('')}
+      ${orderedKeys.map(key => {
+        const value = formData[key];
+        if ((value != '' && value != null) || key == 'x') {
+          const upperCaseKey = key.charAt(0).toUpperCase() + key.slice(1).toLowerCase();
+          if (key === 'tamano') {
+            return `<div style="display: flex;"><div style="font-weight: bold;">Tamaño:</div><div style="border-bottom: 1px solid #000; padding-right: 20px; padding-left: 15px"> ${value}</div>m</div>`;
+          } else if (key === 'forma_biologica') {
+            return `<div style="display: flex;"><div style="font-weight: bold;">Forma biologica:</div><div style="border-bottom: 1px solid #000; padding-right: 20px; padding-left: 15px"> ${value}</div></div>`;
+          } else if (key === 'tipo_vegetacion') {
+            return `<div style="display: flex;"><div style="font-weight: bold;">Tipo de vegetación:</div><div style="border-bottom: 1px solid #000; padding-right: 20px; padding-left: 15px"> ${value}</div></div>`;
+          } else if (key === 'informacion_ambiental') {
+            return `<div style="display: flex;"><div style="font-weight: bold;">Información ambiental:</div><div style="border-bottom: 1px solid #000; padding-right: 20px; padding-left: 15px"> ${value}</div></div>`;
+          } else if (key === 'otros_datos') {
+            return `<div style="display: flex;"><div style="font-weight: bold;">Otros datos:</div><div style="border-bottom: 1px solid #000; padding-right: 20px; padding-left: 15px"> ${value}</div></div>`;
+          } else if (key === 'nombre_cientifico') {
+            return `<div style="display: flex;"><div style="font-weight: bold;">Nombre cientifico:</div><div style="border-bottom: 1px solid #000; padding-right: 20px; padding-left: 15px"> ${value}</div></div>`;
+          } else if (key === 'nombre_local') {
+            return `<div style="display: flex;"><div style="font-weight: bold;">Nombre local:</div><div style="border-bottom: 1px solid #000; padding-right: 20px; padding-left: 15px"> ${value}</div></div>`;
+          } else if (key === 'altitud') {
+            return `<div style="display: flex;"><div style="font-weight: bold;">${upperCaseKey}:</div><div style="border-bottom: 1px solid #000; padding-right: 20px; padding-left: 15px"> ${value} </div>m s.n.m</div>`;
+          } else if (key === 'x') {
+            if (formData['x'] === '' || formData['x'] === null) {
+              return `<div style="display: flex;"><div style="font-weight: bold;">Coordenadas:</div><div style="border-bottom: 1px solid #000; padding-right: 20px; padding-left: 15px"> longitud ${formData.hemisferio_Longitud}: ${formData.grados_Longitud}°${formData.minutos_Longitud}'${formData.segundos_Longitud}''  latitud  ${formData.hemisferio_Latitud}: ${formData.grados_Latitud}°${formData.minutos_Latitud}'${formData.segundos_Latitud}''  </div></div>`
+            } else {
+              return `<div style="display: flex;"><div style="font-weight: bold;">Coordenadas:</div><div style="border-bottom: 1px solid #000; padding-right: 20px; padding-left: 15px"> x:${formData.x} y:${formData.y}</div></div>`
+            }
+          } else {
+            return `<div style="display: flex;"><div style="font-weight: bold;">${upperCaseKey}:</div><div style="border-bottom: 1px solid #000; padding-right: 20px; padding-left: 15px"> ${value}</div></div>`;
+          }
+        }
+      }).join('')}
       </div>
       </div>
   </div>
