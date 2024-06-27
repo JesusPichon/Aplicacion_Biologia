@@ -172,29 +172,32 @@ const Grupos = ({ navigation }) => {
     const handleExport = async () => {
         try {
             const datosConsulta = await getRawData(nombreGrupo);
-            //console.log(datosConsulta);
+            //console.log('Datos obtenidos para la consulta:', datosConsulta); // Add logging
+    
             const datosFormateados = await formatData(datosConsulta);
-            //console.log(datosFormateados);
-            const csv = jsonToCSV(datosFormateados,{quotes: columnasComillas});
-            //console.log(csv);
-
-            guardarArchivoCSV(nombreGrupo, csv)
+            //console.log('Datos formateados para CSV:', datosFormateados); // Add logging
+    
+            const csv = jsonToCSV(datosFormateados, { quotes: columnasComillas });
+            //console.log('CSV generado:', csv);
+    
+            await guardarArchivoCSV(nombreGrupo, csv)
                 .then((mensaje) => {
-                    lanzarAlerta(mensaje); // Imprimirá "Archivo guardado exitosamente" si la operación fue exitosa
+                    lanzarAlerta(mensaje);
                 })
                 .catch((error) => {
-                    lanzarAlerta(error); // Imprimirá "Error al guardar el archivo" si ocurrió algún error
+                    lanzarAlerta(error);
                 });
-
+    
             setExportando(false);
             setNombreGrupo('');
-
+    
         } catch (error) {
-            //console.error("Error al exportar: ", error);
-            lanzarAlerta("Error al exportar: " + error);
+            console.error("Error al exportar: ", error);
+            lanzarAlerta("Error al exportar: " + error.message);
         }
     };
-
+    
+    
     const seleccionarGrupoExportar = (nombre) => {
         // Guardar el grupo seleccionado para exportar
         // Realizar la lógica de exportación con el grupo seleccionado

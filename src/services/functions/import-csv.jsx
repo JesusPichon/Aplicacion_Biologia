@@ -7,11 +7,21 @@ import { readString, jsonToCSV } from 'react-native-csv';
 export const selectCsv = async () => {   
     return new Promise(async (resolve, reject) => {
         try {
-            const result = await DocumentPicker.pickSingle({
-            type: [DocumentPicker.types.allFiles],
-            });
+            // const result = await DocumentPicker.pickSingle({
+            // type: [DocumentPicker.types.allFiles],
+            // });
 
-            if (result.type && !result.type.endsWith('text/comma-separated-values')) {
+            // if (result.type && !result.type.endsWith('text/comma-separated-values')) {
+            //     Alert.alert('Por favor, selecciona solo archivos .csv');
+            //     reject('Tipo de archivo no válido');
+            //     return;
+            // }
+
+            const result = await DocumentPicker.pickSingle({
+            type: ['text/csv', 'application/vnd.ms-excel', 'text/plain', 'application/csv', 'text/comma-separated-values', 'application/excel', 'application/vnd.msexcel'],
+            });
+    
+            if (!result.name.endsWith('.csv')) {
                 Alert.alert('Por favor, selecciona solo archivos .csv');
                 reject('Tipo de archivo no válido');
                 return;
