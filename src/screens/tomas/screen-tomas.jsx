@@ -294,6 +294,7 @@ const Tomas = ({ navigation, route }) => {
                                 eliminarTomas(listSelectDelete);
                             } else {
                                 imprimirTomas(listSelectPrint);
+                                setListSelectPrint([]);
                             }
                         }} />
                 }
