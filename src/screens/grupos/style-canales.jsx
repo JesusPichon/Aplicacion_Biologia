@@ -108,10 +108,12 @@ const styles = StyleSheet.create({
         left: 0,
         width: '100%', // Ocupa todo el ancho
         height: '33.33%', // Una tercera parte del alto
-        justifyContent: 'center', // Centra el contenido (por ejemplo, texto) verticalmente
-        alignItems: 'left', // Centra el contenido horizontalmente
+        justifyContent: 'left', // Centra el contenido (por ejemplo, texto) verticalmente
+        alignItems: 'center', // Centra el contenido horizontalmente
         paddingHorizontal: 20, // Ajusta el relleno horizontal según sea necesario		
         backgroundColor: '#306060', // Fondo semitransparent
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
     otroView: {
         position: 'absolute',
