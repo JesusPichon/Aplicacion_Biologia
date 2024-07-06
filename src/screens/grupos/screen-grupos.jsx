@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Animated, FlatList } from "react-native";
-import { cuarto, principal, secundario } from "../../styles/style-colors";
+import { cuarto, principal, secundario, tercero } from "../../styles/style-colors";
 import { selectCsv } from "../../services/functions/import-csv";
 import styles from "./style-canales";
 import animaciones from '../../components/animaciones/animaciones';
@@ -13,6 +13,7 @@ import { SpeedDial } from "@rneui/themed";
 import { verTomasExportar, verTomasTotales } from "../../services/database/SQLite";
 import { readString, jsonToCSV } from 'react-native-csv';
 import { getRawData, formatData, guardarArchivoCSV, columnasComillas } from "../../services/functions/export-csv";
+import { Tab, TabView } from "react-native-elements";
 
 const Grupos = ({ navigation }) => {
     // animaciones
@@ -228,6 +229,8 @@ const Grupos = ({ navigation }) => {
         }
     }, [nombreGrupo, exportando]); // Observar cambios en nombreGrupo y exportando
 
+    const [index, setIndex] = useState(0);
+
     return (
         <View style={{ backgroundColor: secundario, flex: 1 }}>
             <Animated.View style={{ opacity: unoAnim }}>
@@ -244,6 +247,21 @@ const Grupos = ({ navigation }) => {
                     <Text style={[styles.textP, { textAlign: 'center', fontWeight: 'bold' }]}>IMPORTAR</Text>
                 </TouchableOpacity>
             </View>
+
+            <Tab
+                value={index}
+                onChange={(e) => setIndex(e)}
+                disableIndicator={true}
+                >
+                <Tab.Item
+                    title="Creados"
+                    titleStyle={{ fontSize: 18}}
+                />
+                <Tab.Item
+                    title="Guardados"
+                    titleStyle={{ fontSize: 18 }}
+                />
+            </Tab>
 
             <View style={[styles.container, styles.fondoT]}>
                 
