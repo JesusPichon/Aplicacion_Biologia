@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native';
-import { principal, secundario, tercero } from '../../styles/style-colors';
+import { principal, secundario, tercero, principalFePro, secundarioFePro, terceropFePro, cuartoFePro, quintoFePro} from '../../styles/style-colors';
 import { fonts } from '@rneui/base';
 
 let screenWidth = Dimensions.get('window').width;
@@ -28,8 +28,18 @@ const styles = StyleSheet.create({
     fondoT: {
         backgroundColor: tercero,
     },
-    // contenedor principal
-    container: {
+    mainContainer: { 
+        backgroundColor: quintoFePro, 
+        flex: 1, 
+    },
+    secondaryContainer: { 
+        flex: 1, 
+        backgroundColor: cuartoFePro, 
+        borderTopRightRadius: 30, 
+        borderTopLeftRadius: 30, 
+    },
+    // contenedor de los TabView
+    TabViewcontainer: {
         //paddingHorizontal: 20,
         paddingTop: 0,
         marginTop: 20,
@@ -137,9 +147,10 @@ const styles = StyleSheet.create({
     },
     titleContainer: { 
         flexDirection: 'row', 
-        justifyContent: 'space-between', 
+        justifyContent: 'space-between',
+        marginVertical: 10, 
         paddingHorizontal: 20, 
-        marginBottom: 10
+        marginBottom: 10,
     },
 
 

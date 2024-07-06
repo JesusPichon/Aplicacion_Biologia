@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Animated, FlatList, ScrollView } from "react-native";
-import { cuarto, principal, secundario, tercero } from "../../styles/style-colors";
+import { cuarto, cuartoFePro, principal, principalFePro, quintoFePro, secundario, tercero, terceropFePro } from "../../styles/style-colors";
 import { selectCsv } from "../../services/functions/import-csv";
 import styles from "./style-canales";
 import animaciones from '../../components/animaciones/animaciones';
@@ -234,7 +234,7 @@ const Grupos = ({ navigation }) => {
     const containerStyle = { borderRadius: 30, marginHorizontal: 10,}; // Estilo del título de la pestaña
     
     return (
-        <View style={{ backgroundColor: secundario, flex: 1 }}>
+        <View style={styles.mainContainer}>
             <Animated.View style={{ opacity: unoAnim }}>
                 <BarraBusqueda titulo={'Buscar grupo'} pantalla={'grupos'} onResult={updateGrupos} />
             </Animated.View>
@@ -249,136 +249,139 @@ const Grupos = ({ navigation }) => {
                     <Text style={[styles.textP, { textAlign: 'center', fontWeight: 'bold' }]}>IMPORTAR</Text>
                 </TouchableOpacity>
             </View> */}
-            <View style={styles.titleContainer}>
-                <Text style={{fontSize: 30, fontWeight:'bold'}}>Mis Grupos</Text>
-                <Chip
-                    icon={{
-                        name: "file-download",
-                        type: 'material',
-                        size: 25,
-                        color: 'white',
-                    }}
-                    onPress={() => console.log('Icon chip was pressed!')}
-                    buttonStyle={{backgroundColor: principal}}
-                />
-            </View>
+            <View style={styles.secondaryContainer}>
+                <View style={styles.titleContainer}>
+                    <Text style={{fontSize: 30, fontWeight:'bold', color: principalFePro}}>Mis Grupos</Text>
+                    <Chip
+                        icon={{
+                            name: "file-download",
+                            type: 'material',
+                            size: 25,
+                            color: 'white',
+                        }}
+                        onPress={() => console.log('Icon chip was pressed!')}
+                        buttonStyle={{backgroundColor: principal}}
+                    />
+                </View>
 
-            <Tab
-                value={index}
-                onChange={(e) => setIndex(e)}
-                disableIndicator={true}
+                <Tab
+                    value={index}
+                    onChange={(e) => setIndex(e)}
+                    disableIndicator={true}
+                    style={{marginTop: 10, borderRadius: 30, marginHorizontal: 10}}
+                    >
+                    <Tab.Item
+                        title="Creados"
+                        titleStyle={{fontSize: 20, color: principalFePro, fontWeight: index === 0 ? 'bold' : 'normal'}}
+                        containerStyle={[containerStyle,{backgroundColor: index === 0 ? terceropFePro : cuartoFePro,}]}
+                    />
+                    <Tab.Item
+                        title="Guardados"
+                        titleStyle={{fontSize: 20, color: principalFePro, fontWeight: index === 1 ? 'bold' : 'normal'}}
+                        containerStyle={[containerStyle,{backgroundColor: index === 1 ? terceropFePro : cuartoFePro,}]}
+                    />
+                </Tab>
+
+                <TabView value={index} onChange={setIndex}>
+                    <TabView.Item style={[styles.TabViewcontainer]}>
+                        <FlatList
+                            data={grupos}
+                            numColumns={1}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={({ item, index }) => (
+                                <Grupo
+                                    key={index}
+                                    animacion={unoAnim}
+                                    navigation={navigation}
+                                    nombre={item}
+                                    seleccionar={seleccionar}
+                                    deseleccionar={deseleccionar}
+                                    mostrarSeleccionar={showCheckBox}
+                                    exportando={exportando}
+                                    seleccionarGrupoExportar={seleccionarGrupoExportar} />
+                            )} />
+                    </TabView.Item>
+                    <TabView.Item style={[styles.TabViewcontainer]}>
+                        
+                    </TabView.Item>
+                </TabView>
+
+                <SpeedDial
+                    isOpen={openButton}
+                    icon={{ name: 'edit', color: '#fff' }}
+                    openIcon={{ name: 'close', color: '#fff' }}
+                    onOpen={() => setOpenButton(!openButton)}
+                    onClose={() => setOpenButton(!openButton)}
+                    color={secundario}
                 >
-                <Tab.Item
-                    title="Creados"
-                    titleStyle={{color: index === 0 ? 'white' : 'black'}}
-                    containerStyle={[containerStyle,{backgroundColor: index === 0 ? 'green' : 'gray',}]}
-                />
-                <Tab.Item
-                    title="Guardados"
-                    titleStyle={{color: index === 1 ? 'white' : 'black'}}
-                    containerStyle={[containerStyle,{backgroundColor: index === 1 ? 'green' : 'gray',}]}
-                />
-            </Tab>
+                    {
+                        !showCheckBox && !exportando && (
+                            <SpeedDial.Action
+                                icon={{ name: 'add', color: '#fff' }}
+                                title="Agregar"
+                                color={secundario}
+                                onPress={() => {
+                                    setOpenButton(false);
+                                    setOpenModal(true);
+                                }}
+                            />
+                        )
+                    }
+                    {
+                        !showCheckBox && !exportando && (
+                            <SpeedDial.Action
+                                icon={{ name: 'delete', color: '#fff' }}
+                                title="Eliminar"
+                                color={secundario}
+                                onPress={() => {
+                                    setShowCheckBox(true);
+                                    setOpenButton(false);
+                                }}
+                            />
+                        )
+                    }
+                    {
+                        (showCheckBox && !exportando) && (
+                            <SpeedDial.Action
+                                icon={{ name: 'done', color: '#fff' }}
+                                title="Aceptar"
+                                color={secundario}
+                                onPress={async () => {
+                                    setShowCheckBox(false);
+                                    setOpenButton(false);
+                                    await eliminarGrupos(listaBorrarGrupos);
+                                }}
+                            />
+                        )
+                    }
+                    {
+                        (showCheckBox) && (
+                            <SpeedDial.Action
+                                icon={{ name: 'cancel', color: '#fff' }}
+                                title="Cancelar"
+                                color={secundario}
+                                onPress={() => {
+                                    setShowCheckBox(false);
+                                    setOpenButton(false);
+                                    setListaBorrarGrupos([]);
+                                    if (exportando) {
+                                        setNombreGrupo('');
+                                        setExportando(false);
+                                        lanzarAlerta('Exportar Cancelado');
+                                    }
+                                }}
+                            />
+                        )
+                    }
+                </SpeedDial>
 
-            <TabView value={index} onChange={setIndex}>
-                <TabView.Item style={[styles.container, styles.fondoT]}>
-                    <FlatList
-                        data={grupos}
-                        numColumns={1}
-                        keyExtractor={(item, index) => index.toString()}
-                        renderItem={({ item, index }) => (
-                            <Grupo
-                                key={index}
-                                animacion={unoAnim}
-                                navigation={navigation}
-                                nombre={item}
-                                seleccionar={seleccionar}
-                                deseleccionar={deseleccionar}
-                                mostrarSeleccionar={showCheckBox}
-                                exportando={exportando}
-                                seleccionarGrupoExportar={seleccionarGrupoExportar} />
-                        )} />
-                </TabView.Item>
-                <TabView.Item style={[styles.container, styles.fondoT]}>
-                    
-                </TabView.Item>
-            </TabView>
-
-            <SpeedDial
-                isOpen={openButton}
-                icon={{ name: 'edit', color: '#fff' }}
-                openIcon={{ name: 'close', color: '#fff' }}
-                onOpen={() => setOpenButton(!openButton)}
-                onClose={() => setOpenButton(!openButton)}
-                color={secundario}
-            >
-                {
-                    !showCheckBox && !exportando && (
-                        <SpeedDial.Action
-                            icon={{ name: 'add', color: '#fff' }}
-                            title="Agregar"
-                            color={secundario}
-                            onPress={() => {
-                                setOpenButton(false);
-                                setOpenModal(true);
-                            }}
-                        />
-                    )
-                }
-                {
-                    !showCheckBox && !exportando && (
-                        <SpeedDial.Action
-                            icon={{ name: 'delete', color: '#fff' }}
-                            title="Eliminar"
-                            color={secundario}
-                            onPress={() => {
-                                setShowCheckBox(true);
-                                setOpenButton(false);
-                            }}
-                        />
-                    )
-                }
-                {
-                    (showCheckBox && !exportando) && (
-                        <SpeedDial.Action
-                            icon={{ name: 'done', color: '#fff' }}
-                            title="Aceptar"
-                            color={secundario}
-                            onPress={async () => {
-                                setShowCheckBox(false);
-                                setOpenButton(false);
-                                await eliminarGrupos(listaBorrarGrupos);
-                            }}
-                        />
-                    )
-                }
-                {
-                    (showCheckBox) && (
-                        <SpeedDial.Action
-                            icon={{ name: 'cancel', color: '#fff' }}
-                            title="Cancelar"
-                            color={secundario}
-                            onPress={() => {
-                                setShowCheckBox(false);
-                                setOpenButton(false);
-                                setListaBorrarGrupos([]);
-                                if (exportando) {
-                                    setNombreGrupo('');
-                                    setExportando(false);
-                                    lanzarAlerta('Exportar Cancelado');
-                                }
-                            }}
-                        />
-                    )
-                }
-            </SpeedDial>
-
-            <VentanaFlotante
-                openModal={openModal}
-                handleCloseModal={handleCloseModal}
-                handleTextChange={handleTextChange}
-                errorMessage={error}
-                saveGroup={guardarTexto} />
+                <VentanaFlotante
+                    openModal={openModal}
+                    handleCloseModal={handleCloseModal}
+                    handleTextChange={handleTextChange}
+                    errorMessage={error}
+                    saveGroup={guardarTexto} />
+            </View>        
         </View>
     );
 }
