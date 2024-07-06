@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Animated, FlatList } from "react-native";
+import { View, Text, TouchableOpacity, Animated, FlatList, ScrollView } from "react-native";
 import { cuarto, principal, secundario, tercero } from "../../styles/style-colors";
 import { selectCsv } from "../../services/functions/import-csv";
 import styles from "./style-canales";
@@ -13,7 +13,7 @@ import { SpeedDial } from "@rneui/themed";
 import { verTomasExportar, verTomasTotales } from "../../services/database/SQLite";
 import { readString, jsonToCSV } from 'react-native-csv';
 import { getRawData, formatData, guardarArchivoCSV, columnasComillas } from "../../services/functions/export-csv";
-import { Tab, TabView } from "react-native-elements";
+import { Tab, TabView, Chip } from '@rneui/themed';
 
 const Grupos = ({ navigation }) => {
     // animaciones
@@ -231,13 +231,15 @@ const Grupos = ({ navigation }) => {
 
     const [index, setIndex] = useState(0);
 
+    const containerStyle = { borderRadius: 30, marginHorizontal: 10,}; // Estilo del título de la pestaña
+    
     return (
         <View style={{ backgroundColor: secundario, flex: 1 }}>
             <Animated.View style={{ opacity: unoAnim }}>
                 <BarraBusqueda titulo={'Buscar grupo'} pantalla={'grupos'} onResult={updateGrupos} />
             </Animated.View>
             {/* Nueva sección con los botones en fila */}
-            <View style={styles.buttonContainer}>
+            {/* <View style={styles.buttonContainer}>
                 <TouchableOpacity style={[styles.fusionar, styles.fondoT]} onPress={modoExportar}>
                     <Text style={[styles.textP, { textAlign: 'center', fontWeight: 'bold' }]}>EXPORTAR</Text>
                 </TouchableOpacity>
@@ -246,6 +248,19 @@ const Grupos = ({ navigation }) => {
                     onPress={handleImport}>
                     <Text style={[styles.textP, { textAlign: 'center', fontWeight: 'bold' }]}>IMPORTAR</Text>
                 </TouchableOpacity>
+            </View> */}
+            <View style={styles.titleContainer}>
+                <Text style={{fontSize: 30, fontWeight:'bold'}}>Mis Grupos</Text>
+                <Chip
+                    icon={{
+                        name: "file-download",
+                        type: 'material',
+                        size: 25,
+                        color: 'white',
+                    }}
+                    onPress={() => console.log('Icon chip was pressed!')}
+                    buttonStyle={{backgroundColor: principal}}
+                />
             </View>
 
             <Tab
@@ -255,33 +270,39 @@ const Grupos = ({ navigation }) => {
                 >
                 <Tab.Item
                     title="Creados"
-                    titleStyle={{ fontSize: 18}}
+                    titleStyle={{color: index === 0 ? 'white' : 'black'}}
+                    containerStyle={[containerStyle,{backgroundColor: index === 0 ? 'green' : 'gray',}]}
                 />
                 <Tab.Item
                     title="Guardados"
-                    titleStyle={{ fontSize: 18 }}
+                    titleStyle={{color: index === 1 ? 'white' : 'black'}}
+                    containerStyle={[containerStyle,{backgroundColor: index === 1 ? 'green' : 'gray',}]}
                 />
             </Tab>
 
-            <View style={[styles.container, styles.fondoT]}>
-                
-                <FlatList
-                    data={grupos}
-                    numColumns={1}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item, index }) => (
-                        <Grupo
-                            key={index}
-                            animacion={unoAnim}
-                            navigation={navigation}
-                            nombre={item}
-                            seleccionar={seleccionar}
-                            deseleccionar={deseleccionar}
-                            mostrarSeleccionar={showCheckBox}
-                            exportando={exportando}
-                            seleccionarGrupoExportar={seleccionarGrupoExportar} />
-                    )} />
-            </View>
+            <TabView value={index} onChange={setIndex}>
+                <TabView.Item style={[styles.container, styles.fondoT]}>
+                    <FlatList
+                        data={grupos}
+                        numColumns={1}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({ item, index }) => (
+                            <Grupo
+                                key={index}
+                                animacion={unoAnim}
+                                navigation={navigation}
+                                nombre={item}
+                                seleccionar={seleccionar}
+                                deseleccionar={deseleccionar}
+                                mostrarSeleccionar={showCheckBox}
+                                exportando={exportando}
+                                seleccionarGrupoExportar={seleccionarGrupoExportar} />
+                        )} />
+                </TabView.Item>
+                <TabView.Item style={[styles.container, styles.fondoT]}>
+                    
+                </TabView.Item>
+            </TabView>
 
             <SpeedDial
                 isOpen={openButton}

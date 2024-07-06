@@ -35,7 +35,9 @@ const styles = StyleSheet.create({
         marginTop: 20,
         flex: 1,
         borderTopLeft: 30,  
-        borderTopRight: 30, 
+        borderTopRight: 30,
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30, 
     },
     container1: {
         paddingHorizontal: paddingHorizontal, // Ajusta el relleno horizontal según tus necesidades
@@ -132,6 +134,12 @@ const styles = StyleSheet.create({
         width: '81.7%', // Resto del ancho
         height: '81.7%', // Resto del alto
         justifyContent: 'center',
+    },
+    titleContainer: { 
+        flexDirection: 'row', 
+        justifyContent: 'space-between', 
+        paddingHorizontal: 20, 
+        marginBottom: 10
     },
 
 

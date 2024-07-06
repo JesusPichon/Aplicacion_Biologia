@@ -3,8 +3,7 @@ import styles from "../../styles/style-app";
 import stylesCanales from "../../screens/grupos/style-canales";
 import { useEffect, useState } from "react";
 import { principal } from "../../styles/style-colors";
-import { CheckBox } from "@rneui/themed";
-import { Chip, Icon } from "react-native-elements";
+import { CheckBox, Chip } from "@rneui/themed";
 
 
 
