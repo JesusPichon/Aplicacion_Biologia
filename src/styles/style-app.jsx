@@ -14,7 +14,8 @@ const styles = StyleSheet.create({
     textT: {
         color: tercero,
         textAlign: 'center', 
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontSize: 18,
     },
     textTitle:{
         color: principal,

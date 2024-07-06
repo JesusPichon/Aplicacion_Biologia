@@ -1,5 +1,6 @@
 import { StyleSheet, Dimensions } from 'react-native';
 import { principal, secundario, tercero } from '../../styles/style-colors';
+import { fonts } from '@rneui/base';
 
 let screenWidth = Dimensions.get('window').width;
 
@@ -84,29 +85,52 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         margin: 10,
       },
-    
-
     // cartas en vertical (utilizadas para buscar el canal)
     cardVertical: {
         borderRadius: 10,
         shadowColor: "#000",
-        height: 185,
-        width: 125,
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 0.3,
-        shadowRadius: 4,
-        elevation: 5,
+        width: '90%', // Ajustado para ocupar más espacio
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.63,
+        shadowRadius: 2.62,
+        elevation: 4,
         justifyContent: 'flex-end',
         overflow: 'hidden',
+        alignSelf: 'center', // Centrar en el contenedor
+        marginBottom: 20, // Espaciado entre elementos
     },
     cardVImagen: {
         flex: 1
     },
+    nombreView: {
+        position: 'absolute',
+        top: '66.66%',
+        left: 0,
+        width: '100%', // Ocupa todo el ancho
+        height: '33.33%', // Una tercera parte del alto
+        justifyContent: 'center', // Centra el contenido (por ejemplo, texto) verticalmente
+        alignItems: 'left', // Centra el contenido horizontalmente
+        paddingHorizontal: 20, // Ajusta el relleno horizontal según sea necesario		
+        backgroundColor: '#306060', // Fondo semitransparent
+    },
+    otroView: {
+        position: 'absolute',
+        top: 0,
+        left: '66.66%',
+        width: '33.33%', // Una tercera parte del ancho
+        height: '66.66%', // Ocupa todo el alto
+        justifyContent: 'center', // Centra el contenido verticalmente
+        alignItems: 'center', // Centra el contenido horizontalmente
+        backgroundColor: '#eff3f4',
+    },
     image: {
-        flex: 1,
+        position: 'absolute',
+        top: 0, // Comienza donde termina el View del nombre
+        left: 0, // Comienza donde termina el otro View
+        width: '81.7%', // Resto del ancho
+        height: '81.7%', // Resto del alto
         justifyContent: 'center',
     },
-
 
 
     

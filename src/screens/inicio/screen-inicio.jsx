@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../../styles/style-app';
 import animaciones from '../../components/animaciones/animaciones';
 import { tercero } from '../../styles/style-colors';
 import { crearTablas } from '../../services/database/SQLite';
-import { PermissionsAndroid } from 'react-native';
+import { PermissionsAndroid,useColorScheme } from 'react-native';
 import {
     Text,
     View,
@@ -70,13 +70,34 @@ const Inicio = ({ navigation }) => {
         //console.log(cacheData);
     }, []);
 
+    const systemTheme = useColorScheme(); // Obtiene el tema actual del sistema ('light' o 'dark')
+    const [theme, setTheme] = useState(systemTheme); // Estado para manejar el tema de la app
 
+    useEffect(() => {
+        // Este efecto se ejecuta cuando cambia la preferencia de tema del sistema.
+        setTheme(systemTheme);
+    }, [systemTheme]); // Dependencias: se vuelve a ejecutar el efecto si systemTheme cambia.
 
+    // Imágenes para cada tema
+    const logoClaro = require('../../assets/images/logoClaro.png'); // Paso 3
+    const logoOscuro = require('../../assets/images/logoOscuro.png'); // Asume que tienes otra imagen para el tema oscuro
+
+     // Selecciona la imagen basada en el tema
+     const logoImagen = theme === 'dark' ? logoOscuro : logoClaro; // Paso 4
+
+     // Define las imágenes para cada tema
+    const fondoClaro = require('../../assets/images/fondoClaro.jpeg');
+    const fondoOscuro = require('../../assets/images/fondoOscuro.jpeg');
+
+    // Selecciona la imagen de fondo basada en el tema
+    const imagenFondo = theme === 'dark' ? fondoOscuro : fondoClaro;
+
+    const colorStatusBar = theme === 'dark' ? '#203c3b' : '#97b4a5';
 
     return (
         // activamos la animacion de entrada
+        <ImageBackground source={imagenFondo} resizeMode="cover" style={{flex: 1, width: '100%', height: '100%'}}>
         <View style={[
-            styles.fondoT,
             {
                 flex: 1,
                 /*marginTop: Constants.statusBarHeight,*/
@@ -86,13 +107,14 @@ const Inicio = ({ navigation }) => {
             <StatusBar
                 barStyle="dark-content"
                 animated={true}
-                backgroundColor={tercero}
+                backgroundColor={colorStatusBar}
             />
 
+            
             {/* View del logo*/}
             <Animated.View style={{ flex: 10, flexDirection: 'row', overflow: 'hidden', transform: [{ translateY: translateAnimDOWN }, { scale: unoAnim }] }}>
                 <View style={{ flex: 1 }}></View>
-                <ImageBackground source={require('../../assets/images/buap.png')} resizeMode="contain" style={{ flex: 8 }}></ImageBackground>
+                <ImageBackground source={logoImagen} resizeMode="contain" style={{ flex: 8 }}></ImageBackground>
                 <View style={{ flex: 1 }}></View>
             </Animated.View>
 
@@ -119,6 +141,7 @@ const Inicio = ({ navigation }) => {
             </Animated.View>
 
         </View>
+        </ImageBackground> 
     )
 }
 

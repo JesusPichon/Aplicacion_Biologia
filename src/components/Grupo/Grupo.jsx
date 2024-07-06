@@ -34,32 +34,25 @@ const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccio
 
     return (
         <TouchableOpacity
-            style={[stylesCanales.cardVertical, styles.fondoT, { width: '45%', marginBottom: 20, margin: 10 }]}
+            style={[stylesCanales.cardVertical, { marginBottom: 10, margin: 10, flexDirection: 'column', height: 200 }]}
             onPress={handleSeleccionarGrupo}>
-
-            <View style={[stylesCanales.cardVImagen]}>
-
-                {
-                    mostrarSeleccionar && <CheckBox
-                        title={exportando ? 'Exportar' : 'Eliminar'}
-                        checkedColor="red"
-                        checked={checked} />
-                }
-
-                <ImageBackground
-                    source={require('../../assets/images/nature.jpg')}
-                    resizeMode="cover"
-                    style={styles.image}>
-                </ImageBackground>
-
+    
+            <ImageBackground
+                source={require('../../assets/images/nature.jpg')}
+                resizeMode="cover"
+                style={stylesCanales.image}>
+            </ImageBackground>
+    
+            <View style={{ flex: 1, flexDirection: 'row', width: '100%' }}>
+                <View style={stylesCanales.nombreView}>
+                    <Text style={[styles.textT, { textAlign: 'left', fontWeight: 'bold'}]}>
+                        {nombre}
+                    </Text>
+                </View>
+                <View style={stylesCanales.otroView}>
+                    <Text style={{color:'black'}}>Tomas: 300</Text>
+                </View>
             </View>
-
-            <View style={[styles.botongrupo, { backgroundColor: checked ? "red" : principal }]}>
-                <Text style={[styles.textT, { textAlign: 'center', fontWeight: 'bold' }]}>
-                    {nombre}
-                </Text>
-            </View>
-
         </TouchableOpacity>
     );
 }

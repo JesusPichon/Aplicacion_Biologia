@@ -249,7 +249,7 @@ const Grupos = ({ navigation }) => {
                 
                 <FlatList
                     data={grupos}
-                    numColumns={2}
+                    numColumns={1}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item, index }) => (
                         <Grupo
