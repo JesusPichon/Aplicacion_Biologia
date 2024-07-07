@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import Prueba from "./screens/prueba";
 import Inicio from "./screens/inicio";
 import Formulario from "./screens/formulario";
 import InformacionToma from "./screens/info";
@@ -22,6 +23,7 @@ const App = () => {
       <CacheProvider>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Prueba" component={Prueba} />
             <Stack.Screen name="Inicio" component={Inicio} />
             <Stack.Screen name="Formulario" component={Formulario} />
             <Stack.Screen name="Tomas" component={Tomas} />

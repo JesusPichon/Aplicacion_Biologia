@@ -1,8 +1,9 @@
 import { SearchBar } from "@rneui/themed";
 import { cuarto, principal, secundario, tercero } from "../../styles/style-colors";
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { Icon } from '@rneui/themed';
 import { verGruposFiltrado, verTomas, consultarIdGrupo, verTomasFiltrado } from "../../services/database/SQLite";
-import { View } from "react-native";
+import { View, Animated, TouchableOpacity, Easing } from "react-native";
 import { Dropdown } from 'react-native-element-dropdown';
 
 // como implementar en canales
@@ -55,6 +56,8 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
     ];
     const [search, setSearch] = useState("");
     const [buscando, setBuscando] = useState(false);
+    const [showSearchBar, setShowSearchBar] = useState(false);
+    const animation = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
         let timerId;
@@ -79,6 +82,32 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
     const updateSearch = (searchInput) => {
         setSearch(searchInput);
     };
+
+    useEffect(() => {
+        Animated.timing(animation, {
+            toValue: showSearchBar ? 1 : 0,
+            duration: 1000,
+            easing: Easing.bezier(0,.46,.7,.79),
+            useNativeDriver: false,
+        }).start();
+    }, [showSearchBar]);
+
+    const toggleSearchBar = () => {
+        console.log("funciona")
+        setShowSearchBar(!showSearchBar);
+        console.log(showSearchBar)
+        console.log(searchBarWidth)
+    };
+
+    const searchBarWidth = animation.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['0%', '100%'],
+    });
+
+    const searchBarTranslate = animation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [20, 0],
+    });
 
     const peticion = (buscar) => {
         if (pantalla === "grupos") {
@@ -111,56 +140,53 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
         }
     };
 
-    if (pantalla === 'grupos') {
-        return (
-            <SearchBar
-                placeholder={titulo}
-                containerStyle={{ backgroundColor: secundario, borderColor: secundario }}
-                inputContainerStyle={{ backgroundColor: 'white', borderRadius: 20 }}
-                inputStyle={{ backgroundColor: 'white' }}
-                onChangeText={updateSearch}
-                value={search}
-                showLoading={buscando}
-            />
-        );
-    } else {
-        return (
-            <View style={{ flexDirection: 'row' }}>
-                <View style={{ width: '75%', backgroundColor: '#000', padding: 0 }}>
+    return (
+        <View style={{ flexDirection: 'row', flex:1}}>
+            <View style={{flex: 8, alignItems:"flex-end"}}>
+                <Animated.View style={{overflow: 'hidden', width:searchBarWidth, transform: [{ translateX: searchBarTranslate }]}}>
                     <SearchBar
                         placeholder={titulo}
-                        containerStyle={{ backgroundColor: secundario, borderColor: secundario, paddingRight: 0 }}
-                        inputContainerStyle={{ backgroundColor: 'white', borderTopLeftRadius: 20, borderBottomLeftRadius: 20 }}
-                        inputStyle={{ backgroundColor: 'white' }}
+                        searchIcon={false}
+                        inputContainerStyle={{ 
+                            backgroundColor: 'white', 
+                            borderTopLeftRadius: 20, 
+                            borderBottomLeftRadius: 20, 
+                            borderTopRightRadius: 0, 
+                            borderBottomRightRadius: 0, 
+                            height:'100%'
+                        }}
+                        containerStyle={{
+                            padding: 0, 
+                            margin: 0, 
+                            borderTopWidth: 0, 
+                            borderBottomWidth: 0, 
+                            backgroundColor: 'rgba(0,0,0,0)'
+                        }}
+                        inputStyle={{ 
+                            backgroundColor: 'white'
+                        }}
                         onChangeText={updateSearch}
                         value={search}
                         showLoading={buscando}
                     />
-                </View>
-                <Dropdown
-                    style={{ backgroundColor: principal, width: '25%', marginVertical: 8, marginLeft: -8, borderTopRightRadius: 20, borderBottomRightRadius: 20 }}
-                    iconStyle={{ tintColor: 'white', width: 20, height: 20, marginRight: 5 }}
-                    selectedTextStyle={{ marginLeft: 5, color: tercero, fontSize: 12 }}
-                    itemTextStyle={{ fontSize: 12, color: tercero }}
-                    itemContainerStyle={{ borderWidth: 0.2, borderColor: cuarto }}
-                    containerStyle={{ backgroundColor: principal, borderWidth: 1, borderColor: tercero }} // Establece estilos para el contenedor                        label='Selecciona un valor'
-                    activeColor={secundario}
-                    maxHeight={200}
-                    labelField="label"
-                    valueField="value"
-                    data={data_filtro}
-                    value={value}
-                    onFocus={() => setIsFocus(true)}
-                    onBlur={() => setIsFocus(false)}
-                    onChange={item => {
-                        setValue(item.value);
-                        setIsFocus(false);
-                    }}
-
-                />
+                </Animated.View>
             </View>
-        );
-    }
+            <TouchableOpacity style={{
+                flex: 1, 
+                backgroundColor:'#fff', 
+                height:'100%', 
+                justifyContent:'center', 
+                alignContent:'center', 
+                borderTopRightRadius: 20, 
+                borderBottomRightRadius: 20,
+                borderTopLeftRadius: showSearchBar ? 0 : 20, 
+                borderBottomLeftRadius: showSearchBar ? 0 : 20
+
+            }} onPress={toggleSearchBar}>
+                <Icon name='search' size={25}/>
+            </TouchableOpacity>
+        </View>
+    );
 }
 
 export default BarraBusqueda;
