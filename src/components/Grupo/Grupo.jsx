@@ -1,77 +1,76 @@
-import { View, Text, TouchableOpacity, ImageBackground } from "react-native";
+import { View, Text, TouchableOpacity, ImageBackground, useColorScheme } from "react-native";
 import styles from "../../styles/style-app";
 import stylesCanales from "../../screens/grupos/style-canales";
 import { useEffect, useState } from "react";
-import { principal } from "../../styles/style-colors";
+import { principal, principalFePro, quintoFePro, secundarioFePro, terceropFePro } from "../../styles/style-colors";
 import { CheckBox, Chip } from "@rneui/themed";
 
-
-
 const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccionar, exportando, seleccionarGrupoExportar }) => {
+  const systemTheme = useColorScheme(); // Obtiene el tema actual del sistema ('light' o 'dark')
+  const [theme, setTheme] = useState(systemTheme); // Estado para manejar el tema de la app
 
-    const [checked, setChecked] = useState(false);
+  useEffect(() => {
+    // Este efecto se ejecuta cuando cambia la preferencia de tema del sistema.
+    setTheme(systemTheme);
+  }, [systemTheme]); // Dependencias: se vuelve a ejecutar el efecto si systemTheme cambia.
 
-    useEffect(() => {
-        setChecked(false);
-    },[mostrarSeleccionar]);
+  const [checked, setChecked] = useState(false);
 
-    const handleSeleccionarGrupo = () => {
-        if (mostrarSeleccionar == true && !exportando) {
-            if (checked) {
-                deseleccionar(nombre);
-            } else {
-                seleccionar(nombre);
-            }
-            setChecked(!checked);
-        } else if (exportando) {
-            seleccionarGrupoExportar(nombre);
-            setChecked(false); // Ocultar las casillas de selección
-        }
+  useEffect(() => {
+    setChecked(false);
+  }, [mostrarSeleccionar]);
 
-        if (!mostrarSeleccionar)
-            navigation.navigate('Tomas', { nombre });
-    };
+  const handleSeleccionarGrupo = () => {
+    if (mostrarSeleccionar == true && !exportando) {
+      if (checked) {
+        deseleccionar(nombre);
+      } else {
+        seleccionar(nombre);
+      }
+      setChecked(!checked);
+    } else if (exportando) {
+      seleccionarGrupoExportar(nombre);
+      setChecked(false); // Ocultar las casillas de selección
+    }
 
-    return (
-      <TouchableOpacity
-        style={[
-          stylesCanales.cardVertical,
-          {marginBottom: 10, margin: 10, flexDirection: 'column', height: 200},
-        ]}
-        onPress={handleSeleccionarGrupo}>
-        <ImageBackground
-          source={require('../../assets/images/nature.jpg')}
-          resizeMode="cover"
-          style={stylesCanales.image}></ImageBackground>
+    if (!mostrarSeleccionar) navigation.navigate('Tomas', {nombre});
+  };
 
-        <View style={{flex: 1, flexDirection: 'row', width: '100%'}}>
-          <View style={stylesCanales.nombreView}>
-            <Text
-              style={[styles.textT, {textAlign: 'left', fontWeight: 'bold'}]}>
-              {nombre}
-            </Text>
-            {/* <TouchableOpacity>
-                        chi
-                        <Text style={{color: principal}}>Ver más</Text>
-                    </TouchableOpacity> */}
-            <Chip
-              icon={{
-                name: "file-upload",
-                type: 'material',
-                size: 25,
-                color: 'white',
-              }}
-              onPress={() => console.log('Icon chip was pressed!')}
-              buttonStyle={{backgroundColor: principal}}
-            />
-          </View>
-          <View style={stylesCanales.otroView}>
-            <Text style={{color: 'black'}}>Tomas: 300</Text>
-          </View>
+  const nombreViewBackgroundColor = theme === 'dark' ? principalFePro : terceropFePro;
+  const nombreViewTextColor = theme === 'dark' ? quintoFePro : principalFePro;
+
+  const tomasViewBackgroundColor = theme === 'dark' ? terceropFePro : principalFePro;
+  const tomasViewTextColor = theme === 'dark' ? secundarioFePro : quintoFePro;
+
+  return (
+    <TouchableOpacity style={stylesCanales.cardVertical} onPress={handleSeleccionarGrupo}>
+      <ImageBackground
+        source={require('../../assets/images/nature.jpg')}
+        resizeMode="cover"
+        style={stylesCanales.image}
+      />
+      <View style={{flex: 1, flexDirection: 'row', width: '100%'}}>
+        <View style={[stylesCanales.nombreView, {backgroundColor: nombreViewBackgroundColor}]}>
+          <Text style={[stylesCanales.nombreViewText, {color: nombreViewTextColor} ]}>
+            {nombre}
+          </Text>
+          <Chip
+            icon={{
+              name: 'file-upload',
+              type: 'material',
+              size: 25,
+              color: 'white',
+            }}
+            onPress={() => console.log('Icon chip was pressed!')}
+            buttonStyle={{backgroundColor: principal}}
+          />
         </View>
-      </TouchableOpacity>
-    );
+        <View style={[stylesCanales.tomasView, {backgroundColor: tomasViewBackgroundColor}]}>
+          <Text style={[stylesCanales.tomasViewText, {color: tomasViewTextColor}]}>Tomas: 300</Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
 }
-
 
 export default Grupo;

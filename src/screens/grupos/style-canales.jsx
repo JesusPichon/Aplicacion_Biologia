@@ -109,7 +109,8 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         overflow: 'hidden',
         alignSelf: 'center', // Centrar en el contenedor
-        marginBottom: 20, // Espaciado entre elementos
+        margin: 10, // Espaciado entre elementos
+        height: 200
     },
     cardVImagen: {
         flex: 1
@@ -123,11 +124,15 @@ const styles = StyleSheet.create({
         justifyContent: 'left', // Centra el contenido (por ejemplo, texto) verticalmente
         alignItems: 'center', // Centra el contenido horizontalmente
         paddingHorizontal: 20, // Ajusta el relleno horizontal según sea necesario		
-        backgroundColor: '#306060', // Fondo semitransparent
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
-    otroView: {
+    nombreViewText: {
+        textAlign: 'left', 
+        fontWeight: 'bold',
+        fontSize: 18,
+    },
+    tomasView: {
         position: 'absolute',
         top: 0,
         left: '66.66%',
@@ -136,6 +141,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center', // Centra el contenido verticalmente
         alignItems: 'center', // Centra el contenido horizontalmente
         backgroundColor: '#eff3f4',
+    },
+    tomasViewText: {
+        fontWeight: 'bold',
+        fontSize: 16,
     },
     image: {
         position: 'absolute',
