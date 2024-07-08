@@ -86,7 +86,7 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
     useEffect(() => {
         Animated.timing(animation, {
             toValue: showSearchBar ? 1 : 0,
-            duration: 1000,
+            duration: 500,
             easing: Easing.bezier(0,.46,.7,.79),
             useNativeDriver: false,
         }).start();

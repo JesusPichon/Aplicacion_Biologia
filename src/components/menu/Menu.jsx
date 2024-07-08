@@ -12,7 +12,7 @@ const Menu = ({ pantalla, navigation }) => {
 
     const paginas = [
         { label: 'Perfil', value: '---' },
-        { label: 'Configuracion', value: '---' },
+        { label: 'Mis grupos', value: '---' },
         { label: 'Explorar', value: '---' },
     ];
 

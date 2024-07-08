@@ -14,6 +14,7 @@ import { verTomasExportar, verTomasTotales } from "../../services/database/SQLit
 import { readString, jsonToCSV } from 'react-native-csv';
 import { getRawData, formatData, guardarArchivoCSV, columnasComillas } from "../../services/functions/export-csv";
 import { Tab, TabView, Chip } from '@rneui/themed';
+import { color } from "@rneui/base";
 
 const Grupos = ({ navigation }) => {
     // animaciones
@@ -236,7 +237,12 @@ const Grupos = ({ navigation }) => {
     return (
         <View style={styles.mainContainer}>
             <Animated.View style={{ opacity: unoAnim }}>
-                <BarraBusqueda titulo={'Buscar grupo'} pantalla={'grupos'} onResult={updateGrupos} />
+                <View style={{width:'100%', height:50, flexDirection:"row"}}>
+                    <View style={{width:'10%'}}>
+                        <Text style={{color:'#000'}}>Menu</Text>
+                    </View>
+                    <BarraBusqueda titulo={'Buscar grupo'} pantalla={'grupos'} onResult={updateGrupos} />
+                </View>
             </Animated.View>
             {/* Nueva sección con los botones en fila */}
             {/* <View style={styles.buttonContainer}>

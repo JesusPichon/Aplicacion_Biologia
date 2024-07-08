@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FlatList, View } from 'react-native';
+import { FlatList, View, Text } from 'react-native';
 import { SpeedDial, ButtonGroup, LinearProgress } from '@rneui/themed';
 import styles from "../../styles/style-app";
 import { principal, secundario } from '../../styles/style-colors';
@@ -183,10 +183,15 @@ const Tomas = ({ navigation, route }) => {
     return (
         <View style={{ flex: 1, backgroundColor: secundario }}>
 
-            <BarraBusqueda
-                titulo={'Buscar en las tomas'}
-                pantalla={nombreGrupo} // colocar el nombre del grupo
-                onResult={updateTomas} />
+            <View style={{width:'100%', height:50, flexDirection:"row"}}>
+                <View style={{width:'10%'}}>
+                    <Text style={{color:'#000'}}>Menu</Text>
+                </View>
+                <BarraBusqueda
+                    titulo={'Buscar en las tomas'}
+                    pantalla={nombreGrupo} // colocar el nombre del grupo
+                    onResult={updateTomas} />
+            </View>
 
             <View style={[styles.container, styles.fondoT]}>
                 <LinearProgress
