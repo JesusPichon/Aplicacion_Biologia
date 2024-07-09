@@ -1,9 +1,8 @@
-import { View, Text, TouchableOpacity, ImageBackground, useColorScheme } from "react-native";
-import styles from "../../styles/style-app";
+import { View, Text, TouchableOpacity, ImageBackground } from "react-native";
 import stylesCanales from "../../screens/grupos/style-canales";
 import { useEffect, useState } from "react";
-import { principal, principalFePro, quintoFePro, secundarioFePro, terceropFePro } from "../../styles/style-colors";
-import { CheckBox, Chip } from "@rneui/themed";
+import { principal } from "../../styles/style-colors";
+import { Chip } from "@rneui/themed";
 import { useSelector } from "react-redux";
 
 const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccionar, exportando, seleccionarGrupoExportar }) => {
@@ -31,7 +30,7 @@ const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccio
     if (!mostrarSeleccionar) navigation.navigate('Tomas', {nombre});
   };
 
-  const theme = themes[currentTheme] || themes[systemTheme] || themes.light;
+  const theme = themes[currentTheme] || themes.light;
   const { nombreViewBackgroundColor, nombreViewTextColor, tomasViewBackgroundColor, tomasViewTextColor, } = theme;
 
   return (

@@ -1,15 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Appearance } from "react-native";
-import { principal, principalFePro, quintoFePro, secundarioFePro, terceropFePro } from "../../../styles/style-colors";
+import { cuartoFePro, principal, principalFePro, quintoFePro, secundarioFePro, terceroFePro } from "../../../styles/style-colors";
 
 const lightTheme = {
-    imageBackgroundInicio: require('../../../assets/images/fondoClaro.jpeg'),
-    logoInicio: require('../../../assets/images/logoClaro.png'),
-    colorStatusBarInicio: '#97b4a5', 
-    nombreViewBackgroundColor: terceropFePro,
-    nombreViewTextColor: principalFePro,
-    tomasViewBackgroundColor: principalFePro,
-    tomasViewTextColor: quintoFePro,
+    imageBackgroundInicio: require('../../../assets/images/fondoClaro.jpeg'), // Pantalla de inicio
+    logoInicio: require('../../../assets/images/logoClaro.png'), //Pantalla de inicio
+    colorStatusBarInicio: '#97b4a5', //Pantalla de inicio
+    nombreViewBackgroundColor: terceroFePro, //Componente Grupo
+    nombreViewTextColor: principalFePro, //Componente Grupo
+    tomasViewBackgroundColor: principalFePro, //Componente Grupo
+    tomasViewTextColor: quintoFePro, //Componente Grupo
+    mainContainerBackgroundColor: quintoFePro, //Pantalla Grupos
+    secondaryContainerBackgroundColor: cuartoFePro, //Pantalla Grupos
+    titleColorText: principalFePro, //Pantalla Grupos
+    tabItemSelectColor: terceroFePro, //Pantalla Grupos
 };
     
 const darkTheme = {
@@ -18,8 +22,12 @@ const darkTheme = {
     colorStatusBarInicio: '#203c3b',
     nombreViewBackgroundColor: principalFePro,
     nombreViewTextColor: quintoFePro,
-    tomasViewBackgroundColor: terceropFePro,
+    tomasViewBackgroundColor: terceroFePro,
     tomasViewTextColor: secundarioFePro,
+    mainContainerBackgroundColor: principalFePro,
+    secondaryContainerBackgroundColor: secundarioFePro,
+    titleColorText: quintoFePro,
+    tabItemSelectColor: principalFePro,
 };
 
 initialState = {

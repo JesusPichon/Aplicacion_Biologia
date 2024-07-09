@@ -28,13 +28,11 @@ const styles = StyleSheet.create({
     fondoT: {
         backgroundColor: tercero,
     },
-    mainContainer: { 
-        backgroundColor: quintoFePro, 
+    mainContainer: {  
         flex: 1, 
     },
     secondaryContainer: { 
-        flex: 1, 
-        backgroundColor: cuartoFePro, 
+        flex: 1,  
         borderTopRightRadius: 30, 
         borderTopLeftRadius: 30, 
     },

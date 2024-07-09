@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Animated, FlatList, ScrollView } from "react-native";
-import { cuarto, cuartoFePro, principal, principalFePro, quintoFePro, secundario, tercero, terceropFePro } from "../../styles/style-colors";
+import { View, Text, Animated, FlatList } from "react-native";
+import { cuartoFePro, principal, principalFePro, secundario, terceroFePro } from "../../styles/style-colors";
 import { selectCsv } from "../../services/functions/import-csv";
 import styles from "./style-canales";
 import animaciones from '../../components/animaciones/animaciones';
@@ -15,10 +15,19 @@ import { verTomasExportar, verTomasTotales } from "../../services/database/SQLit
 import { readString, jsonToCSV } from 'react-native-csv';
 import { getRawData, formatData, guardarArchivoCSV, columnasComillas } from "../../services/functions/export-csv";
 import { Tab, TabView, Chip } from '@rneui/themed';
-import { useSelector, useDispatch } from 'react-redux';
-import { setTheme } from '../../services/redux/slices/themeSlice';
+import { useSelector } from 'react-redux';
+
 
 const Grupos = ({ navigation }) => {
+    const {currentTheme, themes} = useSelector((state) => state.theme);
+
+    const theme = themes[currentTheme] || themes.light;
+    const { mainContainerBackgroundColor, 
+        secondaryContainerBackgroundColor,
+        titleColorText,
+        tabItemSelectColor,
+    } = theme;
+
     // animaciones
     const {
         unoAnim,
@@ -237,7 +246,7 @@ const Grupos = ({ navigation }) => {
     const containerStyle = { borderRadius: 30, marginHorizontal: 10,}; // Estilo del título de la pestaña
     
     return (
-        <View style={styles.mainContainer}>
+        <View style={[styles.mainContainer, { backgroundColor: mainContainerBackgroundColor, }]}>
             <Menu pantalla={'Mis grupos'}/>
             <Animated.View style={{ opacity: unoAnim }}>
                 <View style={{width:'100%', height:50, flexDirection:"row"}}>
@@ -257,9 +266,9 @@ const Grupos = ({ navigation }) => {
                     <Text style={[styles.textP, { textAlign: 'center', fontWeight: 'bold' }]}>IMPORTAR</Text>
                 </TouchableOpacity>
             </View> */}
-            <View style={styles.secondaryContainer}>
+            <View style={[styles.secondaryContainer, { backgroundColor: secondaryContainerBackgroundColor, }]}>  
                 <View style={styles.titleContainer}>
-                    <Text style={{fontSize: 30, fontWeight:'bold', color: principalFePro}}>Mis Grupos</Text>
+                    <Text style={{fontSize: 30, fontWeight:'bold', color: titleColorText}}>Mis Grupos</Text>
                     <Chip
                         icon={{
                             name: "file-download",
@@ -280,13 +289,13 @@ const Grupos = ({ navigation }) => {
                     >
                     <Tab.Item
                         title="Creados"
-                        titleStyle={{fontSize: 20, color: principalFePro, fontWeight: index === 0 ? 'bold' : 'normal'}}
-                        containerStyle={[containerStyle,{backgroundColor: index === 0 ? terceropFePro : cuartoFePro,}]}
+                        titleStyle={{fontSize: 20, fontWeight: index === 0 ? 'bold' : 'normal', color: titleColorText,}}
+                        containerStyle={[containerStyle,{backgroundColor: index === 0 ? tabItemSelectColor : secondaryContainerBackgroundColor,}]}
                     />
                     <Tab.Item
                         title="Guardados"
-                        titleStyle={{fontSize: 20, color: principalFePro, fontWeight: index === 1 ? 'bold' : 'normal'}}
-                        containerStyle={[containerStyle,{backgroundColor: index === 1 ? terceropFePro : cuartoFePro,}]}
+                        titleStyle={{fontSize: 20, fontWeight: index === 1 ? 'bold' : 'normal', color: titleColorText,}}
+                        containerStyle={[containerStyle,{backgroundColor: index === 1 ? tabItemSelectColor : secondaryContainerBackgroundColor,}]}
                     />
                 </Tab>
 

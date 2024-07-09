@@ -5,6 +5,6 @@ export const cuarto = '#98B9BC'
 
 export const principalFePro = '#306060'
 export const secundarioFePro = '#438686'
-export const terceropFePro = '#B8C8C8'
+export const terceroFePro = '#B8C8C8'
 export const cuartoFePro = '#dfe2e3'
 export const quintoFePro = '#ffffff'
