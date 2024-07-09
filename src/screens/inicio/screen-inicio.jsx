@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCache } from "./../../services/storage/CacheContext";
+import { useSelector } from 'react-redux';
 
 
 const Inicio = ({ navigation }) => {
@@ -70,29 +71,31 @@ const Inicio = ({ navigation }) => {
         //console.log(cacheData);
     }, []);
 
-    const systemTheme = useColorScheme(); // Obtiene el tema actual del sistema ('light' o 'dark')
-    const [theme, setTheme] = useState(systemTheme); // Estado para manejar el tema de la app
+    // const systemTheme = useColorScheme(); // Obtiene el tema actual del sistema ('light' o 'dark')
+    // const [theme, setTheme] = useState(systemTheme); // Estado para manejar el tema de la app
 
-    useEffect(() => {
-        // Este efecto se ejecuta cuando cambia la preferencia de tema del sistema.
-        setTheme(systemTheme);
-    }, [systemTheme]); // Dependencias: se vuelve a ejecutar el efecto si systemTheme cambia.
+    // useEffect(() => {
+    //     // Este efecto se ejecuta cuando cambia la preferencia de tema del sistema.
+    //     setTheme(systemTheme);
+    // }, [systemTheme]); // Dependencias: se vuelve a ejecutar el efecto si systemTheme cambia.
 
-    // Imágenes para cada tema
-    const logoClaro = require('../../assets/images/logoClaro.png'); // Paso 3
-    const logoOscuro = require('../../assets/images/logoOscuro.png'); // Asume que tienes otra imagen para el tema oscuro
+    // // Imágenes para cada tema
+    // const logoClaro = require('../../assets/images/logoClaro.png'); // Paso 3
+    // const logoOscuro = require('../../assets/images/logoOscuro.png'); // Asume que tienes otra imagen para el tema oscuro
 
-     // Selecciona la imagen basada en el tema
-     const logoImagen = theme === 'dark' ? logoOscuro : logoClaro; // Paso 4
+    //  // Selecciona la imagen basada en el tema
+    //  const logoImagen = theme === 'dark' ? logoOscuro : logoClaro; // Paso 4
 
-     // Define las imágenes para cada tema
-    const fondoClaro = require('../../assets/images/fondoClaro.jpeg');
-    const fondoOscuro = require('../../assets/images/fondoOscuro.jpeg');
+    //  // Define las imágenes para cada tema
+    // const fondoClaro = require('../../assets/images/fondoClaro.jpeg');
+    // const fondoOscuro = require('../../assets/images/fondoOscuro.jpeg');
 
-    // Selecciona la imagen de fondo basada en el tema
-    const imagenFondo = theme === 'dark' ? fondoOscuro : fondoClaro;
+    // // Selecciona la imagen de fondo basada en el tema
+    // const imagenFondo = theme === 'dark' ? fondoOscuro : fondoClaro;
 
-    const colorStatusBar = theme === 'dark' ? '#203c3b' : '#97b4a5';
+    // const colorStatusBar = theme === 'dark' ? '#203c3b' : '#97b4a5';
+
+    const theme = useSelector((state) => state.theme.currentTheme);
 
     return (
         // activamos la animacion de entrada

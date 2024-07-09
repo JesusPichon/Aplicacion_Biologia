@@ -19,11 +19,11 @@ const Stack = createNativeStackNavigator();
 
 const App = () => {
   return (
-    // <Provider store={store}>
+    <Provider store={store}>
       <CacheProvider>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
-            {/*<Stack.Screen name="Prueba" component={Prueba} />*/}
+            {/* <Stack.Screen name="Prueba" component={Prueba} /> */}
             <Stack.Screen name="Inicio" component={Inicio} />
             <Stack.Screen name="Formulario" component={Formulario} />
             <Stack.Screen name="Tomas" component={Tomas} />
@@ -35,7 +35,7 @@ const App = () => {
           </Stack.Navigator>
         </NavigationContainer>
       </CacheProvider>
-    // </Provider>
+    </Provider>
   );
 }
 
