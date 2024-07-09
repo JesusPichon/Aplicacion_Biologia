@@ -3,6 +3,7 @@ import { FlatList, View, Text } from 'react-native';
 import { SpeedDial, ButtonGroup, LinearProgress } from '@rneui/themed';
 import styles from "../../styles/style-app";
 import { principal, secundario } from '../../styles/style-colors';
+import Menu from "../../components/menu";
 import Toma from "../../components/Toma";
 import { imprimirTomas } from "../../components/imprimir/imprimirSeleccionando";
 import BarraBusqueda from "../../components/BarraBusqueda";
@@ -182,10 +183,9 @@ const Tomas = ({ navigation, route }) => {
 
     return (
         <View style={{ flex: 1, backgroundColor: secundario }}>
-
+            <Menu pantalla={'Mis grupos'}/>
             <View style={{width:'100%', height:50, flexDirection:"row"}}>
                 <View style={{width:'10%'}}>
-                    <Text style={{color:'#000'}}>Menu</Text>
                 </View>
                 <BarraBusqueda
                     titulo={'Buscar en las tomas'}

@@ -6,6 +6,7 @@ import styles from "./style-canales";
 import animaciones from '../../components/animaciones/animaciones';
 import Grupo from "../../components/Grupo";
 import BarraBusqueda from "../../components/BarraBusqueda";
+import Menu from "../../components/menu";
 import VentanaFlotante from "../../components/VentanaFlotante";
 import Snackbar from 'react-native-snackbar';
 import GrupoController from "../../services/controllers/grupoController";
@@ -236,10 +237,10 @@ const Grupos = ({ navigation }) => {
     
     return (
         <View style={styles.mainContainer}>
+            <Menu pantalla={'Mis grupos'}/>
             <Animated.View style={{ opacity: unoAnim }}>
                 <View style={{width:'100%', height:50, flexDirection:"row"}}>
                     <View style={{width:'10%'}}>
-                        <Text style={{color:'#000'}}>Menu</Text>
                     </View>
                     <BarraBusqueda titulo={'Buscar grupo'} pantalla={'grupos'} onResult={updateGrupos} />
                 </View>
@@ -274,7 +275,7 @@ const Grupos = ({ navigation }) => {
                     value={index}
                     onChange={(e) => setIndex(e)}
                     disableIndicator={true}
-                    style={{marginTop: 10, borderRadius: 30, marginHorizontal: 10}}
+                    style={{marginTop: 5, marginHorizontal: 10}}
                     >
                     <Tab.Item
                         title="Creados"

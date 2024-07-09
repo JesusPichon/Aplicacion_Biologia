@@ -1,10 +1,9 @@
 import { SearchBar } from "@rneui/themed";
-import { cuarto, principal, secundario, tercero } from "../../styles/style-colors";
-import React, { useState, useRef, useEffect } from "react";
+import { principalFePro, secundarioFePro, terceropFePro, cuartoFePro, quintoFePro, principal } from "../../styles/style-colors";
+import React, { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { Icon } from '@rneui/themed';
 import { verGruposFiltrado, verTomas, consultarIdGrupo, verTomasFiltrado } from "../../services/database/SQLite";
 import { View, Animated, TouchableOpacity, Easing } from "react-native";
-import { Dropdown } from 'react-native-element-dropdown';
 
 // como implementar en canales
 
@@ -32,7 +31,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
     const [value, setValue] = useState('nombre_cientifico');
     const [isFocus, setIsFocus] = useState(false);
-    const data_filtro = [
+    const data_filtro = useMemo(() => [
         { label: 'Nombre científico', value: 'nombre_cientifico' },
         { label: 'Familia', value: 'familia' },
         { label: 'Nombre local', value: 'nombre_local' },
@@ -53,7 +52,7 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
         { label: 'Fecha', value: 'fecha' },
         { label: 'Determino', value: 'determino' },
         { label: 'Otros datos', value: 'otros_datos' },
-    ];
+    ], []);
     const [search, setSearch] = useState("");
     const [buscando, setBuscando] = useState(false);
     const [showSearchBar, setShowSearchBar] = useState(false);
@@ -79,9 +78,9 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
         }
     }, [value]);
 
-    const updateSearch = (searchInput) => {
+    const updateSearch = useCallback((searchInput) => {
         setSearch(searchInput);
-    };
+    }, []);
 
     useEffect(() => {
         Animated.timing(animation, {
@@ -92,12 +91,9 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
         }).start();
     }, [showSearchBar]);
 
-    const toggleSearchBar = () => {
-        console.log("funciona")
+    const toggleSearchBar = useCallback(() => {
         setShowSearchBar(!showSearchBar);
-        console.log(showSearchBar)
-        console.log(searchBarWidth)
-    };
+    }, [showSearchBar]);
 
     const searchBarWidth = animation.interpolate({
         inputRange: [0, 1],
@@ -109,46 +105,32 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
         outputRange: [20, 0],
     });
 
-    const peticion = (buscar) => {
+    const peticion = useCallback((buscar) => {
         if (pantalla === "grupos") {
-            //console.log("Buscando: " + buscar);
             verGruposFiltrado(buscar)
                 .then(result => {
                     setBuscando(false);
-                    onResult(result); // Pasamos los resultados a la función de devolución de llamada
+                    onResult(result);
                 })
                 .catch(error => {
                     setBuscando(false);
                     console.error('Ocurrió un error al obtener los grupos:', error);
                 });
         } else {
-            //console.log("Buscando: " + buscar);
             onResult([buscar, value]);
             setBuscando(false);
-            /*
-            consultarIdGrupo(pantalla).then((id) => {
-                console.log("id del grupo: " + id);
-                verTomasFiltrado(id, value, buscar).then(tomas => {
-                    setBuscando(false);
-                    onResult(tomas); // Pasamos los resultados a la función de devolución de llamada
-                }).catch(error => {
-                    console.error(error);
-                });
-            }).catch((error) => {
-                console.log(error);
-            });*/
         }
-    };
+    }, [pantalla, value, onResult]);
 
     return (
-        <View style={{ flexDirection: 'row', flex:1}}>
+        <View style={{ flexDirection: 'row', flex:1, paddingVertical:5}}>
             <View style={{flex: 8, alignItems:"flex-end"}}>
                 <Animated.View style={{overflow: 'hidden', width:searchBarWidth, transform: [{ translateX: searchBarTranslate }]}}>
                     <SearchBar
                         placeholder={titulo}
                         searchIcon={false}
                         inputContainerStyle={{ 
-                            backgroundColor: 'white', 
+                            backgroundColor: quintoFePro, 
                             borderTopLeftRadius: 20, 
                             borderBottomLeftRadius: 20, 
                             borderTopRightRadius: 0, 
@@ -163,7 +145,8 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
                             backgroundColor: 'rgba(0,0,0,0)'
                         }}
                         inputStyle={{ 
-                            backgroundColor: 'white'
+                            backgroundColor: quintoFePro,
+                            color: principalFePro
                         }}
                         onChangeText={updateSearch}
                         value={search}
@@ -173,7 +156,7 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
             </View>
             <TouchableOpacity style={{
                 flex: 1, 
-                backgroundColor:'#fff', 
+                backgroundColor: showSearchBar ? principalFePro : quintoFePro, 
                 height:'100%', 
                 justifyContent:'center', 
                 alignContent:'center', 
@@ -183,7 +166,7 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
                 borderBottomLeftRadius: showSearchBar ? 0 : 20
 
             }} onPress={toggleSearchBar}>
-                <Icon name='search' size={25}/>
+                <Icon name='search' size={25} color={showSearchBar ? quintoFePro : principalFePro}/>
             </TouchableOpacity>
         </View>
     );

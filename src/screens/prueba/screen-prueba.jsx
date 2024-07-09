@@ -25,7 +25,7 @@ const Prueba = ({ navigation }) => {
 
     return (
         <View style={{width:'100%', height:'100%', justifyContent:'center'}}>
-            <Menu/>
+            <Menu pantalla={'Perfil'}/>
             <View style={{width:'100%', height:43, backgroundColor:'#58f'}}>
                 <BarraBusqueda titulo={'Buscar grupo'} pantalla={'grupos'} onResult={updateGrupos} />
             </View>
