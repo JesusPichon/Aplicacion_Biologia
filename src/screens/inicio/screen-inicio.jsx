@@ -1,19 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import styles from '../../styles/style-app';
-import animaciones from '../../components/animaciones/animaciones';
-import { tercero } from '../../styles/style-colors';
-import { crearTablas } from '../../services/database/SQLite';
-import { PermissionsAndroid,useColorScheme } from 'react-native';
+import React, { useEffect } from 'react';
 import {
     Text,
     View,
     TouchableOpacity,
     Animated,
     StatusBar,
-    ImageBackground
+    ImageBackground,
+    PermissionsAndroid, 
+    useColorScheme, 
+    Appearance, 
+    AppState,
 } from "react-native";
+import styles from '../../styles/style-app';
+import animaciones from '../../components/animaciones/animaciones';
+import { crearTablas } from '../../services/database/SQLite';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCache } from "./../../services/storage/CacheContext";
+import { useSelector, useDispatch } from 'react-redux';
+import { setTheme } from '../../services/redux/slices/themeSlice';
 
 
 const Inicio = ({ navigation }) => {
@@ -70,59 +74,67 @@ const Inicio = ({ navigation }) => {
         //console.log(cacheData);
     }, []);
 
+    const dispatch = useDispatch();
     const systemTheme = useColorScheme(); // Obtiene el tema actual del sistema ('light' o 'dark')
-    const [theme, setTheme] = useState(systemTheme); // Estado para manejar el tema de la app
+    const {currentTheme, themes} = useSelector((state) => state.theme);
+    
+    useEffect(() => {
+        // // Establecer el tema de la aplicación según el tema del sistema al iniciar
+        // console.log("Current Theme:", currentTheme);
+        // console.log("System Theme:", systemTheme);
+        // console.log("Selected Theme:", theme);
+        if (currentTheme === 'system' || currentTheme !== systemTheme) {
+            dispatch(setTheme(systemTheme));
+        }
+    }, [dispatch, systemTheme, currentTheme]);
 
     useEffect(() => {
-        // Este efecto se ejecuta cuando cambia la preferencia de tema del sistema.
-        setTheme(systemTheme);
-    }, [systemTheme]); // Dependencias: se vuelve a ejecutar el efecto si systemTheme cambia.
+        const handleAppearanceChange = ({ colorScheme }) => {
+            // Actualizar el tema de la aplicación cuando el tema del sistema cambie
+            if (currentTheme === 'system') {
+                dispatch(setTheme(colorScheme));
+            }
+        };
 
-    // Imágenes para cada tema
-    const logoClaro = require('../../assets/images/logoClaro.png'); // Paso 3
-    const logoOscuro = require('../../assets/images/logoOscuro.png'); // Asume que tienes otra imagen para el tema oscuro
+        const listener = Appearance.addChangeListener(handleAppearanceChange);
 
-     // Selecciona la imagen basada en el tema
-     const logoImagen = theme === 'dark' ? logoOscuro : logoClaro; // Paso 4
+        return () => listener.remove();
+    }, [dispatch, currentTheme]);
 
-     // Define las imágenes para cada tema
-    const fondoClaro = require('../../assets/images/fondoClaro.jpeg');
-    const fondoOscuro = require('../../assets/images/fondoOscuro.jpeg');
+    useEffect(() => {
+        const handleAppStateChange = (nextAppState) => {
+            if (nextAppState === 'active' && currentTheme === 'system') {
+                dispatch(setTheme(Appearance.getColorScheme()));
+            }
+        };
 
-    // Selecciona la imagen de fondo basada en el tema
-    const imagenFondo = theme === 'dark' ? fondoOscuro : fondoClaro;
+        const subscription = AppState.addEventListener('change', handleAppStateChange);
 
-    const colorStatusBar = theme === 'dark' ? '#203c3b' : '#97b4a5';
+        return () => subscription.remove();
+    }, [dispatch, currentTheme]);
+
+    const theme = themes[currentTheme] || themes[systemTheme] || themes.light;
+    const { imageBackgroundInicio, logoInicio, colorStatusBarInicio } = theme;
 
     return (
         // activamos la animacion de entrada
-        <ImageBackground source={imagenFondo} resizeMode="cover" style={{flex: 1, width: '100%', height: '100%'}}>
-        <View style={[
-            {
-                flex: 1,
-                /*marginTop: Constants.statusBarHeight,*/
-                justifyContent: 'center',
-                alignItems: 'center',
-            }]}>
+        <ImageBackground source={imageBackgroundInicio} resizeMode="cover" style={{flex: 1, width: '100%', height: '100%'}}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
             <StatusBar
                 barStyle="dark-content"
                 animated={true}
-                backgroundColor={colorStatusBar}
-            />
-
-            
+                backgroundColor={colorStatusBarInicio}
+            />            
             {/* View del logo*/}
             <Animated.View style={{ flex: 10, flexDirection: 'row', overflow: 'hidden', transform: [{ translateY: translateAnimDOWN }, { scale: unoAnim }] }}>
                 <View style={{ flex: 1 }}></View>
-                <ImageBackground source={logoImagen} resizeMode="contain" style={{ flex: 8 }}></ImageBackground>
+                <ImageBackground source={logoInicio} resizeMode="contain" style={{ flex: 8 }}></ImageBackground>
                 <View style={{ flex: 1 }}></View>
             </Animated.View>
 
             {/* View del boton */}
             <Animated.View style={{ flex: 6, justifyContent: 'center', opacity: unoAnim }}>
-                <TouchableOpacity onPress={() => {
-                    navigation.navigate('Grupos');
-                }}>
+                <TouchableOpacity onPress={() => { navigation.navigate('Grupos'); }}>
                     <Text style={[styles.boton, styles.fondoP, styles.textT, { paddingHorizontal: 25, paddingVertical: 15, fontSize: 18, fontWeight: 'bold' }]}>
                         Entrar
                     </Text>
@@ -131,15 +143,12 @@ const Inicio = ({ navigation }) => {
 
             {/* View para FAQ */}
             <Animated.View style={{ flex: 1, justifyContent: 'center', opacity: unoAnim }}>
-                <TouchableOpacity onPress={() => {
-                    navigation.navigate('FAQ');
-                }}>
-                    <Text style={[styles.textP]}>
+                <TouchableOpacity onPress={() => { navigation.navigate('FAQ'); }}>
+                    <Text style={styles.textP}>
                         Preguntas frecuentes (FAQs)
                     </Text>
                 </TouchableOpacity>
             </Animated.View>
-
         </View>
         </ImageBackground> 
     )

@@ -15,7 +15,8 @@ import { verTomasExportar, verTomasTotales } from "../../services/database/SQLit
 import { readString, jsonToCSV } from 'react-native-csv';
 import { getRawData, formatData, guardarArchivoCSV, columnasComillas } from "../../services/functions/export-csv";
 import { Tab, TabView, Chip } from '@rneui/themed';
-import { color } from "@rneui/base";
+import { useSelector, useDispatch } from 'react-redux';
+import { setTheme } from '../../services/redux/slices/themeSlice';
 
 const Grupos = ({ navigation }) => {
     // animaciones
