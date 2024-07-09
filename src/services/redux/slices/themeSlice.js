@@ -1,20 +1,16 @@
-import { createSlice, current } from "@reduxjs/toolkit";
-import { Appearance, ImageBackground } from "react-native";
+import { createSlice } from "@reduxjs/toolkit";
+import { Appearance } from "react-native";
 
 const lightTheme = {
-    background: '#f5f5f5',	
-    Text: '#000000',
-    imageBackground: require('../../../assets/images/fondoClaro.jpeg'),
-    logo: require('../../../assets/images/logoClaro.png'),
-    colorStatusBar: '#97b4a5',
+    imageBackgroundInicio: require('../../../assets/images/fondoClaro.jpeg'),
+    logoInicio: require('../../../assets/images/logoClaro.png'),
+    colorStatusBarInicio: '#97b4a5',
 };
     
 const darkTheme = {
-    background: '#000000',
-    Text: '#ffffff',
-    imageBackground: require('../../../assets/images/fondoOscuro.jpeg'),
-    logo: require('../../../assets/images/logoOscuro.png'),
-    colorStatusBar: '#203c3b',
+    imageBackgroundInicio: require('../../../assets/images/fondoOscuro.jpeg'),
+    logoInicio: require('../../../assets/images/logoOscuro.png'),
+    colorStatusBarInicio: '#203c3b',
 };
 
 initialState = {
@@ -32,16 +28,17 @@ const themeSlice = createSlice({
         setTheme: (state, action) => {
             state.currentTheme = action.payload;
         },
-        toggleTheme: (state, action) => {
-            state.currentTheme = state.currentTheme === 'light' ? 'dark' : 'light';
-        },
-        updateSystemTheme: (state) => {
-            if (state.currentTheme === 'system') {
-                state.currentTheme = Appearance.getColorScheme();
+        toggleTheme: (state) => {
+            if (state.currentTheme === 'light') {
+              state.currentTheme = 'dark';
+            } else if (state.currentTheme === 'dark') {
+              state.currentTheme = 'light';
+            } else {
+              state.currentTheme = Appearance.getColorScheme() === 'light' ? 'dark' : 'light';
             }
         },
     },
 });
 
-export const { setTheme, toggleTheme, updateSystemTheme } = themeSlice.actions;
+export const { setTheme, toggleTheme } = themeSlice.actions;
 export default themeSlice.reducer;
