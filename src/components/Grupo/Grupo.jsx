@@ -4,15 +4,10 @@ import stylesCanales from "../../screens/grupos/style-canales";
 import { useEffect, useState } from "react";
 import { principal, principalFePro, quintoFePro, secundarioFePro, terceropFePro } from "../../styles/style-colors";
 import { CheckBox, Chip } from "@rneui/themed";
+import { useSelector } from "react-redux";
 
 const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccionar, exportando, seleccionarGrupoExportar }) => {
-  const systemTheme = useColorScheme(); // Obtiene el tema actual del sistema ('light' o 'dark')
-  const [theme, setTheme] = useState(systemTheme); // Estado para manejar el tema de la app
-
-  useEffect(() => {
-    // Este efecto se ejecuta cuando cambia la preferencia de tema del sistema.
-    setTheme(systemTheme);
-  }, [systemTheme]); // Dependencias: se vuelve a ejecutar el efecto si systemTheme cambia.
+  const {currentTheme, themes} = useSelector((state) => state.theme);
 
   const [checked, setChecked] = useState(false);
 
@@ -36,11 +31,8 @@ const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccio
     if (!mostrarSeleccionar) navigation.navigate('Tomas', {nombre});
   };
 
-  const nombreViewBackgroundColor = theme === 'dark' ? principalFePro : terceropFePro;
-  const nombreViewTextColor = theme === 'dark' ? quintoFePro : principalFePro;
-
-  const tomasViewBackgroundColor = theme === 'dark' ? terceropFePro : principalFePro;
-  const tomasViewTextColor = theme === 'dark' ? secundarioFePro : quintoFePro;
+  const theme = themes[currentTheme] || themes[systemTheme] || themes.light;
+  const { nombreViewBackgroundColor, nombreViewTextColor, tomasViewBackgroundColor, tomasViewTextColor, } = theme;
 
   return (
     <TouchableOpacity style={stylesCanales.cardVertical} onPress={handleSeleccionarGrupo}>

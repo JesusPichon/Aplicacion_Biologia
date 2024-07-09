@@ -1,16 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Appearance } from "react-native";
+import { principal, principalFePro, quintoFePro, secundarioFePro, terceropFePro } from "../../../styles/style-colors";
 
 const lightTheme = {
     imageBackgroundInicio: require('../../../assets/images/fondoClaro.jpeg'),
     logoInicio: require('../../../assets/images/logoClaro.png'),
-    colorStatusBarInicio: '#97b4a5',
+    colorStatusBarInicio: '#97b4a5', 
+    nombreViewBackgroundColor: terceropFePro,
+    nombreViewTextColor: principalFePro,
+    tomasViewBackgroundColor: principalFePro,
+    tomasViewTextColor: quintoFePro,
 };
     
 const darkTheme = {
     imageBackgroundInicio: require('../../../assets/images/fondoOscuro.jpeg'),
     logoInicio: require('../../../assets/images/logoOscuro.png'),
     colorStatusBarInicio: '#203c3b',
+    nombreViewBackgroundColor: principalFePro,
+    nombreViewTextColor: quintoFePro,
+    tomasViewBackgroundColor: terceropFePro,
+    tomasViewTextColor: secundarioFePro,
 };
 
 initialState = {
