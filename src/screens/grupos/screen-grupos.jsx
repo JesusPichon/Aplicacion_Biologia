@@ -15,6 +15,7 @@ import { readString, jsonToCSV } from 'react-native-csv';
 import { getRawData, formatData, guardarArchivoCSV, columnasComillas } from "../../services/functions/export-csv";
 import { Tab, TabView, Chip } from '@rneui/themed';
 import { useSelector } from 'react-redux';
+import { Icon } from "react-native-elements";
 
 
 const Grupos = ({ navigation }) => {
@@ -246,13 +247,24 @@ const Grupos = ({ navigation }) => {
     
     return (
         <View style={[styles.mainContainer, { backgroundColor: mainContainerBackgroundColor, }]}>
-            <Animated.View style={{ opacity: unoAnim }}>
-                <View style={{width:'100%', height:50, flexDirection:"row"}}>
-                    <View style={{width:'10%'}}>
+            {/* <View style={{ flexDirection:"row", justifyContent: 'space-between', paddingHorizontal: 10}}> */}
+                {/* <Icon
+                    name='menu'
+                    type='material'
+                    color={principal}
+                    size={40}
+                    onPress={() => navigation.openDrawer()}
+                /> */}
+                {/* <Menu pantalla={'Mis grupos'}/> */}
+                <Animated.View style={{ opacity: unoAnim }}>
+                    <View style={{width:'100%', height:50, flexDirection:"row"}}>
+                        <View style={{width:'10%'}}>
+                        </View>
+                        <BarraBusqueda titulo={'Buscar grupo'} pantalla={'grupos'} onResult={updateGrupos} />
                     </View>
-                    <BarraBusqueda titulo={'Buscar grupo'} pantalla={'grupos'} onResult={updateGrupos} />
-                </View>
-            </Animated.View>
+                </Animated.View>
+            {/* </View> */}
+            
             {/* Nueva sección con los botones en fila */}
             {/* <View style={styles.buttonContainer}>
                 <TouchableOpacity style={[styles.fusionar, styles.fondoT]} onPress={modoExportar}>

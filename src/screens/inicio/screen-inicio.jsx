@@ -134,7 +134,7 @@ const Inicio = ({ navigation }) => {
 
             {/* View del boton */}
             <Animated.View style={{ flex: 6, justifyContent: 'center', opacity: unoAnim }}>
-                <TouchableOpacity onPress={() => { navigation.navigate('Grupos'); }}>
+                <TouchableOpacity onPress={() => { navigation.replace('Home'); }}>
                     <Text style={[styles.boton, styles.fondoP, styles.textT, { paddingHorizontal: 25, paddingVertical: 15, fontSize: 18, fontWeight: 'bold' }]}>
                         Entrar
                     </Text>
@@ -142,13 +142,13 @@ const Inicio = ({ navigation }) => {
             </Animated.View>
 
             {/* View para FAQ */}
-            <Animated.View style={{ flex: 1, justifyContent: 'center', opacity: unoAnim }}>
+            {/* <Animated.View style={{ flex: 1, justifyContent: 'center', opacity: unoAnim }}>
                 <TouchableOpacity onPress={() => { navigation.navigate('FAQ'); }}>
                     <Text style={styles.textP}>
                         Preguntas frecuentes (FAQs)
                     </Text>
                 </TouchableOpacity>
-            </Animated.View>
+            </Animated.View> */}
         </View>
         </ImageBackground> 
     )
