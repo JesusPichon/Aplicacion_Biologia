@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect, useMemo, useCallback } from "react"
 import { Icon } from '@rneui/themed';
 import { verGruposFiltrado, verTomas, consultarIdGrupo, verTomasFiltrado } from "../../services/database/SQLite";
 import { View, Animated, TouchableOpacity, Easing } from "react-native";
+import { useSelector } from "react-redux";
 
 // como implementar en canales
 
@@ -29,6 +30,11 @@ import { View, Animated, TouchableOpacity, Easing } from "react-native";
 
 
 const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
+    const {currentTheme, themes} = useSelector((state) => state.theme);
+
+    const theme = themes[currentTheme] || themes.light;
+  const {  } = theme;
+
     const [value, setValue] = useState('nombre_cientifico');
     const [isFocus, setIsFocus] = useState(false);
     const data_filtro = useMemo(() => [
@@ -163,9 +169,8 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
                 borderTopRightRadius: 20, 
                 borderBottomRightRadius: 20,
                 borderTopLeftRadius: showSearchBar ? 0 : 20, 
-                borderBottomLeftRadius: showSearchBar ? 0 : 20
-
-            }} onPress={toggleSearchBar}>
+                borderBottomLeftRadius: showSearchBar ? 0 : 20,
+                }} onPress={toggleSearchBar}>
                 <Icon name='search' size={25} color={showSearchBar ? quintoFePro : principalFePro}/>
             </TouchableOpacity>
         </View>
