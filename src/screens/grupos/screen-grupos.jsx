@@ -22,10 +22,13 @@ const Grupos = ({ navigation }) => {
     const {currentTheme, themes} = useSelector((state) => state.theme);
 
     const theme = themes[currentTheme] || themes.light;
-    const { mainContainerBackgroundColor, 
-        secondaryContainerBackgroundColor,
-        titleColorText,
+    const {  
         tabItemSelectColor,
+        colorPrimario,
+        colorSecundario,
+        colorTerciario,
+        colorCuaternario,
+        colorQuinario,
     } = theme;
 
     // animaciones
@@ -246,25 +249,23 @@ const Grupos = ({ navigation }) => {
     const containerStyle = { borderRadius: 30, marginHorizontal: 10,}; // Estilo del título de la pestaña
     
     return (
-        <View style={[styles.mainContainer, { backgroundColor: mainContainerBackgroundColor, }]}>
-            {/* <View style={{ flexDirection:"row", justifyContent: 'space-between', paddingHorizontal: 10}}> */}
-                {/* <Icon
-                    name='menu'
-                    type='material'
-                    color={principal}
-                    size={40}
-                    onPress={() => navigation.openDrawer()}
-                /> */}
+        <View style={[styles.mainContainer, { backgroundColor: colorPrimario, }]}>
                 {/* <Menu pantalla={'Mis grupos'}/> */}
-                <Animated.View style={{ opacity: unoAnim }}>
+                <Animated.View style={{ opacity: unoAnim, paddingHorizontal: 10}}>
                     <View style={{width:'100%', height:50, flexDirection:"row"}}>
                         <View style={{width:'10%'}}>
+                            <Icon
+                                name='menu'
+                                type='material'
+                                color={principal}
+                                size={40}
+                                onPress={() => navigation.openDrawer()}
+                            />
                         </View>
                         <BarraBusqueda titulo={'Buscar grupo'} pantalla={'grupos'} onResult={updateGrupos} />
                     </View>
                 </Animated.View>
-            {/* </View> */}
-            
+
             {/* Nueva sección con los botones en fila */}
             {/* <View style={styles.buttonContainer}>
                 <TouchableOpacity style={[styles.fusionar, styles.fondoT]} onPress={modoExportar}>
@@ -276,9 +277,9 @@ const Grupos = ({ navigation }) => {
                     <Text style={[styles.textP, { textAlign: 'center', fontWeight: 'bold' }]}>IMPORTAR</Text>
                 </TouchableOpacity>
             </View> */}
-            <View style={[styles.secondaryContainer, { backgroundColor: secondaryContainerBackgroundColor, }]}>  
+            <View style={[styles.secondaryContainer, { backgroundColor: colorSecundario, }]}>  
                 <View style={styles.titleContainer}>
-                    <Text style={{fontSize: 30, fontWeight:'bold', color: titleColorText}}>Mis Grupos</Text>
+                    <Text style={{fontSize: 30, fontWeight:'bold', color: colorQuinario}}>Mis Grupos</Text>
                     <Chip
                         icon={{
                             name: "file-download",
@@ -299,13 +300,13 @@ const Grupos = ({ navigation }) => {
                     >
                     <Tab.Item
                         title="Creados"
-                        titleStyle={{fontSize: 20, fontWeight: index === 0 ? 'bold' : 'normal', color: titleColorText,}}
-                        containerStyle={[containerStyle,{backgroundColor: index === 0 ? tabItemSelectColor : secondaryContainerBackgroundColor,}]}
+                        titleStyle={{fontSize: 20, fontWeight: index === 0 ? 'bold' : 'normal', color: colorQuinario,}}
+                        containerStyle={[containerStyle,{backgroundColor: index === 0 ? colorTerciario : colorSecundario,}]}
                     />
                     <Tab.Item
                         title="Guardados"
-                        titleStyle={{fontSize: 20, fontWeight: index === 1 ? 'bold' : 'normal', color: titleColorText,}}
-                        containerStyle={[containerStyle,{backgroundColor: index === 1 ? tabItemSelectColor : secondaryContainerBackgroundColor,}]}
+                        titleStyle={{fontSize: 20, fontWeight: index === 1 ? 'bold' : 'normal', color: colorQuinario,}}
+                        containerStyle={[containerStyle,{backgroundColor: index === 1 ? colorTerciario : colorSecundario,}]}
                     />
                 </Tab>
 

@@ -31,7 +31,13 @@ const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccio
   };
 
   const theme = themes[currentTheme] || themes.light;
-  const { nombreViewBackgroundColor, nombreViewTextColor, tomasViewBackgroundColor, tomasViewTextColor, } = theme;
+  const { 
+    colorPrimario,
+    colorSecundario,
+    colorTerciario,
+    colorCuaternario,
+    colorQuinario,
+  } = theme;
 
   return (
     <TouchableOpacity style={stylesCanales.cardVertical} onPress={handleSeleccionarGrupo}>
@@ -41,8 +47,8 @@ const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccio
         style={stylesCanales.image}
       />
       <View style={{flex: 1, flexDirection: 'row', width: '100%'}}>
-        <View style={[stylesCanales.nombreView, {backgroundColor: nombreViewBackgroundColor}]}>
-          <Text style={[stylesCanales.nombreViewText, {color: nombreViewTextColor} ]}>
+        <View style={[stylesCanales.nombreView, {backgroundColor: colorPrimario }]}>
+          <Text style={[stylesCanales.nombreViewText, {color: colorQuinario} ]}>
             {nombre}
           </Text>
           <Chip
@@ -56,8 +62,8 @@ const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccio
             buttonStyle={{backgroundColor: principal}}
           />
         </View>
-        <View style={[stylesCanales.tomasView, {backgroundColor: tomasViewBackgroundColor}]}>
-          <Text style={[stylesCanales.tomasViewText, {color: tomasViewTextColor}]}>Tomas: 300</Text>
+        <View style={[stylesCanales.tomasView, {backgroundColor: colorQuinario}]}>
+          <Text style={[stylesCanales.tomasViewText, {color: colorPrimario}]}>Tomas: 300</Text>
         </View>
       </View>
     </TouchableOpacity>

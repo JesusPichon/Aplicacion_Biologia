@@ -6,28 +6,26 @@ const lightTheme = {
     imageBackgroundInicio: require('../../../assets/images/fondoClaro.jpeg'), // Pantalla de inicio
     logoInicio: require('../../../assets/images/logoClaro.png'), //Pantalla de inicio
     colorStatusBarInicio: '#97b4a5', //Pantalla de inicio
-    nombreViewBackgroundColor: terceroFePro, //Componente Grupo
-    nombreViewTextColor: principalFePro, //Componente Grupo
-    tomasViewBackgroundColor: principalFePro, //Componente Grupo
-    tomasViewTextColor: quintoFePro, //Componente Grupo
-    mainContainerBackgroundColor: quintoFePro, //Pantalla Grupos
-    secondaryContainerBackgroundColor: cuartoFePro, //Pantalla Grupos
-    titleColorText: principalFePro, //Pantalla Grupos
     tabItemSelectColor: terceroFePro, //Pantalla Grupos
+    
+    colorPrimario: quintoFePro,
+    colorSecundario: cuartoFePro,
+    colorTerciario: terceroFePro,
+    colorCuaternario: secundarioFePro,
+    colorQuinario: principalFePro,
 };
     
 const darkTheme = {
     imageBackgroundInicio: require('../../../assets/images/fondoOscuro.jpeg'),
     logoInicio: require('../../../assets/images/logoOscuro.png'),
     colorStatusBarInicio: '#203c3b',
-    nombreViewBackgroundColor: principalFePro,
-    nombreViewTextColor: quintoFePro,
-    tomasViewBackgroundColor: terceroFePro,
-    tomasViewTextColor: secundarioFePro,
-    mainContainerBackgroundColor: principalFePro,
-    secondaryContainerBackgroundColor: secundarioFePro,
-    titleColorText: quintoFePro,
     tabItemSelectColor: principalFePro,
+
+    colorPrimario: principalFePro,
+    colorSecundario: secundarioFePro,
+    colorTerciario: terceroFePro,
+    colorCuaternario: cuartoFePro,
+    colorQuinario: quintoFePro,
 };
 
 initialState = {

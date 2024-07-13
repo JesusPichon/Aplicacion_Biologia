@@ -134,7 +134,7 @@ const Inicio = ({ navigation }) => {
 
             {/* View del boton */}
             <Animated.View style={{ flex: 6, justifyContent: 'center', opacity: unoAnim }}>
-                <TouchableOpacity onPress={() => { navigation.replace('Home'); }}>
+                <TouchableOpacity onPress={() => { navigation.navigate('Home'); }}>
                     <Text style={[styles.boton, styles.fondoP, styles.textT, { paddingHorizontal: 25, paddingVertical: 15, fontSize: 18, fontWeight: 'bold' }]}>
                         Entrar
                     </Text>
