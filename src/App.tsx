@@ -58,10 +58,14 @@ import CamposPred from './screens/campos-predeterminados/screen-camposPred';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { CacheProvider } from './services/storage/CacheContext';
 import { Provider } from 'react-redux';
 import store from './services/redux/store';
+import { View, Text, Animated, FlatList } from "react-native";
+import { useSelector } from 'react-redux';
+import { Icon } from 'react-native-elements';
+import { cuartoFePro, principal, principalFePro, quintoFePro, secundarioFePro, terceroFePro } from "../src/styles/style-colors";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -79,7 +83,58 @@ const MisGruposStack = () => (
 
 // Drawer Navigation
 const HomeDrawer = () => (
-  <Drawer.Navigator initialRouteName="MisGrupos" screenOptions={{ headerShown: false }}>
+  <Drawer.Navigator 
+    initialRouteName="MisGrupos" 
+    screenOptions={{ headerShown: false, drawerStyle: {borderBottomRightRadius: 20, borderTopRightRadius: 20,}}}
+    drawerContent={(props) => {
+
+      const { routeNames, index } = props.state;
+      const focused = routeNames[index];
+      //console.log('focuses', focused);
+
+      return (
+        <DrawerContentScrollView {...props} contentContainerStyle={{backgroundColor: quintoFePro, justifyContent: 'center', height: '100%', borderTopRightRadius: 20, borderBottomRightRadius: 20,}}>
+            <DrawerItem 
+              label="Mis Grupos" 
+              onPress={() => {props.navigation.navigate('MisGrupos')}}
+              focused = { focused === 'MisGrupos' }
+              activeBackgroundColor= {principalFePro}
+              inactiveBackgroundColor={quintoFePro}
+              activeTintColor= {quintoFePro}
+              inactiveTintColor={principalFePro}
+              icon={({focused, color, size}) => (
+                <Icon
+                    name='home'
+                    type='material'
+                    color={color}
+                    size={40}
+                />
+              )}
+              style={{borderTopRightRadius: 20, borderBottomRightRadius: 20, borderBottomLeftRadius: 0, borderTopLeftRadius: 0, marginHorizontal: 0}}
+            />
+            <DrawerItem 
+              label="FAQ" 
+              onPress={() => {props.navigation.navigate('FAQ')}} 
+              focused = { focused === 'FAQ' }
+              activeBackgroundColor= {principalFePro}
+              inactiveBackgroundColor={quintoFePro}
+              activeTintColor= {quintoFePro}
+              inactiveTintColor={principalFePro}
+              icon={({focused, color, size}) => (
+                <Icon
+                    name='explore'
+                    type='material'
+                    color={color}
+                    size={40}
+                />
+              )}
+              style={{borderTopRightRadius: 20, borderBottomRightRadius: 20, borderBottomLeftRadius: 0, borderTopLeftRadius: 0, marginHorizontal: 0}}
+            />
+          
+        </DrawerContentScrollView>
+      );
+    }}
+    >
     <Drawer.Screen name="MisGrupos" component={MisGruposStack} />
     {/* <Drawer.Screen name="Explorar" component={ExplorarStack} /> */}
     {/* <Drawer.Screen name="Configuracion" component={Configuracion} /> */}
