@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Controller } from "react-hook-form";
 import { View, Text, TextInput, Pressable, Platform, StyleSheet } from "react-native";
-import DateTimePicker from '@react-native-community/datetimepicker';
+// import DateTimePicker from '@react-native-community/datetimepicker';
 import { Tooltip, Icon } from '@rneui/themed';
 import { principal, tercero } from '../../styles/style-colors';
 

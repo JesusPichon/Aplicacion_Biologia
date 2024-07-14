@@ -28,6 +28,27 @@ const styles = StyleSheet.create({
         color: 'black', // Cambia el color de la letra a negro
         
     },
+
+    mainContainer: {
+        flex: 1,
+    },
+    secondaryContainer: { 
+        flex: 1,
+        borderTopRightRadius: 30, 
+        borderTopLeftRadius: 30, 
+    },
+    // contenedor de los TabView
+    TabViewcontainer: {
+        flex: 1,
+        width: '100%',
+        height: '100%',
+        borderTopLeft: 30,  
+        borderTopRight: 30,
+        borderRadius: 30,
+        margin: 15,
+        padding: 15,
+
+    },
 });
 
 

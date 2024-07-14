@@ -250,21 +250,21 @@ const Grupos = ({ navigation }) => {
     
     return (
         <View style={[styles.mainContainer, { backgroundColor: colorPrimario, }]}>
-                {/* <Menu pantalla={'Mis grupos'}/> */}
-                <Animated.View style={{ opacity: unoAnim, paddingHorizontal: 10}}>
-                    <View style={{width:'100%', height:50, flexDirection:"row"}}>
-                        <View style={{width:'10%'}}>
-                            <Icon
-                                name='menu'
-                                type='material'
-                                color={principal}
-                                size={40}
-                                onPress={() => navigation.openDrawer()}
-                            />
-                        </View>
-                        <BarraBusqueda titulo={'Buscar grupo'} pantalla={'grupos'} onResult={updateGrupos} />
+            {/* <Menu pantalla={'Mis grupos'}/> */}
+            <Animated.View style={{ opacity: unoAnim, paddingHorizontal: 10}}>
+                <View style={{width:'100%', height:50, flexDirection:"row"}}>
+                    <View style={{width:'10%'}}>
+                        <Icon
+                            name='menu'
+                            type='material'
+                            color={principal}
+                            size={40}
+                            onPress={() => navigation.openDrawer()}
+                        />
                     </View>
-                </Animated.View>
+                    <BarraBusqueda titulo={'Buscar grupo'} pantalla={'grupos'} onResult={updateGrupos} />
+                </View>
+            </Animated.View>
 
             {/* Nueva sección con los botones en fila */}
             {/* <View style={styles.buttonContainer}>
@@ -277,6 +277,7 @@ const Grupos = ({ navigation }) => {
                     <Text style={[styles.textP, { textAlign: 'center', fontWeight: 'bold' }]}>IMPORTAR</Text>
                 </TouchableOpacity>
             </View> */}
+            
             <View style={[styles.secondaryContainer, { backgroundColor: colorSecundario, }]}>  
                 <View style={styles.titleContainer}>
                     <Text style={{fontSize: 30, fontWeight:'bold', color: colorQuinario}}>Mis Grupos</Text>
