@@ -19,6 +19,7 @@ import {
 import seleccion from "../../components/Selecionar-Imagenes/selecion";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCache } from "../../services/storage/CacheContext";
+import { Tab, TabView, Chip } from '@rneui/themed';
 
 const Formulario = ({navigation, route}) => {
     // Estado para almacenar la URI de la imagen seleccionada
