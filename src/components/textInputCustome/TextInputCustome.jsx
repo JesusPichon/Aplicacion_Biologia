@@ -8,15 +8,32 @@ import {
     View,
     StyleSheet
 } from 'react-native';
+import { useSelector } from 'react-redux';
+import { color } from '@rneui/base';
 
 const TextInputCustome = ({ label, control, name, rules, errors, multiline, maxLines, tooltip, keyboardType }) => {
-    const textInputStyle = multiline ? styles.textInputMultiLine : styles.textInput;  // Determinar el estilo de TextInput según la prop multilinea
+    const {currentTheme, themes} = useSelector((state) => state.theme);
+
+    const theme = themes[currentTheme] || themes.light;
+    const {  
+        tabItemSelectColor,
+        colorPrimario,
+        colorSecundario,
+        colorTerciario,
+        colorCuaternario,
+        colorQuinario,
+    } = theme;
+
+    const textInputStyle = multiline ? 
+    [styles.textInputMultiLine, {backgroundColor: colorPrimario, borderColor: colorTerciario, color: colorQuinario}] : 
+    [styles.textInput, {backgroundColor: colorPrimario, borderColor: colorTerciario, color: colorQuinario}];  // Determinar el estilo de TextInput según la prop multilinea
+    
     const [open, setOpen] = React.useState(false);
 
     return (
         <View style={ styles.container}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={styles.textP}>{label}</Text>
+                <Text style={[styles.textP, {color: colorCuaternario,}]}>{label}</Text>
                 {tooltip && (
                     <View >
                         <Tooltip 
@@ -69,33 +86,30 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },  
     container: {
+        marginTop: 10,
         marginBottom: 10
     },
     textP: {
-        color: principal,
         textAlign: 'left',
         fontWeight: 'bold',
         marginRight: 5,
-        fontSize: 15
+        marginBottom: 5,
+        fontSize: 16
     },
     textInput: {
-        backgroundColor: 'rgb(128, 155, 174)',
-        borderRadius: 5,
-        borderColor: false,
-        color: tercero,
+        borderRadius: 10,
         paddingLeft: 10,
         fontWeight: 'bold',
         fontSize: 16,
+        borderWidth: 2,
     },
     textInputMultiLine: {
-        backgroundColor: 'rgb(128, 155, 174)',
-        borderRadius: 5,
-        borderColor: false,
-        color: tercero,
+        borderRadius: 10,
         paddingLeft: 10,
         fontWeight: 'bold',
         height: 150,
         fontSize: 16,
+        borderWidth: 2,
     },
     textError: {
         color: 'red',

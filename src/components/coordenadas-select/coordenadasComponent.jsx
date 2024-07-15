@@ -4,6 +4,7 @@ import { Controller } from 'react-hook-form';
 import { principal, secundario, tercero } from '../../styles/style-colors';
 import { CheckBox } from '@rneui/themed';
 import { Dropdown } from "react-native-element-dropdown";
+import { useSelector } from 'react-redux';
 
 const Hemisferio_longitud = [
   { label: 'Este', value: 'Este' },
@@ -16,6 +17,17 @@ const Hemisferio_latitud = [
 ];
 
 const InputCoordenadas = ({control, rules, errors, name1, name2, name3, name4, name5, name6, name7, name8, name9, name10, watch, setValue }) => {
+  const {currentTheme, themes} = useSelector((state) => state.theme);
+
+  const theme = themes[currentTheme] || themes.light;
+  const {  
+      colorPrimario,
+      colorSecundario,
+      colorTerciario,
+      colorCuaternario,
+      colorQuinario,
+  } = theme;
+
   const watchOption = watch('option', 'geographic'); 
   const setValueOption = (value) => {setValue('option', value);};
   const [isFocus, setIsFocus] = useState(false);
@@ -49,15 +61,19 @@ const InputCoordenadas = ({control, rules, errors, name1, name2, name3, name4, n
     setValue(name8, selectedLongitud);
   }, [selectedLongitud]);
 
+  const borderColor = colorTerciario;
+
   return (
     <View style={styles.container}>
-      <Text style={styles.textP}>Coordenadas:</Text>
+      <Text style={[styles.textP, {color: colorCuaternario}]}>Coordenadas:</Text>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <CheckBox
           center
           title="Geográficas"
           checkedIcon="dot-circle-o"
           uncheckedIcon="circle-o"
+          containerStyle={{backgroundColor: colorPrimario}}
+          textStyle={{color: colorQuinario}}
           checked={watchOption === 'geographic'}
           onPress={() => {
             handleOptionChange('geographic');
@@ -68,6 +84,8 @@ const InputCoordenadas = ({control, rules, errors, name1, name2, name3, name4, n
           title="Métricas"
           checkedIcon="dot-circle-o"
           uncheckedIcon="circle-o"
+          containerStyle={{backgroundColor: colorPrimario}}
+          textStyle={{color: colorQuinario}}
           checked={watchOption === 'metric'}
           onPress={() => {
             handleOptionChange('metric');
@@ -78,15 +96,16 @@ const InputCoordenadas = ({control, rules, errors, name1, name2, name3, name4, n
       {watchOption === 'geographic' && (
         <View style={styles.container}>
           <View style={styles.container}>
-            <Text style={styles.textPCoordenadas}>Latitud:</Text>
+            <Text style={[styles.textPCoordenadas, {color: colorCuaternario}]}>Latitud:</Text>
             <Controller
               control={control}
               render={({ field: { onChange, value } }) => (
                 <TextInput
-                  style={styles.textInputCoordenadas}
+                  style={[styles.textInputCoordenadas, {borderColor: borderColor}]}
                   onChangeText={onChange}
                   value={value}
                   placeholder="Ingrese los grados de latitud"
+                  placeholderTextColor={currentTheme === 'dark' ? '#FFF' : 'gray'}
                   keyboardType="numeric"
                 />
               )}
@@ -101,10 +120,11 @@ const InputCoordenadas = ({control, rules, errors, name1, name2, name3, name4, n
               control={control}
               render={({ field: { onChange, value } }) => (
                 <TextInput
-                  style={styles.textInputCoordenadas}
+                  style={[styles.textInputCoordenadas, {borderColor: borderColor}]}
                   onChangeText={onChange}
                   value={value}
                   placeholder="Ingrese los minutos de latitud"
+                  placeholderTextColor={currentTheme === 'dark' ? '#FFF' : 'gray'}
                   keyboardType="numeric"
                 />
               )}
@@ -119,10 +139,11 @@ const InputCoordenadas = ({control, rules, errors, name1, name2, name3, name4, n
               control={control}
               render={({ field: { onChange, value } }) => (
                 <TextInput
-                  style={styles.textInputCoordenadas}
+                  style={[styles.textInputCoordenadas, {borderColor: borderColor}]}
                   onChangeText={onChange}
                   value={value}
                   placeholder="Ingrese los segundos de latitud"
+                  placeholderTextColor={currentTheme === 'dark' ? '#FFF' : 'gray'}
                   keyboardType="numeric"
                 />
               )}
@@ -137,13 +158,17 @@ const InputCoordenadas = ({control, rules, errors, name1, name2, name3, name4, n
               control={control}
               render={({ field: { onChange, value, onBlur } }) => (
                 <Dropdown
-                  style={styles.dropdown}
+                  style={[styles.dropdown, {backgroundColor: colorPrimario, borderColor: colorTerciario}]}
+                  itemTextStyle={{color: colorQuinario}}
+                  containerStyle={[styles.ContainerStyle, {backgroundColor: colorTerciario}]}
+                  activeColor={colorSecundario}
                   iconColor='#FFF'
                   data={Hemisferio_latitud}
                   labelField="label"
                   valueField="value"
                   placeholder="Hemisferio de latitud"
-                  selectedTextStyle={styles.selectedTextStyle}
+                  placeholderStyle={{color: currentTheme === 'dark' ? '#FFF' : 'gray'}}
+                  selectedTextStyle={[styles.selectedTextStyle, {color: colorQuinario}]}
                   value={value}
                   onChange={(selectedItem) => {
                     onChange(selectedItem.value);
@@ -156,16 +181,17 @@ const InputCoordenadas = ({control, rules, errors, name1, name2, name3, name4, n
               rules={{ required: true }}
             />
           </View>
-          <Text style={styles.textPCoordenadas}>Longitud:</Text>
+          <Text style={[styles.textPCoordenadas, { color: colorCuaternario }]}>Longitud:</Text>
           <View style={styles.container}>
             <Controller
               control={control}
               render={({ field: { onChange, value } }) => (
                 <TextInput
-                  style={styles.textInputCoordenadas}
+                  style={[styles.textInputCoordenadas, {borderColor: borderColor}]}
                   onChangeText={onChange}
                   value={value}
                   placeholder="Ingrese los grados de longitud"
+                  placeholderTextColor={currentTheme === 'dark' ? '#FFF' : 'gray'}
                   keyboardType="numeric"
                 />
               )}
@@ -180,10 +206,11 @@ const InputCoordenadas = ({control, rules, errors, name1, name2, name3, name4, n
               control={control}
               render={({ field: { onChange, value } }) => (
                 <TextInput
-                  style={styles.textInputCoordenadas}
+                  style={[styles.textInputCoordenadas, {borderColor: borderColor}]}
                   onChangeText={onChange}
                   value={value}
                   placeholder="Ingrese los minutos de longitud"
+                  placeholderTextColor={currentTheme === 'dark' ? '#FFF' : 'gray'}
                   keyboardType="numeric"
                 />
               )}
@@ -198,10 +225,11 @@ const InputCoordenadas = ({control, rules, errors, name1, name2, name3, name4, n
               control={control}
               render={({ field: { onChange, value } }) => (
                 <TextInput
-                  style={styles.textInputCoordenadas}
+                  style={[styles.textInputCoordenadas, {borderColor: borderColor}]}
                   onChangeText={onChange}
                   value={value}
                   placeholder="Ingrese los segundos de longitud"
+                  placeholderTextColor={currentTheme === 'dark' ? '#FFF' : 'gray'}
                   keyboardType="numeric"
                 />
               )}
@@ -216,9 +244,11 @@ const InputCoordenadas = ({control, rules, errors, name1, name2, name3, name4, n
               control={control}
               render={({ field: { onChange, value, onBlur } }) => (
               <Dropdown
-                style={styles.dropdown}
-                selectedTextStyle={styles.selectedTextStyle}
-                containerStyle={styles.ContainerStyle}
+                style={[styles.dropdown, {backgroundColor: colorPrimario, borderColor: colorTerciario}]}
+                selectedTextStyle={[styles.selectedTextStyle, {color: colorQuinario}]}
+                itemTextStyle={{color: colorQuinario}}
+                containerStyle={[styles.ContainerStyle, {backgroundColor: colorTerciario}]}
+                activeColor={colorSecundario}
                 iconColor='#FFF'
                 data={Hemisferio_longitud}
                 labelField="label"
@@ -236,10 +266,10 @@ const InputCoordenadas = ({control, rules, errors, name1, name2, name3, name4, n
               rules={{ required: true }}
             />
           </View>
-          <Text style={styles.textPCoordenadasFinal}>
+          <Text style={[styles.textPCoordenadasFinal, { color: colorCuaternario }]}>
             Latitud: {watch(name1)}° {watch(name2)}' {watch(name3)}" {watch(name4)}
           </Text>
-          <Text style={styles.textPCoordenadasFinal}>
+          <Text style={[styles.textPCoordenadasFinal, { color: colorCuaternario }]}>
             Longitud: {watch(name5)}° {watch(name6)}' {watch(name7)}" {watch(name8)}
           </Text>
         </View>
@@ -252,10 +282,11 @@ const InputCoordenadas = ({control, rules, errors, name1, name2, name3, name4, n
               control={control}
               render={({ field: { onChange, value } }) => (
                 <TextInput
-                  style={styles.textInputCoordenadas}
+                  style={[styles.textInputCoordenadas, {borderColor: borderColor}]}
                   onChangeText={onChange}
                   value={value}
                   placeholder="Ingrese la coordenada X"
+                  placeholderTextColor={currentTheme === 'dark' ? '#FFF' : 'gray'}
                   keyboardType="numeric"
                 />
               )}
@@ -270,10 +301,11 @@ const InputCoordenadas = ({control, rules, errors, name1, name2, name3, name4, n
               control={control}
               render={({ field: { onChange, value } }) => (
                 <TextInput
-                  style={styles.textInputCoordenadas}
+                  style={[styles.textInputCoordenadas, {borderColor: borderColor}]}
                   onChangeText={onChange}
                   value={value}
                   placeholder="Ingrese la coordenada Y"
+                  placeholderTextColor={currentTheme === 'dark' ? '#FFF' : 'gray'}
                   keyboardType="numeric"
                 />
               )}
@@ -283,7 +315,7 @@ const InputCoordenadas = ({control, rules, errors, name1, name2, name3, name4, n
             />
             {errors && errors[name10] && <Text style={styles.textError}>{errors[name10].message}</Text>}
           </View>
-          <Text style={styles.textPCoordenadasFinal}>
+          <Text style={[styles.textPCoordenadasFinal, { color: colorCuaternario }]}>
             X: {watch(name9)}    Y: {watch(name10)}
           </Text>
         </View>
@@ -297,34 +329,32 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   textP: {
-    color: principal,
     textAlign: 'left',
     fontWeight: 'bold',
     marginRight: 5,
-    fontSize: 15
+    marginBottom: 5,
+    fontSize: 16,
   },
   textPCoordenadas: {
     color: principal,
     textAlign: 'left',
     fontWeight: 'bold',
     marginLeft:10,
-    fontSize: 15
+    fontSize: 15,
+    marginBottom: 5,
   },
   textPCoordenadasFinal: {
     color: principal,
     fontWeight: 'bold',
     textAlign: 'center',
-    fontSize: 15
+    fontSize: 17,
   },
   textInputCoordenadas: {
     flex: 1,
-    backgroundColor: 'rgb(128, 155, 174)',
-    borderRadius: 5,
-    borderColor: false,
-    color: tercero,
+    borderRadius: 10,
+    borderWidth: 2,
     paddingLeft: 10,
     paddingRight: 10,
-    // marginBottom: 10,
     marginHorizontal: 10,
     fontSize: 16,
   },
@@ -334,13 +364,11 @@ const styles = StyleSheet.create({
   },
   dropdown:{
     marginHorizontal: 10,
-    backgroundColor: 'rgb(128, 155, 174)',
-    borderRadius: 5,
+    borderRadius: 10,
     paddingHorizontal: 10,
-
+    borderWidth: 2,
   },
   selectedTextStyle: {
-    color: tercero,
     fontWeight: 'bold',
   },
   ContainerStyle: {

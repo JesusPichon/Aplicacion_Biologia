@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Controller } from "react-hook-form";
 import { View, Text, TextInput, Pressable, Platform, StyleSheet } from "react-native";
-// import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { Tooltip, Icon } from '@rneui/themed';
 import { principal, tercero } from '../../styles/style-colors';
+import { useSelector } from 'react-redux';
 
 const FechaComponente = ({ control, name, errors, rules, tooltip }) => {
     const [showPicker, setShowPicker] = useState(false);
@@ -26,10 +27,21 @@ const FechaComponente = ({ control, name, errors, rules, tooltip }) => {
         return `${day}/${month}/${year}`;
     }
 
+    const {currentTheme, themes} = useSelector((state) => state.theme);
+
+    const theme = themes[currentTheme] || themes.light;
+    const {  
+        colorPrimario,
+        colorSecundario,
+        colorTerciario,
+        colorCuaternario,
+        colorQuinario,
+    } = theme;
+
     return (
         <View style={styles.container}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={styles.textP}>Fecha:</Text>
+                <Text style={[styles.textP, {color: colorCuaternario}]}>Fecha:</Text>
                 {tooltip && (
                     <View >
                         <Tooltip 
@@ -62,7 +74,7 @@ const FechaComponente = ({ control, name, errors, rules, tooltip }) => {
                         {!showPicker && (
                             <Pressable onPress={toggleDatePicker}>
                                 <TextInput
-                                    style={styles.textInput}
+                                    style={[styles.textInput, { borderColor: colorTerciario, color: colorQuinario }]}
                                     editable={false}
                                     value={value ? formatDate(value) : ''}
                                     onChangeText={onChange}
@@ -91,19 +103,17 @@ const FechaComponente = ({ control, name, errors, rules, tooltip }) => {
 
 const styles = StyleSheet.create({
     container: {
-        marginBottom: 10
+        marginBottom: 5,
     },
     textP: {
-        color: principal,
         textAlign: 'left',
         fontWeight: 'bold',
-        fontSize: 15
+        fontSize: 16,
+        marginBottom: 5,
     },
     textInput: {
-        backgroundColor: 'rgb(128, 155, 174)',
-        borderRadius: 5,
-        borderColor: false,
-        color: tercero,
+        borderWidth: 2,
+        borderRadius: 10,
         paddingLeft: 10,
         fontWeight: 'bold',
         fontSize: 16,

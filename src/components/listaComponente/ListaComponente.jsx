@@ -9,15 +9,27 @@ import {
     StyleSheet
 } from 'react-native';
 import { Controller } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 
 const CustomDropdown = ({ control, name, rules, errors, label, data, allowCustomOption, allowSearchOption, tooltip, placeholder }) => {
   const [isCustom, setIsCustom] = useState(false);
   const [open, setOpen] = React.useState(false);
 
+  const {currentTheme, themes} = useSelector((state) => state.theme);
+
+  const theme = themes[currentTheme] || themes.light;
+  const {  
+      colorPrimario,
+      colorSecundario,
+      colorTerciario,
+      colorCuaternario,
+      colorQuinario,
+  } = theme;
+
   return (
     <View style={styles.container}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={styles.textP}>{label}</Text>
+            <Text style={[styles.textP, {color: colorCuaternario}]}>{label}</Text>
             {tooltip && (
                 <View >
                     <Tooltip 
@@ -46,11 +58,12 @@ const CustomDropdown = ({ control, name, rules, errors, label, data, allowCustom
           render={({ field: { onChange, value } }) => (
             <View>
               <Dropdown
-                style={styles.dropdown}
-                selectedTextStyle={styles.selectedTextStyle}
-                itemTextStyle={styles.itemTextStyle}
-                containerStyle={styles.ContainerStyle}
-                iconColor='#FFF'
+                style={[styles.dropdown, {backgroundColor: colorPrimario, borderColor: colorTerciario}]}
+                selectedTextStyle={[styles.selectedTextStyle, {color: colorQuinario}]}
+                itemTextStyle={{color: colorQuinario}}
+                containerStyle={[styles.ContainerStyle, {backgroundColor: colorTerciario}]}
+                activeColor={colorSecundario}
+                iconColor={currentTheme === 'dark' ? '#FFF' : 'gray'}
                 data={allowCustomOption ? data : data.filter(item => item.value !== 'otro')}
                 ietm
                 search={allowSearchOption}
@@ -58,6 +71,7 @@ const CustomDropdown = ({ control, name, rules, errors, label, data, allowCustom
                 labelField="label"
                 valueField="value"
                 placeholder={placeholder}
+                placeholderStyle={{color: currentTheme === 'dark' ? '#FFF' : 'gray'}}
                 value={isCustom ? 'otro' : value}
                 onChange={item => {
                   if (item.value === 'otro') {
@@ -71,10 +85,11 @@ const CustomDropdown = ({ control, name, rules, errors, label, data, allowCustom
               />
               {isCustom && (
                 <TextInput
-                  style={styles.textInputOp}
+                  style={[styles.textInputOp, {backgroundColor: colorPrimario, borderColor: colorTerciario, color: colorQuinario}]}
                   value={value}
                   onChangeText={text => onChange(text)}
                   placeholder="Ingresa tu opción"
+                  placeholderTextColor={currentTheme === 'dark' ? '#FFF' : 'gray'}
                 />
               )}
             </View>
@@ -94,17 +109,16 @@ const styles = StyleSheet.create({
       marginBottom: 10
     },
     textP: {
-      color: principal,
       textAlign: 'left',
       fontWeight: 'bold',
-      fontSize: 15
+      marginRight: 5,
+      marginBottom: 5,
+      fontSize: 16
     },
     textInputOp: {
       flex: 1,
-      backgroundColor: 'rgb(128, 155, 174)',
-      borderRadius: 5,
-      borderColor: false,
-      color: tercero,
+      borderRadius: 10,
+      borderWidth: 2,
       paddingHorizontal: 10,
       marginTop: 10,
       fontSize: 16,
@@ -113,13 +127,12 @@ const styles = StyleSheet.create({
         color: 'red',
     },
     dropdown:{
-      backgroundColor: 'rgb(128, 155, 174)',
-      borderRadius: 5,
+      borderWidth: 2,
+      borderRadius: 10,
       paddingHorizontal: 10,
-  
+      
     },
     selectedTextStyle: {
-      color: tercero,
       fontWeight: 'bold'
     },
     itemTextStyle: {
@@ -127,6 +140,7 @@ const styles = StyleSheet.create({
     },
     ContainerStyle: {
       borderRadius: 10,
+      borderWidth: 0,
     },
     tooltipText: {
         color:tercero,

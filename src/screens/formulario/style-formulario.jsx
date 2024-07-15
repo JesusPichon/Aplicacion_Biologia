@@ -40,14 +40,12 @@ const styles = StyleSheet.create({
     // contenedor de los TabView
     TabViewcontainer: {
         flex: 1,
-        width: '100%',
         height: '100%',
         borderTopLeft: 30,  
         borderTopRight: 30,
         borderRadius: 30,
         margin: 15,
         padding: 15,
-
     },
 });
 
