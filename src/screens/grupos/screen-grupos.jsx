@@ -258,8 +258,6 @@ const Grupos = ({ navigation }) => {
                 {/* <Menu pantalla={'Mis grupos'}/> */}
                 <Animated.View style={{ opacity: unoAnim }}>
                     <View style={{width:'100%', height:50, flexDirection:"row"}}>
-                        <View style={{width:'10%'}}>
-                        </View>
                         <BarraBusqueda titulo={'Buscar grupo'} pantalla={'grupos'} onResult={updateGrupos} />
                     </View>
                 </Animated.View>

@@ -1,10 +1,11 @@
 import { SearchBar } from "@rneui/themed";
-import { principalFePro, secundarioFePro, terceropFePro, cuartoFePro, quintoFePro, principal } from "../../styles/style-colors";
+import { principalFePro, secundarioFePro, terceropFePro, cuartoFePro, quintoFePro, terceroFePro } from "../../styles/style-colors";
 import React, { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { Icon } from '@rneui/themed';
 import { verGruposFiltrado, verTomas, consultarIdGrupo, verTomasFiltrado } from "../../services/database/SQLite";
 import { View, Animated, TouchableOpacity, Easing } from "react-native";
 import { useSelector } from "react-redux";
+import { Dropdown } from 'react-native-element-dropdown';
 
 // como implementar en canales
 
@@ -70,7 +71,7 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
             setBuscando(true);
             timerId = setTimeout(() => {
                 peticion(search);
-            }, 200);
+            }, 300);
         } else {
             peticion(search);
         }
@@ -91,7 +92,7 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
     useEffect(() => {
         Animated.timing(animation, {
             toValue: showSearchBar ? 1 : 0,
-            duration: 500,
+            duration: 300,
             easing: Easing.bezier(0,.46,.7,.79),
             useNativeDriver: false,
         }).start();
@@ -103,7 +104,7 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
 
     const searchBarWidth = animation.interpolate({
         inputRange: [0, 1],
-        outputRange: ['0%', '100%'],
+        outputRange: ['0%', '90%'],
     });
 
     const searchBarTranslate = animation.interpolate({
@@ -128,53 +129,124 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
         }
     }, [pantalla, value, onResult]);
 
-    return (
-        <View style={{ flexDirection: 'row', flex:1, paddingVertical:5}}>
-            <View style={{flex: 8, alignItems:"flex-end"}}>
-                <Animated.View style={{overflow: 'hidden', width:searchBarWidth, transform: [{ translateX: searchBarTranslate }]}}>
-                    <SearchBar
-                        placeholder={titulo}
-                        searchIcon={false}
-                        inputContainerStyle={{ 
-                            backgroundColor: quintoFePro, 
-                            borderTopLeftRadius: 20, 
-                            borderBottomLeftRadius: 20, 
-                            borderTopRightRadius: 0, 
-                            borderBottomRightRadius: 0, 
-                            height:'100%'
-                        }}
-                        containerStyle={{
-                            padding: 0, 
-                            margin: 0, 
-                            borderTopWidth: 0, 
-                            borderBottomWidth: 0, 
-                            backgroundColor: 'rgba(0,0,0,0)'
-                        }}
-                        inputStyle={{ 
-                            backgroundColor: quintoFePro,
-                            color: principalFePro
-                        }}
-                        onChangeText={updateSearch}
-                        value={search}
-                        showLoading={buscando}
-                    />
-                </Animated.View>
+    if (pantalla === "grupos") {
+        return (
+            <View style={{ flexDirection: 'row', flex:1, paddingVertical:5}}>
+                <View style={{flex: 9, alignItems:"flex-end"}}>
+                    <Animated.View style={{overflow: 'hidden', width:searchBarWidth, transform: [{ translateX: searchBarTranslate }]}}>
+                        <SearchBar
+                            placeholder={titulo}
+                            searchIcon={false}
+                            inputContainerStyle={{ 
+                                backgroundColor: quintoFePro, 
+                                borderTopLeftRadius: 20, 
+                                borderBottomLeftRadius: 20, 
+                                borderTopRightRadius: 0, 
+                                borderBottomRightRadius: 0, 
+                                height:'100%'
+                            }}
+                            containerStyle={{
+                                padding: 0, 
+                                margin: 0, 
+                                borderTopWidth: 0, 
+                                borderBottomWidth: 0, 
+                                backgroundColor: 'rgba(0,0,0,0)'
+                            }}
+                            inputStyle={{ 
+                                backgroundColor: quintoFePro,
+                                color: principalFePro
+                            }}
+                            onChangeText={updateSearch}
+                            value={search}
+                            showLoading={buscando}
+                        />
+                    </Animated.View>
+                </View>
+                <TouchableOpacity style={{
+                    flex: 1, 
+                    backgroundColor: showSearchBar ? principalFePro : quintoFePro, 
+                    height:'100%', 
+                    justifyContent:'center', 
+                    alignContent:'center', 
+                    borderTopRightRadius: 20, 
+                    borderBottomRightRadius: 20,
+                    borderTopLeftRadius: showSearchBar ? 0 : 20, 
+                    borderBottomLeftRadius: showSearchBar ? 0 : 20,
+                    }} onPress={toggleSearchBar}>
+                    <Icon name='search' size={25} color={showSearchBar ? quintoFePro : principalFePro}/>
+                </TouchableOpacity>
             </View>
-            <TouchableOpacity style={{
-                flex: 1, 
-                backgroundColor: showSearchBar ? principalFePro : quintoFePro, 
-                height:'100%', 
-                justifyContent:'center', 
-                alignContent:'center', 
-                borderTopRightRadius: 20, 
-                borderBottomRightRadius: 20,
-                borderTopLeftRadius: showSearchBar ? 0 : 20, 
-                borderBottomLeftRadius: showSearchBar ? 0 : 20,
-                }} onPress={toggleSearchBar}>
-                <Icon name='search' size={25} color={showSearchBar ? quintoFePro : principalFePro}/>
-            </TouchableOpacity>
-        </View>
-    );
+        );
+    }else{
+        return (
+            <View style={{ flexDirection: 'row', flex:1, paddingVertical:5, position:"relative"}}>
+                <View style={{flex: 9, alignItems:"flex-end"}}>
+                    <Animated.View style={{overflow: 'hidden', width:searchBarWidth, transform: [{ translateX: searchBarTranslate }]}}>
+                        <SearchBar
+                            placeholder={titulo}
+                            searchIcon={false}
+                            inputContainerStyle={{ 
+                                backgroundColor: quintoFePro, 
+                                borderTopLeftRadius: 20, 
+                                borderBottomLeftRadius: 20, 
+                                borderTopRightRadius: 0, 
+                                borderBottomRightRadius: 0, 
+                                height:'100%'
+                            }}
+                            containerStyle={{
+                                padding: 0, 
+                                margin: 0, 
+                                borderTopWidth: 0, 
+                                borderBottomWidth: 0, 
+                                backgroundColor: 'rgba(0,0,0,0)'
+                            }}
+                            inputStyle={{ 
+                                backgroundColor: quintoFePro,
+                                color: principalFePro
+                            }}
+                            onChangeText={updateSearch}
+                            value={search}
+                            showLoading={buscando}
+                        />
+                    </Animated.View>
+                </View>
+                <Dropdown
+                    style={{ backgroundColor: principalFePro, width:150, borderRadius: 20, position:"absolute", left: 20, top: 61, zIndex:2}}
+                    iconStyle={{ tintColor: quintoFePro, width: 20, height: 20, marginRight: 5 }}
+                    selectedTextStyle={{ marginLeft: 5, color: terceroFePro, fontSize: 12 }}
+                    itemTextStyle={{ fontSize: 12, color: quintoFePro }}
+                    itemContainerStyle={{ borderWidth: 0.2, borderColor: principalFePro }}
+                    containerStyle={{ backgroundColor:principalFePro, borderWidth:0, borderRadius:20 }}
+                    activeColor={secundarioFePro}
+                    maxHeight={200}
+                    labelField="label"
+                    valueField="value"
+                    data={data_filtro}
+                    value={value}
+                    onFocus={() => setIsFocus(true)}
+                    onBlur={() => setIsFocus(false)}
+                    onChange={item => {
+                        setValue(item.value);
+                        setIsFocus(false);
+                    }}
+
+                />
+                <TouchableOpacity style={{
+                    flex: 1, 
+                    backgroundColor: showSearchBar ? principalFePro : quintoFePro, 
+                    height:'100%', 
+                    justifyContent:'center', 
+                    alignContent:'center', 
+                    borderTopRightRadius: 20, 
+                    borderBottomRightRadius: 20,
+                    borderTopLeftRadius: showSearchBar ? 0 : 20, 
+                    borderBottomLeftRadius: showSearchBar ? 0 : 20,
+                    }} onPress={toggleSearchBar}>
+                    <Icon name='search' size={25} color={showSearchBar ? quintoFePro : principalFePro}/>
+                </TouchableOpacity>
+            </View>
+        );
+    }
 }
 
 export default BarraBusqueda;

@@ -33,8 +33,8 @@ const styles = StyleSheet.create({
     },
     secondaryContainer: { 
         flex: 1,  
-        borderTopRightRadius: 30, 
-        borderTopLeftRadius: 30, 
+        borderTopRightRadius: 20, 
+        borderTopLeftRadius: 20, 
     },
     // contenedor de los TabView
     TabViewcontainer: {
