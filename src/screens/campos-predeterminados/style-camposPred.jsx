@@ -14,7 +14,6 @@ const styles = StyleSheet.create({
         backgroundColor: tercero,
     },
     textTitle:{
-        color: principal,
         textAlign: 'center',
         fontWeight: 'bold',
         fontSize: 20,

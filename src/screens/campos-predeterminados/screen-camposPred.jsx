@@ -9,8 +9,21 @@ import {data_Estados} from './../formulario/dataDropdowns';
 import {ScrollView, Text, View, TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCache } from '../../services/storage/CacheContext';
+import { useSelector } from 'react-redux';
 
 const CamposPred = ({navigation, route}) => {
+  const {currentTheme, themes} = useSelector((state) => state.theme);
+
+    const theme = themes[currentTheme] || themes.light;
+    const {  
+        tabItemSelectColor,
+        colorPrimario,
+        colorSecundario,
+        colorTerciario,
+        colorCuaternario,
+        colorQuinario,
+    } = theme;
+
   const { cacheData, setCacheData } = useCache();
 
   const {
@@ -125,9 +138,9 @@ const CamposPred = ({navigation, route}) => {
   }, [cacheData]);
 
   return (
-    <View style={{flex: 1, backgroundColor: secundario}}>
-      <ScrollView style={[styles.containerF, styles.fondoT]}>
-        <Text style={styles.textTitle}>Valores Predeterminados</Text>
+    <View style={{flex: 1, backgroundColor: colorSecundario}}>
+      <ScrollView style={[styles.containerF, {backgroundColor: colorPrimario}]}>
+        <Text style={[styles.textTitle, { color: colorQuinario }]}>Campos Predeterminados</Text>
         <CustomDropdown
           label="Estado:"
           data={data_Estados}
