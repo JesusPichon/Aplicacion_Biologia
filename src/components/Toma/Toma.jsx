@@ -4,9 +4,20 @@ import style_toma from "./style-toma";
 import { CheckBox, ListItem, Icon } from "@rneui/themed";
 import { useState, useEffect } from "react";
 import { principal, principalFePro, quintoFePro } from "../../styles/style-colors";
+import { useSelector } from 'react-redux';
 import Snackbar from 'react-native-snackbar';
 
 const Toma = ({ navigation, data, seleccionarImprimir, deseleccionarImprimir, seleccionarEliminar, deseleccionarEliminar, showCheckBox, eliminar }) => {
+  const {currentTheme, themes} = useSelector((state) => state.theme);
+
+  const theme = themes[currentTheme] || themes.light;
+  const {  
+      colorPrimario,
+      colorSecundario,
+      colorTerciario,
+      colorCuaternario,
+      colorQuinario,
+  } = theme;
 
   const [checked, setChecked] = useState(false);
 
@@ -36,20 +47,20 @@ const Toma = ({ navigation, data, seleccionarImprimir, deseleccionarImprimir, se
       style={{paddingHorizontal:20}} >
 
       <ListItem
-        containerStyle={{marginBottom:30, backgroundColor: quintoFePro, borderRadius: 20}}
+        containerStyle={{marginBottom:30, backgroundColor: colorPrimario, borderRadius: 20}}
       >
-        <Icon name="flower-tulip-outline" type="material-community" color={principalFePro} size={60} />
+        <Icon name="flower-tulip-outline" type="material-community" color={colorQuinario} size={60} />
         <ListItem.Content>
-          <ListItem.Title style={{fontWeight: "bold" }}>
+          <ListItem.Title style={{fontWeight: "bold", color:colorQuinario }}>
           {data.nombre_cientifico ? 
             `Nombre cientifico: ${data.nombre_cientifico}` : 
             `Estado: ${data.estado}`
           }
           </ListItem.Title>
-          <ListItem.Title style={{fontWeight: "bold" }}>
+          <ListItem.Title style={{fontWeight: "bold", color:colorQuinario }}>
             Colector(es): {data.colector_es}
           </ListItem.Title>
-          <ListItem.Subtitle style={{}}>
+          <ListItem.Subtitle style={{color:colorQuinario}}>
             Fecha: {data.fecha}
           </ListItem.Subtitle>
         </ListItem.Content>
@@ -58,8 +69,9 @@ const Toma = ({ navigation, data, seleccionarImprimir, deseleccionarImprimir, se
           <ListItem.CheckBox
             iconType="material-community"
             checkedIcon="checkbox-marked"
+            containerStyle={{backgroundColor: colorPrimario}}
             uncheckedIcon="checkbox-blank-outline"
-            checkedColor={eliminar ? "#F00" : "#00F"}
+            checkedColor={colorQuinario}
             checked={checked}
             onPress={() => {if (eliminar) {
               if (checked)

@@ -1,15 +1,26 @@
 import { useState, useEffect } from "react";
-import { FlatList, View, Text } from 'react-native';
-import { SpeedDial, ButtonGroup, LinearProgress } from '@rneui/themed';
-import styles from "../../styles/style-app";
+import { FlatList, View} from 'react-native';
+import { SpeedDial,LinearProgress } from '@rneui/themed';
 import { principalFePro, secundarioFePro, terceropFePro, cuartoFePro, quintoFePro, terceroFePro } from "../../styles/style-colors";
 import Toma from "../../components/Toma";
 import { imprimirTomas } from "../../components/imprimir/imprimirSeleccionando";
 import BarraBusqueda from "../../components/BarraBusqueda";
 import TomaController from "../../services/controllers/tomaController";
+import { useSelector } from 'react-redux';
+import { Icon, Text } from "react-native-elements";
 import Snackbar from 'react-native-snackbar';
 
 const Tomas = ({ navigation, route }) => {
+    const {currentTheme, themes} = useSelector((state) => state.theme);
+
+    const theme = themes[currentTheme] || themes.light;
+    const {  
+        colorPrimario,
+        colorSecundario,
+        colorTerciario,
+        colorCuaternario,
+        colorQuinario,
+    } = theme;
 
     const nombreGrupo = route.params.nombre;
 
@@ -21,7 +32,6 @@ const Tomas = ({ navigation, route }) => {
     const [listTomas, setListTomas] = useState([]);
     const [listSelectPrint, setListSelectPrint] = useState([]);
     const [listSelectDelete, setListSelectDelete] = useState([]);
-    const [botones, setBotones] = useState([]);
     const [numPaginas, setNumPaginas] = useState(1);
     const [openButton, setOpenButton] = useState(false);
     const [showCheckBox, setShowCheckBox] = useState(false);
@@ -30,11 +40,11 @@ const Tomas = ({ navigation, route }) => {
 
     const controller = new TomaController();
 
-    const cargarTomas = async (pageNumber) => {
+    const cargarTomas = async (pageNumber, clearList = false) => {
         try {
             setLoading(true);
             const tomas = await controller.obtenerTomas(nombreGrupo, pageNumber, numeroTomas, buscar, campo);
-            setListTomas([...listTomas, ...tomas]);
+            setListTomas(clearList ? tomas : [...listTomas, ...tomas]);
             setLoading(false);
             setProgreso(1);
         } catch (error) {
@@ -60,7 +70,7 @@ const Tomas = ({ navigation, route }) => {
                 });
                 setTimeout(async () => {
                     await cargarTomas(page);
-                }, 300);
+                }, 150);
                 lanzarAlerta(lista.length == 1 ? 'Toma eliminada con éxito' : 'Tomas eliminadas con éxito');
                 setListSelectDelete([]);
             }
@@ -107,29 +117,43 @@ const Tomas = ({ navigation, route }) => {
 
     useEffect(() => {
         setPage(1);
-        cargarTomas(1);
         tomasTotales();
+        cargarTomas(1, true);
         setListSelectPrint([]);
         setListSelectDelete([]);
         setEliminar(false);
     }, [buscar]);
 
     return (
-        <View style={{ flex: 1, backgroundColor: principalFePro }}>
-            <View style={{ width: '100%', height: 50, flexDirection: "row" }}>
+        <View style={{ flex: 1, backgroundColor: colorPrimario }}>
+            <View style={{ width: '100%', height: 50, flexDirection: "row",  paddingHorizontal: 10, marginVertical:10}}>
+                <View style={{width:'10%', justifyContent:"center"}}>
+                    <Icon
+                        name='menu'
+                        type='material'
+                        color={colorQuinario}
+                        size={30}
+                        onPress={() => navigation.openDrawer()}
+                    />
+                </View>
                 <BarraBusqueda
                     titulo={'Buscar en las tomas'}
                     pantalla={nombreGrupo}
-                    onResult={updateTomas} />
+                    onResult={updateTomas} 
+                />
             </View>
 
-            <View style={{ flex: 1, backgroundColor: secundarioFePro, borderTopLeftRadius: 20, borderTopRightRadius: 20, paddingTop: 60}}>
+            <View style={{ flex: 1, backgroundColor: colorSecundario, borderTopLeftRadius: 20, borderTopRightRadius: 20, paddingTop: 60}}>
                 <FlatList
+                    ListEmptyComponent={<View style={{alignItems:"center"}}>
+                        <Icon name='menu' type='material' color={colorQuinario} size={100}/>
+                        <Text style={{fontSize:25}}>No se encontraron tomas. </Text>
+                    </View>}
                     data={listTomas}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item, index }) => (
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({item}) => (
                         <Toma
-                            key={index}
+                            key={item.id.toString()}
                             data={item}
                             navigation={navigation}
                             seleccionarImprimir={seleccionarImprimir}
@@ -146,21 +170,22 @@ const Tomas = ({ navigation, route }) => {
                         }
                     }}
                     onEndReachedThreshold={0.5}
-                    ListFooterComponent={loading && <LinearProgress color={quintoFePro} />}
+                    ListHeaderComponent={loading && <LinearProgress color={colorQuinario} />}
+                    ListHeaderComponentStyle={{marginBottom:15}}
                 />
             </View>
 
             <SpeedDial
                 isOpen={openButton}
-                icon={{ name: 'edit', color: 'white' }}
-                openIcon={{ name: 'close', color: 'white' }}
-                color={secundarioFePro}
+                icon={{ name: 'edit', color: colorPrimario }}
+                openIcon={{ name: 'close', color: colorPrimario }}
+                color={colorCuaternario}
                 onOpen={() => setOpenButton(!openButton)}
                 onClose={() => setOpenButton(!openButton)}>
 
                 {!showCheckBox && <SpeedDial.Action
-                    icon={{ name: 'edit', color: '#fff' }}
-                    color={secundarioFePro}
+                    icon={{ name: 'edit', color: colorPrimario }}
+                    color={colorQuinario}
                     title={'Campos Predeterminados'}
                     onPress={() => {
                         setOpenButton(!openButton);
@@ -168,8 +193,8 @@ const Tomas = ({ navigation, route }) => {
                     }} />}
                 
                 {!showCheckBox && <SpeedDial.Action
-                    icon={{ name: 'add', color: '#fff' }}
-                    color={secundarioFePro}
+                    icon={{ name: 'add', color: colorPrimario }}
+                    color={colorQuinario}
                     title={'Agregar'}
                     onPress={() => {
                         setOpenButton(!openButton);
@@ -177,8 +202,8 @@ const Tomas = ({ navigation, route }) => {
                     }} />}
                 
                 {!showCheckBox && <SpeedDial.Action
-                    icon={{ name: 'delete', color: '#fff' }}
-                    color={secundarioFePro}
+                    icon={{ name: 'delete', color: colorPrimario }}
+                    color={colorQuinario}
                     title={'Eliminar'}
                     onPress={() => {
                         setOpenButton(!openButton);
@@ -187,8 +212,8 @@ const Tomas = ({ navigation, route }) => {
                     }} />}
                 
                 {!showCheckBox && <SpeedDial.Action
-                    icon={{ name: 'print', color: '#fff' }}
-                    color={secundarioFePro}
+                    icon={{ name: 'print', color: colorPrimario }}
+                    color={colorQuinario}
                     title={'Imprimir'}
                     onPress={() => {
                         setOpenButton(!openButton);
@@ -197,9 +222,9 @@ const Tomas = ({ navigation, route }) => {
                     }} />}
                 
                 {showCheckBox && <SpeedDial.Action
-                    icon={{ name: 'done', color: '#fff' }}
+                    icon={{ name: 'done', color: colorPrimario }}
                     title="Aceptar"
-                    color={secundarioFePro}
+                    color={colorQuinario}
                     onPress={() => {
                         setShowCheckBox(false);
                         setOpenButton(false);
@@ -212,9 +237,9 @@ const Tomas = ({ navigation, route }) => {
                     }} />}
                 
                 {showCheckBox && <SpeedDial.Action
-                    icon={{ name: 'cancel', color: '#fff' }}
+                    icon={{ name: 'cancel', color: colorPrimario }}
                     title="Cancelar"
-                    color={secundarioFePro}
+                    color={colorQuinario}
                     onPress={() => {
                         setShowCheckBox(false);
                         setOpenButton(false);

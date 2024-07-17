@@ -199,14 +199,14 @@ const Grupos = ({ navigation }) => {
     
     return (
         <View style={[styles.mainContainer, { backgroundColor: colorPrimario, }]}>
-            <Animated.View style={{ opacity: unoAnim, paddingHorizontal: 10}}>
+            <Animated.View style={{ opacity: unoAnim, paddingHorizontal: 10, marginVertical:10}}>
                 <View style={{width:'100%', height:50, flexDirection:"row"}}>
-                    <View style={{width:'10%'}}>
+                    <View style={{width:'10%', justifyContent:"center"}}>
                         <Icon
                             name='menu'
                             type='material'
-                            color={principal}
-                            size={40}
+                            color={colorQuinario}
+                            size={30}
                             onPress={() => navigation.openDrawer()}
                         />
                     </View>
