@@ -1,34 +1,16 @@
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, ImageBackground } from "react-native";
 import stylesCanales from "../../screens/grupos/style-canales";
-import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { principal } from "../../styles/style-colors";
 import { Chip } from "@rneui/themed";
-import { useSelector } from "react-redux";
+import Snackbar from 'react-native-snackbar';
+import { readString, jsonToCSV } from 'react-native-csv';
+import { getRawData, formatData, guardarArchivoCSV, columnasComillas } from "../../services/functions/export-csv";
+import { toGammaSpace } from "react-native-reanimated/lib/typescript/Colors";
 
-const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccionar, exportando, seleccionarGrupoExportar }) => {
-  const {currentTheme, themes} = useSelector((state) => state.theme);
-
-  const [checked, setChecked] = useState(false);
-
-  useEffect(() => {
-    setChecked(false);
-  }, [mostrarSeleccionar]);
-
-  const handleSeleccionarGrupo = () => {
-    if (mostrarSeleccionar == true && !exportando) {
-      if (checked) {
-        deseleccionar(nombre);
-      } else {
-        seleccionar(nombre);
-      }
-      setChecked(!checked);
-    } else if (exportando) {
-      seleccionarGrupoExportar(nombre);
-      setChecked(false); // Ocultar las casillas de selección
-    }
-
-    if (!mostrarSeleccionar) navigation.navigate('Tomas', {nombre});
-  };
+const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, selectionMode}) => {
+  const { currentTheme, themes } = useSelector((state) => state.theme);
 
   const theme = themes[currentTheme] || themes.light;
   const { 
@@ -39,31 +21,90 @@ const Grupo = ({ navigation, nombre, deseleccionar, seleccionar, mostrarSeleccio
     colorQuinario,
   } = theme;
 
+  const handleExport = async () => {
+    try {
+      const datosConsulta = await getRawData(nombre);
+      const datosFormateados = await formatData(datosConsulta);
+      const csv = jsonToCSV(datosFormateados, { quotes: columnasComillas });
+      await guardarArchivoCSV(nombre, csv)
+        .then((mensaje) => {
+          Snackbar.show({
+            text: mensaje,
+            duration: Snackbar.LENGTH_SHORT
+          });
+        })
+        .catch((error) => {
+          Snackbar.show({
+            text: error,
+            duration: Snackbar.LENGTH_SHORT
+          });
+        });
+    } catch (error) {
+      console.error("Error al exportar: ", error);
+      Snackbar.show({
+        text: "Error al exportar: " + error.message,
+        duration: Snackbar.LENGTH_SHORT
+      });
+    }
+  };
+
+  const [checked, setChecked] = useState(false);
+
+  useEffect(() => {
+    setChecked(false);
+  }, [showCheckBox]);
+
+  const handleSeleccionarGrupo = () => {
+    if (showCheckBox == true ){
+      if (checked) {
+        deseleccionar(nombre);
+      } else {
+        seleccionar(nombre);
+      }
+      setChecked(!checked);
+    }
+
+    if (!showCheckBox) navigation.navigate('Tomas', {nombre});
+  };
+
   return (
-    <TouchableOpacity style={stylesCanales.cardVertical} onPress={handleSeleccionarGrupo}>
+    <TouchableOpacity style={stylesCanales.cardVertical} onPress={handleSeleccionarGrupo} onLongPress={selectionMode}>
       <ImageBackground
         source={require('../../assets/images/nature.jpg')}
         resizeMode="cover"
         style={stylesCanales.image}
       />
-      <View style={{flex: 1, flexDirection: 'row', width: '100%'}}>
-        <View style={[stylesCanales.nombreView, {backgroundColor: colorPrimario }]}>
-          <Text style={[stylesCanales.nombreViewText, {color: colorQuinario} ]}>
+      <View style={{ flex: 1, flexDirection: 'row', width: '100%' }}>
+        <View style={[stylesCanales.nombreView, { backgroundColor: colorPrimario }]}>
+          <Text style={[stylesCanales.nombreViewText, { color: colorQuinario }]}>
             {nombre}
           </Text>
-          <Chip
-            icon={{
-              name: 'file-upload',
-              type: 'material',
-              size: 25,
-              color: 'white',
-            }}
-            onPress={() => console.log('Icon chip was pressed!')}
-            buttonStyle={{backgroundColor: principal}}
-          />
+          {showCheckBox ? (
+            <Chip
+              icon={{
+                name: checked ? 'check-box' : 'check-box-outline-blank',
+                type: 'material',
+                size: 25,
+                color: 'white',
+              }}
+              onPress={handleSeleccionarGrupo}
+              buttonStyle={{ backgroundColor: 'red' }}
+            />
+          ) : (
+            <Chip
+              icon={{
+                name: 'file-upload',
+                type: 'material',
+                size: 25,
+                color: 'white',
+              }}
+              onPress={handleExport}
+              buttonStyle={{ backgroundColor: principal }}
+            />
+          )}
         </View>
-        <View style={[stylesCanales.tomasView, {backgroundColor: colorQuinario}]}>
-          <Text style={[stylesCanales.tomasViewText, {color: colorPrimario}]}>Tomas: 300</Text>
+        <View style={[stylesCanales.tomasView, { backgroundColor: colorQuinario }]}>
+          <Text style={[stylesCanales.tomasViewText, { color: colorPrimario }]}>Tomas: 300</Text>
         </View>
       </View>
     </TouchableOpacity>

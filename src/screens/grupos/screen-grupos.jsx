@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Animated, FlatList } from "react-native";
+import { View, Text, Animated, FlatList, TouchableOpacity } from "react-native";
 import { cuartoFePro, principal, principalFePro, secundario, terceroFePro } from "../../styles/style-colors";
 import { selectCsv } from "../../services/functions/import-csv";
 import styles from "./style-canales";
@@ -53,9 +53,6 @@ const Grupos = ({ navigation }) => {
     const [openButton, setOpenButton] = useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [showCheckBox, setShowCheckBox] = useState(false); //mostrar casillas de seleccion
-    
-    // Estados de la funcionalidad de exportar
-    const [exportando, setExportando] = useState(false); // Nuevo estado para controlar si se está exportando un grupo
 
     const controller = new GrupoController(); //agregar controller
 
@@ -185,64 +182,16 @@ const Grupos = ({ navigation }) => {
         }
     }
 
-    const handleExport = async () => {
-        try {
-            const datosConsulta = await getRawData(nombreGrupo);
-            //console.log('Datos obtenidos para la consulta:', datosConsulta); // Add logging
-    
-            const datosFormateados = await formatData(datosConsulta);
-            //console.log('Datos formateados para CSV:', datosFormateados); // Add logging
-    
-            const csv = jsonToCSV(datosFormateados, { quotes: columnasComillas });
-            //console.log('CSV generado:', csv);
-    
-            await guardarArchivoCSV(nombreGrupo, csv)
-                .then((mensaje) => {
-                    lanzarAlerta(mensaje);
-                })
-                .catch((error) => {
-                    lanzarAlerta(error);
-                });
-    
-            setExportando(false);
-            setNombreGrupo('');
-    
-        } catch (error) {
-            console.error("Error al exportar: ", error);
-            lanzarAlerta("Error al exportar: " + error.message);
-        }
-    };
-    
-    
-    const seleccionarGrupoExportar = (nombre) => {
-        // Guardar el grupo seleccionado para exportar
-        // Realizar la lógica de exportación con el grupo seleccionado
-        setNombreGrupo(nombre);
-        setShowCheckBox(false);
-    };
-
-    const modoExportar = (nombre) => {
-        if(grupos.length == 0){
-            lanzarAlerta("No hay grupos para Exportar");
-        }else{
-            // Cambiar al modo de exportación y mostrar las casillas de selección
-            setExportando(true);    
-            setShowCheckBox(true);
-        }
-    };
-    
+    const toggleSelectionMode = () => {
+        setShowCheckBox(!showCheckBox);
+        setListaBorrarGrupos([]);
+    }
+     
     useEffect(() => {
         startAnimations();
         cargarGrupos();
         setListaBorrarGrupos([]);
     }, [data]);
-
-    useEffect(() => {
-        // Esta función se ejecutará cada vez que se actualice nombreGrupo
-        if (nombreGrupo.trim() !== '' && exportando) {
-            handleExport(); // Iniciar el proceso de exportación cuando nombreGrupo se actualice
-        }
-    }, [nombreGrupo, exportando]); // Observar cambios en nombreGrupo y exportando
 
     const [index, setIndex] = useState(0);
 
@@ -250,7 +199,6 @@ const Grupos = ({ navigation }) => {
     
     return (
         <View style={[styles.mainContainer, { backgroundColor: colorPrimario, }]}>
-            {/* <Menu pantalla={'Mis grupos'}/> */}
             <Animated.View style={{ opacity: unoAnim, paddingHorizontal: 10}}>
                 <View style={{width:'100%', height:50, flexDirection:"row"}}>
                     <View style={{width:'10%'}}>
@@ -265,21 +213,9 @@ const Grupos = ({ navigation }) => {
                     <BarraBusqueda titulo={'Buscar grupo'} pantalla={'grupos'} onResult={updateGrupos} />
                 </View>
             </Animated.View>
-
-            {/* Nueva sección con los botones en fila */}
-            {/* <View style={styles.buttonContainer}>
-                <TouchableOpacity style={[styles.fusionar, styles.fondoT]} onPress={modoExportar}>
-                    <Text style={[styles.textP, { textAlign: 'center', fontWeight: 'bold' }]}>EXPORTAR</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={[styles.exportar, styles.fondoT]}
-                    onPress={handleImport}>
-                    <Text style={[styles.textP, { textAlign: 'center', fontWeight: 'bold' }]}>IMPORTAR</Text>
-                </TouchableOpacity>
-            </View> */}
             
             <View style={[styles.secondaryContainer, { backgroundColor: colorSecundario, }]}>  
-                <View style={styles.titleContainer}>
+                {/* <View style={styles.titleContainer}>
                     <Text style={{fontSize: 30, fontWeight:'bold', color: colorQuinario}}>Mis Grupos</Text>
                     <Chip
                         icon={{
@@ -288,10 +224,44 @@ const Grupos = ({ navigation }) => {
                             size: 25,
                             color: 'white',
                         }}
-                        onPress={() => console.log('Icon chip was pressed!')}
+                        onPress={handleImport}
+                        buttonStyle={{backgroundColor: principal}}
+                    />
+                </View> */}
+
+                { showCheckBox ? ( 
+                    <View style={styles.titleContainer}>
+                    <Text style={{fontSize: 30, fontWeight:'bold', color: colorQuinario}}>Eliminar Grupos</Text>
+                    <Chip
+                        icon={{
+                            name: "cancel",
+                            type: 'material',
+                            size: 25,
+                            color: 'white',
+                        }}
+                        onPress={() => {
+                            setShowCheckBox(false);
+                            setOpenButton(false);
+                            setListaBorrarGrupos([]);
+                        }}
+                        buttonStyle={{backgroundColor: 'red'}}
+                    />
+                </View>
+                ) : (
+                    <View style={styles.titleContainer}>
+                    <Text style={{fontSize: 30, fontWeight:'bold', color: colorQuinario}}>Mis Grupos</Text>
+                    <Chip
+                        icon={{
+                            name: "file-download",
+                            type: 'material',
+                            size: 25,
+                            color: 'white',
+                        }}
+                        onPress={handleImport}
                         buttonStyle={{backgroundColor: principal}}
                     />
                 </View>
+                )}
 
                 <Tab
                     value={index}
@@ -325,10 +295,11 @@ const Grupos = ({ navigation }) => {
                                     nombre={item}
                                     seleccionar={seleccionar}
                                     deseleccionar={deseleccionar}
-                                    mostrarSeleccionar={showCheckBox}
-                                    exportando={exportando}
-                                    seleccionarGrupoExportar={seleccionarGrupoExportar} />
-                            )} />
+                                    showCheckBox={showCheckBox}
+                                    selectionMode={toggleSelectionMode}
+                                />
+                            )}
+                        />
                     </TabView.Item>
                     <TabView.Item style={[styles.TabViewcontainer]}>
                         
@@ -344,10 +315,10 @@ const Grupos = ({ navigation }) => {
                     color={secundario}
                 >
                     {
-                        !showCheckBox && !exportando && (
+                        !showCheckBox && (
                             <SpeedDial.Action
                                 icon={{ name: 'add', color: '#fff' }}
-                                title="Agregar"
+                                title="Nuevo Grupo"
                                 color={secundario}
                                 onPress={() => {
                                     setOpenButton(false);
@@ -356,11 +327,12 @@ const Grupos = ({ navigation }) => {
                             />
                         )
                     }
+
                     {
-                        !showCheckBox && !exportando && (
+                        !showCheckBox && (
                             <SpeedDial.Action
                                 icon={{ name: 'delete', color: '#fff' }}
-                                title="Eliminar"
+                                title="Eliminar Grupos"
                                 color={secundario}
                                 onPress={() => {
                                     setShowCheckBox(true);
@@ -369,8 +341,10 @@ const Grupos = ({ navigation }) => {
                             />
                         )
                     }
+
+
                     {
-                        (showCheckBox && !exportando) && (
+                        (showCheckBox) && (
                             <SpeedDial.Action
                                 icon={{ name: 'done', color: '#fff' }}
                                 title="Aceptar"
@@ -393,11 +367,6 @@ const Grupos = ({ navigation }) => {
                                     setShowCheckBox(false);
                                     setOpenButton(false);
                                     setListaBorrarGrupos([]);
-                                    if (exportando) {
-                                        setNombreGrupo('');
-                                        setExportando(false);
-                                        lanzarAlerta('Exportar Cancelado');
-                                    }
                                 }}
                             />
                         )

@@ -38,14 +38,15 @@ const styles = StyleSheet.create({
     },
     // contenedor de los TabView
     TabViewcontainer: {
-        //paddingHorizontal: 20,
+        //paddingHorizontal: 5,
         paddingTop: 0,
-        marginTop: 20,
+        marginTop: 10,
         flex: 1,
         borderTopLeft: 30,  
         borderTopRight: 30,
         borderTopLeftRadius: 30,
-        borderTopRightRadius: 30, 
+        borderTopRightRadius: 30,
+        paddingBottom: 40, 
     },
     container1: {
         paddingHorizontal: paddingHorizontal, // Ajusta el relleno horizontal según tus necesidades
