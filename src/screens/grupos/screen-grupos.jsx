@@ -178,7 +178,7 @@ const Grupos = ({ navigation }) => {
             setOpenModal(true);
             //console.log(data);
         } catch (error) {
-            lanzarAlerta(error);
+            lanzarAlerta(error.toString());
         }
     }
 
