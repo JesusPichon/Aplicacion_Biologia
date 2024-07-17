@@ -146,7 +146,7 @@ const Tomas = ({ navigation, route }) => {
             <View style={{ flex: 1, backgroundColor: colorSecundario, borderTopLeftRadius: 20, borderTopRightRadius: 20, paddingTop: 60}}>
                 <FlatList
                     ListEmptyComponent={<View style={{alignItems:"center"}}>
-                        <Icon name='menu' type='material' color={colorQuinario} size={100}/>
+                        <Icon name='search-off' type='material' color={colorQuinario} size={100}/>
                         <Text style={{fontSize:25}}>No se encontraron tomas. </Text>
                     </View>}
                     data={listTomas}
