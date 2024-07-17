@@ -29,27 +29,14 @@ const Toma = ({ navigation, data, seleccionarImprimir, deseleccionarImprimir, se
 
     <TouchableOpacity
       onPress={() => {
-        if (showCheckBox == false)
+        if (showCheckBox == false){
           navigation.navigate('InformacionToma', { data })
-        else {
-          if (eliminar) {
-            if (checked)
-              deseleccionarEliminar(data);
-            else
-              seleccionarEliminar(data);
-          } else {
-            if (checked)
-              deseleccionarImprimir(data);
-            else
-              seleccionarImprimir(data);
-          }
-
-          setChecked(!checked);
         }
-      }} >
+      }}
+      style={{paddingHorizontal:20}} >
 
       <ListItem
-        containerStyle={{marginBottom:30, marginHorizontal:20 , backgroundColor: quintoFePro, borderRadius: 20}}
+        containerStyle={{marginBottom:30, backgroundColor: quintoFePro, borderRadius: 20}}
       >
         <Icon name="flower-tulip-outline" type="material-community" color={principalFePro} size={60} />
         <ListItem.Content>
@@ -74,7 +61,19 @@ const Toma = ({ navigation, data, seleccionarImprimir, deseleccionarImprimir, se
             uncheckedIcon="checkbox-blank-outline"
             checkedColor={eliminar ? "#F00" : "#00F"}
             checked={checked}
-            onPress={() => setChecked(!checked)}
+            onPress={() => {if (eliminar) {
+              if (checked)
+                deseleccionarEliminar(data);
+              else
+                seleccionarEliminar(data);
+            } else {
+              if (checked)
+                deseleccionarImprimir(data);
+              else
+                seleccionarImprimir(data);
+            }
+  
+            setChecked(!checked);}}
           />
         }
       </ListItem>
