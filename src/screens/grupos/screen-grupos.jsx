@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Animated, FlatList, TouchableOpacity } from "react-native";
-import { cuartoFePro, principal, principalFePro, secundario, terceroFePro } from "../../styles/style-colors";
+import { View, Text, Animated, FlatList, StatusBar } from "react-native";
+import {  principal, secundario, } from "../../styles/style-colors";
 import { selectCsv } from "../../services/functions/import-csv";
 import styles from "./style-canales";
 import animaciones from '../../components/animaciones/animaciones';
@@ -10,9 +10,6 @@ import VentanaFlotante from "../../components/VentanaFlotante";
 import Snackbar from 'react-native-snackbar';
 import GrupoController from "../../services/controllers/grupoController";
 import { SpeedDial } from "@rneui/themed";
-import { verTomasExportar, verTomasTotales } from "../../services/database/SQLite";
-import { readString, jsonToCSV } from 'react-native-csv';
-import { getRawData, formatData, guardarArchivoCSV, columnasComillas } from "../../services/functions/export-csv";
 import { Tab, TabView, Chip } from '@rneui/themed';
 import { useSelector } from 'react-redux';
 import { Icon } from "react-native-elements";
@@ -199,6 +196,11 @@ const Grupos = ({ navigation }) => {
     
     return (
         <View style={[styles.mainContainer, { backgroundColor: colorPrimario, }]}>
+            <StatusBar
+                barStyle={currentTheme === 'light' ? 'dark-content' : 'light-content'}
+                animated={true}
+                backgroundColor={colorPrimario}
+            />
             <Animated.View style={{ opacity: unoAnim, paddingHorizontal: 10, marginVertical:10}}>
                 <View style={{width:'100%', height:50, flexDirection:"row"}}>
                     <View style={{width:'10%', justifyContent:"center"}}>
