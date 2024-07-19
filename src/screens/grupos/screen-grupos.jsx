@@ -217,20 +217,6 @@ const Grupos = ({ navigation }) => {
             </Animated.View>
             
             <View style={[styles.secondaryContainer, { backgroundColor: colorSecundario, }]}>  
-                {/* <View style={styles.titleContainer}>
-                    <Text style={{fontSize: 30, fontWeight:'bold', color: colorQuinario}}>Mis Grupos</Text>
-                    <Chip
-                        icon={{
-                            name: "file-download",
-                            type: 'material',
-                            size: 25,
-                            color: 'white',
-                        }}
-                        onPress={handleImport}
-                        buttonStyle={{backgroundColor: principal}}
-                    />
-                </View> */}
-
                 { showCheckBox ? ( 
                     <View style={styles.titleContainer}>
                     <Text style={{fontSize: 30, fontWeight:'bold', color: colorQuinario}}>Eliminar Grupos</Text>
