@@ -185,19 +185,18 @@ const Formulario = ({navigation, route}) => {
     
     return (
         <View style={[styles.mainContainer, { backgroundColor: colorPrimario, }]}>
-            <View style={{alignItems: 'left', marginLeft: 10,}}>
+           <View style={{width: '10%', justifyContent: 'center'}}>
                 <Icon
-                    name='menu'
-                    type='material'
-                    color={principal}
-                    containerStyle={{width: '10%'}}
-                    
-                    size={40}
-                    onPress={() => navigation.openDrawer()}
+                name="menu"
+                type="material"
+                color={colorQuinario}
+                size={30}
+                onPress={() => navigation.openDrawer()}
+                containerStyle={{marginVertical: 20, paddingLeft: 15}}
                 />
             </View>
-            <View style={[styles.secondaryContainer, { backgroundColor: colorSecundario, }]}>
-                <Text style={[styles.textTitle, { color: colorQuinario }]}>FICHA DE DATOS</Text>
+            <View style={[styles.secondaryContainer, { backgroundColor: currentTheme === 'light' ?  colorPrimario : colorSecundario, borderWidth: currentTheme === 'light' ? 1 : 0, borderColor: 'gray' }]}>
+                <Text style={[styles.textTitle, { color: currentTheme === 'light' ?  colorTerciario : colorQuinario }]}>FICHA DE DATOS</Text>
                 <Tab
                     value={index}
                     onChange={(e) => {
@@ -210,38 +209,38 @@ const Formulario = ({navigation, route}) => {
                 >
                     <Tab.Item
                         title="Datos Generales"
-                        titleStyle={{ fontSize: 15, fontWeight: index === 0 ? 'bold' : 'normal', color: colorQuinario, }}
-                        containerStyle={[containerStyle, { backgroundColor: index === 0 ? colorTerciario : colorSecundario, }]}
+                        titleStyle={{ fontSize: 15, fontWeight: index === 0 ? 'bold' : 'normal', color: currentTheme === 'light' ? (index === 0 ? 'white' : colorTerciario) : (index === 0 ? colorQuinario : colorQuinario), }}
+                        containerStyle={[containerStyle, {backgroundColor: index === 0 ? colorTerciario : currentTheme === 'light' ? colorPrimario : colorSecundario,}]}
                     />
                     <Tab.Item
                         title="Ubicación"
-                        titleStyle={{ fontSize: 15, fontWeight: index === 1 ? 'bold' : 'normal', color: colorQuinario, }}
-                        containerStyle={[containerStyle, { backgroundColor: index === 1 ? colorTerciario : colorSecundario, }]}
+                        titleStyle={{ fontSize: 15, fontWeight: index === 1 ? 'bold' : 'normal', color: currentTheme === 'light' ? (index === 1 ? 'white' : colorTerciario) : (index === 1 ? colorQuinario : colorQuinario), }}
+                        containerStyle={[containerStyle, {backgroundColor: index === 1 ? colorTerciario : currentTheme === 'light' ? colorPrimario : colorSecundario,}]}
                     />
                     <Tab.Item
                         title="Ambiente"
-                        titleStyle={{ fontSize: 15, fontWeight: index === 2 ? 'bold' : 'normal', color: colorQuinario, }}
-                        containerStyle={[containerStyle, { backgroundColor: index === 2 ? colorTerciario : colorSecundario, }]}
+                        titleStyle={{ fontSize: 15, fontWeight: index === 2 ? 'bold' : 'normal', color: currentTheme === 'light' ? (index === 2 ? 'white' : colorTerciario) : (index === 2 ? colorQuinario : colorQuinario), }}
+                        containerStyle={[containerStyle, {backgroundColor: index === 2 ? colorTerciario : currentTheme === 'light' ? colorPrimario : colorSecundario,}]}
                     />
                     <Tab.Item
                         title="Información Detallada"
-                        titleStyle={{ fontSize: 15, fontWeight: index === 3 ? 'bold' : 'normal', color: colorQuinario, }}
-                        containerStyle={[containerStyle, { backgroundColor: index === 3 ? colorTerciario : colorSecundario, }]}
+                        titleStyle={{ fontSize: 15, fontWeight: index === 3 ? 'bold' : 'normal', color: currentTheme === 'light' ? (index === 3 ? 'white' : colorTerciario) : (index === 3 ? colorQuinario : colorQuinario), }}
+                        containerStyle={[containerStyle, {backgroundColor: index === 3 ? colorTerciario : currentTheme === 'light' ? colorPrimario : colorSecundario,}]}
                     />
                     <Tab.Item
                         title="Datos de Colector(es)"
-                        titleStyle={{ fontSize: 15, fontWeight: index === 4 ? 'bold' : 'normal', color: colorQuinario, }}
-                        containerStyle={[containerStyle, { backgroundColor: index === 4 ? colorTerciario : colorSecundario, }]}
+                        titleStyle={{ fontSize: 15, fontWeight: index === 4 ? 'bold' : 'normal', color: currentTheme === 'light' ? (index === 4 ? 'white' : colorTerciario) : (index === 4 ? colorQuinario : colorQuinario), }}
+                        containerStyle={[containerStyle, {backgroundColor: index === 4 ? colorTerciario : currentTheme === 'light' ? colorPrimario : colorSecundario,}]}
                     />
                     <Tab.Item
                         title="Información Adicional"
-                        titleStyle={{ fontSize: 15, fontWeight: index === 5 ? 'bold' : 'normal', color: colorQuinario, }}
-                        containerStyle={[containerStyle, { backgroundColor: index === 5 ? colorTerciario : colorSecundario, }]}
+                        titleStyle={{ fontSize: 15, fontWeight: index === 5 ? 'bold' : 'normal', color: currentTheme === 'light' ? (index === 5 ? 'white' : colorTerciario) : (index === 5 ? colorQuinario : colorQuinario), }}
+                        containerStyle={[containerStyle, {backgroundColor: index === 5 ? colorTerciario : currentTheme === 'light' ? colorPrimario : colorSecundario,}]}
                     />
                 </Tab>
 
                 <TabView value={index} onChange={setIndex} animationType="spring" >
-                    <TabView.Item style={[styles.TabViewcontainer, { backgroundColor: colorPrimario }]}>
+                    <TabView.Item style={[styles.TabViewcontainer, { backgroundColor: colorPrimario, borderWidth: currentTheme === 'light' ? 1 : 0, borderColor: 'gray'  }]}>
                         <ScrollView>
                             <TextInputCustom
                                 label="Nombre Científico:"
@@ -264,7 +263,7 @@ const Formulario = ({navigation, route}) => {
                             />
                         </ScrollView>
                     </TabView.Item>
-                    <TabView.Item style={[styles.TabViewcontainer, { backgroundColor: colorPrimario }]}>
+                    <TabView.Item style={[styles.TabViewcontainer, { backgroundColor: colorPrimario, borderWidth: currentTheme === 'light' ? 1 : 0, borderColor: 'gray'  }]}>
                         <ScrollView>
                             <CustomDropdown
                                 label="Estado:"
@@ -317,7 +316,7 @@ const Formulario = ({navigation, route}) => {
                             />
                         </ScrollView>
                     </TabView.Item>
-                    <TabView.Item style={[styles.TabViewcontainer, { backgroundColor: colorPrimario }]}>
+                    <TabView.Item style={[styles.TabViewcontainer, { backgroundColor: colorPrimario, borderWidth: currentTheme === 'light' ? 1 : 0, borderColor: 'gray'  }]}>
                         <ScrollView>
                             <TextInputCustom
                                 label="Tipo de vegetación:"
@@ -352,7 +351,7 @@ const Formulario = ({navigation, route}) => {
                             />
                         </ScrollView>
                     </TabView.Item>
-                    <TabView.Item style={[styles.TabViewcontainer, { backgroundColor: colorPrimario }]}>
+                    <TabView.Item style={[styles.TabViewcontainer, { backgroundColor: colorPrimario, borderWidth: currentTheme === 'light' ? 1 : 0, borderColor: 'gray'  }]}>
                         <ScrollView>
                             <CustomDropdown
                                 label="Abundancia:"
@@ -409,7 +408,7 @@ const Formulario = ({navigation, route}) => {
                             />
                         </ScrollView>
                     </TabView.Item>
-                    <TabView.Item style={[styles.TabViewcontainer, { backgroundColor: colorPrimario }]}>
+                    <TabView.Item style={[styles.TabViewcontainer, { backgroundColor: colorPrimario, borderWidth: currentTheme === 'light' ? 1 : 0, borderColor: 'gray'  }]}>
                         <ScrollView>
                             <TextInputCustom
                                 label="Colector(es):"
@@ -444,7 +443,7 @@ const Formulario = ({navigation, route}) => {
                             />
                         </ScrollView>
                     </TabView.Item>
-                    <TabView.Item style={[styles.TabViewcontainer, { backgroundColor: colorPrimario }]}>
+                    <TabView.Item style={[styles.TabViewcontainer, { backgroundColor: colorPrimario, borderWidth: currentTheme === 'light' ? 1 : 0, borderColor: 'gray'  }]}>
                         <ScrollView>
                             <TextInputCustom
                                 label="Otros Datos:"
@@ -463,10 +462,10 @@ const Formulario = ({navigation, route}) => {
                     type="solid"
                     onPress={handleSubmit(onSubmit)}
                     title="GUARDAR"
-                    containerStyle={{ marginHorizontal: 10, marginTop: 30, marginBottom: 20 }}
-                    buttonStyle={{ backgroundColor: principal, height: 50, borderRadius: 30, }}
-                    icon={{ name: 'save', color: tercero }}
-                    titleStyle={{ color: tercero, fontSize: 18, fontWeight: 'bold' }}
+                    containerStyle={{ marginHorizontal: 10, marginTop: 30, marginBottom: 20, }}
+                    buttonStyle={{ backgroundColor: colorTerciario, height: 50, borderRadius: 30, }}
+                    icon={{ name: 'save', color: 'white' }}
+                    titleStyle={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}
                 />
             </View>   
         </View>

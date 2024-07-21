@@ -336,7 +336,7 @@ const Grupos = ({ navigation }) => {
                             <SpeedDial.Action
                                 icon={{ name: 'done', color: '#fff' }}
                                 title="Aceptar"
-                                color={secundario}
+                                color={colorTerciario}
                                 onPress={async () => {
                                     setShowCheckBox(false);
                                     setOpenButton(false);
@@ -350,7 +350,7 @@ const Grupos = ({ navigation }) => {
                             <SpeedDial.Action
                                 icon={{ name: 'cancel', color: '#fff' }}
                                 title="Cancelar"
-                                color={secundario}
+                                color={colorTerciario}
                                 onPress={() => {
                                     setShowCheckBox(false);
                                     setOpenButton(false);
