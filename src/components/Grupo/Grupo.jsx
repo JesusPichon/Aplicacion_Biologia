@@ -75,8 +75,8 @@ const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, s
         style={stylesCanales.image}
       />
       <View style={{ flex: 1, flexDirection: 'row', width: '100%' }}>
-        <View style={[stylesCanales.nombreView, { backgroundColor: colorPrimario }]}>
-          <Text style={[stylesCanales.nombreViewText, { color: colorQuinario }]}>
+        <View style={[stylesCanales.nombreView, { backgroundColor: currentTheme === 'light' ? colorCuaternario : colorPrimario }]}>
+          <Text style={[stylesCanales.nombreViewText, { color: currentTheme === 'light' ? colorPrimario : colorQuinario}]}>
             {nombre}
           </Text>
           {showCheckBox ? (
@@ -99,12 +99,12 @@ const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, s
                 color: 'white',
               }}
               onPress={handleExport}
-              buttonStyle={{ backgroundColor: principal }}
+              buttonStyle={{ backgroundColor: colorTerciario }}
             />
           )}
         </View>
-        <View style={[stylesCanales.tomasView, { backgroundColor: colorQuinario }]}>
-          <Text style={[stylesCanales.tomasViewText, { color: colorPrimario }]}>Tomas: 300</Text>
+        <View style={[stylesCanales.tomasView, { backgroundColor: currentTheme === 'light' ? colorPrimario : colorPrimario }]}>
+          <Text style={[stylesCanales.tomasViewText, { color: currentTheme === 'light' ? colorTerciario : colorQuinario}]}>Tomas: 300</Text>
         </View>
       </View>
     </TouchableOpacity>
