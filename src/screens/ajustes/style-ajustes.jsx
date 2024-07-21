@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { TextInput } from "react-native-gesture-handler";
 
 const styles = StyleSheet.create({ 
     mainContainer: {  
@@ -14,6 +15,13 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginVertical: 10, 
         paddingHorizontal: 20, 
+        marginBottom: 10,
+    },
+    textInput: { 
+        borderWidth: 1, 
+        borderRadius: 10, 
+        marginHorizontal: 20, 
+        padding: 10, 
         marginBottom: 10,
     },
 });
