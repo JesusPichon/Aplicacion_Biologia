@@ -1,5 +1,4 @@
 import { SearchBar } from "@rneui/themed";
-import { principalFePro, secundarioFePro, terceropFePro, cuartoFePro, quintoFePro, terceroFePro } from "../../styles/style-colors";
 import React, { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { Icon } from '@rneui/themed';
 import { verGruposFiltrado, verTomas, consultarIdGrupo, verTomasFiltrado } from "../../services/database/SQLite";

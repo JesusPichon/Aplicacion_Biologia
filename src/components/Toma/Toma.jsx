@@ -41,7 +41,7 @@ const Toma = ({ navigation, data, seleccionarImprimir, deseleccionarImprimir, se
     <TouchableOpacity
       onPress={() => {
         if (showCheckBox == false){
-          navigation.navigate('InformacionToma', { data })
+          navigation.navigate('InformacionToma', { id: data.id })
         }
       }}
       style={{paddingHorizontal:20}} >

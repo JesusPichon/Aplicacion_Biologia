@@ -682,3 +682,44 @@ export const actualizarIMG = (id, uri) => {
     );
   });
 };
+
+export const verToma = (id) => {
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      // Construir la consulta dinámica para buscar en el campo especificado
+      const query = `SELECT * FROM TOMAS WHERE id = ?`;
+      const params = [id];
+
+      // Ejecutar la consulta SQL
+      tx.executeSql(query, params,
+        (tx, results) => {
+          const len = results.rows.length;
+          let tomas = [];
+          if (len > 0) {
+            for (let i = 0; i < len; i++) {
+              const row = results.rows.item(i);
+              const tomaObj = {};
+
+              // Copiar los datos de la fila a un objeto toma
+              Object.keys(row).forEach(key => {
+                tomaObj[key] = row[key];
+              });
+
+              tomas.push(tomaObj);
+            }
+
+            //console.log(`Consulta exitosa, ${len} tomas encontradas`);
+            resolve(tomas);
+          } else {
+            //console.log('No se encontraron tomas.');
+            resolve([]);
+          }
+        }, 
+        error => {
+          console.error('Error al ejecutar la consulta de tomas:', error);
+          reject(error);
+        }
+      );
+    });
+  });
+};

@@ -2,7 +2,8 @@ import {
     consultarIdGrupo,
     verTomas,
     eliminarToma,
-    verTomasTotales
+    verTomasTotales,
+    verToma
 } from "../../services/database/SQLite";
 
 class TomaController {
@@ -40,6 +41,14 @@ class TomaController {
         }
     }
 
+    async obtenerToma(id) {
+        try {
+            const listaTomas = await verToma(id);
+            return listaTomas;
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
 }
 
 

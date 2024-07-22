@@ -147,7 +147,7 @@ const Tomas = ({ navigation, route }) => {
                 <FlatList
                     ListEmptyComponent={<View style={{alignItems:"center"}}>
                         <Icon name='search-off' type='material' color={colorQuinario} size={100}/>
-                        <Text style={{fontSize:25}}>No se encontraron tomas. </Text>
+                        <Text style={{fontSize:25, color:colorQuinario}}>No se encontraron tomas. </Text>
                     </View>}
                     data={listTomas}
                     keyExtractor={(item) => item.id.toString()}
