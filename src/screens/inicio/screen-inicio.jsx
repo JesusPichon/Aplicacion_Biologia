@@ -121,7 +121,7 @@ const Inicio = ({ navigation }) => {
         <ImageBackground source={imageBackgroundInicio} resizeMode="cover" style={{flex: 1, width: '100%', height: '100%'}}>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
             <StatusBar
-                barStyle="dark-content"
+                
                 animated={true}
                 backgroundColor={colorStatusBarInicio}
             />            

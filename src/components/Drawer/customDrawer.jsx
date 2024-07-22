@@ -86,6 +86,30 @@ const CustomDrawer = (props) => {
             marginHorizontal: 0
           }}
         />
+        <DrawerItem
+          label="Configuración"
+          onPress={() => { props.navigation.navigate('Configuracion') }}
+          focused={focused === 'Configuracion'}
+        
+          icon={({ focused, color, size }) => (
+            <Icon
+              name='settings'
+              type='material'
+              color={color}
+              size={40}
+            />
+          )}
+          activeBackgroundColor={colorQuinario}
+          activeTintColor={colorPrimario}
+          inactiveTintColor={colorQuinario}
+          style={{
+            borderTopRightRadius: 20,
+            borderBottomRightRadius: 20,
+            borderBottomLeftRadius: 0,
+            borderTopLeftRadius: 0,
+            marginHorizontal: 0
+          }}
+        />
       </View>
     </DrawerContentScrollView>
   );

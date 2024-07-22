@@ -8,11 +8,11 @@ const lightTheme = {
     colorStatusBarInicio: '#97b4a5', //Pantalla de inicio
     tabItemSelectColor: terceroFePro, //Pantalla Grupos
     
-    colorPrimario: quintoFePro,
-    colorSecundario: cuartoFePro,
-    colorTerciario: terceroFePro,
-    colorCuaternario: secundarioFePro,
-    colorQuinario: principalFePro,
+    colorPrimario: quintoFePro,         //'#eff3f4'
+    colorSecundario: cuartoFePro,       //'#306d6f'
+    colorTerciario: terceroFePro,       //'#1a4d4d'
+    colorCuaternario: secundarioFePro,  //'#2e3b3b'
+    colorQuinario: principalFePro,      //'#1e2d2d'
 };
     
 const darkTheme = {
@@ -21,11 +21,11 @@ const darkTheme = {
     colorStatusBarInicio: '#203c3b',
     tabItemSelectColor: principalFePro,
 
-    colorPrimario: principalFePro,
-    colorSecundario: secundarioFePro,
-    colorTerciario: terceroFePro,
-    colorCuaternario: cuartoFePro,
-    colorQuinario: quintoFePro,
+    colorPrimario: principalFePro,      //'#1e2d2d'
+    colorSecundario: secundarioFePro,   //'#2e3b3b'
+    colorTerciario: terceroFePro,       //'#1a4d4d'
+    colorCuaternario: cuartoFePro,      //'#306d6f'
+    colorQuinario: quintoFePro,         //'#eff3f4'
 };
 
 initialState = {

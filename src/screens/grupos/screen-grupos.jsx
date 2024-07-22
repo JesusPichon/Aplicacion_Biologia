@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Animated, FlatList, TouchableOpacity } from "react-native";
-import { cuartoFePro, principal, principalFePro, secundario, terceroFePro } from "../../styles/style-colors";
+import { View, Text, Animated, FlatList, StatusBar } from "react-native";
+import {  principal, secundario, } from "../../styles/style-colors";
 import { selectCsv } from "../../services/functions/import-csv";
 import styles from "./style-canales";
 import animaciones from '../../components/animaciones/animaciones';
@@ -10,9 +10,6 @@ import VentanaFlotante from "../../components/VentanaFlotante";
 import Snackbar from 'react-native-snackbar';
 import GrupoController from "../../services/controllers/grupoController";
 import { SpeedDial } from "@rneui/themed";
-import { verTomasExportar, verTomasTotales } from "../../services/database/SQLite";
-import { readString, jsonToCSV } from 'react-native-csv';
-import { getRawData, formatData, guardarArchivoCSV, columnasComillas } from "../../services/functions/export-csv";
 import { Tab, TabView, Chip } from '@rneui/themed';
 import { useSelector } from 'react-redux';
 import { Icon } from "react-native-elements";
@@ -199,6 +196,11 @@ const Grupos = ({ navigation }) => {
     
     return (
         <View style={[styles.mainContainer, { backgroundColor: colorPrimario, }]}>
+            <StatusBar
+                barStyle={currentTheme === 'light' ? 'dark-content' : 'light-content'}
+                animated={true}
+                backgroundColor={colorPrimario}
+            />
             <Animated.View style={{ opacity: unoAnim, paddingHorizontal: 10, marginVertical:10}}>
                 <View style={{width:'100%', height:50, flexDirection:"row"}}>
                     <View style={{width:'10%', justifyContent:"center"}}>
@@ -214,24 +216,10 @@ const Grupos = ({ navigation }) => {
                 </View>
             </Animated.View>
             
-            <View style={[styles.secondaryContainer, { backgroundColor: colorSecundario, }]}>  
-                {/* <View style={styles.titleContainer}>
-                    <Text style={{fontSize: 30, fontWeight:'bold', color: colorQuinario}}>Mis Grupos</Text>
-                    <Chip
-                        icon={{
-                            name: "file-download",
-                            type: 'material',
-                            size: 25,
-                            color: 'white',
-                        }}
-                        onPress={handleImport}
-                        buttonStyle={{backgroundColor: principal}}
-                    />
-                </View> */}
-
+            <View style={[styles.secondaryContainer, { backgroundColor: currentTheme === 'light' ?  colorPrimario : colorSecundario, borderWidth: currentTheme === 'light' ? 1 : 0, borderColor: 'gray' }]}>  
                 { showCheckBox ? ( 
                     <View style={styles.titleContainer}>
-                    <Text style={{fontSize: 30, fontWeight:'bold', color: colorQuinario}}>Eliminar Grupos</Text>
+                    <Text style={{fontSize: 30, fontWeight:'bold', color: currentTheme === 'light' ?  colorTerciario : colorQuinario}}>Eliminar Grupos</Text>
                     <Chip
                         icon={{
                             name: "cancel",
@@ -249,7 +237,7 @@ const Grupos = ({ navigation }) => {
                 </View>
                 ) : (
                     <View style={styles.titleContainer}>
-                    <Text style={{fontSize: 30, fontWeight:'bold', color: colorQuinario}}>Mis Grupos</Text>
+                    <Text style={{fontSize: 30, fontWeight:'bold', color: currentTheme === 'light' ?  colorTerciario : colorQuinario}}>Mis Grupos</Text>
                     <Chip
                         icon={{
                             name: "file-download",
@@ -258,7 +246,7 @@ const Grupos = ({ navigation }) => {
                             color: 'white',
                         }}
                         onPress={handleImport}
-                        buttonStyle={{backgroundColor: principal}}
+                        buttonStyle={{backgroundColor: colorTerciario}}
                     />
                 </View>
                 )}
@@ -271,13 +259,13 @@ const Grupos = ({ navigation }) => {
                     >
                     <Tab.Item
                         title="Creados"
-                        titleStyle={{fontSize: 20, fontWeight: index === 0 ? 'bold' : 'normal', color: colorQuinario,}}
-                        containerStyle={[containerStyle,{backgroundColor: index === 0 ? colorTerciario : colorSecundario,}]}
-                    />
+                        titleStyle={{fontSize: 20, fontWeight: index === 0 ? 'bold' : 'normal', color: currentTheme === 'light' ? (index === 0 ? 'white' : colorTerciario) : (index === 0 ? colorQuinario : colorQuinario),}}
+                        containerStyle={[containerStyle,{backgroundColor: index === 0 ? colorTerciario : currentTheme === 'light' ? colorPrimario : colorSecundario,}]}
+                    />       
                     <Tab.Item
                         title="Guardados"
-                        titleStyle={{fontSize: 20, fontWeight: index === 1 ? 'bold' : 'normal', color: colorQuinario,}}
-                        containerStyle={[containerStyle,{backgroundColor: index === 1 ? colorTerciario : colorSecundario,}]}
+                        titleStyle={{fontSize: 20, fontWeight: index === 1 ? 'bold' : 'normal', color: currentTheme === 'light' ? (index === 1 ? 'white' : colorTerciario) : (index === 1 ? colorQuinario : colorQuinario),}}
+                        containerStyle={[containerStyle,{backgroundColor: index === 1 ? colorTerciario : currentTheme === 'light' ? colorPrimario : colorSecundario,}]}
                     />
                 </Tab>
 
@@ -308,18 +296,18 @@ const Grupos = ({ navigation }) => {
 
                 <SpeedDial
                     isOpen={openButton}
-                    icon={{ name: 'edit', color: '#fff' }}
-                    openIcon={{ name: 'close', color: '#fff' }}
+                    icon={{ name: 'edit', color: currentTheme === 'light' ?  colorPrimario : colorQuinario}}
+                    openIcon={{ name: 'close', color: currentTheme === 'light' ? colorPrimario : colorQuinario }}
                     onOpen={() => setOpenButton(!openButton)}
                     onClose={() => setOpenButton(!openButton)}
-                    color={secundario}
+                    color={colorTerciario}
                 >
                     {
                         !showCheckBox && (
                             <SpeedDial.Action
                                 icon={{ name: 'add', color: '#fff' }}
                                 title="Nuevo Grupo"
-                                color={secundario}
+                                color={colorTerciario}
                                 onPress={() => {
                                     setOpenButton(false);
                                     setOpenModal(true);
@@ -333,7 +321,7 @@ const Grupos = ({ navigation }) => {
                             <SpeedDial.Action
                                 icon={{ name: 'delete', color: '#fff' }}
                                 title="Eliminar Grupos"
-                                color={secundario}
+                                color={colorTerciario}
                                 onPress={() => {
                                     setShowCheckBox(true);
                                     setOpenButton(false);
@@ -348,7 +336,7 @@ const Grupos = ({ navigation }) => {
                             <SpeedDial.Action
                                 icon={{ name: 'done', color: '#fff' }}
                                 title="Aceptar"
-                                color={secundario}
+                                color={colorTerciario}
                                 onPress={async () => {
                                     setShowCheckBox(false);
                                     setOpenButton(false);
@@ -362,7 +350,7 @@ const Grupos = ({ navigation }) => {
                             <SpeedDial.Action
                                 icon={{ name: 'cancel', color: '#fff' }}
                                 title="Cancelar"
-                                color={secundario}
+                                color={colorTerciario}
                                 onPress={() => {
                                     setShowCheckBox(false);
                                     setOpenButton(false);

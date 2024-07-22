@@ -55,6 +55,7 @@ import Tomas from './screens/tomas';
 import Editar from './screens/editar';
 import FAQ from './screens/FAQ/screen-FAQ';
 import CamposPred from './screens/campos-predeterminados/screen-camposPred';
+import Ajustes from './screens/ajustes';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -91,7 +92,7 @@ const HomeDrawer = () => (
   >
     <Drawer.Screen name="MisGrupos" component={MisGruposStack} />
     {/* <Drawer.Screen name="Explorar" component={ExplorarStack} /> */}
-    {/* <Drawer.Screen name="Configuracion" component={Configuracion} /> */}
+    <Drawer.Screen name="Configuracion" component={Ajustes} />
     <Drawer.Screen name="FAQ" component={FAQ} />
     {/* <Drawer.Screen name="AcercaDe" component={AcercaDe} /> */}
   </Drawer.Navigator>
