@@ -195,8 +195,8 @@ const Formulario = ({navigation, route}) => {
                 containerStyle={{marginVertical: 20, paddingLeft: 15}}
                 />
             </View>
-            <View style={[styles.secondaryContainer, { backgroundColor: currentTheme === 'light' ?  colorPrimario : colorSecundario, borderWidth: currentTheme === 'light' ? 1 : 0, borderColor: 'gray' }]}>
-                <Text style={[styles.textTitle, { color: currentTheme === 'light' ?  colorTerciario : colorQuinario }]}>FICHA DE DATOS</Text>
+            <View style={[styles.secondaryContainer, { backgroundColor: colorSecundario, }]}>
+                 <Text style={[styles.textTitle, { color: colorQuinario }]}>FICHA DE DATOS</Text>
                 <Tab
                     value={index}
                     onChange={(e) => {
@@ -209,38 +209,38 @@ const Formulario = ({navigation, route}) => {
                 >
                     <Tab.Item
                         title="Datos Generales"
-                        titleStyle={{ fontSize: 15, fontWeight: index === 0 ? 'bold' : 'normal', color: currentTheme === 'light' ? (index === 0 ? 'white' : colorTerciario) : (index === 0 ? colorQuinario : colorQuinario), }}
-                        containerStyle={[containerStyle, {backgroundColor: index === 0 ? colorTerciario : currentTheme === 'light' ? colorPrimario : colorSecundario,}]}
+                        titleStyle={{ fontSize: 15, fontWeight: index === 0 ? 'bold' : 'normal', color: colorQuinario, }}
+                        containerStyle={[containerStyle, { backgroundColor: index === 0 ? colorTerciario : colorSecundario, }]}
                     />
                     <Tab.Item
                         title="Ubicación"
-                        titleStyle={{ fontSize: 15, fontWeight: index === 1 ? 'bold' : 'normal', color: currentTheme === 'light' ? (index === 1 ? 'white' : colorTerciario) : (index === 1 ? colorQuinario : colorQuinario), }}
-                        containerStyle={[containerStyle, {backgroundColor: index === 1 ? colorTerciario : currentTheme === 'light' ? colorPrimario : colorSecundario,}]}
+                        titleStyle={{ fontSize: 15, fontWeight: index === 1 ? 'bold' : 'normal', color: colorQuinario, }}
+                         containerStyle={[containerStyle, { backgroundColor: index === 1 ? colorTerciario : colorSecundario, }]}
                     />
                     <Tab.Item
                         title="Ambiente"
-                        titleStyle={{ fontSize: 15, fontWeight: index === 2 ? 'bold' : 'normal', color: currentTheme === 'light' ? (index === 2 ? 'white' : colorTerciario) : (index === 2 ? colorQuinario : colorQuinario), }}
-                        containerStyle={[containerStyle, {backgroundColor: index === 2 ? colorTerciario : currentTheme === 'light' ? colorPrimario : colorSecundario,}]}
+                        titleStyle={{ fontSize: 15, fontWeight: index === 2 ? 'bold' : 'normal', color: colorQuinario, }}
+                        containerStyle={[containerStyle, { backgroundColor: index === 2 ? colorTerciario : colorSecundario, }]}
                     />
                     <Tab.Item
                         title="Información Detallada"
-                        titleStyle={{ fontSize: 15, fontWeight: index === 3 ? 'bold' : 'normal', color: currentTheme === 'light' ? (index === 3 ? 'white' : colorTerciario) : (index === 3 ? colorQuinario : colorQuinario), }}
-                        containerStyle={[containerStyle, {backgroundColor: index === 3 ? colorTerciario : currentTheme === 'light' ? colorPrimario : colorSecundario,}]}
+                        titleStyle={{ fontSize: 15, fontWeight: index === 3 ? 'bold' : 'normal', color: colorQuinario, }}
+                        containerStyle={[containerStyle, { backgroundColor: index === 3 ? colorTerciario : colorSecundario, }]}
                     />
                     <Tab.Item
                         title="Datos de Colector(es)"
-                        titleStyle={{ fontSize: 15, fontWeight: index === 4 ? 'bold' : 'normal', color: currentTheme === 'light' ? (index === 4 ? 'white' : colorTerciario) : (index === 4 ? colorQuinario : colorQuinario), }}
-                        containerStyle={[containerStyle, {backgroundColor: index === 4 ? colorTerciario : currentTheme === 'light' ? colorPrimario : colorSecundario,}]}
+                        titleStyle={{ fontSize: 15, fontWeight: index === 4 ? 'bold' : 'normal', color: colorQuinario, }}
+                        containerStyle={[containerStyle, { backgroundColor: index === 4 ? colorTerciario : colorSecundario, }]}
                     />
                     <Tab.Item
                         title="Información Adicional"
-                        titleStyle={{ fontSize: 15, fontWeight: index === 5 ? 'bold' : 'normal', color: currentTheme === 'light' ? (index === 5 ? 'white' : colorTerciario) : (index === 5 ? colorQuinario : colorQuinario), }}
-                        containerStyle={[containerStyle, {backgroundColor: index === 5 ? colorTerciario : currentTheme === 'light' ? colorPrimario : colorSecundario,}]}
+                        titleStyle={{ fontSize: 15, fontWeight: index === 5 ? 'bold' : 'normal', color: colorQuinario, }}
+                        containerStyle={[containerStyle, { backgroundColor: index === 5 ? colorTerciario : colorSecundario, }]}
                     />
                 </Tab>
 
                 <TabView value={index} onChange={setIndex} animationType="spring" >
-                    <TabView.Item style={[styles.TabViewcontainer, { backgroundColor: colorPrimario, borderWidth: currentTheme === 'light' ? 1 : 0, borderColor: 'gray'  }]}>
+                    <TabView.Item style={[styles.TabViewcontainer, { backgroundColor: colorPrimario }]}>
                         <ScrollView>
                             <TextInputCustom
                                 label="Nombre Científico:"
@@ -263,7 +263,7 @@ const Formulario = ({navigation, route}) => {
                             />
                         </ScrollView>
                     </TabView.Item>
-                    <TabView.Item style={[styles.TabViewcontainer, { backgroundColor: colorPrimario, borderWidth: currentTheme === 'light' ? 1 : 0, borderColor: 'gray'  }]}>
+                    <TabView.Item style={[styles.TabViewcontainer, { backgroundColor: colorPrimario }]}>
                         <ScrollView>
                             <CustomDropdown
                                 label="Estado:"
@@ -316,7 +316,7 @@ const Formulario = ({navigation, route}) => {
                             />
                         </ScrollView>
                     </TabView.Item>
-                    <TabView.Item style={[styles.TabViewcontainer, { backgroundColor: colorPrimario, borderWidth: currentTheme === 'light' ? 1 : 0, borderColor: 'gray'  }]}>
+                    <TabView.Item style={[styles.TabViewcontainer, { backgroundColor: colorPrimario }]}>
                         <ScrollView>
                             <TextInputCustom
                                 label="Tipo de vegetación:"
@@ -351,7 +351,7 @@ const Formulario = ({navigation, route}) => {
                             />
                         </ScrollView>
                     </TabView.Item>
-                    <TabView.Item style={[styles.TabViewcontainer, { backgroundColor: colorPrimario, borderWidth: currentTheme === 'light' ? 1 : 0, borderColor: 'gray'  }]}>
+                    <TabView.Item style={[styles.TabViewcontainer, { backgroundColor: colorPrimario }]}>
                         <ScrollView>
                             <CustomDropdown
                                 label="Abundancia:"
@@ -408,7 +408,7 @@ const Formulario = ({navigation, route}) => {
                             />
                         </ScrollView>
                     </TabView.Item>
-                    <TabView.Item style={[styles.TabViewcontainer, { backgroundColor: colorPrimario, borderWidth: currentTheme === 'light' ? 1 : 0, borderColor: 'gray'  }]}>
+                    <TabView.Item style={[styles.TabViewcontainer, { backgroundColor: colorPrimario }]}>
                         <ScrollView>
                             <TextInputCustom
                                 label="Colector(es):"
@@ -443,7 +443,7 @@ const Formulario = ({navigation, route}) => {
                             />
                         </ScrollView>
                     </TabView.Item>
-                    <TabView.Item style={[styles.TabViewcontainer, { backgroundColor: colorPrimario, borderWidth: currentTheme === 'light' ? 1 : 0, borderColor: 'gray'  }]}>
+                    <TabView.Item style={[styles.TabViewcontainer, { backgroundColor: colorPrimario }]}>
                         <ScrollView>
                             <TextInputCustom
                                 label="Otros Datos:"

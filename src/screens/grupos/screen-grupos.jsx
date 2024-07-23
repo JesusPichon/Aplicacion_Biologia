@@ -216,10 +216,10 @@ const Grupos = ({ navigation }) => {
                 </View>
             </Animated.View>
             
-            <View style={[styles.secondaryContainer, { backgroundColor: currentTheme === 'light' ?  colorPrimario : colorSecundario, borderWidth: currentTheme === 'light' ? 1 : 0, borderColor: 'gray' }]}>  
+            <View style={[styles.secondaryContainer, { backgroundColor: colorSecundario, }]}>  
                 { showCheckBox ? ( 
                     <View style={styles.titleContainer}>
-                    <Text style={{fontSize: 30, fontWeight:'bold', color: currentTheme === 'light' ?  colorTerciario : colorQuinario}}>Eliminar Grupos</Text>
+                    <Text style={{fontSize: 30, fontWeight:'bold', color: colorQuinario}}>Eliminar Grupos</Text>
                     <Chip
                         icon={{
                             name: "cancel",
@@ -237,7 +237,7 @@ const Grupos = ({ navigation }) => {
                 </View>
                 ) : (
                     <View style={styles.titleContainer}>
-                    <Text style={{fontSize: 30, fontWeight:'bold', color: currentTheme === 'light' ?  colorTerciario : colorQuinario}}>Mis Grupos</Text>
+                    <Text style={{fontSize: 30, fontWeight:'bold', color: colorQuinario}}>Mis Grupos</Text>
                     <Chip
                         icon={{
                             name: "file-download",
@@ -259,13 +259,13 @@ const Grupos = ({ navigation }) => {
                     >
                     <Tab.Item
                         title="Creados"
-                        titleStyle={{fontSize: 20, fontWeight: index === 0 ? 'bold' : 'normal', color: currentTheme === 'light' ? (index === 0 ? 'white' : colorTerciario) : (index === 0 ? colorQuinario : colorQuinario),}}
-                        containerStyle={[containerStyle,{backgroundColor: index === 0 ? colorTerciario : currentTheme === 'light' ? colorPrimario : colorSecundario,}]}
+                        titleStyle={{fontSize: 20, fontWeight: index === 0 ? 'bold' : 'normal', color: index === 0 ? colorPrimario : colorQuinario,}}
+                        containerStyle={[containerStyle,{backgroundColor: index === 0 ? colorTerciario : colorSecundario,}]}
                     />       
                     <Tab.Item
                         title="Guardados"
-                        titleStyle={{fontSize: 20, fontWeight: index === 1 ? 'bold' : 'normal', color: currentTheme === 'light' ? (index === 1 ? 'white' : colorTerciario) : (index === 1 ? colorQuinario : colorQuinario),}}
-                        containerStyle={[containerStyle,{backgroundColor: index === 1 ? colorTerciario : currentTheme === 'light' ? colorPrimario : colorSecundario,}]}
+                        titleStyle={{fontSize: 20, fontWeight: index === 1 ? 'bold' : 'normal', color: index === 1 ? colorPrimario : colorQuinario}}
+                        containerStyle={[containerStyle,{backgroundColor: index === 1 ? colorTerciario : colorSecundario,}]}
                     />
                 </Tab>
 
