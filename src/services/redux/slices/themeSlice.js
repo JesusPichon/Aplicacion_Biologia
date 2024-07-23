@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Appearance } from "react-native";
 import { cuartoFePro, principal, principalFePro, quintoFePro, secundarioFePro, terceroFePro } from "../../../styles/style-colors";
+import { set } from "react-hook-form";
 
 const lightTheme = {
     imageBackgroundInicio: require('../../../assets/images/fondoClaro.jpeg'), // Pantalla de inicio
@@ -29,6 +30,7 @@ const darkTheme = {
 };
 
 initialState = {
+    modeTheme: 'system',
     currentTheme: 'system',
     themes: {
         light: lightTheme,
@@ -40,20 +42,25 @@ const themeSlice = createSlice({
     name: 'theme',
     initialState,
     reducers: {
+        setModeTheme: (state, action) => {
+            state.modeTheme = action.payload;
+            if (action.payload === 'system') {
+                state.currentTheme = Appearance.getColorScheme();
+            } else {
+                state.currentTheme = action.payload;
+            }
+        },
         setTheme: (state, action) => {
             state.currentTheme = action.payload;
         },
         toggleTheme: (state) => {
-            if (state.currentTheme === 'light') {
-              state.currentTheme = 'dark';
-            } else if (state.currentTheme === 'dark') {
-              state.currentTheme = 'light';
-            } else {
-              state.currentTheme = Appearance.getColorScheme() === 'light' ? 'dark' : 'light';
+            if (state.modeTheme !== 'system') {
+                state.currentTheme = state.currentTheme === 'light' ? 'dark' : 'light';
+                state.modeTheme = state.currentTheme;
             }
         },
     },
 });
 
-export const { setTheme, toggleTheme } = themeSlice.actions;
+export const { setModeTheme, setTheme, toggleTheme } = themeSlice.actions;
 export default themeSlice.reducer;

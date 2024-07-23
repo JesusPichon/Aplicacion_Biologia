@@ -3,9 +3,13 @@ import { View, Text } from 'react-native'
 import styles from './style-ajustes'
 import { useSelector } from 'react-redux'
 import { Icon, ButtonGroup, } from 'react-native-elements'
+import { setModeTheme } from '../../services/redux/slices/themeSlice'
+import { useDispatch } from 'react-redux'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Ajustes = ({ navigation }) => {
-  const {currentTheme, themes} = useSelector((state) => state.theme);
+  const {currentTheme, themes, modeTheme} = useSelector((state) => state.theme);
+  const dispatch = useDispatch();
 
   const theme = themes[currentTheme] || themes.light;
   const {  
@@ -16,7 +20,27 @@ const Ajustes = ({ navigation }) => {
     colorQuinario,
   } = theme;
 
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const themeOptions = ['light', 'dark', 'system'];
+  const [selectedIndex, setSelectedIndex] = useState(themeOptions.indexOf(currentTheme));
+
+  useEffect(() => {
+    const loadTheme = async () => {
+      const storedTheme = await AsyncStorage.getItem('theme');
+      if (storedTheme) {
+        dispatch(setModeTheme(storedTheme));
+        setSelectedIndex(themeOptions.indexOf(storedTheme));
+      }
+    };
+
+    loadTheme();
+  }, [dispatch]);
+
+  const handleThemeChange = async (value) => {
+    const selectedTheme = themeOptions[value];
+    await AsyncStorage.setItem('theme', selectedTheme);
+    dispatch(setModeTheme(selectedTheme));
+    setSelectedIndex(value);
+  };
 
   return (
     <View style={[styles.mainContainer, {backgroundColor: colorPrimario}]}>
@@ -45,9 +69,7 @@ const Ajustes = ({ navigation }) => {
           <ButtonGroup
             buttons={['Claro', 'Oscuro', 'Tema del Sistema']}
             selectedIndex={selectedIndex}
-            onPress={value => {
-              setSelectedIndex(value);
-            }}
+            onPress={handleThemeChange}
             containerStyle={{marginBottom: 20, borderRadius: 25, marginHorizontal: 25, height: 50}}
             textStyle={{fontSize: 16, textAlign: 'center'}}
           />

@@ -6,9 +6,9 @@ import {
     Animated,
     StatusBar,
     ImageBackground,
-    PermissionsAndroid, 
-    useColorScheme, 
-    Appearance, 
+    PermissionsAndroid,
+    useColorScheme,
+    Appearance,
     AppState,
 } from "react-native";
 import styles from '../../styles/style-app';
@@ -17,18 +17,15 @@ import { crearTablas } from '../../services/database/SQLite';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCache } from "./../../services/storage/CacheContext";
 import { useSelector, useDispatch } from 'react-redux';
-import { setTheme } from '../../services/redux/slices/themeSlice';
-
+import { setModeTheme, setTheme } from '../../services/redux/slices/themeSlice';
 
 const Inicio = ({ navigation }) => {
     const {
         unoAnim,
         translateAnimDOWN,
         startAnimations,
-        resetAnimations,
     } = animaciones();
 
-    //Permisos de escritura para la aplicacion 
     const requestWritePermission = async () => {
         try {
             const granted = await PermissionsAndroid.request(
@@ -41,117 +38,103 @@ const Inicio = ({ navigation }) => {
                     buttonPositive: 'OK',
                 },
             );
-            /*if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                console.log('Permiso concedido');
-            } else {
-                console.log('Permiso denegado');
-            }*/
             granted;
         } catch (err) {
             console.warn(err);
         }
     };
 
-    const { cacheData, setCacheData } = useCache();
+    const { setCacheData } = useCache();
 
     const getData = async () => {
-      try {
-        const jsonValue = await AsyncStorage.getItem('@form_default');
-        if (jsonValue !== null) {
-          const defaultData = JSON.parse(jsonValue);
-          setCacheData(defaultData);
+        try {
+            const jsonValue = await AsyncStorage.getItem('@form_default');
+            if (jsonValue !== null) {
+                const defaultData = JSON.parse(jsonValue);
+                setCacheData(defaultData);
+            }
+        } catch (e) {
+            console.error('Error al recuperar datos de AsyncStorage:', e);
         }
-      } catch (e) {
-        console.error('Error al recuperar datos de AsyncStorage:', e);
-      }
     };
 
-    useEffect(() => { 
-        crearTablas();
-        requestWritePermission();
-        startAnimations();
-        getData();
-        //console.log(cacheData);
+    const dispatch = useDispatch();
+    const systemTheme = useColorScheme();
+    const { currentTheme, themes, modeTheme } = useSelector((state) => state.theme);
+
+    const initializeTheme = async () => {
+        try {
+            const themeValue = await AsyncStorage.getItem('theme');
+            dispatch(setModeTheme(themeValue || 'system'));
+        } catch (e) {
+            console.error('Error al recuperar datos de AsyncStorage:', e);
+        }
+    };
+
+    useEffect(() => {
+        const initializeApp = async () => {
+            await crearTablas();
+            await requestWritePermission();
+            await getData();
+            await initializeTheme();
+            startAnimations();
+        };
+        initializeApp();
     }, []);
 
-    const dispatch = useDispatch();
-    const systemTheme = useColorScheme(); // Obtiene el tema actual del sistema ('light' o 'dark')
-    const {currentTheme, themes} = useSelector((state) => state.theme);
-    
     useEffect(() => {
-        // // Establecer el tema de la aplicación según el tema del sistema al iniciar
-        // console.log("Current Theme:", currentTheme);
-        // console.log("System Theme:", systemTheme);
-        // console.log("Selected Theme:", theme);
-        if (currentTheme === 'system' || currentTheme !== systemTheme) {
+        if (modeTheme === 'system') {
             dispatch(setTheme(systemTheme));
+        } else {
+            dispatch(setTheme(modeTheme));
         }
-    }, [dispatch, systemTheme, currentTheme]);
+    }, [modeTheme, systemTheme]);
 
     useEffect(() => {
-        const handleAppearanceChange = ({ colorScheme }) => {
-            // Actualizar el tema de la aplicación cuando el tema del sistema cambie
-            if (currentTheme === 'system') {
+        if (modeTheme === 'system') {
+            const handleAppearanceChange = ({ colorScheme }) => {
                 dispatch(setTheme(colorScheme));
-            }
-        };
-
-        const listener = Appearance.addChangeListener(handleAppearanceChange);
-
-        return () => listener.remove();
-    }, [dispatch, currentTheme]);
+            };
+            const listener = Appearance.addChangeListener(handleAppearanceChange);
+            return () => listener.remove();
+        }
+    }, [modeTheme]);
 
     useEffect(() => {
         const handleAppStateChange = (nextAppState) => {
-            if (nextAppState === 'active' && currentTheme === 'system') {
+            if (nextAppState === 'active' && modeTheme === 'system') {
                 dispatch(setTheme(Appearance.getColorScheme()));
             }
         };
-
         const subscription = AppState.addEventListener('change', handleAppStateChange);
-
         return () => subscription.remove();
-    }, [dispatch, currentTheme]);
+    }, [modeTheme]);
 
     const theme = themes[currentTheme] || themes[systemTheme] || themes.light;
     const { imageBackgroundInicio, logoInicio, colorStatusBarInicio } = theme;
 
     return (
-        // activamos la animacion de entrada
-        <ImageBackground source={imageBackgroundInicio} resizeMode="cover" style={{flex: 1, width: '100%', height: '100%'}}>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
-            <StatusBar
-                
-                animated={true}
-                backgroundColor={colorStatusBarInicio}
-            />            
-            {/* View del logo*/}
-            <Animated.View style={{ flex: 10, flexDirection: 'row', overflow: 'hidden', transform: [{ translateY: translateAnimDOWN }, { scale: unoAnim }] }}>
-                <View style={{ flex: 1 }}></View>
-                <ImageBackground source={logoInicio} resizeMode="contain" style={{ flex: 8 }}></ImageBackground>
-                <View style={{ flex: 1 }}></View>
-            </Animated.View>
-
-            {/* View del boton */}
-            <Animated.View style={{ flex: 6, justifyContent: 'center', opacity: unoAnim }}>
-                <TouchableOpacity onPress={() => { navigation.navigate('Home'); }}>
-                    <Text style={[styles.boton, styles.fondoP, styles.textT, { paddingHorizontal: 25, paddingVertical: 15, fontSize: 18, fontWeight: 'bold' }]}>
-                        Entrar
-                    </Text>
-                </TouchableOpacity>
-            </Animated.View>
-
-            {/* View para FAQ */}
-            {/* <Animated.View style={{ flex: 1, justifyContent: 'center', opacity: unoAnim }}>
-                <TouchableOpacity onPress={() => { navigation.navigate('FAQ'); }}>
-                    <Text style={styles.textP}>
-                        Preguntas frecuentes (FAQs)
-                    </Text>
-                </TouchableOpacity>
-            </Animated.View> */}
-        </View>
-        </ImageBackground> 
-    )
-}
+        <ImageBackground source={imageBackgroundInicio} resizeMode="cover" style={{ flex: 1, width: '100%', height: '100%' }}>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
+                <StatusBar
+                    animated={true}
+                    backgroundColor={colorStatusBarInicio}
+                />
+                <Animated.View style={{ flex: 10, flexDirection: 'row', overflow: 'hidden', transform: [{ translateY: translateAnimDOWN }, { scale: unoAnim }] }}>
+                    <View style={{ flex: 1 }}></View>
+                    <ImageBackground source={logoInicio} resizeMode="contain" style={{ flex: 8 }}></ImageBackground>
+                    <View style={{ flex: 1 }}></View>
+                </Animated.View>
+                <Animated.View style={{ flex: 6, justifyContent: 'center', opacity: unoAnim }}>
+                    <TouchableOpacity onPress={() => { navigation.navigate('Home'); }}>
+                        <Text style={[styles.boton, styles.fondoP, styles.textT, { paddingHorizontal: 25, paddingVertical: 15, fontSize: 18, fontWeight: 'bold' }]}>
+                            Entrar
+                        </Text>
+                    </TouchableOpacity>
+                </Animated.View>
+            </View>
+        </ImageBackground>
+    );
+};
 
 export default Inicio;
