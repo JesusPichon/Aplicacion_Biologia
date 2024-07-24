@@ -48,6 +48,7 @@
 import React from 'react';
 
 import Inicio from './screens/inicio';
+import Registro from './screens/registro';
 import Formulario from './screens/formulario';
 import InformacionToma from './screens/info';
 import Grupos from './screens/grupos';
@@ -105,6 +106,7 @@ const App = () => {
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Inicio" component={Inicio} />
             <Stack.Screen name="Home" component={HomeDrawer} />
+            <Stack.Screen name="Registro" component={Registro}/>
           </Stack.Navigator>
         </NavigationContainer>
       </CacheProvider>

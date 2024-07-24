@@ -16,36 +16,17 @@ import {
 } from "react-native";
 import styles from '../../styles/style-app';
 import animaciones from '../../components/animaciones/animaciones';
-import { crearTablas } from '../../services/database/SQLite';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCache } from "./../../services/storage/CacheContext";
 import { useSelector, useDispatch } from 'react-redux';
 import { setModeTheme, setTheme } from '../../services/redux/slices/themeSlice';
 
-const Inicio = ({ navigation }) => {
+const Registro = ({ navigation }) => {
     const {
         unoAnim,
         translateAnimDOWN,
         startAnimations,
     } = animaciones();
-
-    const requestWritePermission = async () => {
-        try {
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-                {
-                    title: 'Permiso de escritura en almacenamiento externo',
-                    message: 'Necesitamos tu permiso para escribir en el almacenamiento externo.',
-                    buttonNeutral: 'Preguntar más tarde',
-                    buttonNegative: 'Cancelar',
-                    buttonPositive: 'OK',
-                },
-            );
-            granted;
-        } catch (err) {
-            console.warn(err);
-        }
-    };
 
     const { setCacheData } = useCache();
 
@@ -76,8 +57,6 @@ const Inicio = ({ navigation }) => {
 
     useEffect(() => {
         const initializeApp = async () => {
-            await crearTablas();
-            await requestWritePermission();
             await getData();
             await initializeTheme();
             startAnimations();
@@ -114,7 +93,7 @@ const Inicio = ({ navigation }) => {
     }, [modeTheme]);
 
     const theme = themes[currentTheme] || themes[systemTheme] || themes.light;
-    const { imageBackgroundInicio, logoInicio, colorStatusBarInicio, iconoUsuario, iconoContraseña, colorPrimario, colorTerciario, colorTexto } = theme;
+    const { imageBackgroundInicio, logoInicio, colorStatusBarInicio, iconoUsuario, iconoContraseña, iconoCorreo, colorPrimario, colorTerciario, colorTexto } = theme;
 
     const styles = StyleSheet.create({
         input: {
@@ -178,18 +157,22 @@ const Inicio = ({ navigation }) => {
                                 placeholderTextColor="#888"
                             />
                         </View>
-                        <TouchableOpacity style={{ alignItems: 'flex-end' }}>
-                            <Text style={[styles.labelText, { marginTop: -20, textDecorationLine: 'underline' }]}>¿Olvidaste tu contraseña?</Text>
-                        </TouchableOpacity>
-                        
+                        <View style={{flexDirection: 'row', alignSelf: 'center' }}>
+                            <Image source={iconoCorreo} style={{ width: 45, height: 45, marginRight: 5 }}/>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Correo Electrónico"
+                                placeholderTextColor="#888"
+                            />
+                        </View>
                     </View>
-                    <TouchableOpacity style={[styles.button, { alignSelf: 'center', marginTop: 25 }]}  onPress={() => { navigation.navigate('Home'); }}>
-                        <Text style={styles.buttonText}>Iniciar Sesión</Text>
+                    <TouchableOpacity style={[styles.button, { alignSelf: 'center',  }]}>
+                        <Text style={styles.buttonText}>Registrarse</Text>
                     </TouchableOpacity>
                     <View style={{ flexDirection: 'column', paddingLeft: 30,  }}>
-                        <Text style={[styles.labelText, { marginTop: 100 }]}>¿No tienes cuenta?</Text>
-                        <TouchableOpacity style={[styles.button, { marginTop: 5 }]}  onPress={() => { navigation.navigate('Registro'); }}>
-                            <Text style={styles.buttonText}>Registrate</Text>
+                        <Text style={[styles.labelText, { marginTop: 65 }]}>¿Ya tienes cuenta?</Text>
+                        <TouchableOpacity style={[styles.button, { marginTop: 5 }]}  onPress={() => { navigation.goBack(); }}>
+                            <Text style={styles.buttonText}>Inicia Sesión</Text>
                         </TouchableOpacity>
                     </View>
                 </Animated.View>
@@ -198,4 +181,4 @@ const Inicio = ({ navigation }) => {
     );
 };
 
-export default Inicio;
+export default Registro;
