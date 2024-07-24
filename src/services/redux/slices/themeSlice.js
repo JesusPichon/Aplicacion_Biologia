@@ -6,7 +6,10 @@ import { set } from "react-hook-form";
 const lightTheme = {
     imageBackgroundInicio: require('../../../assets/images/fondoClaro.jpeg'), // Pantalla de inicio
     logoInicio: require('../../../assets/images/logoClaro.png'), //Pantalla de inicio
+    iconoUsuario: require('../../../assets/images/usuarioClaro.png'), //Pantalla de inicio
+    iconoContraseña: require('../../../assets/images/contraseñaClaro.png'), //Pantalla de inicio
     colorStatusBarInicio: '#97b4a5', //Pantalla de inicio
+    colorTexto: '#000', //Pantalla de inicio
     tabItemSelectColor: terceroFePro, //Pantalla Grupos
     
     colorPrimario: quintoFePro,         //'#eff3f4'
@@ -19,7 +22,10 @@ const lightTheme = {
 const darkTheme = {
     imageBackgroundInicio: require('../../../assets/images/fondoOscuro.jpeg'),
     logoInicio: require('../../../assets/images/logoOscuro.png'),
+    iconoUsuario: require('../../../assets/images/usuarioOscuro.png'),
+    iconoContraseña: require('../../../assets/images/contraseñaOscuro.png'),
     colorStatusBarInicio: '#203c3b',
+    colorTexto: '#fff',
     tabItemSelectColor: principalFePro,
 
     colorPrimario: principalFePro,      //'#1e2d2d'
