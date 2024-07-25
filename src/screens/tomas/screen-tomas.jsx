@@ -146,8 +146,8 @@ const Tomas = ({ navigation, route }) => {
             <View style={{ flex: 1, backgroundColor: colorSecundario, borderTopLeftRadius: 20, borderTopRightRadius: 20, paddingTop: 60}}>
                 <FlatList
                     ListEmptyComponent={<View style={{alignItems:"center"}}>
-                        <Icon name='search-off' type='material' color={colorQuinario} size={100}/>
-                        <Text style={{fontSize:25, color:colorQuinario}}>No se encontraron tomas. </Text>
+                        <Icon name='search-off' type='material' color={colorCuaternario} size={100}/>
+                        <Text style={{fontSize:25, color:colorCuaternario}}>No se encontraron tomas. </Text>
                     </View>}
                     data={listTomas}
                     keyExtractor={(item) => item.id.toString()}
@@ -170,7 +170,7 @@ const Tomas = ({ navigation, route }) => {
                         }
                     }}
                     onEndReachedThreshold={0.5}
-                    ListHeaderComponent={loading && <LinearProgress color={colorQuinario} />}
+                    ListHeaderComponent={loading && <LinearProgress color={colorCuaternario} />}
                     ListHeaderComponentStyle={{marginBottom:15}}
                 />
             </View>

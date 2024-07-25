@@ -178,7 +178,7 @@ const BarraBusqueda = ({ titulo, pantalla, onResult }) => {
                     itemContainerStyle={{ borderWidth: 0}}
                     itemTextStyle={{ fontSize: 12, color: colorQuinario }}
                     containerStyle={{ backgroundColor:colorPrimario, borderWidth:0, borderRadius:20, overflow:"hidden"}}
-                    activeColor={colorTerciario}
+                    activeColor={colorSecundario}
                     autoScroll={false}
                     maxHeight={200}
                     labelField="label"
