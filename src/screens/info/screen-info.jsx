@@ -1,9 +1,12 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Icon, ListItem, CheckBox, Tab, TabView, Button } from '@rneui/themed';
-import { Text, View, TextInput, FlatList, SafeAreaView, ActivityIndicator, ScrollView } from "react-native";
+import { Text, View, TextInput, FlatList, SafeAreaView, ActivityIndicator, ScrollView, Pressable } from "react-native";
 import TomaController from "../../services/controllers/tomaController";
 import { Dropdown } from "react-native-element-dropdown";
+import { editarToma } from "../../services/database/SQLite";
+import DateTimePicker from '@react-native-community/datetimepicker';
+import {imprimirTomas} from "../../components/imprimir/imprimirSeleccionando";
 
 const InfColecta = ({ navigation, route }) => {
     const { currentTheme, themes } = useSelector((state) => state.theme);
@@ -14,6 +17,10 @@ const InfColecta = ({ navigation, route }) => {
     const [coordTabIndex, setCoordTabIndex] = useState(0);
     const [textCoordenadas, setTextCoordenadas] = useState('');
     const [coordsChecked, setCoordsChecked] = useState(false);
+    const [date, setDate] = useState(new Date());
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [listPrint, setListPrint] = useState([]);
+
 
 
     const theme = themes[currentTheme] || themes.light;
@@ -54,6 +61,20 @@ const InfColecta = ({ navigation, route }) => {
         }
     };
 
+    const handleDateChange = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        setShowDatePicker(false);
+        setDate(currentDate);
+    
+        const formattedDate = currentDate.toLocaleDateString('es-ES'); // Formato DD/MM/AAAA
+        handleTextChange('fecha', formattedDate);
+        console.log(formattedDate);
+    };
+
+    const showDatepicker = () => {
+        setShowDatePicker(true);
+    };
+
     const handleCheckboxChange = useCallback((key) => {
         if (key === 'coordenadas') {
             setCoordsChecked(!coordsChecked);
@@ -73,33 +94,159 @@ const InfColecta = ({ navigation, route }) => {
     }
 
     const handleSubmitImprimir = () => {
-        const result = Object.keys(filteredData)
-            .filter((key) => filteredData[key])
-            .reduce((acc, key) => ({ ...acc, [key]: data[key] }), {});
-    
-        if (coordsChecked) {
-            result['coordenadas'] = textCoordenadas;
+        if (validateRequiredFields()) {
+            const result = Object.keys(filteredData)
+                .filter((key) => filteredData[key])
+                .reduce((acc, key) => ({ ...acc, [key]: data[key] }), {});
+        
+            if (coordsChecked) {
+                result['coordenadas'] = textCoordenadas;
+            }
+            console.log('Data filtrada:', result);
+            setListPrint([result]);
         }
-    
-        console.log('Data filtrada:', result);
     };
+
+    // Efecto para imprimir después de que `listPrint` cambie
+    useEffect(() => {
+        if (listPrint.length > 0) {
+            imprimirTomas(listPrint);
+        }
+    }, [listPrint]);
 
     const handleSubmitGuardar = () => {
-        if (coordTabIndex === 0) {
-            data["x"] = '';
-            data["y"] = '';
-        }else {
-            data["grados_Latitud"] = '';
-            data["minutos_Latitud"] = '';
-            data["segundos_Latitud"] = '';
-            data["grados_Longitud"] = '';
-            data["minutos_Longitud"] = '';
-            data["segundos_Longitud"] = '';
+        if (validateRequiredFields()) {
+            if (coordTabIndex === 0) {
+                data["x"] = '';
+                data["y"] = '';
+            }else {
+                data["grados_Latitud"] = '';
+                data["minutos_Latitud"] = '';
+                data["segundos_Latitud"] = '';
+                data["grados_Longitud"] = '';
+                data["minutos_Longitud"] = '';
+                data["segundos_Longitud"] = '';
+            }
+            let tomasData = {
+                nombre_cientifico: data["nombre_cientifico"],
+                familia: data["familia"],
+                nombre_local: data["nombre_local"],
+                estado: data["estado"],
+                municipio: data["municipio"],
+                localidad: data["localidad"],
+                altitud: data["altitud"],
+                grados_Latitud: data["grados_Latitud"],
+                minutos_Latitud: data["minutos_Latitud"],
+                segundos_Latitud: data["segundos_Latitud"],
+                hemisferio_Latitud: data["hemisferio_Latitud"],
+                grados_Longitud: data["grados_Longitud"],
+                minutos_Longitud: data["minutos_Longitud"],
+                segundos_Longitud: data["segundos_Longitud"],
+                hemisferio_Longitud: data["hemisferio_Longitud"],
+                x: data["x"],
+                y: data["y"],
+                tipo_vegetacion: data["tipo_vegetacion"],
+                informacion_ambiental: data["informacion_ambiental"],
+                suelo: data["suelo"],
+                asociada: data["asociada"],
+                abundancia: data["abundancia"],
+                forma_biologica: data["forma_biologica"],
+                tamano: data["tamano"],
+                flor: data["flor"],
+                fruto: data["fruto"],
+                usos: data["usos"],
+                colector_es: data["colector_es"],
+                no_colecta: data["no_colecta"],
+                fecha: data["fecha"],
+                determino: data["determino"],
+                otros_datos: data["otros_datos"],
+            };
+            console.log('Data a guardar:', tomasData);
+            editarToma(tomasData,data["id"]);
         }
-        console.log('Data a guardar:', data);
+    };
+
+    const toTitleCase = (str) => {
+        switch (str) {
+            case 'altitud':
+                return 'Altitud (m.s.n.m)';
+                break;
+
+            case 'informacion_ambiental':
+                return 'Información Ambiental';
+                break;
+
+            case 'tipo_vegetacion':
+                return 'Tipo de vegetación';
+                break;
+
+            case 'forma_biologica':
+                return 'Forma Biológica';
+                break;
+        
+            case 'tamano':
+                return 'Tamaño (m)';
+                break;
+
+            case 'colector_es':
+                return 'Colector(es)';
+                break;
+
+            case 'no_colecta':
+                return 'No. de colecta';
+                break;
+
+            default:
+                return str
+                    .toLowerCase()
+                    .split('_')
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(' ');
+                break;
+        }
+    };
+
+    const validateRequiredFields = () => {
+        const requiredFields = [
+            'estado', 'municipio', 'localidad', 'informacion_ambiental',
+            'suelo', 'asociada', 'abundancia', 'forma_biologica', 'colector_es',
+            'no_colecta', 'fecha', 'coordenadas'
+        ];
+
+        const coordenadasTemp = [
+            ['grados_Latitud', 'minutos_Latitud', 'segundos_Latitud', 'hemisferio_Latitud', 
+            'grados_Longitud', 'minutos_Longitud', 'segundos_Longitud', 'hemisferio_Longitud'],
+            ['x', 'y']
+        ]
+
+        let isValid = true;
+        let mensaje = '';
+    
+        requiredFields.forEach(field => {
+            if (field === 'coordenadas'){
+                coordenadasTemp[coordTabIndex].forEach(param => {
+                    if (!data[param] || data[param] === '') {
+                        isValid = false;
+                        mensaje += `El campo ${toTitleCase(param)} es obligatorio. \n`;
+                        //console.log(`El campo ${toTitleCase(param)} es obligatorio.`);
+                    }
+                })
+            }else{
+                if (!data[field] || data[field] === '') {
+                    isValid = false;
+                    mensaje += `El campo ${toTitleCase(field)} es obligatorio. \n`;
+                    //console.log(`El campo ${toTitleCase(field)} es obligatorio.`);
+                }
+            }
+        });
+    
+        if (isValid == false) {
+            alert(mensaje);
+        }
+
+        return isValid;
     };
     
-
     const handleCoordenadas = () => {
         if (coordTabIndex === 0) {
             let temp = 'Latitud: ' + (data["grados_Latitud"] || '') + '° ' + (data["minutos_Latitud"] || '') + "' " + (data["segundos_Latitud"] || '') + '" ' + (data["hemisferio_Latitud"] || '') + ' - Longitud: ' + (data["grados_Longitud"] || '') + '° ' + (data["minutos_Longitud"] || '') + "' " + (data["segundos_Longitud"] || '') + '" ' + (data["hemisferio_Longitud"] || '');
@@ -108,6 +255,14 @@ const InfColecta = ({ navigation, route }) => {
             let temp = 'X:' + (data['x'] || '') + ' Y:' + (data['y'] || '');
             setTextCoordenadas(temp);
         }
+    }
+
+    const paramsNumeric = (param) => {
+        let temp = false;
+        if(param === 'tamano' || param === 'altitud' || param === 'no_colecta'){
+            temp = true;
+        }
+        return temp;
     }
 
     const options = {
@@ -177,18 +332,21 @@ const InfColecta = ({ navigation, route }) => {
                     placeholder="Grados"
                     value={data?.grados_Latitud?.toString() || ''}
                     onChangeText={(text) => handleTextChange('grados_Latitud', text)}
+                    keyboardType='numeric'
                 />
                 <TextInput
                     style={{ color: colorQuinario, flex: 1, borderBottomWidth: 1, borderColor: colorCuaternario, padding:3 }}
                     placeholder="Minutos"
                     value={data?.minutos_Latitud?.toString() || ''}
                     onChangeText={(text) => handleTextChange('minutos_Latitud', text)}
+                    keyboardType='numeric'
                 />
                 <TextInput
                     style={{ color: colorQuinario, flex: 1, borderBottomWidth: 1, borderColor: colorCuaternario, padding:3 }}
                     placeholder="Segundos"
                     value={data?.segundos_Latitud?.toString() || ''}
                     onChangeText={(text) => handleTextChange('segundos_Latitud', text)}
+                    keyboardType='numeric'
                 />
                 <Dropdown
                     data={options.hemisferio_Latitud}
@@ -207,18 +365,21 @@ const InfColecta = ({ navigation, route }) => {
                     placeholder="Grados"
                     value={data?.grados_Longitud?.toString() || ''}
                     onChangeText={(text) => handleTextChange('grados_Longitud', text)}
+                    keyboardType='numeric'
                 />
                 <TextInput
                     style={{ color: colorQuinario, flex: 1, borderBottomWidth: 1, borderColor: colorCuaternario, padding:3 }}
                     placeholder="Minutos"
                     value={data?.minutos_Longitud?.toString() || ''}
                     onChangeText={(text) => handleTextChange('minutos_Longitud', text)}
+                    keyboardType='numeric'
                 />
                 <TextInput
                     style={{ color: colorQuinario, flex: 1, borderBottomWidth: 1, borderColor: colorCuaternario, padding:3 }}
                     placeholder="Segundos"
                     value={data?.segundos_Longitud?.toString() || ''}
                     onChangeText={(text) => handleTextChange('segundos_Longitud', text)}
+                    keyboardType='numeric'
                 />
                 <Dropdown
                     data={options.hemisferio_Longitud}
@@ -251,12 +412,14 @@ const InfColecta = ({ navigation, route }) => {
                     placeholder="X"
                     value={data?.x?.toString() || ''}
                     onChangeText={(text) => handleTextChange('x', text)}
+                    keyboardType='numeric'
                 />
                 <TextInput
                     style={{ color: colorQuinario, flex: 1, borderBottomWidth: 1, borderColor: colorCuaternario }}
                     placeholder="Y"
                     value={data?.y?.toString() || ''}
                     onChangeText={(text) => handleTextChange('y', text)}
+                    keyboardType='numeric'
                 />
             </View>
             <CheckBox 
@@ -272,7 +435,52 @@ const InfColecta = ({ navigation, route }) => {
     );
 
     const renderSection = (key) => {
-        if (key === 'coordenadas') {
+        if (key === 'fecha') {
+            return (
+                <View key={key}>
+                    <ListItem containerStyle={{ backgroundColor: colorSecundario, marginVertical: 5, marginHorizontal: 0, padding: 0 }}>
+                        <ListItem.Content>
+                            <ListItem.Title style={{ fontWeight: 'bold', color: colorQuinario, fontSize: 20 }}>
+                                {toTitleCase(key)}
+                            </ListItem.Title>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <Icon
+                                    name='edit'
+                                    size={18}
+                                    color={colorQuinario}
+                                    onPress={showDatepicker}
+                                />
+                                <Pressable onPress={showDatepicker} style={{flex:1}}>
+                                    <TextInput
+                                        style={{ color: colorQuinario, margin: 0, padding: 0, paddingBottom: 5, paddingLeft: 5, marginLeft: 5, fontSize: 18, borderBottomWidth: 1, flex: 1, borderColor: colorCuaternario }}
+                                        value={data["fecha"]}
+                                        editable={false}
+                                    />
+                                </Pressable>
+                            </View>
+                        </ListItem.Content>
+                        <CheckBox
+                            iconType="material-community"
+                            checkedIcon="checkbox-marked"
+                            uncheckedIcon="checkbox-blank-outline"
+                            containerStyle={{ backgroundColor: colorSecundario }}
+                            checkedColor={colorQuinario}
+                            size={30}
+                            checked={filteredData[key]}
+                            onPress={() => handleCheckboxChange(key)}
+                        />
+                    </ListItem>
+                    {showDatePicker && (
+                        <DateTimePicker
+                            value={date}
+                            mode="date"
+                            display="default"
+                            onChange={handleDateChange}
+                        />
+                    )}
+                </View>
+            );
+        } else if (key === 'coordenadas') {
             return (
                 <View key={key} style={{flex:1, height:'100%'}}>
                     <Tab
@@ -301,7 +509,7 @@ const InfColecta = ({ navigation, route }) => {
                     <ListItem containerStyle={{ backgroundColor: colorSecundario, marginVertical: 5, marginHorizontal: 0, padding: 0 }}>
                         <ListItem.Content>
                             <ListItem.Title style={{ fontWeight: 'bold', color: colorQuinario, fontSize: 20 }}>
-                                {key.replace('_', ' ')}:
+                                {toTitleCase(key)}
                             </ListItem.Title>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <Icon
@@ -329,6 +537,7 @@ const InfColecta = ({ navigation, route }) => {
                                         style={{ color: colorQuinario, margin: 0, padding: 0, paddingBottom: 5, paddingLeft: 5, marginLeft: 5, fontSize: 18, borderBottomWidth: 1, flex: 1, borderColor: colorCuaternario }}
                                         value={data?.[key]?.toString() || ''}
                                         onChangeText={(text) => handleTextChange(key, text)}
+                                        keyboardType={paramsNumeric(key) ? 'numeric' : 'default'}
                                     />
                                 )}
                             </View>

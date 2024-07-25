@@ -4,7 +4,7 @@ import imagenLocal from '../../assets/images/logoEquipo.jpg';
 
 const imprimir = async (listaFichas, imagen) => {
   const orderedKeys = [
-    'nombre_cientifico', 'familia', 'nombre_local', 'localidad', 'municipio', 'estado', 'altitud', 'x', 'tipo_vegetacion', 'informacion_ambiental', 'suelo', 'asociada', 'abundancia', 'forma_biologica', 'tamano', 'otros_datos', 'flor', 'fruto', 'usos', 'colector_es', 'no_colecta','fecha', 'determino'
+    'nombre_cientifico', 'familia', 'nombre_local', 'localidad', 'municipio', 'estado', 'altitud', 'x', 'coordenadas', 'tipo_vegetacion', 'informacion_ambiental', 'suelo', 'asociada', 'abundancia', 'forma_biologica', 'tamano', 'otros_datos', 'flor', 'fruto', 'usos', 'colector_es', 'no_colecta','fecha', 'determino'
   ];
 
   //console.log(listaFichas)
@@ -51,7 +51,7 @@ const imprimir = async (listaFichas, imagen) => {
       ">  
       ${orderedKeys.map(key => {
         const value = formData[key];
-        if ((value != '' && value != null) || key == 'x') {
+        if ((value != '' && value != null)) {
           const upperCaseKey = key.charAt(0).toUpperCase() + key.slice(1).toLowerCase();
           if (key === 'tamano') {
             return `<div style="display: flex;"><div style="font-weight: bold;">Tamaño:</div><div style="border-bottom: 1px solid #000; padding-right: 20px; padding-left: 15px"> ${value}</div>m</div>`;
