@@ -328,8 +328,9 @@ const InfColecta = ({ navigation, route }) => {
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 5, gap:5}}>
                 <Text style={{ fontWeight: 'bold', color: colorQuinario, fontSize: 15}}>Latitud:</Text>
                 <TextInput
-                    style={{ color: colorQuinario, flex: 1, borderBottomWidth: 1, borderColor: colorCuaternario, padding:3}}
+                    style={{color: colorQuinario, flex: 1, borderBottomWidth: 1, borderColor: colorCuaternario, padding:3}}
                     placeholder="Grados"
+                    placeholderTextColor={colorQuinario}
                     value={data?.grados_Latitud?.toString() || ''}
                     onChangeText={(text) => handleTextChange('grados_Latitud', text)}
                     keyboardType='numeric'
@@ -337,6 +338,7 @@ const InfColecta = ({ navigation, route }) => {
                 <TextInput
                     style={{ color: colorQuinario, flex: 1, borderBottomWidth: 1, borderColor: colorCuaternario, padding:3 }}
                     placeholder="Minutos"
+                    placeholderTextColor={colorQuinario}
                     value={data?.minutos_Latitud?.toString() || ''}
                     onChangeText={(text) => handleTextChange('minutos_Latitud', text)}
                     keyboardType='numeric'
@@ -344,6 +346,7 @@ const InfColecta = ({ navigation, route }) => {
                 <TextInput
                     style={{ color: colorQuinario, flex: 1, borderBottomWidth: 1, borderColor: colorCuaternario, padding:3 }}
                     placeholder="Segundos"
+                    placeholderTextColor={colorQuinario}
                     value={data?.segundos_Latitud?.toString() || ''}
                     onChangeText={(text) => handleTextChange('segundos_Latitud', text)}
                     keyboardType='numeric'
@@ -355,7 +358,8 @@ const InfColecta = ({ navigation, route }) => {
                     placeholder={'Hemisferio'}
                     value={data?.hemisferio_Latitud}
                     onChange={(item) => handleTextChange('hemisferio_Latitud', item.value)}
-                    style={{ flex: 1, borderBottomWidth: 1, borderColor: colorCuaternario, color: colorQuinario }}
+                    style={{ flex: 1, borderBottomWidth: 1, borderColor: colorCuaternario}}
+                    selectedTextStyle={{color:colorQuinario}}
                 />
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10, gap:5 }}>
@@ -363,6 +367,7 @@ const InfColecta = ({ navigation, route }) => {
                 <TextInput
                     style={{ color: colorQuinario, flex: 1, borderBottomWidth: 1, borderColor: colorCuaternario, padding:3 }}
                     placeholder="Grados"
+                    placeholderTextColor={colorQuinario}
                     value={data?.grados_Longitud?.toString() || ''}
                     onChangeText={(text) => handleTextChange('grados_Longitud', text)}
                     keyboardType='numeric'
@@ -370,6 +375,7 @@ const InfColecta = ({ navigation, route }) => {
                 <TextInput
                     style={{ color: colorQuinario, flex: 1, borderBottomWidth: 1, borderColor: colorCuaternario, padding:3 }}
                     placeholder="Minutos"
+                    placeholderTextColor={colorQuinario}
                     value={data?.minutos_Longitud?.toString() || ''}
                     onChangeText={(text) => handleTextChange('minutos_Longitud', text)}
                     keyboardType='numeric'
@@ -377,6 +383,7 @@ const InfColecta = ({ navigation, route }) => {
                 <TextInput
                     style={{ color: colorQuinario, flex: 1, borderBottomWidth: 1, borderColor: colorCuaternario, padding:3 }}
                     placeholder="Segundos"
+                    placeholderTextColor={colorQuinario}
                     value={data?.segundos_Longitud?.toString() || ''}
                     onChangeText={(text) => handleTextChange('segundos_Longitud', text)}
                     keyboardType='numeric'
@@ -388,16 +395,20 @@ const InfColecta = ({ navigation, route }) => {
                     placeholder={'Hemisferio'}
                     value={data?.hemisferio_Longitud}
                     onChange={(item) => handleTextChange('hemisferio_Longitud', item.value)}
-                    style={{ flex: 1, borderBottomWidth: 1, borderColor: colorCuaternario, color: colorQuinario }}
+                    style={{ flex: 1, borderBottomWidth: 1, borderColor: colorCuaternario}}
+                    selectedTextStyle={{color:colorQuinario}}
                 />
             </View>
             <CheckBox 
-                containerStyle={{backgroundColor: colorSecundario}}
                 title={textCoordenadas} 
+                containerStyle={{backgroundColor: colorSecundario}}
                 textStyle={{color: colorQuinario}}
                 center={true}
+                uncheckedColor={colorQuinario}
                 checkedColor={colorQuinario}
                 checked={coordsChecked}
+                size={30}
+                iconRight
                 onPress={() => handleCheckboxChange('coordenadas')}
             />
         </View>
@@ -423,12 +434,15 @@ const InfColecta = ({ navigation, route }) => {
                 />
             </View>
             <CheckBox 
-                containerStyle={{backgroundColor: colorSecundario}}
                 title={textCoordenadas} 
+                containerStyle={{backgroundColor: colorSecundario}}
                 textStyle={{color: colorQuinario}}
                 center={true}
+                uncheckedColor={colorQuinario}
                 checkedColor={colorQuinario}
                 checked={coordsChecked}
+                size={30}
+                iconRight
                 onPress={() => handleCheckboxChange('coordenadas')}
             />
         </>
@@ -438,7 +452,7 @@ const InfColecta = ({ navigation, route }) => {
         if (key === 'fecha') {
             return (
                 <View key={key}>
-                    <ListItem containerStyle={{ backgroundColor: colorSecundario, marginVertical: 5, marginHorizontal: 0, padding: 0 }}>
+                    <ListItem containerStyle={{ backgroundColor: 'transparent', marginVertical: 5, marginHorizontal: 0, padding: 0 }}>
                         <ListItem.Content>
                             <ListItem.Title style={{ fontWeight: 'bold', color: colorQuinario, fontSize: 20 }}>
                                 {toTitleCase(key)}
@@ -463,7 +477,7 @@ const InfColecta = ({ navigation, route }) => {
                             iconType="material-community"
                             checkedIcon="checkbox-marked"
                             uncheckedIcon="checkbox-blank-outline"
-                            containerStyle={{ backgroundColor: colorSecundario }}
+                            containerStyle={{ backgroundColor: 'transparent' }}
                             checkedColor={colorQuinario}
                             size={30}
                             checked={filteredData[key]}
@@ -490,8 +504,17 @@ const InfColecta = ({ navigation, route }) => {
                         disableIndicator={true}
                         style={{ marginTop: 10 }}
                     >
-                        <Tab.Item title="Geográficas" titleStyle={{ color: colorQuinario }} />
-                        <Tab.Item title="Métricas" titleStyle={{ color: colorQuinario }} />
+                        <Tab.Item 
+                            title="Geográficas"
+                            titleStyle={{ color: colorQuinario }} 
+                            containerStyle={{backgroundColor: colorSecundario, borderRadius:20, marginHorizontal:5, opacity:coordTabIndex === 0 ? 1 : 0.3}}
+                        />
+                        
+                        <Tab.Item 
+                            title="Métricas" 
+                            titleStyle={{ color: colorQuinario }} 
+                            containerStyle={{backgroundColor: colorSecundario, borderRadius:20, marginHorizontal:5, opacity:coordTabIndex === 1 ? 1 : 0.3}}
+                        />
                     </Tab>
                     <TabView value={coordTabIndex} onChange={setCoordTabIndex} animationType="spring" containerStyle={{height:500}}>
                         <TabView.Item style={{ width: '100%' }}>
@@ -506,7 +529,7 @@ const InfColecta = ({ navigation, route }) => {
         } else {
             return (
                 <View key={key}>
-                    <ListItem containerStyle={{ backgroundColor: colorSecundario, marginVertical: 5, marginHorizontal: 0, padding: 0 }}>
+                    <ListItem containerStyle={{ backgroundColor:'transparent', marginVertical: 5, padding:0 }}>
                         <ListItem.Content>
                             <ListItem.Title style={{ fontWeight: 'bold', color: colorQuinario, fontSize: 20 }}>
                                 {toTitleCase(key)}
@@ -525,12 +548,12 @@ const InfColecta = ({ navigation, route }) => {
                                         placeholder={'...'}
                                         value={data?.[key]}
                                         onChange={(item) => handleTextChange(key, item.value)}
-                                        style={{ backgroundColor: 'transparent', color: colorPrimario, fontSize: 18, paddingLeft: 5, marginLeft: 5, borderBottomWidth: 1, flex: 1, borderColor: colorCuaternario }}
+                                        style={{ backgroundColor: 'transparent', fontSize: 18, paddingLeft: 5, marginLeft: 5, borderBottomWidth: 1, flex: 1, borderColor: colorCuaternario }}
+                                        selectedTextStyle={{color:colorQuinario}}
                                         itemContainerStyle={{ borderWidth: 0}}
-                                        itemTextStyle={{ fontSize: 12, color: colorQuinario }}
-                                        containerStyle={{ backgroundColor:colorPrimario, borderWidth:0, borderRadius:20, overflow:"hidden"}}
-                                        activeColor={colorTerciario}
-                                        autoScroll={false}
+                                        itemTextStyle={{ fontSize: 15, color: colorQuinario }}
+                                        containerStyle={{ backgroundColor:colorPrimario, borderWidth:0, borderBottomEndRadius:20, borderBottomStartRadius:20, overflow:"hidden"}}
+                                        activeColor={colorSecundario}
                                     />
                                 ) : (
                                     <TextInput
@@ -545,8 +568,9 @@ const InfColecta = ({ navigation, route }) => {
                         <CheckBox
                             iconType="material-community"
                             checkedIcon="checkbox-marked"
-                            uncheckedIcon="checkbox-blank-outline"
-                            containerStyle={{ backgroundColor: colorSecundario }}
+                            uncheckedIcon={data[key] === '' ? "checkbox-blank" : "checkbox-blank-outline"}
+                            containerStyle={{ backgroundColor: 'transparent' }}
+                            disabled = {data[key] === ''}
                             checkedColor={colorQuinario}
                             size={30}
                             checked={filteredData[key]}
@@ -592,15 +616,15 @@ const InfColecta = ({ navigation, route }) => {
                         onChange={setIndex}
                         indicatorStyle={{ backgroundColor: colorQuinario }}
                         disableIndicator={true}
-                        style={{marginTop: 20, marginHorizontal: 10}}
+                        style={{marginVertical:10}}
                         scrollable={true}
                     >
                         {titulos.map((title, idx) => (
                             <Tab.Item 
                                 key={idx}
                                 title={title} 
-                                titleStyle={{fontSize: 15, fontWeight: index === idx ? 'bold' : 'normal', color: colorQuinario}}
-                                containerStyle={{backgroundColor: index === idx ? colorTerciario : colorSecundario, borderRadius:20, marginHorizontal:5}}
+                                titleStyle={{fontSize: 15, fontWeight: index === idx ? 'bold' : 'normal', color: 'white'}}
+                                containerStyle={{backgroundColor: colorTerciario, borderRadius:20, marginHorizontal:5, opacity:index === idx ? 1 : 0.3}}
                             />
                         ))}
                     </Tab>
@@ -609,27 +633,37 @@ const InfColecta = ({ navigation, route }) => {
                         <ActivityIndicator size="large" color={colorQuinario} />
                     ) : (
                         <View style={{flex:1}}>
-                            <TabView value={index} onChange={setIndex} animationType="spring">
-                                {sections.map((section, idx) => (
-                                    <TabView.Item key={idx} style={{ backgroundColor: colorSecundario, width: '100%', padding:20 }}>
-                                        <ScrollView>
-                                            <FlatList
-                                                data={section}
-                                                renderItem={({ item }) => renderSection(item)}
-                                                keyExtractor={(item) => item}
-                                                scrollEnabled={false}
-                                            />
-                                        </ScrollView>
-                                    </TabView.Item>
-                                ))}
-                            </TabView>
-
-                            <View style={{flexDirection:'row', width:'100%', justifyContent:'space-around', marginBottom:20, gap:10}}>
-                                <Button onPress={handleSubmitGuardar} radius={'md'} type="solid" color={colorCuaternario} containerStyle={{flex:1, paddingHorizontal: 5}}>
-                                    <Icon name="save" color="white" />
+                            <View style={{flex:9}}>
+                                <TabView value={index} onChange={setIndex} animationType="spring">
+                                    {sections.map((section, idx) => (
+                                        <TabView.Item key={idx} 
+                                            style={{
+                                                flex: 1, 
+                                                height: '100%', 
+                                                borderRadius: 20, 
+                                                marginHorizontal:20,
+                                                padding: 10,
+                                                backgroundColor:colorPrimario
+                                                }}>
+                                            <ScrollView>
+                                                <FlatList
+                                                    data={section}
+                                                    renderItem={({ item }) => renderSection(item)}
+                                                    keyExtractor={(item) => item}
+                                                    scrollEnabled={false}
+                                                />
+                                            </ScrollView>
+                                        </TabView.Item>
+                                    ))}
+                                </TabView>
+                            </View>
+                            
+                            <View style={{flexDirection:'row',justifyContent:'space-around', gap:10, flex:1, alignItems:'center', paddingHorizontal:20}}>
+                                <Button onPress={handleSubmitGuardar} radius={'md'} type="solid" color={colorTerciario} containerStyle={{flex:1}}>
+                                    Guardar Cambios
                                 </Button>
-                                <Button onPress={handleSubmitImprimir} radius={"md"} type="solid" color={colorCuaternario} containerStyle={{flex:1, paddingHorizontal: 5} }>
-                                    <Icon name="print" color="white" />
+                                <Button onPress={handleSubmitImprimir} radius={"md"} type="solid" color={colorTerciario} containerStyle={{flex:1} }>
+                                    Imprimir Toma
                                 </Button>
                             </View>
                         </View>
