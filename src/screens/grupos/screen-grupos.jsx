@@ -259,12 +259,12 @@ const Grupos = ({ navigation }) => {
                     >
                     <Tab.Item
                         title="Creados"
-                        titleStyle={{fontSize: 20, fontWeight: index === 0 ? 'bold' : 'normal', color: index === 0 ? colorPrimario : colorQuinario,}}
+                        titleStyle={{fontSize: 20, fontWeight: index === 0 ? 'bold' : 'normal', color: index === 0 ? "white" : colorQuinario,}}
                         containerStyle={[containerStyle,{backgroundColor: index === 0 ? colorTerciario : colorSecundario,}]}
                     />       
                     <Tab.Item
                         title="Guardados"
-                        titleStyle={{fontSize: 20, fontWeight: index === 1 ? 'bold' : 'normal', color: index === 1 ? colorPrimario : colorQuinario}}
+                        titleStyle={{fontSize: 20, fontWeight: index === 1 ? 'bold' : 'normal', color: index === 1 ? "white": colorQuinario}}
                         containerStyle={[containerStyle,{backgroundColor: index === 1 ? colorTerciario : colorSecundario,}]}
                     />
                 </Tab>
