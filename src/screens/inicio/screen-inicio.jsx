@@ -23,12 +23,10 @@ import { useCache } from "./../../services/storage/CacheContext";
 import { useSelector, useDispatch } from 'react-redux';
 import { setModeTheme, setTheme } from '../../services/redux/slices/themeSlice';
 import { useForm, Controller } from 'react-hook-form';
-// import { pb } from '../../services/PocketBase/pocketbase'
-import PocketBase from 'pocketbase';
+import pb from '../../services/PocketBase/pocketbase';
+import { loginUser, logoutUser, registerUser, checkUserAuthentication } from '../../services/auth/AuthFunctions';
 
 const Inicio = ({ navigation }) => {
-    const pb = new PocketBase('https://djd96hdp-8090.usw3.devtunnels.ms/');
-
     const {
         unoAnim,
         translateAnimDOWN,
@@ -87,6 +85,7 @@ const Inicio = ({ navigation }) => {
             await getData();
             await initializeTheme();
             startAnimations();
+            
         };
         initializeApp();
     }, []);
@@ -156,6 +155,8 @@ const Inicio = ({ navigation }) => {
     const [isLogin, setIsLogin] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
 
+    const { isAuthenticated, loading, error } = useSelector((state) => state.auth);
+
     const { control, handleSubmit, reset } = useForm({
         defaultValues: {
             username: '',
@@ -167,54 +168,35 @@ const Inicio = ({ navigation }) => {
 
     const onSubmit = async (data) => {
         if (isLogin) {
-            await handleLogin(data);
+            await dispatch(loginUser(data.email, data.password));
+            const authToken = await AsyncStorage.getItem('userToken');
+            if (authToken) {
+                reset();
+                navigation.navigate('Home');
+            }
         } else {
-            await handleRegister(data);
-        }
-    };
-
-    const handleLogin = async ({ email, password }) => {
-        try {
-            const authData = await pb.collection('users').authWithPassword(email, password);
-
-            console.log(pb.authStore.isValid);
-            console.log(pb.authStore.token);
-            console.log(pb.authStore.model.id);
-
-            navigation.navigate('Home');
-        } catch (error) {
-            console.error('Error logging in:', error);
-            setErrorMessage('Error al iniciar sesión. Verifique sus credenciales.');
-            Alert.alert('Error', 'Error al iniciar sesión. Verifique sus credenciales.');
-        }
-    };
-
-    const handleRegister = async ({ username, email, password, passwordConfirm }) => {
-        if (password !== passwordConfirm) {
-            setErrorMessage('Las contraseñas no coinciden.');
-            Alert.alert('Error', 'Las contraseñas no coinciden.');
-            return;
-        }
-        
-        const newUserData = {
-            "username": username,
-            "email": email,
-            "password": password,
-            "passwordConfirm": passwordConfirm,
-        }
-        try {
-            
-            const newUser = await pb.collection('users').create(newUserData);
-
-            Alert.alert('Éxito', 'Registro exitoso. Ahora puede iniciar sesión.');
+            await dispatch(registerUser(data.username, data.email, data.password, data.passwordConfirm));
             setIsLogin(true);
             reset();
-        } catch (error) {
-            console.error('Error registering:', error);
-            setErrorMessage('Error al registrar. Verifique sus datos.');
-            Alert.alert('Error', `Error al registrar. Verifique sus datos.\n${error.message}`);
         }
     };
+
+    const handleLogout = async () => {
+        await dispatch(logoutUser());
+    };
+
+    useEffect(() => {
+        // Verifica el estado de autenticación al montar el componente
+        const checkAuth = async () => {
+            try {
+                await dispatch(checkUserAuthentication());
+            } catch (error) {
+                console.error('Error checking authentication:', error);
+                // Handle the error here, e.g. show an error message to the user
+            }
+        };
+        checkAuth();
+    }, [dispatch]);
 
     return (
         <ImageBackground source={imageBackgroundInicio} resizeMode="cover" style={{ flex: 1, width: '100%', height: '100%' }}>
@@ -229,8 +211,8 @@ const Inicio = ({ navigation }) => {
                     <View style={{ flex: 1 }}></View>
                 </Animated.View>
 
-
-                <Animated.View style={{ flex: 1, width: '100%', opacity: unoAnim }}>
+                { !isAuthenticated ? (
+                    <Animated.View style={{ flex: 1, width: '100%', opacity: unoAnim }}>
                     <View style={{width: '80%',  alignSelf: 'center'}}>
                         {!isLogin && (
                             <View style={{flexDirection: 'row', alignSelf: 'center' }}>
@@ -326,6 +308,17 @@ const Inicio = ({ navigation }) => {
                         </TouchableOpacity>
                     </View>
                 </Animated.View>
+                ) : (
+                    <Animated.View style={{ flex: 1, width: '100%', opacity: unoAnim }}>
+                        <TouchableOpacity style={[styles.button, { alignSelf: 'center' }]} onPress={() => navigation.navigate("Home")}>
+                            <Text style={styles.buttonText}>Ir a Home</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.button, { alignSelf: 'center' }]} onPress={handleLogout}>
+                            <Text style={styles.buttonText}>Cerrar Sesión</Text>
+                        </TouchableOpacity>
+                    </Animated.View>
+                )}
+                
                 
             </View>
         </ImageBackground>
