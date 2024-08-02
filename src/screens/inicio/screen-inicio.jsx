@@ -159,7 +159,7 @@ const Inicio = ({ navigation }) => {
     const [isLogin, setIsLogin] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');
 
-    const { isAuthenticated, loading, error } = useSelector((state) => state.auth);
+    const { isAuthenticated, loading, error, token } = useSelector((state) => state.auth);
 
     const { control, handleSubmit, reset } = useForm({
         defaultValues: {
@@ -176,7 +176,9 @@ const Inicio = ({ navigation }) => {
         setCargando(true);
         if (isLogin) {
             await dispatch(loginUser(data.email, data.password));
+            console.log('Token despues del login...', token);
             const authToken = await AsyncStorage.getItem('userToken');
+            console.log('Token despues del login en AsyncStorage...', authToken);
             if (authToken) {
                 reset();
                 resetAnimations(navigation,'Home');
@@ -200,6 +202,9 @@ const Inicio = ({ navigation }) => {
         // Verifica el estado de autenticación al montar el componente
         const checkAuth = async () => {
             try {
+                // await AsyncStorage.removeItem('userToken');
+                // dispatch(logoutUser());
+                console.log('Checking authentication...');
                 await dispatch(checkUserAuthentication());
             } catch (error) {
                 console.error('Error checking authentication:', error);
@@ -208,6 +213,11 @@ const Inicio = ({ navigation }) => {
         };
         checkAuth();
     }, [dispatch]);    
+
+    useEffect(() => {
+        console.log('isAuthenticated changed:', isAuthenticated);
+    }, [isAuthenticated]);
+
 
     return (
         <ImageBackground source={imageBackgroundInicio} resizeMode="cover" style={{ flex: 1, width: '100%', height: '100%' }}>

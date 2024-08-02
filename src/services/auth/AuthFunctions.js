@@ -43,17 +43,50 @@ export const logoutUser = () => async (dispatch) => {
     dispatch(logout());
 };
 
+// export const checkUserAuthentication = () => async (dispatch) => {
+//     const token = await AsyncStorage.getItem('userToken');
+//     if (token) {
+//         pb.authStore.save(token);
+//         const user = pb.authStore.model;
+//         console.log(user);
+//         if (user) {
+//             dispatch(loginSuccess({ user, token }));
+//         } else {
+//             dispatch(logout());
+//         }
+//     } else {
+//         dispatch(logout());
+//     }
+// };
+
 export const checkUserAuthentication = () => async (dispatch) => {
-    const token = await AsyncStorage.getItem('userToken');
-    if (token) {
-        pb.authStore.save(token);
-        const user = pb.authStore.model;
-        if (user) {
-            dispatch(loginSuccess({ user, token }));
+    try {
+        const token = await AsyncStorage.getItem('userToken');
+        console.log('Token from AsyncStorage:', token);
+        if (token) {
+            pb.authStore.save(token);
+            console.log('Token saved in PocketBase authStore:', pb.authStore.token);
+            const user = pb.authStore.model;
+            if (user) {
+                console.log('Authenticated user:', user);
+                dispatch(loginSuccess({ user, token }));
+            } else {
+                await pb.collection('users').authRefresh();
+                const refreshedUser = pb.authStore.model;
+                if (refreshedUser) {
+                    console.log('Refreshed user:', refreshedUser);
+                    dispatch(loginSuccess({ user: refreshedUser, token }));
+                } else {
+                    console.log('User not found, logging out');
+                    dispatch(logout());
+                }
+            }
         } else {
+            console.log('No token found, logging out');
             dispatch(logout());
         }
-    } else {
+    } catch (error) {
+        console.error('Error checking authentication:', error);
         dispatch(logout());
     }
 };
