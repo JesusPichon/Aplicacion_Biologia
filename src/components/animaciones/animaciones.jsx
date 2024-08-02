@@ -23,8 +23,8 @@ const animaciones = () => {
 
   const unoOut = () => {
     Animated.timing(unoAnim, {
-      toValue: 0,
-      duration: 250,
+      toValue: 1.4,
+      duration: 700,
       easing: Easing.ease,
       useNativeDriver: true,
     }).start();
@@ -63,28 +63,28 @@ const animaciones = () => {
   const translateOut = () => {
     Animated.timing(translateAnimUP, {
       toValue: Dimensions.get('screen').height,
-      duration: 250,
+      duration: 600,
       easing: Easing.ease,
       useNativeDriver: true,
     }).start();
 
     Animated.timing(translateAnimDOWN, {
-      toValue: -Dimensions.get('screen').height,
-      duration: 250,
+      toValue: Dimensions.get('screen').height - Dimensions.get('screen').height*0.9,
+      duration: 600,
       easing: Easing.ease,
       useNativeDriver: true,
     }).start();
 
     Animated.timing(translateAnimRIGHT, {
         toValue: Dimensions.get('screen').width,
-        duration: 250,
+        duration: 600,
         easing: Easing.ease,
         useNativeDriver: true,
     }).start();
 
     Animated.timing(translateAnimLEFT, {
         toValue: -Dimensions.get('screen').width,
-        duration: 250,
+        duration: 600,
         easing: Easing.ease,
         useNativeDriver: true,
     }).start();
@@ -101,7 +101,7 @@ const animaciones = () => {
     unoOut();
     translateOut();
     setTimeout(() => {
-      navigation.replace(screen);
+      navigation.navigate(screen);
     }, 250);
   };
 
