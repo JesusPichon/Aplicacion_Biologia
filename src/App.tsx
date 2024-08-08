@@ -48,7 +48,6 @@
 import React from 'react';
 
 import Inicio from './screens/inicio';
-import Registro from './screens/registro';
 import Formulario from './screens/formulario';
 import InformacionToma from './screens/info';
 import Grupos from './screens/grupos';
@@ -57,6 +56,7 @@ import Editar from './screens/editar';
 import FAQ from './screens/FAQ/screen-FAQ';
 import CamposPred from './screens/campos-predeterminados/screen-camposPred';
 import Ajustes from './screens/ajustes';
+import Login from './screens/login';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -81,6 +81,7 @@ const MisGruposStack = () => (
     <Stack.Screen name="Tomas" component={Tomas} />
     <Stack.Screen name="Editar" component={Editar} />
     <Stack.Screen name="CamposPred" component={CamposPred}/>
+    <Stack.Screen name="Login" component={Login} />
   </Stack.Navigator>
 );
 
@@ -95,7 +96,6 @@ const HomeDrawer = () => (
     {/* <Drawer.Screen name="Explorar" component={ExplorarStack} /> */}
     <Drawer.Screen name="Configuracion" component={Ajustes} />
     <Drawer.Screen name="FAQ" component={FAQ} />
-    {/* <Drawer.Screen name="AcercaDe" component={AcercaDe} /> */}
   </Drawer.Navigator>
 );
 const App = () => {
@@ -106,7 +106,7 @@ const App = () => {
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Inicio" component={Inicio} />
             <Stack.Screen name="Home" component={HomeDrawer} />
-            <Stack.Screen name="Registro" component={Registro}/>
+            <Stack.Screen name="Login" component={Login} />
           </Stack.Navigator>
         </NavigationContainer>
       </CacheProvider>

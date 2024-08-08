@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import styles from './style-ajustes'
-import { useSelector } from 'react-redux'
 import { Icon, ButtonGroup, } from 'react-native-elements'
 import { setModeTheme } from '../../services/redux/slices/themeSlice'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Ajustes = ({ navigation }) => {
   const {currentTheme, themes, modeTheme} = useSelector((state) => state.theme);
   const dispatch = useDispatch();
+
+  const { isAuthenticated, loading, error, token } = useSelector((state) => state.auth);
 
   const theme = themes[currentTheme] || themes.light;
   const {  
@@ -54,25 +55,48 @@ const Ajustes = ({ navigation }) => {
           containerStyle={{marginVertical: 20, paddingLeft: 15}}
         />
       </View>
-      <View
-        style={[styles.secondaryContainer, {backgroundColor: colorSecundario}]}>
+
+      <View style={[styles.secondaryContainer, {backgroundColor: colorSecundario}]}>
         <View style={styles.titleContainer}>
           <Text
             style={{fontSize: 30, fontWeight: 'bold', color: colorQuinario}}>
             Ajustes
           </Text>
         </View>
-        <View>
-          <Text style={{color: colorQuinario, paddingLeft: 25, fontSize: 20}}>
+
+        <View style={styles.itemContainer}>
+          <Text style={{color: colorQuinario, fontSize: 20}}>
             Tema de la Aplicación
           </Text>
           <ButtonGroup
             buttons={['Claro', 'Oscuro', 'Tema del Sistema']}
             selectedIndex={selectedIndex}
             onPress={handleThemeChange}
-            containerStyle={{marginBottom: 20, borderRadius: 25, marginHorizontal: 25, height: 50}}
+            containerStyle={{marginBottom: 20, borderRadius: 25, height: 50}}
             textStyle={{fontSize: 16, textAlign: 'center'}}
           />
+        </View>
+
+        <View style={styles.itemContainer}>
+          <Text style={{color: colorQuinario, fontSize: 20}}>
+            Cuenta
+          </Text>
+          { isAuthenticated ? (
+            <View>
+              <TouchableOpacity>
+                <Text>Autenticado</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <View style={{alignItems: 'center', marginBottom: 10}}>
+              <Text>No has iniciado Sesión</Text>
+              <TouchableOpacity 
+                style={[styles.button, {backgroundColor: colorTerciario}]}
+                onPress={() => navigation.navigate("Login")}>
+                <Text style={{color: 'white', fontWeight: 'bold'}}>No Autenticado</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       </View>
     </View>

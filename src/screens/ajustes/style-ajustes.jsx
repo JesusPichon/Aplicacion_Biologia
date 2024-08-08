@@ -13,9 +13,18 @@ const styles = StyleSheet.create({
         flexDirection: 'row', 
         justifyContent: 'space-between',
         marginVertical: 10, 
-        paddingHorizontal: 20, 
         marginBottom: 10,
+        marginHorizontal: 10,
     },
+    itemContainer: {
+        marginHorizontal: 10,
+    },
+    button: {
+        borderRadius: 25,
+        width: '35%',
+        paddingVertical: 10,
+        alignItems: 'center',
+      },
 });
 
 export default styles;
