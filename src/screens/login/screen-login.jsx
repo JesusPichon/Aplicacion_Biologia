@@ -156,7 +156,7 @@ const Login = ({ navigation }) => {
                                 )
                             }
                             <View style={{flexDirection: 'row', alignSelf: 'center' }}>
-                                <Image source={iconoUsuario} style={{ width: 40, height: 40, marginRight: 10 }}/>
+                            <Image source={isLogin ? iconoUsuario : iconoCorreo} style={isLogin ? { width: 40, height: 40, marginRight: 10 } : { width: 45, height: 45, marginRight: 5 }}/>
                                 <Controller
                                     control={control}
                                     name="email"
