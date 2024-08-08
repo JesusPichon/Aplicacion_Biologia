@@ -60,7 +60,7 @@ const CustomDropdown = ({ control, name, rules, errors, label, data, allowCustom
               <Dropdown
                 style={[styles.dropdown, {backgroundColor: colorPrimario, borderColor: colorTerciario}]}
                 selectedTextStyle={[styles.selectedTextStyle, {color: colorQuinario}]}
-                itemTextStyle={{color: colorQuinario}}
+                itemTextStyle={{color: '#FFF'}}
                 containerStyle={[styles.ContainerStyle, {backgroundColor: colorTerciario}]}
                 activeColor={colorSecundario}
                 iconColor={currentTheme === 'dark' ? '#FFF' : 'gray'}

@@ -179,10 +179,14 @@ const Formulario = ({navigation, route}) => {
     }
     }, [cacheData]);
 
-    
-
     const containerStyle = { borderRadius: 30, marginHorizontal: 10,}; // Estilo del título de la pestaña
     
+    const handleIndexChange = (e) => {
+        if (e >= 0 && e < 6) { // Verifica si el nuevo índice está dentro de los límites
+            setIndex(e);
+        }
+    };
+
     return (
         <View style={[styles.mainContainer, { backgroundColor: colorPrimario, }]}>
            <View style={{width: '10%', justifyContent: 'center'}}>
@@ -199,47 +203,44 @@ const Formulario = ({navigation, route}) => {
                  <Text style={[styles.textTitle, { color: colorQuinario }]}>FICHA DE DATOS</Text>
                 <Tab
                     value={index}
-                    onChange={(e) => {
-                        
-                        setIndex(e);
-                    }}
+                    onChange={handleIndexChange}
                     disableIndicator={true}
                     style={{ marginTop: 5, marginHorizontal: 10 }}
                     scrollable={true}
                 >
                     <Tab.Item
                         title="Datos Generales"
-                        titleStyle={{ fontSize: 15, fontWeight: index === 0 ? 'bold' : 'normal', color: colorQuinario, }}
+                        titleStyle={{ fontSize: 15, fontWeight: index === 0 ? 'bold' : 'normal', color: index === 0 ? '#FFF' : colorQuinario, }}
                         containerStyle={[containerStyle, { backgroundColor: index === 0 ? colorTerciario : colorSecundario, }]}
                     />
                     <Tab.Item
                         title="Ubicación"
-                        titleStyle={{ fontSize: 15, fontWeight: index === 1 ? 'bold' : 'normal', color: colorQuinario, }}
+                        titleStyle={{ fontSize: 15, fontWeight: index === 1 ? 'bold' : 'normal', color: index === 1 ? '#FFF' : colorQuinario, }}
                          containerStyle={[containerStyle, { backgroundColor: index === 1 ? colorTerciario : colorSecundario, }]}
                     />
                     <Tab.Item
                         title="Ambiente"
-                        titleStyle={{ fontSize: 15, fontWeight: index === 2 ? 'bold' : 'normal', color: colorQuinario, }}
+                        titleStyle={{ fontSize: 15, fontWeight: index === 2 ? 'bold' : 'normal', color: index === 2 ? '#FFF' : colorQuinario, }}
                         containerStyle={[containerStyle, { backgroundColor: index === 2 ? colorTerciario : colorSecundario, }]}
                     />
                     <Tab.Item
                         title="Información Detallada"
-                        titleStyle={{ fontSize: 15, fontWeight: index === 3 ? 'bold' : 'normal', color: colorQuinario, }}
+                        titleStyle={{ fontSize: 15, fontWeight: index === 3 ? 'bold' : 'normal', color: index === 3 ? '#FFF' : colorQuinario, }}
                         containerStyle={[containerStyle, { backgroundColor: index === 3 ? colorTerciario : colorSecundario, }]}
                     />
                     <Tab.Item
                         title="Datos de Colector(es)"
-                        titleStyle={{ fontSize: 15, fontWeight: index === 4 ? 'bold' : 'normal', color: colorQuinario, }}
+                        titleStyle={{ fontSize: 15, fontWeight: index === 4 ? 'bold' : 'normal', color: index === 4 ? '#FFF' : colorQuinario, }}
                         containerStyle={[containerStyle, { backgroundColor: index === 4 ? colorTerciario : colorSecundario, }]}
                     />
                     <Tab.Item
                         title="Información Adicional"
-                        titleStyle={{ fontSize: 15, fontWeight: index === 5 ? 'bold' : 'normal', color: colorQuinario, }}
+                        titleStyle={{ fontSize: 15, fontWeight: index === 5 ? 'bold' : 'normal', color: index === 5 ? '#FFF' : colorQuinario, }}
                         containerStyle={[containerStyle, { backgroundColor: index === 5 ? colorTerciario : colorSecundario, }]}
                     />
                 </Tab>
 
-                <TabView value={index} onChange={setIndex} animationType="spring" >
+                <TabView value={index} onChange={handleIndexChange} animationType="spring" >
                     <TabView.Item style={[styles.TabViewcontainer, { backgroundColor: colorPrimario }]}>
                         <ScrollView>
                             <TextInputCustom
