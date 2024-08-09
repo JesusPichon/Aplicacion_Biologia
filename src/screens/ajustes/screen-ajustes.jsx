@@ -93,7 +93,7 @@ const Ajustes = ({ navigation }) => {
               <TouchableOpacity 
                 style={[styles.button, {backgroundColor: colorTerciario}]}
                 onPress={() => navigation.navigate("Login")}>
-                <Text style={{color: 'white', fontWeight: 'bold'}}>No Autenticado</Text>
+                <Text style={{color: 'white', fontWeight: 'bold'}}>Iniciar Sesión</Text>
               </TouchableOpacity>
             </View>
           )}
