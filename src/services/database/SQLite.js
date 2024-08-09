@@ -723,3 +723,28 @@ export const verToma = (id) => {
     });
   });
 };
+
+export const obtenerTotalTomasPorGrupo = (nombreGrupo) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const grupoId = await consultarIdGrupo(nombreGrupo);
+      db.transaction(tx => {
+        tx.executeSql(
+          'SELECT COUNT(*) as total FROM TOMAS WHERE grupo = ?',
+          [grupoId],
+          (tx, results) => {
+            const total = results.rows.item(0).total;
+            resolve(total);
+          },
+          (error) => {
+            console.error('Error al obtener el total de tomas:', error.message);
+            reject(error);
+          }
+        );
+      });
+    } catch (error) {
+      console.error('Error al obtener el ID del grupo:', error.message);
+      reject(error);
+    }
+  });
+};

@@ -161,8 +161,14 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
 
-
-    
+     exportOptionButton: {
+          padding: 10,
+          backgroundColor: 'colorTerciario', // Ajusta esto al color deseado
+          borderRadius: 5,
+          margin: 5,
+          alignItems: 'center',
+        },
+       
 });
 
 export default styles;
