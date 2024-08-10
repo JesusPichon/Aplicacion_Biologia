@@ -254,7 +254,6 @@ const Explorar = ({ navigation }) => {
                                     nombre={item}
                                     seleccionar={seleccionar}
                                     deseleccionar={deseleccionar}
-                                    showCheckBox={showCheckBox}
                                     selectionMode={toggleSelectionMode}
                                     explorar={true}
                                 />

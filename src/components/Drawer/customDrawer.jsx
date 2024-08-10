@@ -118,6 +118,7 @@ const CustomDrawer = (props) => {
               label="Explorar"
               onPress={() => {
                 props.navigation.navigate('Explorar');
+                console.log(routeNames)
               }}
               focused={focused === 'Explorar'}
               icon={({focused, color, size}) => (

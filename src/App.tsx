@@ -98,6 +98,7 @@ const HomeDrawer = () => (
     {/* <Drawer.Screen name="Explorar" component={ExplorarStack} /> */}
     <Drawer.Screen name="Configuracion" component={Ajustes} />
     <Drawer.Screen name="FAQ" component={FAQ} />
+    <Drawer.Screen name="Explorar" component={Explorar} />
   </Drawer.Navigator>
 );
 const App = () => {
