@@ -8,7 +8,7 @@ import Grupo from "../../components/Grupo";
 import BarraBusqueda from "../../components/BarraBusqueda";
 import VentanaFlotante from "../../components/VentanaFlotante";
 import Snackbar from 'react-native-snackbar';
-import GrupoController from "../../services/controllers/grupoController";
+import PocketController from "../../services/controllers/pocketController";
 import { SpeedDial } from "@rneui/themed";
 import { Tab, TabView, Chip } from '@rneui/themed';
 import { useSelector } from 'react-redux';
@@ -47,41 +47,22 @@ const Explorar = ({ navigation }) => {
     //manejador de errores
     const [error, setError] = useState('');
 
-    const [openButton, setOpenButton] = useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [showCheckBox, setShowCheckBox] = useState(false); //mostrar casillas de seleccion
 
-    const controller = new GrupoController(); //agregar controller
+    const controller = new PocketController(); //agregar controller
 
     const cargarGrupos = async () => {
         try {
             const grupos = await controller.obtenerGrupos();
+            console.log(grupos);
             setGrupos(grupos);
         } catch (error) {
             lanzarAlerta("Error al obtener la lista de grupos");
         }
     }
 
-    const eliminarGrupos = async (list) => {
-        try {
-            if (list.length !== 0) {
-                await controller.deleteGroups(list);
-
-                setTimeout(async () => {
-                    await cargarGrupos();
-                }, 300);
-
-                if (list.length == 1)
-                    lanzarAlerta('Grupo eliminado con exito');
-                else
-                    lanzarAlerta('Grupos eliminados con exito');
-
-                setListaBorrarGrupos([]);
-            }
-        } catch (error) {
-            lanzarAlerta('Error elimnando grupos');
-        }
-    }
+    
 
     const agregarGrupo = async (nombre) => {
         try {
@@ -103,20 +84,6 @@ const Explorar = ({ navigation }) => {
         } catch (error) {
             lanzarAlerta("Error al agregar el grupo dentro de la base de datos");
         }
-    }
-
-    function seleccionar(grupo) { //agregar grupo a la lista de seleccionados 
-        setListaBorrarGrupos(listaBorrarGrupos.concat(grupo));
-    }
-
-    function seleccionar(nombre) {
-        setListaBorrarGrupos(listaBorrarGrupos.concat(nombre));
-    }
-
-    function deseleccionar(nombre) {
-        setListaBorrarGrupos(listaBorrarGrupos.filter((item) => {
-            item !== nombre;
-        }))
     }
 
     function updateGrupos(nuevosGrupos) {
@@ -166,23 +133,7 @@ const Explorar = ({ navigation }) => {
         }
     }
 
-    const handleImport = async () => {
-        try {
-            const datos = await selectCsv();
-            setData(datos);
-            lanzarAlerta("CSV importado correctamente, Cree nuevo grupo");
-            setIsImporting(true);
-            setOpenModal(true);
-            //console.log(data);
-        } catch (error) {
-            lanzarAlerta(error.toString());
-        }
-    }
-
-    const toggleSelectionMode = () => {
-        setShowCheckBox(!showCheckBox);
-        setListaBorrarGrupos([]);
-    }
+   
      
     useEffect(() => {
         startAnimations();
@@ -251,11 +202,9 @@ const Explorar = ({ navigation }) => {
                                     key={index}
                                     animacion={unoAnim}
                                     navigation={navigation}
-                                    nombre={item}
-                                    seleccionar={seleccionar}
-                                    deseleccionar={deseleccionar}
-                                    selectionMode={toggleSelectionMode}
+                                    nombre={item.nombre}
                                     explorar={true}
+                                    item={item}
                                 />
                             )}
                         />

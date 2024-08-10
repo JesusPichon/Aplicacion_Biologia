@@ -8,7 +8,7 @@ import { jsonToCSV } from 'react-native-csv';
 import { getRawData, formatData, guardarArchivoCSV, columnasComillas } from "../../services/functions/export-csv";
 import GrupoController from "../../services/controllers/grupoController";
 
-const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, selectionMode, explorar=false, misGrupos=false}) => {
+const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, selectionMode, explorar=false, misGrupos=false, item}) => {
   const { currentTheme, themes } = useSelector((state) => state.theme);
   const theme = themes[currentTheme] || themes.light;
   const { 
@@ -29,14 +29,18 @@ const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, s
 
   const controller = new GrupoController();
   useEffect(() => {
-    // Obtén el total de tomas para este grupo cuando se monte el componente
-    controller.obtenerNumeroTomas(nombre)
-      .then(total => {
-        setTotalTomas(total);
-      })
-      .catch(error => {
-        console.error("Error al obtener el total de tomas:", error);
-      });
+    if (!explorar) {
+      // Obtén el total de tomas para este grupo cuando se monte el componente
+      controller.obtenerNumeroTomas(nombre)
+        .then(total => {
+          setTotalTomas(total);
+        })
+        .catch(error => {
+          console.error("Error al obtener el total de tomas:", error);
+        });
+    }else{
+      setTotalTomas(item.numero_tomas);
+    }
   }, [nombre]);
 
   const handleExportOptions = () => {
@@ -123,7 +127,13 @@ const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, s
       <View style={{ flex: 1, flexDirection: 'row', width: '100%' }}>
         <View style={[stylesCanales.nombreView, { backgroundColor: colorPrimario }]}>
           <Text style={[stylesCanales.nombreViewText, { color: colorQuinario}]}>
-            {nombre}
+            {explorar ? (
+              <View style={{flexDirection:"column"}}>
+                <Text style={{ color: colorQuinario, fontWeight: 'bold' }}>{nombre}</Text>
+                <Text style={{ color: colorQuinario}}>{item.created}</Text>
+                <Text style={{ color: colorQuinario}}>autor:{item.autor}</Text>
+              </View>
+            ) : nombre}
           </Text>
           {showCheckBox ? (
             <Chip
