@@ -56,6 +56,7 @@ import Editar from './screens/editar';
 import FAQ from './screens/FAQ/screen-FAQ';
 import CamposPred from './screens/campos-predeterminados/screen-camposPred';
 import Ajustes from './screens/ajustes';
+import Explorar from './screens/explorar';
 import Login from './screens/login';
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -82,6 +83,7 @@ const MisGruposStack = () => (
     <Stack.Screen name="Editar" component={Editar} />
     <Stack.Screen name="CamposPred" component={CamposPred}/>
     <Stack.Screen name="Login" component={Login} />
+    <Stack.Screen name="Explorar" component={Explorar} />
   </Stack.Navigator>
 );
 

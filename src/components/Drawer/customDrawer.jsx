@@ -113,26 +113,48 @@ const CustomDrawer = (props) => {
           }}
         />
         {isAuthenticated && (
-          <DrawerItem
-            label="Salir"
-            onPress={() => {
-              handleLogout();
-            }}
-            focused={focused === 'Salir'}
-            icon={({focused, color, size}) => (
-              <Icon name="logout" type="material" color={color} size={40} />
-            )}
-            activeBackgroundColor={colorQuinario}
-            activeTintColor={colorPrimario}
-            inactiveTintColor={colorQuinario}
-            style={{
-              borderTopRightRadius: 20,
-              borderBottomRightRadius: 20,
-              borderBottomLeftRadius: 0,
-              borderTopLeftRadius: 0,
-              marginHorizontal: 0,
-            }}
-          />
+          <>
+            <DrawerItem
+              label="Explorar"
+              onPress={() => {
+                props.navigation.navigate('Explorar');
+              }}
+              focused={focused === 'Explorar'}
+              icon={({focused, color, size}) => (
+                <Icon name="search" type="material" color={color} size={40} />
+              )}
+              activeBackgroundColor={colorQuinario}
+              activeTintColor={colorPrimario}
+              inactiveTintColor={colorQuinario}
+              style={{
+                borderTopRightRadius: 20,
+                borderBottomRightRadius: 20,
+                borderBottomLeftRadius: 0,
+                borderTopLeftRadius: 0,
+                marginHorizontal: 0,
+              }}
+            />
+            <DrawerItem
+              label="Salir"
+              onPress={() => {
+                handleLogout();
+              }}
+              focused={focused === 'Salir'}
+              icon={({focused, color, size}) => (
+                <Icon name="logout" type="material" color={color} size={40} />
+              )}
+              activeBackgroundColor={colorQuinario}
+              activeTintColor={colorPrimario}
+              inactiveTintColor={colorQuinario}
+              style={{
+                borderTopRightRadius: 20,
+                borderBottomRightRadius: 20,
+                borderBottomLeftRadius: 0,
+                borderTopLeftRadius: 0,
+                marginHorizontal: 0,
+              }}
+            />
+          </>
         )}
       </View>
     </DrawerContentScrollView>

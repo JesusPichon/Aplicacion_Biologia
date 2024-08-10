@@ -8,7 +8,7 @@ import { jsonToCSV } from 'react-native-csv';
 import { getRawData, formatData, guardarArchivoCSV, columnasComillas } from "../../services/functions/export-csv";
 import { obtenerTotalTomasPorGrupo } from "../../services/database/SQLite";// Importa la nueva función
 
-const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, selectionMode}) => {
+const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, selectionMode, explorar=false, misGrupos=false}) => {
   const { currentTheme, themes } = useSelector((state) => state.theme);
   const theme = themes[currentTheme] || themes.light;
   const { 
