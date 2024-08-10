@@ -47,7 +47,7 @@ const Login = ({ navigation }) => {
     const { imageBackgroundInicio, logoInicio, colorStatusBarInicio, iconoUsuario, iconoContraseña, iconoCorreo, colorPrimario, colorTerciario, colorTexto } = theme;
 
     const [isLogin, setIsLogin] = useState(true);
-    const { error } = useSelector((state) => state.auth);
+    const { error, user, token } = useSelector((state) => state.auth);
     const { control, handleSubmit, watch, reset, formState: { errors }, } = useForm({
         defaultValues: {
             username: '',
@@ -67,7 +67,6 @@ const Login = ({ navigation }) => {
         if (isLogin) {
             Keyboard.dismiss();
             await dispatch(loginUser(data.email, data.password));
-            
             const authToken = await AsyncStorage.getItem('userToken');
             if (authToken) {
                 reset();
@@ -96,6 +95,11 @@ const Login = ({ navigation }) => {
         required: 'Email obligatorio',
         pattern: { value: /^\S+@\S+$/i, message: 'Correo electrónico no válido'},
     }
+
+    // useEffect(() => {
+    //     console.log('user:', user);
+    //         console.log('token', token);
+    // }, [user, token]);
 
     return (
         <ImageBackground source={imageBackgroundInicio} resizeMode="cover" style={{ flex: 1, width: '100%', height: '100%' }}>

@@ -7,16 +7,12 @@ export const loginUser = (email, password) => async (dispatch) => {
     dispatch(startLoading());
     try {
         const authData = await pb.collection('users').authWithPassword(email, password);
-        const userData = {
-            user: authData.record,
-            token: authData.token,
-        };
-        await AsyncStorage.setItem('userToken', authData.token);
-        dispatch(loginSuccess(userData));
-    } catch (error) {
         
-        //dispatch(loginFailure(error.message));
+        await AsyncStorage.setItem('userToken', pb.authStore.token);
+        const username = pb.authStore.model.username;
+        dispatch(loginSuccess({ user: username, token: pb.authStore.token }));
 
+    } catch (error) {
         if (error.message.includes('Failed to authenticate')) {
             dispatch(loginFailure('El nombre de usuario o contraseña son incorrectos'));
         }
@@ -50,36 +46,22 @@ export const checkUserAuthentication = () => async (dispatch) => {
         const token = await AsyncStorage.getItem('userToken');
         if (token) {
             pb.authStore.save(token);
+
+            await pb.collection('users').authRefresh();
+
             const user = pb.authStore.model;
-
+            const username = pb.authStore.model.username;
             if (user) {
-                dispatch(loginSuccess({ user, token }));
+                await AsyncStorage.setItem('userToken', pb.authStore.token);
+                dispatch(loginSuccess({ user: username, token: pb.authStore.token }));
             } else {
-                await pb.collection('users').authRefresh();
-                const refreshedUser = pb.authStore.model;
-
-                if (refreshedUser) {
-                    await AsyncStorage.setItem('userToken', pb.authStore.token);
-                    dispatch(loginSuccess({ user: refreshedUser, token: pb.authStore.token }));
-                } else {
-                    dispatch(logout());
-                }
+                dispatch(logout());
             }
         } else {
             dispatch(logout());
         }
     } catch (error) {
-        if (error.message.includes('Failed to fetch')) {
-            dispatch(loginFailure('No se pudo conectar al servidor. Verifique su conexión a internet.'));
-        } else {
-            const errorMessage = error?.data?.message || error.message || 'Ocurrió un error';
-            dispatch(loginFailure(errorMessage));
-
-            if (error.message.includes('Unauthorized') || error.message.includes('Invalid token')) {
-                await AsyncStorage.removeItem('userToken');
-            }
-        }
-        dispatch(logout());
+        console.error('Error en checkUserAuthentication:', error);
+        // Manejo de errores
     }
 };
-

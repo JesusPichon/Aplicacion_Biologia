@@ -10,23 +10,16 @@ import {
     useColorScheme,
     Appearance,
     AppState,
-    StyleSheet,
     KeyboardAvoidingView,
-    TextInput,
-    Image,
-    ActivityIndicator,
-    Alert,
 } from "react-native";
-import styles from '../../styles/style-app';
+import styles from './style-inicio';
 import animaciones from '../../components/animaciones/animaciones';
 import { crearTablas } from '../../services/database/SQLite';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCache } from "./../../services/storage/CacheContext";
 import { useSelector, useDispatch } from 'react-redux';
 import { setModeTheme, setTheme } from '../../services/redux/slices/themeSlice';
-import { useForm, Controller } from 'react-hook-form';
-import pb from '../../services/PocketBase/pocketbase';
-import { loginUser, logoutUser, registerUser, checkUserAuthentication } from '../../services/auth/AuthFunctions';
+import { logoutUser, checkUserAuthentication } from '../../services/auth/AuthFunctions';
 
 const Inicio = ({ navigation }) => {
     const {
@@ -125,74 +118,7 @@ const Inicio = ({ navigation }) => {
     const theme = themes[currentTheme] || themes[systemTheme] || themes.light;
     const { imageBackgroundInicio, logoInicio, colorStatusBarInicio, iconoUsuario, iconoContraseña, colorPrimario, colorTerciario, colorTexto } = theme;
 
-    const styles = StyleSheet.create({
-        input: {
-          backgroundColor: colorPrimario,
-          borderColor: colorTerciario,
-          color: colorTexto,
-          fontWeight: 'bold',
-          borderWidth: 2,
-          borderRadius: 10,
-          paddingLeft: 10,
-          marginBottom: 20,
-          height: 40,
-          width: '85%'
-        },
-        button: {
-          backgroundColor: colorTerciario,
-          borderRadius: 25,
-          width: '35%',
-          paddingVertical: 10,
-          alignItems: 'center',
-        },
-        buttonText: {
-          color: '#fff',
-          fontSize: 16,
-          fontWeight: 'bold',
-        },
-        labelText: {
-          color: colorTexto,
-          fontSize: 16,
-        },
-    });
-
-    // const [isLogin, setIsLogin] = useState(true);
-    // const [errorMessage, setErrorMessage] = useState('');
-
-    const { isAuthenticated, loading, error, token } = useSelector((state) => state.auth);
-
-    // const { control, handleSubmit, reset } = useForm({
-    //     defaultValues: {
-    //         username: '',
-    //         email: '',
-    //         password: '',
-    //         passwordConfirm: '',
-    //     },
-    // });
-
-    // const [cargando, setCargando] = useState(false);
-
-    // const onSubmit = async (data) => {
-    //     setCargando(true);
-    //     if (isLogin) {
-    //         await dispatch(loginUser(data.email, data.password));
-    //         console.log('Token despues del login...', token);
-    //         const authToken = await AsyncStorage.getItem('userToken');
-    //         console.log('Token despues del login en AsyncStorage...', authToken);
-    //         if (authToken) {
-    //             reset();
-    //             resetAnimations(navigation,'Home');
-    //             setTimeout(() => {
-    //                 startAnimations();
-    //             }, 500);
-    //         }
-    //     } else {
-    //         await dispatch(registerUser(data.username, data.email, data.password, data.passwordConfirm));
-    //         setIsLogin(true);
-    //         reset();
-    //     }
-    //     setCargando(false);
-    // };
+    const { isAuthenticated, user } = useSelector((state) => state.auth);
 
     const handleLogout = async () => {
         await dispatch(logoutUser());
@@ -218,7 +144,6 @@ const Inicio = ({ navigation }) => {
         console.log('isAuthenticated changed:', isAuthenticated);
     }, [isAuthenticated]);
 
-
     return (
         <ImageBackground source={imageBackgroundInicio} resizeMode="cover" style={{ flex: 1, width: '100%', height: '100%' }}>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -239,19 +164,20 @@ const Inicio = ({ navigation }) => {
 
                 { !isAuthenticated ? (
                     <Animated.View style={{ flex: 10, width: '100%', opacity: unoAnim, gap:10, justifyContent:'center' }}>
-                        <TouchableOpacity style={[styles.button, { alignSelf: 'center' }]} onPress={() => navigation.navigate("Home")}>
+                        <TouchableOpacity style={[styles.button, { backgroundColor: colorTerciario, }]} onPress={() => navigation.navigate("Home")}>
                             <Text style={styles.buttonText}>Ir a Home</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.button, { alignSelf: 'center' }]} onPress={() => navigation.navigate("Login")}>
+                        <TouchableOpacity style={[styles.button, { backgroundColor: colorTerciario, }]} onPress={() => navigation.navigate("Login")}>
                             <Text style={styles.buttonText}>Iniciar Sesión</Text>
                         </TouchableOpacity>
                     </Animated.View>
                 ) : (
-                    <Animated.View style={{ flex: 10, width: '100%', opacity: unoAnim, gap:10, justifyContent:'center' }}>
-                        <TouchableOpacity style={[styles.button, { alignSelf: 'center' }]} onPress={() => navigation.navigate("Home")}>
+                    <Animated.View style={{ flex: 15, width: '100%', opacity: unoAnim, gap:10, justifyContent:'center' }}>
+                        <Text style={{alignSelf: 'center', marginBottom: 20, fontSize: 18, color: 'white', fontWeight: 'bold'}}>Bienvenido {user}</Text>
+                        <TouchableOpacity style={[styles.button, { backgroundColor: colorTerciario, }]} onPress={() => navigation.navigate("Home")}>
                             <Text style={styles.buttonText}>Ir a Home</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.button, { alignSelf: 'center' }]} onPress={handleLogout}>
+                        <TouchableOpacity style={[styles.button, { backgroundColor: colorTerciario, }]} onPress={handleLogout}>
                             <Text style={styles.buttonText}>Cerrar Sesión</Text>
                         </TouchableOpacity>
                     </Animated.View>
