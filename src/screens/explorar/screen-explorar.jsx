@@ -120,7 +120,9 @@ const Explorar = ({ navigation }) => {
                             onPress={() => navigation.openDrawer()}
                         />
                     </View>
+                    {/*
                     <BarraBusqueda titulo={'Buscar grupo'} pantalla={'grupos'} />
+                    */}
                 </View>
             </Animated.View>
             
@@ -178,6 +180,7 @@ const Explorar = ({ navigation }) => {
                                     navigation={navigation}
                                     nombre={item.nombre}
                                     explorar={true}
+                                    misGrupos={true}
                                     item={item}
                                 />
                             )}

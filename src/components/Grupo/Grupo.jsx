@@ -154,6 +154,39 @@ const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, s
               onPress={handleSeleccionarGrupo}
               buttonStyle={{ backgroundColor: 'red' }}
             />
+          ) : explorar ? (
+            misGrupos ? (
+              <>
+                <Chip
+                  icon={{
+                    name: 'edit',
+                    type: 'material',
+                    size: 25,
+                    color: 'white',
+                  }}
+                  buttonStyle={{ backgroundColor: colorTerciario }}
+                />
+                <Chip
+                  icon={{
+                    name: 'delete',
+                    type: 'material',
+                    size: 25,
+                    color: 'white',
+                  }}
+                  buttonStyle={{ backgroundColor: 'red' }}
+                />
+              </>
+            ) : (
+              <Chip
+                icon={{
+                  name: 'file-upload',
+                  type: 'material',
+                  size: 25,
+                  color: 'white',
+                }}
+                buttonStyle={{ backgroundColor: colorTerciario }}
+              />
+            )
           ) : (
             <Chip
               icon={{
