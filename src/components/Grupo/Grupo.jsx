@@ -6,7 +6,7 @@ import { Chip } from "@rneui/themed";
 import Snackbar from 'react-native-snackbar';
 import { jsonToCSV } from 'react-native-csv';
 import { getRawData, formatData, guardarArchivoCSV, columnasComillas } from "../../services/functions/export-csv";
-import { obtenerTotalTomasPorGrupo } from "../../services/database/SQLite";// Importa la nueva función
+import GrupoController from "../../services/controllers/grupoController";
 
 const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, selectionMode, explorar=false, misGrupos=false}) => {
   const { currentTheme, themes } = useSelector((state) => state.theme);
@@ -27,9 +27,10 @@ const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, s
     setChecked(false);
   }, [showCheckBox]);
 
+  const controller = new GrupoController();
   useEffect(() => {
     // Obtén el total de tomas para este grupo cuando se monte el componente
-    obtenerTotalTomasPorGrupo(nombre)
+    controller.obtenerNumeroTomas(nombre)
       .then(total => {
         setTotalTomas(total);
       })

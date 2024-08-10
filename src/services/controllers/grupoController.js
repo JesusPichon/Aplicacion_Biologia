@@ -5,7 +5,8 @@ import {
     consultarIdGrupo,
     consultarNombreGrupo,
     insertarTomas,
-    eliminarTomas
+    eliminarTomas,
+    obtenerTotalTomasPorGrupo
 } from "../database/SQLite";
 
 
@@ -75,6 +76,17 @@ class GrupoController {
 
     isEmptyEntry(toma) {
         return Object.values(toma).every(value => value === undefined || value === null || value === '');
+    }
+
+    async obtenerNumeroTomas(groupName) {
+        try {
+
+            const Tomas = await obtenerTotalTomasPorGrupo(groupName);
+            return Tomas;
+
+        } catch (error) {
+            throw new Error(error);
+        }
     }
 
     async importTomas(nombreGrupo, data) {
