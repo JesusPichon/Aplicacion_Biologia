@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { startLoading, loginSuccess, loginFailure, logout } from '../redux/slices/authSlice';
 import pb from '../PocketBase/pocketbase';
+import Snackbar from 'react-native-snackbar';
 
 export const loginUser = (email, password) => async (dispatch) => {
     dispatch(startLoading());
@@ -13,15 +14,16 @@ export const loginUser = (email, password) => async (dispatch) => {
         await AsyncStorage.setItem('userToken', authData.token);
         dispatch(loginSuccess(userData));
     } catch (error) {
-        dispatch(loginFailure(error.message));
+        
+        //dispatch(loginFailure(error.message));
+
+        if (error.message.includes('Failed to authenticate')) {
+            dispatch(loginFailure('El nombre de usuario o contraseña son incorrectos'));
+        }
     }
 };
 
 export const registerUser = (username, email, password, passwordConfirm) => async (dispatch) => {
-    if (password !== passwordConfirm) {
-        dispatch(loginFailure('Las contraseñas no coinciden.'));
-        return;
-    }
     dispatch(startLoading());
     newUserData = {
         "username": username,
@@ -31,7 +33,7 @@ export const registerUser = (username, email, password, passwordConfirm) => asyn
     };
     try {
         const newUser = await pb.collection('users').create(newUserData);
-         
+        
     } catch (error) {
         dispatch(loginFailure(error.message));
     }
@@ -43,50 +45,41 @@ export const logoutUser = () => async (dispatch) => {
     dispatch(logout());
 };
 
-// export const checkUserAuthentication = () => async (dispatch) => {
-//     const token = await AsyncStorage.getItem('userToken');
-//     if (token) {
-//         pb.authStore.save(token);
-//         const user = pb.authStore.model;
-//         console.log(user);
-//         if (user) {
-//             dispatch(loginSuccess({ user, token }));
-//         } else {
-//             dispatch(logout());
-//         }
-//     } else {
-//         dispatch(logout());
-//     }
-// };
-
 export const checkUserAuthentication = () => async (dispatch) => {
     try {
         const token = await AsyncStorage.getItem('userToken');
-        console.log('Token from AsyncStorage:', token);
         if (token) {
             pb.authStore.save(token);
-            console.log('Token saved in PocketBase authStore:', pb.authStore.token);
             const user = pb.authStore.model;
+
             if (user) {
-                console.log('Authenticated user:', user);
                 dispatch(loginSuccess({ user, token }));
             } else {
                 await pb.collection('users').authRefresh();
                 const refreshedUser = pb.authStore.model;
+
                 if (refreshedUser) {
-                    console.log('Refreshed user:', refreshedUser);
-                    dispatch(loginSuccess({ user: refreshedUser, token }));
+                    await AsyncStorage.setItem('userToken', pb.authStore.token);
+                    dispatch(loginSuccess({ user: refreshedUser, token: pb.authStore.token }));
                 } else {
-                    console.log('User not found, logging out');
                     dispatch(logout());
                 }
             }
         } else {
-            console.log('No token found, logging out');
             dispatch(logout());
         }
     } catch (error) {
-        console.error('Error checking authentication:', error);
+        if (error.message.includes('Failed to fetch')) {
+            dispatch(loginFailure('No se pudo conectar al servidor. Verifique su conexión a internet.'));
+        } else {
+            const errorMessage = error?.data?.message || error.message || 'Ocurrió un error';
+            dispatch(loginFailure(errorMessage));
+
+            if (error.message.includes('Unauthorized') || error.message.includes('Invalid token')) {
+                await AsyncStorage.removeItem('userToken');
+            }
+        }
         dispatch(logout());
     }
 };
+
