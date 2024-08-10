@@ -38,6 +38,7 @@ const Explorar = ({ navigation }) => {
 
     //grupos y mensajes de error
     const [grupos, setGrupos] = useState([]);
+    const [misGrupos, setMisGrupos] = useState([]);
     const [nombreGrupo, setNombreGrupo] = useState('');
     const [listaBorrarGrupos, setListaBorrarGrupos] = useState([]);
 
@@ -54,41 +55,14 @@ const Explorar = ({ navigation }) => {
 
     const cargarGrupos = async () => {
         try {
-            const grupos = await controller.obtenerGrupos();
-            console.log(grupos);
+            const grupos = await controller.obtenerGruposDeOtros();
+            const misGrupos = await controller.obtenerMisGrupos();
             setGrupos(grupos);
+            setMisGrupos(misGrupos);
         } catch (error) {
             lanzarAlerta("Error al obtener la lista de grupos");
         }
     }
-
-    
-
-    const agregarGrupo = async (nombre) => {
-        try {
-            const encontrado = await controller.searchGroupByName(nombre);
-            if (encontrado == true)
-                setError('El nombre del grupo ya existe');
-            else {
-                await controller.addGrupo(nombre);
-                setOpenModal(false);
-                setError('');
-                setNombreGrupo('');
-                lanzarAlerta('Grupo: ' + nombre + ' , creado exitosamente!!');
-                await cargarGrupos();
-                if (isImporting === true) {
-                    controller.importTomas(nombre, data);
-                    setIsImporting(false);
-                }
-            }
-        } catch (error) {
-            lanzarAlerta("Error al agregar el grupo dentro de la base de datos");
-        }
-    }
-
-    function updateGrupos(nuevosGrupos) {
-        setGrupos(nuevosGrupos); // Actualizamos los grupos con los resultados de la búsqueda
-    };
 
     function handleTextChange(text) {
         setNombreGrupo(text);
@@ -102,23 +76,6 @@ const Explorar = ({ navigation }) => {
                 duration: Snackbar.LENGTH_SHORT
             });
         }, 200);
-    }
-
-    
-    async function guardarTexto() { //guarda un nuevo grupo con el nombre que le fue asignado dentro del modal 
-        if (nombreGrupo.trim() !== '') {
-            await agregarGrupo(nombreGrupo.toUpperCase()); //Cambia el nombre a mayusculas
-        } else {
-            setError('El nombre del grupo no puede estar vacio');
-        }
-    }
-
-    async function guardarTexto() { //guarda un nuevo grupo con el nombre que le fue asignado dentro del modal 
-        if (nombreGrupo.trim() !== '') {
-            await agregarGrupo(nombreGrupo);
-        } else {
-            setError('El nombre del grupo no puede estar vacio');
-        }
     }
 
     const handleCloseModal = () => {
@@ -163,7 +120,7 @@ const Explorar = ({ navigation }) => {
                             onPress={() => navigation.openDrawer()}
                         />
                     </View>
-                    <BarraBusqueda titulo={'Buscar grupo'} pantalla={'grupos'} onResult={updateGrupos} />
+                    <BarraBusqueda titulo={'Buscar grupo'} pantalla={'grupos'} />
                 </View>
             </Animated.View>
             
@@ -210,16 +167,23 @@ const Explorar = ({ navigation }) => {
                         />
                     </TabView.Item>
                     <TabView.Item style={[styles.TabViewcontainer]}>
-                        
+                        <FlatList
+                            data={misGrupos}
+                            numColumns={1}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={({ item, index }) => (
+                                <Grupo
+                                    key={index}
+                                    animacion={unoAnim}
+                                    navigation={navigation}
+                                    nombre={item.nombre}
+                                    explorar={true}
+                                    item={item}
+                                />
+                            )}
+                        />
                     </TabView.Item>
                 </TabView>
-
-                <VentanaFlotante
-                    openModal={openModal}
-                    handleCloseModal={handleCloseModal}
-                    handleTextChange={handleTextChange}
-                    errorMessage={error}
-                    saveGroup={guardarTexto} />
             </View>        
         </View>
     );

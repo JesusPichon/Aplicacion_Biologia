@@ -20,7 +20,8 @@ const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, s
 
   const [checked, setChecked] = useState(false);
   const [showExportOptions, setShowExportOptions] = useState(false);
-  const [totalTomas, setTotalTomas] = useState(0); // Nuevo estado para almacenar el total de tomas
+  const [totalTomas, setTotalTomas] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
 
   useEffect(() => {
@@ -117,12 +118,19 @@ const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, s
 
   );
 
+  const imageSource = explorar && item.url_imagen
+    ? { uri: item.url_imagen }  // Si `url_imagen` es una URL remota, se usa `uri`
+    : require('../../assets/images/nature.jpg');
+
+
   return (
+
     <TouchableOpacity style={stylesCanales.cardVertical} onPress={handleSeleccionarGrupo} onLongPress={selectionMode}>
       <ImageBackground
-        source={require('../../assets/images/nature.jpg')}
+        source={isLoading ? require('../../assets/images/nature.jpg') : imageSource}
         resizeMode="cover"
         style={stylesCanales.image}
+        onLoadEnd={() => setIsLoading(false)}
       />
       <View style={{ flex: 1, flexDirection: 'row', width: '100%' }}>
         <View style={[stylesCanales.nombreView, { backgroundColor: colorPrimario }]}>
