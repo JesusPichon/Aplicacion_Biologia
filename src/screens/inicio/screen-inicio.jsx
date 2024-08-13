@@ -11,6 +11,7 @@ import {
     Appearance,
     AppState,
     KeyboardAvoidingView,
+    ActivityIndicator,
 } from "react-native";
 import styles from './style-inicio';
 import animaciones from '../../components/animaciones/animaciones';
@@ -118,7 +119,8 @@ const Inicio = ({ navigation }) => {
     const theme = themes[currentTheme] || themes[systemTheme] || themes.light;
     const { imageBackgroundInicio, logoInicio, colorStatusBarInicio, iconoUsuario, iconoContraseña, colorPrimario, colorTerciario, colorTexto } = theme;
 
-    const { isAuthenticated, user } = useSelector((state) => state.auth);
+    const { isAuthenticated, user, loading } = useSelector((state) => state.auth);
+    const [loadingAuth, setLoadingAuth] = useState();
 
     const handleLogout = async () => {
         await dispatch(logoutUser());
@@ -144,6 +146,10 @@ const Inicio = ({ navigation }) => {
         console.log('isAuthenticated changed:', isAuthenticated);
     }, [isAuthenticated]);
 
+    useEffect(() => {
+        setLoadingAuth(loading);
+    }, [loading]);
+
     return (
         <ImageBackground source={imageBackgroundInicio} resizeMode="cover" style={{ flex: 1, width: '100%', height: '100%' }}>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -161,27 +167,34 @@ const Inicio = ({ navigation }) => {
                         <ImageBackground source={logoInicio} resizeMode="contain" style={{ flex: 8, margin:20 }}></ImageBackground>
                         <View style={{ flex: 1 }}></View>
                     </Animated.View>
-
-                { !isAuthenticated ? (
-                    <Animated.View style={{ flex: 10, width: '100%', opacity: unoAnim, gap:10, justifyContent:'center' }}>
-                        <TouchableOpacity style={[styles.button, { backgroundColor: colorTerciario, }]} onPress={() => navigation.navigate("Home")}>
-                            <Text style={styles.buttonText}>Ir a Home</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={[styles.button, { backgroundColor: colorTerciario, }]} onPress={() => navigation.navigate("Login")}>
-                            <Text style={styles.buttonText}>Iniciar Sesión</Text>
-                        </TouchableOpacity>
-                    </Animated.View>
-                ) : (
-                    <Animated.View style={{ flex: 15, width: '100%', opacity: unoAnim, gap:10, justifyContent:'center' }}>
-                        <Text style={{alignSelf: 'center', marginBottom: 20, fontSize: 18, color: 'white', fontWeight: 'bold'}}>Bienvenido {user}</Text>
-                        <TouchableOpacity style={[styles.button, { backgroundColor: colorTerciario, }]} onPress={() => navigation.navigate("Home")}>
-                            <Text style={styles.buttonText}>Ir a Home</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={[styles.button, { backgroundColor: colorTerciario, }]} onPress={handleLogout}>
-                            <Text style={styles.buttonText}>Cerrar Sesión</Text>
-                        </TouchableOpacity>
-                    </Animated.View>
-                )}
+                    { loadingAuth ? (
+                        <Animated.View style={{ flex: 10, width: '100%', opacity: unoAnim, gap:10, justifyContent:'center' }}>
+                            <ActivityIndicator size="large" color={colorTerciario} />
+                        </Animated.View>  
+                    ) : (
+                        <>
+                            { !isAuthenticated ? (
+                                <Animated.View style={{ flex: 15, width: '100%', opacity: unoAnim, gap:10, justifyContent:'center' }}>
+                                    <TouchableOpacity style={[styles.button, { backgroundColor: colorTerciario, }]} onPress={() => navigation.navigate("Home")}>
+                                        <Text style={styles.buttonText}>Ir a Home</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={[styles.button, { backgroundColor: colorTerciario, }]} onPress={() => navigation.navigate("Login")}>
+                                        <Text style={styles.buttonText}>Iniciar Sesión</Text>
+                                    </TouchableOpacity>
+                                </Animated.View>
+                            ) : (
+                                <Animated.View style={{ flex: 15, width: '100%', opacity: unoAnim, gap:10, justifyContent:'center' }}>
+                                    <Text style={{alignSelf: 'center', marginBottom: 20, fontSize: 18, color: 'white', fontWeight: 'bold'}}>Bienvenido {user}</Text>
+                                    <TouchableOpacity style={[styles.button, { backgroundColor: colorTerciario, }]} onPress={() => navigation.navigate("Home")}>
+                                        <Text style={styles.buttonText}>Ir a Home</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={[styles.button, { backgroundColor: colorTerciario, }]} onPress={handleLogout}>
+                                        <Text style={styles.buttonText}>Cerrar Sesión</Text>
+                                    </TouchableOpacity>
+                                </Animated.View>
+                            )}
+                        </>
+                    )}
                 </KeyboardAvoidingView>
             </View>
         </ImageBackground>

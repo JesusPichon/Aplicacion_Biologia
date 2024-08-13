@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { startLoading, loginSuccess, loginFailure, logout } from '../redux/slices/authSlice';
+import { startLoading, endLoading, loginSuccess, loginFailure, logout } from '../redux/slices/authSlice';
 import pb from '../PocketBase/pocketbase';
 import Snackbar from 'react-native-snackbar';
 
@@ -7,7 +7,7 @@ export const loginUser = (email, password) => async (dispatch) => {
     dispatch(startLoading());
     try {
         const authData = await pb.collection('users').authWithPassword(email, password);
-        
+        console.log("Autenticacion CORRECTA");
         await AsyncStorage.setItem('userToken', pb.authStore.token);
         const username = pb.authStore.model.username;
         dispatch(loginSuccess({ user: username, token: pb.authStore.token }));
@@ -43,6 +43,8 @@ export const logoutUser = () => async (dispatch) => {
 
 export const checkUserAuthentication = () => async (dispatch) => {
     try {
+        console.log("Inicio de autenticacion, cargando...");
+        dispatch(startLoading());
         const token = await AsyncStorage.getItem('userToken');
         if (token) {
             pb.authStore.save(token);
@@ -57,11 +59,16 @@ export const checkUserAuthentication = () => async (dispatch) => {
             } else {
                 dispatch(logout());
             }
+            console.log("Fin de autenticacion, Carga terminadada...");
+            dispatch(endLoading());
         } else {
             dispatch(logout());
+            console.log("Fin de autenticacion, Carga terminadada...");
+            dispatch(endLoading());
         }
     } catch (error) {
         console.error('Error en checkUserAuthentication:', error);
+        dispatch(endLoading());
         // Manejo de errores
     }
 };
