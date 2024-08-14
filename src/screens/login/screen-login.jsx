@@ -7,7 +7,6 @@ import {
     StatusBar,
     ImageBackground,
     useColorScheme,
-    StyleSheet,
     TextInput,
     Image,
     KeyboardAvoidingView,
@@ -21,6 +20,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useForm, Controller } from 'react-hook-form';
 import { loginUser, registerUser } from '../../services/auth/AuthFunctions';
 import { loginFailure } from '../../services/redux/slices/authSlice';
+import pb from '../../services/PocketBase/pocketbase';
 
 const Login = ({ navigation }) => {
     const {
@@ -67,8 +67,8 @@ const Login = ({ navigation }) => {
         if (isLogin) {
             Keyboard.dismiss();
             await dispatch(loginUser(data.email, data.password));
-            const authToken = await AsyncStorage.getItem('userToken');
-            if (authToken) {
+            const AuthStatus = pb.authStore.isValid;
+            if (AuthStatus) {
                 reset();
                 navigation.goBack();
             }
