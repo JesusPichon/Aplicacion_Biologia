@@ -20,6 +20,7 @@ class PocketController {
     async obtenerMisGrupos() {
         try {
             const user = pb.authStore.model.username;
+            console.log(user);
             const records = await pb.collection('grupos').getFullList({
                 sort: '-created',
                 filter: `autor = "${user}"`,
@@ -31,7 +32,15 @@ class PocketController {
         }
     }
     
-
+    async EliminarGrupo(id) {
+        try {
+            const records = await pb.collection('grupos').delete(id);
+            return records;
+        } catch (error) {
+            console.error("Error al obtener grupos:", error);
+            throw new Error("Error al obtener grupos: " + error.message);
+        }
+    }
     
 }
 

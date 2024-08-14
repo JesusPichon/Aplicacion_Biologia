@@ -4,11 +4,12 @@ import stylesCanales from "../../screens/grupos/style-canales";
 import { useSelector } from "react-redux";
 import { Chip } from "@rneui/themed";
 import Snackbar from 'react-native-snackbar';
+import PocketController from "../../services/controllers/pocketController";
 import { jsonToCSV } from 'react-native-csv';
 import { getRawData, formatData, guardarArchivoCSV, columnasComillas } from "../../services/functions/export-csv";
 import GrupoController from "../../services/controllers/grupoController";
 
-const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, selectionMode, explorar=false, misGrupos=false, item}) => {
+const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, selectionMode, explorar=false, misGrupos=false, item, onEliminarGrupo}) => {
   const { currentTheme, themes } = useSelector((state) => state.theme);
   const theme = themes[currentTheme] || themes.light;
   const { 
@@ -28,6 +29,7 @@ const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, s
     setChecked(false);
   }, [showCheckBox]);
 
+  const controllerPocket = new PocketController(); //agregar controller
   const controller = new GrupoController();
   useEffect(() => {
     if (!explorar) {
@@ -122,6 +124,25 @@ const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, s
     ? { uri: item.url_imagen }  // Si `url_imagen` es una URL remota, se usa `uri`
     : require('../../assets/images/nature.jpg');
 
+  function lanzarAlerta(mensaje) {
+    setTimeout(() => {
+        Snackbar.show({
+            text: mensaje,
+            duration: Snackbar.LENGTH_SHORT
+        });
+    }, 200);
+  }
+
+  const handleEliminarGrupo = async (grupoId) => {
+    try {
+        lanzarAlerta("Eliminando el grupo: " + item.nombre);
+        await controllerPocket.EliminarGrupo(grupoId);
+        onEliminarGrupo(grupoId); // Llamar la función que actualiza el estado en el componente padre
+        lanzarAlerta("Grupo eliminado exitosamente");
+    } catch (error) {
+        lanzarAlerta("Error al eliminar el grupo");
+    }
+  };
 
   return (
 
@@ -159,21 +180,13 @@ const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, s
               <>
                 <Chip
                   icon={{
-                    name: 'edit',
-                    type: 'material',
-                    size: 25,
-                    color: 'white',
-                  }}
-                  buttonStyle={{ backgroundColor: colorTerciario }}
-                />
-                <Chip
-                  icon={{
                     name: 'delete',
                     type: 'material',
                     size: 25,
                     color: 'white',
                   }}
                   buttonStyle={{ backgroundColor: 'red' }}
+                  onPress={() => handleEliminarGrupo(item.id)}
                 />
               </>
             ) : (

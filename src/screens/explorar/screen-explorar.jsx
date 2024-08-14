@@ -35,6 +35,8 @@ const Explorar = ({ navigation }) => {
     } = animaciones();
 
     const [data, setData] = useState([]);
+    const [index, setIndex] = useState(0);
+
 
     //grupos y mensajes de error
     const [grupos, setGrupos] = useState([]);
@@ -57,6 +59,8 @@ const Explorar = ({ navigation }) => {
         try {
             const grupos = await controller.obtenerGruposDeOtros();
             const misGrupos = await controller.obtenerMisGrupos();
+            console.log(grupos);
+            console.log(misGrupos);
             setGrupos(grupos);
             setMisGrupos(misGrupos);
         } catch (error) {
@@ -90,7 +94,10 @@ const Explorar = ({ navigation }) => {
         }
     }
 
-   
+    const handleGrupoEliminado = (grupoId) => {
+        setMisGrupos(prevGrupos => prevGrupos.filter(grupo => grupo.id !== grupoId));
+        console.log(grupoId + " eliminado exitosamente");
+    };
      
     useEffect(() => {
         startAnimations();
@@ -98,7 +105,6 @@ const Explorar = ({ navigation }) => {
         setListaBorrarGrupos([]);
     }, [data]);
 
-    const [index, setIndex] = useState(0);
 
     const containerStyle = { borderRadius: 30, marginHorizontal: 10,}; // Estilo del título de la pestaña
     
@@ -182,6 +188,7 @@ const Explorar = ({ navigation }) => {
                                     explorar={true}
                                     misGrupos={true}
                                     item={item}
+                                    onEliminarGrupo={handleGrupoEliminado}
                                 />
                             )}
                         />
