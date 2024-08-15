@@ -144,6 +144,14 @@ const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, s
     }
   };
 
+  const formatearFecha = (fecha) => {
+    const date = new Date(fecha);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${day}-${month}-${year}`;
+  };
+
   return (
 
     <TouchableOpacity style={stylesCanales.cardVertical} onPress={handleSeleccionarGrupo} onLongPress={selectionMode}>
@@ -159,8 +167,8 @@ const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, s
             {explorar ? (
               <View style={{flexDirection:"column"}}>
                 <Text style={{ color: colorQuinario, fontWeight: 'bold' }}>{nombre}</Text>
-                <Text style={{ color: colorQuinario}}>{item.created}</Text>
-                <Text style={{ color: colorQuinario}}>autor:{item.autor}</Text>
+                <Text style={{ color: colorQuinario}}><Text style={{fontWeight:'bold'}}>Publicado:</Text> {formatearFecha(item.created)}</Text>
+                <Text style={{ color: colorQuinario}}><Text style={{fontWeight:'bold'}}>Autor:</Text> {item.autor}</Text>
               </View>
             ) : nombre}
           </Text>
@@ -190,15 +198,7 @@ const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, s
                 />
               </>
             ) : (
-              <Chip
-                icon={{
-                  name: 'file-upload',
-                  type: 'material',
-                  size: 25,
-                  color: 'white',
-                }}
-                buttonStyle={{ backgroundColor: colorTerciario }}
-              />
+              <></>
             )
           ) : (
             <Chip

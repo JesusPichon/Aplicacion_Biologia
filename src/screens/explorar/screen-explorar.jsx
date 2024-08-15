@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Animated, FlatList, StatusBar } from "react-native";
+import { View, Text, Animated, FlatList, StatusBar, ActivityIndicator } from "react-native";
 import {  principal, secundario, } from "../../styles/style-colors";
 import { selectCsv } from "../../services/functions/import-csv";
 import styles from "./style-canales";
@@ -230,7 +230,7 @@ const Explorar = ({ navigation }) => {
                             )}
                             onEndReached={() => {handleLoadMore()}}
                             onEndReachedThreshold={0.7}
-                            ListFooterComponent={cargando && <Text>Cargando más grupos...</Text>}
+                            ListFooterComponent={cargando && <ActivityIndicator size="large" color="#0000ff" />}
                         />
                     </TabView.Item>
                     <TabView.Item style={[styles.TabViewcontainer]}>
@@ -252,7 +252,7 @@ const Explorar = ({ navigation }) => {
                             )}
                             onEndReached={() => {handleLoadMoreMisGrupos()}}
                             onEndReachedThreshold={0.7}
-                            ListFooterComponent={cargando && <Text>Cargando más grupos...</Text>}
+                            ListFooterComponent={cargando && <ActivityIndicator size="large" color="#0000ff" />}
                         />
                     </TabView.Item>
                 </TabView>
