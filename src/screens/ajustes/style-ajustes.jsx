@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
       title: {
         fontSize: 18,
         fontWeight: 'bold',
-        marginBottom: 20,
+        marginBottom: 15,
       },
       inputModal: {
         width: '100%',
