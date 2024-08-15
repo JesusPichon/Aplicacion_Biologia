@@ -17,6 +17,12 @@ import { Icon } from "react-native-elements";
 
 const Explorar = ({ navigation }) => {
     const {currentTheme, themes} = useSelector((state) => state.theme);
+    const [pagina, setPagina] = useState(1);
+    const [paginaMisGrupos, setPaginaMisGrupos] = useState(1);
+    const [cargando, setCargando] = useState(false);
+    const [sinMasGrupos, setSinMasGrupos] = useState(false);
+    const [sinMasMisGrupos, setSinMasMisGrupos] = useState(false);
+
 
     const theme = themes[currentTheme] || themes.light;
     const {  
@@ -55,18 +61,59 @@ const Explorar = ({ navigation }) => {
 
     const controller = new PocketController(); //agregar controller
 
-    const cargarGrupos = async () => {
+    const ITEMS_POR_PAGINA = 5;
+
+    const cargarGrupos = async (nuevaPagina) => {
+        if (sinMasGrupos || cargando) return;
+    
+        setCargando(true);
+    
         try {
-            const grupos = await controller.obtenerGruposDeOtros();
-            const misGrupos = await controller.obtenerMisGrupos();
-            console.log(grupos);
-            console.log(misGrupos);
-            setGrupos(grupos);
-            setMisGrupos(misGrupos);
+            const nuevosGrupos = await controller.obtenerGruposDeOtros(nuevaPagina, ITEMS_POR_PAGINA);
+            if (pagina >= nuevosGrupos.totalPages) {
+                setSinMasGrupos(true);
+            }
+            setGrupos((prevGrupos) => [...prevGrupos, ...nuevosGrupos.items]);
         } catch (error) {
             lanzarAlerta("Error al obtener la lista de grupos");
+        } finally {
+            setCargando(false);
         }
-    }
+    };
+
+    const cargarMisGrupos = async (nuevaPagina) => {
+        if (sinMasMisGrupos || cargando) return;
+    
+        setCargando(true);
+    
+        try {
+            const nuevosGrupos = await controller.obtenerMisGrupos(nuevaPagina, ITEMS_POR_PAGINA);
+            if (paginaMisGrupos >= nuevosGrupos.totalPages) {
+                setSinMasMisGrupos(true);
+            }
+            setMisGrupos((prevGrupos) => [...prevGrupos, ...nuevosGrupos.items]);
+        } catch (error) {
+            lanzarAlerta("Error al obtener la lista de grupos");
+        } finally {
+            setCargando(false);
+        }
+    };
+
+    const handleLoadMore = () => {
+        if (!sinMasGrupos && !cargando) {
+            const nuevaPagina = pagina + 1;
+            setPagina(nuevaPagina);
+            cargarGrupos(nuevaPagina);
+        }
+    };
+
+    const handleLoadMoreMisGrupos = () => {
+        if (!sinMasMisGrupos && !cargando) {
+            const nuevaPagina = paginaMisGrupos + 1;
+            setPaginaMisGrupos(nuevaPagina);
+            cargarMisGrupos(nuevaPagina);
+        }
+    };
 
     function handleTextChange(text) {
         setNombreGrupo(text);
@@ -100,10 +147,19 @@ const Explorar = ({ navigation }) => {
     };
      
     useEffect(() => {
-        startAnimations();
-        cargarGrupos();
-        setListaBorrarGrupos([]);
-    }, [data]);
+        const fetchData = async () => {
+            try {
+                startAnimations();
+                await cargarGrupos();
+                await cargarMisGrupos();
+                setListaBorrarGrupos([]);
+            } catch (error) {
+                console.error("Error al cargar datos:", error);
+            }
+        };
+    
+        fetchData();
+    }, []);
 
 
     const containerStyle = { borderRadius: 30, marginHorizontal: 10,}; // Estilo del título de la pestaña
@@ -161,10 +217,10 @@ const Explorar = ({ navigation }) => {
                         <FlatList
                             data={grupos}
                             numColumns={1}
-                            keyExtractor={(item, index) => index.toString()}
+                            keyExtractor={(item) => item.id.toString()}
                             renderItem={({ item, index }) => (
                                 <Grupo
-                                    key={index}
+                                    key={(item) => item.id.toString()}
                                     animacion={unoAnim}
                                     navigation={navigation}
                                     nombre={item.nombre}
@@ -172,16 +228,19 @@ const Explorar = ({ navigation }) => {
                                     item={item}
                                 />
                             )}
+                            onEndReached={() => {handleLoadMore()}}
+                            onEndReachedThreshold={0.7}
+                            ListFooterComponent={cargando && <Text>Cargando más grupos...</Text>}
                         />
                     </TabView.Item>
                     <TabView.Item style={[styles.TabViewcontainer]}>
                         <FlatList
                             data={misGrupos}
                             numColumns={1}
-                            keyExtractor={(item, index) => index.toString()}
+                            keyExtractor={(item) => item.id.toString()}
                             renderItem={({ item, index }) => (
                                 <Grupo
-                                    key={index}
+                                    key={(item) => item.id.toString()}
                                     animacion={unoAnim}
                                     navigation={navigation}
                                     nombre={item.nombre}
@@ -191,6 +250,9 @@ const Explorar = ({ navigation }) => {
                                     onEliminarGrupo={handleGrupoEliminado}
                                 />
                             )}
+                            onEndReached={() => {handleLoadMoreMisGrupos()}}
+                            onEndReachedThreshold={0.7}
+                            ListFooterComponent={cargando && <Text>Cargando más grupos...</Text>}
                         />
                     </TabView.Item>
                 </TabView>
