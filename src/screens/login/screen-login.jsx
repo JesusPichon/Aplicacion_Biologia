@@ -67,10 +67,14 @@ const Login = ({ navigation }) => {
         if (isLogin) {
             Keyboard.dismiss();
             await dispatch(loginUser(data.email, data.password));
-            const AuthStatus = pb.authStore.isValid;
-            if (AuthStatus) {
+            console.log("Se comprueba que el AuthStore es valido");
+            const AuthStatus = pb.authStore.isValid;;
+            console.log(AuthStatus);
+            if (AuthStatus === true) {
                 reset();
                 navigation.goBack();
+            } else {
+                reset();
             }
         } else {
             await dispatch(registerUser(data.username, data.email, data.password, data.passwordConfirm));

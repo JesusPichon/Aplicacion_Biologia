@@ -49,6 +49,54 @@ const styles = StyleSheet.create({
         marginBottom: 25,
         height: 40,
     },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      },
+      modalContent: {
+        width: 300,
+        padding: 20,
+        backgroundColor: 'white',
+        borderRadius: 10,
+        alignItems: 'center',
+      },
+      title: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 20,
+      },
+      inputModal: {
+        width: '100%',
+        fontWeight: 'bold',
+        padding: 10,
+        borderColor: '#ccc',
+        borderWidth: 2,
+        borderRadius: 10,
+        marginBottom: 20,
+        marginTop: 15,
+      },
+      buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+      },
+      button: {
+        flex: 1,
+        padding: 10,
+        backgroundColor: '#007BFF',
+        borderRadius: 18,
+        alignItems: 'center',
+        marginHorizontal: 5,
+      },
+      cancelButton: {
+        backgroundColor: '#FF4136',
+      },
+      buttonText: {
+        color: 'white',
+        fontWeight: 'bold',
+      },
 });
 
 export default styles;

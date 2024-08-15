@@ -76,16 +76,11 @@ export const checkUserAuthentication = () => async (dispatch) => {
 export const updateUser = async (userId, updateData) => {
     try {
         const updatedUser = await pb.collection('users').update(userId, updateData);
-        
-        // Actualiza el authStore con los nuevos datos del usuario
-        pb.authStore.save(pb.authStore.token, updatedUser);
-
-        // Actualiza el token en AsyncStorage si es necesario
-        await AsyncStorage.setItem('userToken', pb.authStore.token);
 
         return updatedUser;
     } catch (error) {
-        console.error('Error updating user:', error);
+        console.error('Error updating user:', error.message);
         throw error;
     }
 };
+

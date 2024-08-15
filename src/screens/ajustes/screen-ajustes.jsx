@@ -1,13 +1,15 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, TouchableOpacity, TextInput, KeyboardAvoidingView, ScrollView} from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, KeyboardAvoidingView, ScrollView, Alert, Modal} from 'react-native';
 import { Button} from '@rneui/themed';
 import styles from './style-ajustes';
 import {Icon, ButtonGroup} from 'react-native-elements';
 import {setModeTheme} from '../../services/redux/slices/themeSlice';
+import { setUser } from '../../services/redux/slices/authSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import {useForm, Controller} from 'react-hook-form';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { updateUser } from '../../services/auth/AuthFunctions';
+import { loginUser, updateUser } from '../../services/auth/AuthFunctions';
+import Snackbar from 'react-native-snackbar';
 import pb from '../../services/PocketBase/pocketbase';
 
 const Ajustes = ({navigation}) => {
@@ -45,30 +47,99 @@ const Ajustes = ({navigation}) => {
     setSelectedIndex(value);
   };
 
-  const { control, handleSubmit, watch, reset, formState: {errors}, } = useForm({
+  const { control, handleSubmit, watch, reset, setValue, formState: {errors}, } = useForm({
     defaultValues: {
       username: '',
       email: '',
       password: '',
       passwordConfirm: '',
+      oldPassword: '',
     },
   });
 
   const passwordValue = watch('password'); // Observa el valor del campo de contraseña
+  const oldPasswordValue = watch('oldPassword');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [pendingData, setPendingData] = useState(null); // Guardar datos pendientes para el modal
 
-  const onSubmit = () => {
-    console.log("Boton presionado...")
-  } 
+  const onSubmit = (data) => {
+    const isPasswordChanging = data.password.length > 0;
+
+    if (isPasswordChanging) {
+      setPendingData(data);
+      setModalVisible(true); // Mostrar el modal para confirmar la contraseña antigua
+    } else {
+      updateValidation(data); // Si no se cambia la contraseña, proceder directamente
+    }
+  };
+
+  const submitConfirmation = async () => {
+    if (pendingData) {
+      await updateValidation(pendingData);
+      setModalVisible(false);
+    }
+  };
+
+  const submitCancelation = () => {
+    setModalVisible(false);
+    reset();
+  };
+
+  const updateValidation = async (data) => {
+    try {
+      const updateData = {};
+
+      // Comparar el nombre de usuario
+      if (data.username && data.username !== pb.authStore.model.username) {
+        updateData.username = data.username;
+      }
+
+      // Actualizar la contraseña solo si el usuario ingresó una nueva
+      if (data.password && data.password.length > 0) {
+        updateData.oldPassword = oldPasswordValue;
+        updateData.password = data.password;
+        updateData.passwordConfirm = data.passwordConfirm;
+      }
+
+      console.log(updateData);
+      // Solo realizar la actualización si hay cambios
+      if (Object.keys(updateData).length > 0) {
+        console.log("ID:", pb.authStore.model.id);
+        const updatedUser = await updateUser(pb.authStore.model.id, updateData);
+
+        Alert.alert('Éxito', 'Tus datos han sido actualizados');
+
+        // Si se cambió la contraseña, reautenticar al usuario
+        if (updateData.password) {
+          await pb.authStore.clear(); // Limpiar el authStore
+
+          dispatch(loginUser( data.username || pb.authStore.model.username, updateData.password))
+        }else{
+          dispatch(setUser(updateData.username));
+        }
+        reset();
+      } else {
+        Alert.alert('Sin cambios', 'No se realizaron cambios en los datos.');
+      }
+    } catch (error) {
+      console.error('Error al actualizar los datos:', error);
+      Alert.alert('Error', 'Hubo un problema al actualizar tus datos');
+    }
+  };
 
   useEffect(() => {
     // Si el usuario está autenticado, carga los valores actuales en el formulario
-    if (pb.authStore.model) {
+    // console.log('reset:', pb.authStore.isValid);
+    if (pb.authStore.isValid) {
       reset({
-        username: pb.authStore.model.username || '',
+        username: user || '',
         email: pb.authStore.model.email || '',
+        password: '',
+        oldPassword: '',
+        passwordConfirm: '',
       });
     }
-  }, [reset, isAuthenticated]);
+  }, [reset, user]);
 
   return (
     <View style={[styles.mainContainer, {backgroundColor: colorPrimario}]}>
@@ -138,16 +209,17 @@ const Ajustes = ({navigation}) => {
                     rules={{
                       // required: 'El correo electrónico es obligatorio',
                       pattern: {
-                        value: /^\S+@\S+$/i,
+                        value: /^\S+@\S+\.\S+$/,
                         message: 'Correo electrónico no válido',
                       },
                     }}
                     render={({field: {onChange, onBlur, value}}) => (
                       <TextInput
-                        style={[styles.input, {backgroundColor: colorPrimario, borderColor: colorTerciario, color: colorTexto, }]}
+                        style={[styles.input, {backgroundColor: colorPrimario, borderColor: 'grey', color: 'grey', }]}
                         onBlur={onBlur}
                         onChangeText={onChange}
                         value={value}
+                        editable={false}
                       />
                     )}
                   />
@@ -225,6 +297,53 @@ const Ajustes = ({navigation}) => {
                   </TouchableOpacity>
                 </View>
               )}
+
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(true)}
+              >
+                <View style={styles.modalContainer}>
+                  <View style={styles.modalContent}>
+                    <Text style={styles.title}>Ingresa tu contraseña actual</Text>
+                    <Text>Actualizar a una nueva contraseña requiere confirmar con la contraseña antigua</Text>
+                    
+                    <Controller
+                        control={control}
+                        name="oldPassword"
+                        rules={{required: 'La contraseña es obligatoria'}}
+                        render={({field: {onChange, onBlur, value}}) => (
+                          <TextInput
+                            style={[styles.inputModal, {backgroundColor: colorPrimario, borderColor: colorTerciario, color: colorTexto, }]}
+                            placeholder="Confirmar Contraseña"
+                            secureTextEntry
+                            onChangeText={(text) => {
+                              onChange(text); // Mantiene la función original del controlador
+                              setValue('oldPassword', text); // Asigna explícitamente el valor al campo 'oldPassword'
+                            }}
+                            onBlur={onBlur}
+                            value={value}
+                          />
+                        )}
+                      />
+                      {errors.oldPassword && (
+                        <Text style={{color: 'red'}}>{errors.oldPassword.message}</Text>
+                      )}
+
+                    <View style={styles.buttonContainer}>
+                      <TouchableOpacity style={styles.button} onPress={submitConfirmation}>
+                        <Text style={styles.buttonText}>Confirmar</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={submitCancelation}>
+                        <Text style={styles.buttonText}>Cancelar</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+              </Modal>
+
+
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
