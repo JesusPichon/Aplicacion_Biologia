@@ -5,6 +5,7 @@ import Formulario from './screens/formulario';
 import InformacionToma from './screens/info';
 import Grupos from './screens/grupos';
 import Tomas from './screens/tomas';
+import TomasExplorar from './screens/tomasExplorar';
 import Editar from './screens/editar';
 import FAQ from './screens/FAQ/screen-FAQ';
 import CamposPred from './screens/campos-predeterminados/screen-camposPred';
@@ -38,6 +39,7 @@ const MisGruposStack = () => (
 const ExplorarStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Drawer.Screen name="ExplorarScreen" component={Explorar} />
+    <Drawer.Screen name="TomasExplorar" component={TomasExplorar} />
     {/* Aqui van el resto de pantallas para ver contenido del servidor */}
   </Stack.Navigator>
 );
