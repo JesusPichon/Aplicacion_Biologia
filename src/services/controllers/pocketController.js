@@ -20,7 +20,6 @@ class PocketController {
     async obtenerMisGrupos(pagina, itemsPorPagina) {
         try {
             const user = pb.authStore.model.username;
-            console.log(user);
             const records = await pb.collection('grupos').getList(pagina, itemsPorPagina, {
                 sort: '-created',
                 filter: `autor = "${user}"`,

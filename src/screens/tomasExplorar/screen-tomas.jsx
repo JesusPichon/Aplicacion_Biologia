@@ -149,7 +149,9 @@ const TomasExplorar = ({ navigation, route }) => {
                             seleccionarEliminar={seleccionarEliminar}
                             deseleccionarEliminar={deseleccionarEliminar}
                             showCheckBox={showCheckBox}
-                            eliminar={eliminar} />
+                            eliminar={eliminar} 
+                            explorar={true}
+                        />
                     )}
                     onEndReached={() => {
                         if (page < numPaginas && !loading) {

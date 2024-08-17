@@ -5,9 +5,11 @@ import { CheckBox, ListItem, Icon } from "@rneui/themed";
 import { useState, useEffect } from "react";
 import { principal, principalFePro, quintoFePro } from "../../styles/style-colors";
 import { useSelector } from 'react-redux';
+import imprimir from "../../components/imprimir/imprimir";
 import Snackbar from 'react-native-snackbar';
+import imagenLocal from '../../assets/images/logoClaro.png';
 
-const Toma = ({ navigation, data, seleccionarImprimir, deseleccionarImprimir, seleccionarEliminar, deseleccionarEliminar, showCheckBox, eliminar }) => {
+const Toma = ({ navigation, data, seleccionarImprimir, deseleccionarImprimir, seleccionarEliminar, deseleccionarEliminar, showCheckBox, eliminar, explorar = false }) => {
   const {currentTheme, themes} = useSelector((state) => state.theme);
 
   const theme = themes[currentTheme] || themes.light;
@@ -20,7 +22,6 @@ const Toma = ({ navigation, data, seleccionarImprimir, deseleccionarImprimir, se
   } = theme;
 
   const [checked, setChecked] = useState(false);
-
   const [showNoImage, setShowNoImage] = useState(false); //Estado para saber cuando hay un error al mostrar la imagen
 
   useEffect(() => {
@@ -36,12 +37,15 @@ const Toma = ({ navigation, data, seleccionarImprimir, deseleccionarImprimir, se
     }, 200);
   }
 
+  function verToma() {
+    imprimir([data], "https://i.postimg.cc/90sJMTRn/Proyecto-nuevo-1.jpg");
+  }
   return (
 
     <TouchableOpacity
       onPress={() => {
         if (showCheckBox == false){
-          navigation.navigate('InformacionToma', { id: data.id })
+          !explorar ? navigation.navigate('InformacionToma', { id: data.id }) : verToma();
         }
       }}
       style={{paddingHorizontal:20}} >
