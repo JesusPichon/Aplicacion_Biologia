@@ -56,7 +56,24 @@ class PocketController {
         }
     }
     
-    
+
+    async publicarGrupo(dataGrupo, dataTomas) {
+        try {
+            const nuevoGrupo = await pb.collection('grupos').create(dataGrupo);
+
+            // Subir cada toma asociada a ese grupo
+            for (const toma of dataTomas) {
+                await pb.collection('tomas').create({ 
+                    ...toma,
+                    id_grupo: nuevoGrupo.id,
+                });
+            }
+
+        }catch(error){
+            console.error("Error al publicar el grupo:", error);
+            throw new Error("Error al publicar el grupo: " + error.message);
+        }
+    }
 }
 
 

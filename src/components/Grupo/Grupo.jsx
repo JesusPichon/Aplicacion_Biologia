@@ -9,6 +9,7 @@ import { jsonToCSV } from 'react-native-csv';
 import { getRawData, formatData, guardarArchivoCSV, columnasComillas } from "../../services/functions/export-csv";
 import GrupoController from "../../services/controllers/grupoController";
 
+
 const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, selectionMode, explorar=false, misGrupos=false, item, onEliminarGrupo}) => {
   const { currentTheme, themes } = useSelector((state) => state.theme);
   const theme = themes[currentTheme] || themes.light;
@@ -24,6 +25,8 @@ const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, s
   const [totalTomas, setTotalTomas] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
+  const { user, isAuthenticated } = useSelector(state => state.auth);
+
 
   useEffect(() => {
     setChecked(false);
@@ -31,6 +34,7 @@ const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, s
 
   const controllerPocket = new PocketController(); //agregar controller
   const controller = new GrupoController();
+  
   useEffect(() => {
     if (!explorar) {
       // Obtén el total de tomas para este grupo cuando se monte el componente
@@ -54,7 +58,9 @@ const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, s
     setShowExportOptions(false);
     try {
       const datosConsulta = await getRawData(nombre);
+      
       const datosFormateados = await formatData(datosConsulta);
+      
       const csv = jsonToCSV(datosFormateados, { quotes: columnasComillas });
       await guardarArchivoCSV(nombre, csv)
         .then((mensaje) => {
@@ -78,11 +84,31 @@ const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, s
     }
   };
 
-  const handlePublicar = () => {
-    Snackbar.show({
-      text: "Funcionalidad de Publicar no implementada",
+  const handlePublicar = async () => {
+    try{
+      const datosConsulta = await getRawData(nombre);
+      const datosFormateados = await formatData(datosConsulta);
+
+      const dataGrupo = {
+        autor: user,
+        nombre: nombre,
+        numero_tomas: totalTomas
+      }
+
+      await controllerPocket.publicarGrupo(dataGrupo, datosFormateados);
+
+      Snackbar.show({
+      text: "Grupo Publicado",
       duration: Snackbar.LENGTH_SHORT
-    });
+      });
+    } catch (error) {
+      Snackbar.show({
+        text: "Error al publicar el grupo",
+        duration: Snackbar.LENGTH_SHORT
+      });
+      console.error("Error al publicar el grupo:", error);
+      throw new Error("Error al publicar el grupo: " + error.message);
+    }
     setShowExportOptions(false);
   };
 
@@ -100,13 +126,16 @@ const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, s
     }
   };
 
+  const exportLocal = [{ id: '1', label: 'Descargar en este dispositivo', action: handleLocalExport }];
+  const exportLocalPb = [
+    { id: '1', label: 'Descargar en este dispositivo', action: handleLocalExport },
+    { id: '2', label: 'Compartir públicamente', action: handlePublicar }
+  ];
+
   const renderExportOptions = () => (
     <View style={[stylesCanales.exportOptionsContainer, { backgroundColor: colorPrimario }]}>
     <FlatList
-      data={[
-        { id: '1', label: 'Descargar en este dispositivo', action: handleLocalExport },
-        { id: '2', label: 'Compartir públicamente', action: handlePublicar }
-      ]}
+      data={!isAuthenticated ? exportLocal : exportLocalPb}
       renderItem={({ item }) => (
         <TouchableOpacity 
           style={[stylesCanales.exportOptionButton, { backgroundColor: colorTerciario }]} 
