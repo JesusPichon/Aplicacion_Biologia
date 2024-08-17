@@ -55,6 +55,19 @@ class PocketController {
             return null; // O cualquier valor que tenga sentido devolver en caso de error
         }
     }
+
+    async ObtenerTomasFull(id){
+        try {
+            const records = await pb.collection('tomas').getFullList({
+                sort: '-created',
+                filter: `id_grupo = "${id}"`,
+            });
+            return records
+        } catch (error) {
+            console.error("Error fetching list:", error);
+            return null; // O cualquier valor que tenga sentido devolver en caso de error
+        }
+    }
     
 
     async publicarGrupo(dataGrupo, dataTomas) {

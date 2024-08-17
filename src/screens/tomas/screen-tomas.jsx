@@ -69,7 +69,7 @@ const Tomas = ({ navigation, route }) => {
                     await controller.eliminarToma(nombreGrupo, toma.id);
                 });
                 setTimeout(async () => {
-                    await cargarTomas(page);
+                    await cargarTomas(page, true);
                 }, 150);
                 lanzarAlerta(lista.length == 1 ? 'Toma eliminada con éxito' : 'Tomas eliminadas con éxito');
                 setListSelectDelete([]);
@@ -111,7 +111,6 @@ const Tomas = ({ navigation, route }) => {
     }
 
     useEffect(() => {
-        cargarTomas(page);
         tomasTotales();
     }, [page]);
 
@@ -150,7 +149,7 @@ const Tomas = ({ navigation, route }) => {
                         <Text style={{fontSize:25, color:colorCuaternario}}>No se encontraron tomas. </Text>
                     </View>}
                     data={listTomas}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyExtractor={(item, index) => item.id.toString()}
                     renderItem={({item}) => (
                         <Toma
                             key={item.id.toString()}
@@ -165,13 +164,14 @@ const Tomas = ({ navigation, route }) => {
                     )}
                     onEndReached={() => {
                         if (page < numPaginas && !loading) {
-                            setPage(page + 1);
-                            cargarTomas(page);
+                            let nextPage = page + 1;
+                            setPage(nextPage);
+                            cargarTomas(nextPage);
                         }
                     }}
-                    onEndReachedThreshold={0.5}
-                    ListHeaderComponent={loading && <LinearProgress color={colorCuaternario} />}
-                    ListHeaderComponentStyle={{marginBottom:15}}
+                    onEndReachedThreshold={0.8}
+                    ListFooterComponent={loading && <LinearProgress color={colorCuaternario} />}
+                    ListFooterComponentStyle={{marginBottom:15}}
                 />
             </View>
 

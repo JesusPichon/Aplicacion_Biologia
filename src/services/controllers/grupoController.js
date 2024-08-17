@@ -1,5 +1,6 @@
 import {
     insertarGrupos,
+    insertarGruposPublicos,
     eliminarGrupo,
     verGrupos,
     consultarIdGrupo,
@@ -24,6 +25,14 @@ class GrupoController {
     async addGrupo(nombreGrupo) { //agregar grupo por nombre  
         try {
             await insertarGrupos(nombreGrupo);
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
+
+    async addGrupoPublico(nombreGrupo) { //agregar grupo por nombre  
+        try {
+            await insertarGruposPublicos(nombreGrupo);
         } catch (error) {
             throw new Error(error);
         }
@@ -98,7 +107,9 @@ class GrupoController {
             return;
         }
 
+        console.log(data);
         for (const toma of data) {
+            console.log(toma);
             if (this.isEmptyEntry(toma)) {
                 console.warn("Entrada completamente vacía encontrada y omitida:", toma);
                 continue; // Saltar entradas completamente vacías

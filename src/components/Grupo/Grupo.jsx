@@ -122,7 +122,7 @@ const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, s
       setChecked(!checked);
     } else {
       explorar ? id = item.id : null;
-      explorar ? navigation.navigate('TomasExplorar', {id}) : navigation.navigate('Tomas', {nombre});
+      explorar ? navigation.navigate('TomasExplorar', {id, nombre}) : navigation.navigate('Tomas', {nombre});
     }
   };
 

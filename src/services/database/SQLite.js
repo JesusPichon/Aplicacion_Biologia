@@ -54,7 +54,8 @@ export const crearTablas = () => {
       case 'GRUPOS':
         return `CREATE TABLE IF NOT EXISTS 'GRUPOS'(
             id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-            nombre TEXT)`;
+            nombre TEXT,
+            local TEXT)`;
       case 'TOMAS':
         return `CREATE TABLE IF NOT EXISTS 'TOMAS'(
             id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -124,6 +125,33 @@ export const insertarGrupos = (nombreGrupo) => {
       tx.executeSql(
         `INSERT INTO GRUPOS (nombre) VALUES (?)`,
         [nombreGrupo],
+        (_, results) => {
+          if (results.rowsAffected > 0) {
+            //console.log(`¡El grupo ${nombreGrupo} se ha insertado correctamente en la tabla GRUPOS!`);
+            resolve();
+          } else {
+            const errorMessage = `Error: No se pudo insertar el grupo ${nombreGrupo} en la tabla GRUPOS.`;
+            console.error(errorMessage);
+            reject(new Error(errorMessage));
+          }
+        },
+        error => {
+          const errorMessage = `Error al intentar insertar el grupo ${nombreGrupo}: ${error.message}`;
+          console.error(errorMessage);
+          reject(new Error(errorMessage));
+        }
+      );
+    });
+  });
+};
+
+export const insertarGruposPublicos = (nombreGrupo) => {
+  const idenrificador = "DOOM"
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(
+        `INSERT INTO GRUPOS (nombre, local) VALUES (?, ?)`,
+        [nombreGrupo, idenrificador],
         (_, results) => {
           if (results.rowsAffected > 0) {
             //console.log(`¡El grupo ${nombreGrupo} se ha insertado correctamente en la tabla GRUPOS!`);
