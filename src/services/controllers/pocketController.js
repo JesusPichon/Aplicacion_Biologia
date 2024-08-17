@@ -41,6 +41,22 @@ class PocketController {
             throw new Error("Error al obtener grupos: " + error.message);
         }
     }
+
+    // Tomas
+
+    async ObtenerTomas(id, pagina, itemsPorPagina) {
+        try {
+            const resultList = await pb.collection('tomas').getList(pagina, itemsPorPagina, {
+                sort: '-created',
+                filter: `id_grupo = "${id}"`,
+            });
+            return resultList;
+        } catch (error) {
+            console.error("Error fetching list:", error);
+            return null; // O cualquier valor que tenga sentido devolver en caso de error
+        }
+    }
+    
     
 }
 

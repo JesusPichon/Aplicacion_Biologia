@@ -9,6 +9,7 @@ import TomaController from "../../services/controllers/tomaController";
 import { useSelector } from 'react-redux';
 import { Icon, Text } from "react-native-elements";
 import Snackbar from 'react-native-snackbar';
+import PocketController from "../../services/controllers/pocketController";
 
 const TomasExplorar = ({ navigation, route }) => {
     const {currentTheme, themes} = useSelector((state) => state.theme);
@@ -22,7 +23,7 @@ const TomasExplorar = ({ navigation, route }) => {
         colorQuinario,
     } = theme;
 
-    const nombreGrupo = route.params.nombre;
+    const idGrupos = route.params.id;
 
     const numeroTomas = 10;
     const [progreso, setProgreso] = useState(0);
@@ -38,35 +39,30 @@ const TomasExplorar = ({ navigation, route }) => {
     const [eliminar, setEliminar] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const controller = new TomaController();
+    const controller = new PocketController();
 
     const cargarTomas = async (pageNumber, clearList = false) => {
-        try {
+        if (page <= numPaginas && !loading){
             setLoading(true);
-            const tomas = await controller.obtenerTomas(nombreGrupo, pageNumber, numeroTomas, buscar, campo);
-            setListTomas(clearList ? tomas : [...listTomas, ...tomas]);
-            setLoading(false);
-            setProgreso(1);
-        } catch (error) {
-            setLoading(false);
-            lanzarAlerta("Error al obtener la lista de tomas.");
+            try {
+                const tomas = await controller.ObtenerTomas(idGrupos, pageNumber, numeroTomas);
+                setListTomas((prevGrupos) => [...prevGrupos, ...tomas.items]);
+                setNumPaginas(tomas.totalPages)
+                setLoading(false);
+                setProgreso(1);
+            } catch (error) {
+                setLoading(false);
+                lanzarAlerta("Error al obtener la lista de tomas.");
+            }
         }
-    };
-
-    const tomasTotales = async () => {
-        try {
-            const tomas = await controller.obtenerTomasTotales(nombreGrupo, buscar, campo);
-            setNumPaginas(Math.ceil(tomas / numeroTomas));
-        } catch (error) {
-            lanzarAlerta("Error al obtener la lista de tomas totales.");
-        }
+        setLoading(false);
     };
 
     const eliminarTomas = async (lista) => {
         try {
             if (lista.length !== 0) {
                 lista.forEach(async (toma) => {
-                    await controller.eliminarToma(nombreGrupo, toma.id);
+                    await controller.eliminarToma(idGrupos, toma.id);
                 });
                 setTimeout(async () => {
                     await cargarTomas(page);
@@ -112,17 +108,7 @@ const TomasExplorar = ({ navigation, route }) => {
 
     useEffect(() => {
         cargarTomas(page);
-        tomasTotales();
-    }, [page]);
-
-    useEffect(() => {
-        setPage(1);
-        tomasTotales();
-        cargarTomas(1, true);
-        setListSelectPrint([]);
-        setListSelectDelete([]);
-        setEliminar(false);
-    }, [buscar]);
+    }, []);
 
     return (
         <View style={{ flex: 1, backgroundColor: colorPrimario }}>
@@ -136,11 +122,13 @@ const TomasExplorar = ({ navigation, route }) => {
                         onPress={() => navigation.openDrawer()}
                     />
                 </View>
+                {/*
                 <BarraBusqueda
                     titulo={'Buscar en las tomas'}
-                    pantalla={nombreGrupo}
+                    pantalla={idGrupos}
                     onResult={updateTomas} 
                 />
+                */}
             </View>
 
             <View style={{ flex: 1, backgroundColor: colorSecundario, borderTopLeftRadius: 20, borderTopRightRadius: 20, paddingTop: 60}}>
@@ -165,87 +153,16 @@ const TomasExplorar = ({ navigation, route }) => {
                     )}
                     onEndReached={() => {
                         if (page < numPaginas && !loading) {
-                            setPage(page + 1);
-                            cargarTomas(page);
+                            const nextPage = page + 1;
+                            setPage(nextPage);
+                            cargarTomas(nextPage);
                         }
                     }}
-                    onEndReachedThreshold={0.5}
+                    onEndReachedThreshold={0.8}
                     ListHeaderComponent={loading && <LinearProgress color={colorCuaternario} />}
                     ListHeaderComponentStyle={{marginBottom:15}}
                 />
             </View>
-
-            <SpeedDial
-                isOpen={openButton}
-                icon={{ name: 'edit', color: colorPrimario }}
-                openIcon={{ name: 'close', color: colorPrimario }}
-                color={colorCuaternario}
-                onOpen={() => setOpenButton(!openButton)}
-                onClose={() => setOpenButton(!openButton)}>
-
-                {!showCheckBox && <SpeedDial.Action
-                    icon={{ name: 'edit', color: colorPrimario }}
-                    color={colorQuinario}
-                    title={'Campos Predeterminados'}
-                    onPress={() => {
-                        setOpenButton(!openButton);
-                        navigation.navigate('CamposPred');
-                    }} />}
-                
-                {!showCheckBox && <SpeedDial.Action
-                    icon={{ name: 'add', color: colorPrimario }}
-                    color={colorQuinario}
-                    title={'Agregar'}
-                    onPress={() => {
-                        setOpenButton(!openButton);
-                        navigation.navigate('Formulario', { nombreGrupo });
-                    }} />}
-                
-                {!showCheckBox && <SpeedDial.Action
-                    icon={{ name: 'delete', color: colorPrimario }}
-                    color={colorQuinario}
-                    title={'Eliminar'}
-                    onPress={() => {
-                        setOpenButton(!openButton);
-                        setShowCheckBox(true);
-                        setEliminar(true);
-                    }} />}
-                
-                {!showCheckBox && <SpeedDial.Action
-                    icon={{ name: 'print', color: colorPrimario }}
-                    color={colorQuinario}
-                    title={'Imprimir'}
-                    onPress={() => {
-                        setOpenButton(!openButton);
-                        setShowCheckBox(true);
-                        setEliminar(false);
-                    }} />}
-                
-                {showCheckBox && <SpeedDial.Action
-                    icon={{ name: 'done', color: colorPrimario }}
-                    title="Aceptar"
-                    color={colorQuinario}
-                    onPress={() => {
-                        setShowCheckBox(false);
-                        setOpenButton(false);
-                        if (eliminar) {
-                            eliminarTomas(listSelectDelete);
-                        } else {
-                            imprimirTomas(listSelectPrint);
-                            setListSelectPrint([]);
-                        }
-                    }} />}
-                
-                {showCheckBox && <SpeedDial.Action
-                    icon={{ name: 'cancel', color: colorPrimario }}
-                    title="Cancelar"
-                    color={colorQuinario}
-                    onPress={() => {
-                        setShowCheckBox(false);
-                        setOpenButton(false);
-                        setEliminar(false);
-                    }} />}
-            </SpeedDial>
         </View>
     );
 }
