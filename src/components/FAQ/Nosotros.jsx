@@ -40,25 +40,25 @@ const Nosotros = () => {
             posicion: true
         },
         {
-            nombre: 'Desarrollador 2',
+            nombre: 'Jesus Pichón Ramirez',
             github: 'JesusPichon',
             url: 'https://github.com/JesusPichon',
             posicion: false
         },
         {
-            nombre: 'Desarrollador 3',
+            nombre: 'Sergio Enrique Rivera Vidal',
             github: 'EnriqueRV10',
             url: 'https://github.com/EnriqueRV10',
             posicion: true
         },
         {
-            nombre: 'Desarrollador 4',
+            nombre: 'Abner Pino Federico',
             github: 'Abnerpino',
             url: 'https://github.com/Abnerpino',
             posicion: false
         },
         {
-            nombre: 'Desarrollador 5',
+            nombre: 'Christian Santiago Rodriguez',
             github: 'Kreork',
             url: 'https://github.com/Kreork',
             posicion: true
