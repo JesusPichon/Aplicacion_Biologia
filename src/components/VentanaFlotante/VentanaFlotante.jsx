@@ -20,7 +20,6 @@ function VentanaFlotante({openModal, handleCloseModal, handleTextChange, saveGro
                                 placeholderTextColor="gray" // Cambia el color aquí
                                 style={{ borderWidth: 1, borderColor: 'gray', padding: 10, marginBottom: 10, borderRadius: 5, color: 'black' }}
                                 onChangeText={handleTextChange}
-                                value={nombre ? nombre : ''}
                             />
 
                             {errorMessage ? <Text style={{ color: 'red' }}>{errorMessage}</Text> : null}
