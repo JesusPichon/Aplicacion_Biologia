@@ -254,12 +254,12 @@ export const insertarTomas = (tomasData) => {
 export const verGrupos = () => {
   return new Promise((resolve, reject) => {
     db.transaction(tx => {
-      tx.executeSql('SELECT nombre FROM GRUPOS', [], (tx, results) => {
+      tx.executeSql('SELECT * FROM GRUPOS', [], (tx, results) => {
         const len = results.rows.length;
         if (len > 0) {
           const grupos = [];
           for (let i = 0; i < len; i++) {
-            grupos.push(results.rows.item(i).nombre);
+            grupos.push(results.rows.item(i));
           }
           //console.log(`Consulta exitosa, ${len} nombres de grupos encontrados`);
           resolve(grupos);
@@ -278,12 +278,12 @@ export const verGrupos = () => {
 export const verGruposFiltrado = (nombre) => {
   return new Promise((resolve, reject) => {
     db.transaction(tx => {
-      tx.executeSql('SELECT nombre FROM GRUPOS WHERE nombre LIKE ?', [`%${nombre}%`], (tx, results) => {
+      tx.executeSql('SELECT * FROM GRUPOS WHERE nombre LIKE ?', [`%${nombre}%`], (tx, results) => {
         const len = results.rows.length;
         if (len > 0) {
           const grupos = [];
           for (let i = 0; i < len; i++) {
-            grupos.push(results.rows.item(i).nombre);
+            grupos.push(results.rows.item(i));
           }
           //console.log(`Consulta exitosa, ${len} nombres de grupos encontrados`);
           resolve(grupos); // Resolvemos la promesa con los resultados

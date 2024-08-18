@@ -38,6 +38,7 @@ const Grupos = ({ navigation }) => {
 
     //grupos y mensajes de error
     const [grupos, setGrupos] = useState([]);
+    const [gruposGuardados, setGruposGuardados] = useState([]);
     const [nombreGrupo, setNombreGrupo] = useState('');
     const [listaBorrarGrupos, setListaBorrarGrupos] = useState([]);
 
@@ -55,8 +56,13 @@ const Grupos = ({ navigation }) => {
 
     const cargarGrupos = async () => {
         try {
-            const grupos = await controller.obtenerGrupos();
-            setGrupos(grupos);
+            const tempGrupos = await controller.obtenerGrupos();
+            const gruposGuardados = tempGrupos.filter(grupo => grupo.local === "DOOM");
+            const gruposCreados = tempGrupos.filter(grupo => grupo.local !== "DOOM");
+            //console.log({gruposCreados, gruposGuardados});
+
+            setGrupos(gruposCreados);
+            setGruposGuardados(gruposGuardados);
         } catch (error) {
             lanzarAlerta("Error al obtener la lista de grupos");
         }
@@ -120,7 +126,11 @@ const Grupos = ({ navigation }) => {
     }
 
     function updateGrupos(nuevosGrupos) {
-        setGrupos(nuevosGrupos); // Actualizamos los grupos con los resultados de la búsqueda
+        const gruposGuardados = nuevosGrupos.filter(grupo => grupo.local === "DOOM");
+        const gruposCreados = nuevosGrupos.filter(grupo => grupo.local !== "DOOM");
+
+        setGrupos(gruposCreados);
+        setGruposGuardados(gruposGuardados);
     };
 
     function handleTextChange(text) {
@@ -274,13 +284,13 @@ const Grupos = ({ navigation }) => {
                         <FlatList
                             data={grupos}
                             numColumns={1}
-                            keyExtractor={(item, index) => index.toString()}
+                            keyExtractor={(item, index) => item.id.toString()}
                             renderItem={({ item, index }) => (
                                 <Grupo
-                                    key={index}
+                                    key={item.id.toString()}
                                     animacion={unoAnim}
                                     navigation={navigation}
-                                    nombre={item}
+                                    nombre={item.nombre}
                                     seleccionar={seleccionar}
                                     deseleccionar={deseleccionar}
                                     showCheckBox={showCheckBox}
@@ -290,7 +300,23 @@ const Grupos = ({ navigation }) => {
                         />
                     </TabView.Item>
                     <TabView.Item style={[styles.TabViewcontainer]}>
-                        
+                        <FlatList
+                            data={gruposGuardados}
+                            numColumns={1}
+                            keyExtractor={(item, index) => item.id.toString()}
+                            renderItem={({ item, index }) => (
+                                <Grupo
+                                    key={item.id.toString()}
+                                    animacion={unoAnim}
+                                    navigation={navigation}
+                                    nombre={item.nombre}
+                                    seleccionar={seleccionar}
+                                    deseleccionar={deseleccionar}
+                                    showCheckBox={showCheckBox}
+                                    selectionMode={toggleSelectionMode}
+                                />
+                            )}
+                        />
                     </TabView.Item>
                 </TabView>
 
