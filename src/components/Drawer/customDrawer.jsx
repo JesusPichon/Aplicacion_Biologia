@@ -73,7 +73,7 @@ const CustomDrawer = (props) => {
           }}
         />
         <DrawerItem
-          label="FAQ"
+          label="Acerca de"
           onPress={() => {
             props.navigation.navigate('FAQ');
           }}
