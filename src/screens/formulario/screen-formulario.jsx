@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import styles from "./style-formulario";
 import TextInputCustom from "../../components/textInputCustome";
 import { principal, principalFePro, secundario, tercero } from "../../styles/style-colors";
@@ -179,8 +179,12 @@ const Formulario = ({navigation, route}) => {
     }
     }, [cacheData]);
 
-    const containerStyle = { borderRadius: 30, marginHorizontal: 10,}; // Estilo del título de la pestaña
+    //const containerStyle = { borderRadius: 30, marginHorizontal: 10,}; // Estilo del título de la pestaña
     
+    const titulos = useMemo(() => [
+        'Datos generales', 'Ubicación', 'Ambiente', 'Información detallada', 'Datos del colector', 'Información extra'
+    ],[]);
+
     const handleIndexChange = (e) => {
         if (e >= 0 && e < 6) { // Verifica si el nuevo índice está dentro de los límites
             setIndex(e);
@@ -208,36 +212,15 @@ const Formulario = ({navigation, route}) => {
                     style={{ marginTop: 5, marginHorizontal: 10 }}
                     scrollable={true}
                 >
-                    <Tab.Item
-                        title="Datos Generales"
-                        titleStyle={{ fontSize: 15, fontWeight: index === 0 ? 'bold' : 'normal', color: index === 0 ? '#FFF' : colorQuinario, }}
-                        containerStyle={[containerStyle, { backgroundColor: index === 0 ? colorTerciario : colorSecundario, }]}
-                    />
-                    <Tab.Item
-                        title="Ubicación"
-                        titleStyle={{ fontSize: 15, fontWeight: index === 1 ? 'bold' : 'normal', color: index === 1 ? '#FFF' : colorQuinario, }}
-                         containerStyle={[containerStyle, { backgroundColor: index === 1 ? colorTerciario : colorSecundario, }]}
-                    />
-                    <Tab.Item
-                        title="Ambiente"
-                        titleStyle={{ fontSize: 15, fontWeight: index === 2 ? 'bold' : 'normal', color: index === 2 ? '#FFF' : colorQuinario, }}
-                        containerStyle={[containerStyle, { backgroundColor: index === 2 ? colorTerciario : colorSecundario, }]}
-                    />
-                    <Tab.Item
-                        title="Información Detallada"
-                        titleStyle={{ fontSize: 15, fontWeight: index === 3 ? 'bold' : 'normal', color: index === 3 ? '#FFF' : colorQuinario, }}
-                        containerStyle={[containerStyle, { backgroundColor: index === 3 ? colorTerciario : colorSecundario, }]}
-                    />
-                    <Tab.Item
-                        title="Datos de Colector(es)"
-                        titleStyle={{ fontSize: 15, fontWeight: index === 4 ? 'bold' : 'normal', color: index === 4 ? '#FFF' : colorQuinario, }}
-                        containerStyle={[containerStyle, { backgroundColor: index === 4 ? colorTerciario : colorSecundario, }]}
-                    />
-                    <Tab.Item
-                        title="Información Adicional"
-                        titleStyle={{ fontSize: 15, fontWeight: index === 5 ? 'bold' : 'normal', color: index === 5 ? '#FFF' : colorQuinario, }}
-                        containerStyle={[containerStyle, { backgroundColor: index === 5 ? colorTerciario : colorSecundario, }]}
-                    />
+                    {titulos.map((title, idx) => (
+                        <Tab.Item 
+                            key={idx}
+                            title={title} 
+                            titleStyle={{fontSize: 15, fontWeight: index === idx ? 'bold' : 'normal', color: 'white'}}
+                            containerStyle={{backgroundColor: colorTerciario, borderRadius:30, marginHorizontal:5, opacity:index === idx ? 1 : 0.3}}
+                        />
+                    ))}
+                    
                 </Tab>
 
                 <TabView value={index} onChange={handleIndexChange} animationType="spring" >
