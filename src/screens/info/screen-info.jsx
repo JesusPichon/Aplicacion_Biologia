@@ -592,8 +592,14 @@ const InfColecta = ({ navigation, route }) => {
     ], []);
 
     const titulos = useMemo(() => [
-        'Datos generales', 'Ubicación', 'Ambiente', 'Información detallada', 'Datos del colector', 'Información extra'
+        'Datos generales', 'Ubicación', 'Ambiente', 'Información detallada', 'Datos de Colector(es)', 'Información Adicional'
     ],[]);
+
+    const handleIndexChange = (e) => {
+        if (e >= 0 && e < 6) { // Verifica si el nuevo índice está dentro de los límites
+            setIndex(e);
+        }
+    };
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: colorPrimario }}>
@@ -613,10 +619,10 @@ const InfColecta = ({ navigation, route }) => {
                 <>
                     <Tab
                         value={index}
-                        onChange={setIndex}
+                        onChange={handleIndexChange}
                         indicatorStyle={{ backgroundColor: colorQuinario }}
                         disableIndicator={true}
-                        style={{marginVertical:10}}
+                        style={{marginVertical:15, marginHorizontal: 10}}
                         scrollable={true}
                     >
                         {titulos.map((title, idx) => (
@@ -624,7 +630,7 @@ const InfColecta = ({ navigation, route }) => {
                                 key={idx}
                                 title={title} 
                                 titleStyle={{fontSize: 15, fontWeight: index === idx ? 'bold' : 'normal', color: 'white'}}
-                                containerStyle={{backgroundColor: colorTerciario, borderRadius:20, marginHorizontal:5, opacity:index === idx ? 1 : 0.3}}
+                                containerStyle={{backgroundColor: colorTerciario, borderRadius:30, marginHorizontal:5, opacity:index === idx ? 1 : 0.3}}
                             />
                         ))}
                     </Tab>
@@ -634,7 +640,7 @@ const InfColecta = ({ navigation, route }) => {
                     ) : (
                         <View style={{flex:1}}>
                             <View style={{flex:9}}>
-                                <TabView value={index} onChange={setIndex} animationType="spring">
+                                <TabView value={index} onChange={handleIndexChange} animationType="spring">
                                     {sections.map((section, idx) => (
                                         <TabView.Item key={idx} 
                                             style={{
