@@ -48,6 +48,7 @@ const Explorar = ({ navigation }) => {
     const [grupos, setGrupos] = useState([]);
     const [misGrupos, setMisGrupos] = useState([]);
     const [nombreGrupo, setNombreGrupo] = useState('');
+    const [buscar, setBuscar] = useState('');
     const [listaBorrarGrupos, setListaBorrarGrupos] = useState([]);
 
     //Estado de la funcionalidad importar
@@ -63,17 +64,22 @@ const Explorar = ({ navigation }) => {
 
     const ITEMS_POR_PAGINA = 5;
 
-    const cargarGrupos = async (nuevaPagina) => {
+    const cargarGrupos = async (nuevaPagina, vaciar = false) => {
+        console.log({sinMasGrupos, cargando})
         if (sinMasGrupos || cargando) return;
     
         setCargando(true);
     
         try {
-            const nuevosGrupos = await controller.obtenerGruposDeOtros(nuevaPagina, ITEMS_POR_PAGINA);
-            if (pagina >= nuevosGrupos.totalPages) {
+            const nuevosGrupos = await controller.obtenerGruposDeOtros(nuevaPagina, ITEMS_POR_PAGINA, buscar);
+            if (nuevaPagina >= nuevosGrupos.totalPages) {
                 setSinMasGrupos(true);
             }
-            setGrupos((prevGrupos) => [...prevGrupos, ...nuevosGrupos.items]);
+            if (vaciar) {
+                setGrupos([...nuevosGrupos.items]);
+            }else {
+                setGrupos((prevGrupos) => [...prevGrupos, ...nuevosGrupos.items]);
+            }
         } catch (error) {
             lanzarAlerta("Error al obtener la lista de grupos");
         } finally {
@@ -81,17 +87,21 @@ const Explorar = ({ navigation }) => {
         }
     };
 
-    const cargarMisGrupos = async (nuevaPagina) => {
+    const cargarMisGrupos = async (nuevaPagina, vaciar = false) => {
         if (sinMasMisGrupos || cargando) return;
     
         setCargando(true);
     
         try {
-            const nuevosGrupos = await controller.obtenerMisGrupos(nuevaPagina, ITEMS_POR_PAGINA);
+            const nuevosGrupos = await controller.obtenerMisGrupos(nuevaPagina, ITEMS_POR_PAGINA, buscar);
             if (paginaMisGrupos >= nuevosGrupos.totalPages) {
                 setSinMasMisGrupos(true);
             }
-            setMisGrupos((prevGrupos) => [...prevGrupos, ...nuevosGrupos.items]);
+            if (vaciar) {
+                setMisGrupos([...nuevosGrupos.items]);
+            }else{
+                setMisGrupos((prevGrupos) => [...prevGrupos, ...nuevosGrupos.items]);
+            }
         } catch (error) {
             lanzarAlerta("Error al obtener la lista de grupos");
         } finally {
@@ -103,7 +113,7 @@ const Explorar = ({ navigation }) => {
         if (!sinMasGrupos && !cargando) {
             const nuevaPagina = pagina + 1;
             setPagina(nuevaPagina);
-            cargarGrupos(nuevaPagina);
+            cargarGrupos(nuevaPagina, false);
         }
     };
 
@@ -117,6 +127,7 @@ const Explorar = ({ navigation }) => {
 
     function handleTextChange(text) {
         setNombreGrupo(text);
+        setSinMasGrupos(false);
         setError(''); // Limpiar el mensaje de error cuando se ingresa texto
     };
 
@@ -149,9 +160,9 @@ const Explorar = ({ navigation }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                startAnimations();
-                await cargarGrupos();
-                await cargarMisGrupos();
+                console.log("cargando grupos " + buscar)
+                await cargarGrupos(pagina, true);
+                await cargarMisGrupos(paginaMisGrupos, true);
                 setListaBorrarGrupos([]);
             } catch (error) {
                 console.error("Error al cargar datos:", error);
@@ -159,8 +170,20 @@ const Explorar = ({ navigation }) => {
         };
     
         fetchData();
+    }, [buscar]);
+
+    useEffect(() => {
+        startAnimations();
     }, []);
 
+    const updateSearch = async (data) => {
+        console.log(data[0]);
+        setPagina(1);
+        setSinMasGrupos(false);
+        setPaginaMisGrupos(1);
+        setSinMasMisGrupos(false);
+        setBuscar(data[0]);
+    }
 
     const containerStyle = { borderRadius: 30, marginHorizontal: 10,}; // Estilo del título de la pestaña
     
@@ -182,9 +205,7 @@ const Explorar = ({ navigation }) => {
                             onPress={() => navigation.openDrawer()}
                         />
                     </View>
-                    {/*
-                    <BarraBusqueda titulo={'Buscar grupo'} pantalla={'grupos'} />
-                    */}
+                    <BarraBusqueda titulo={'Buscar grupo'} pantalla={'explorar'} onResult={updateSearch} />
                 </View>
             </Animated.View>
             
@@ -229,7 +250,7 @@ const Explorar = ({ navigation }) => {
                                 />
                             )}
                             onEndReached={() => {handleLoadMore()}}
-                            onEndReachedThreshold={0.7}
+                            onEndReachedThreshold={0.5}
                             ListFooterComponent={cargando && <ActivityIndicator size="large" color="#0000ff" />}
                         />
                     </TabView.Item>
@@ -251,7 +272,7 @@ const Explorar = ({ navigation }) => {
                                 />
                             )}
                             onEndReached={() => {handleLoadMoreMisGrupos()}}
-                            onEndReachedThreshold={0.7}
+                            onEndReachedThreshold={0.5}
                             ListFooterComponent={cargando && <ActivityIndicator size="large" color="#0000ff" />}
                         />
                     </TabView.Item>

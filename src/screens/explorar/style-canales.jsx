@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         borderTopRight: 30,
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
-        paddingBottom: 40, 
+        paddingBottom: 0, 
     },
     container1: {
         paddingHorizontal: paddingHorizontal, // Ajusta el relleno horizontal según tus necesidades
