@@ -49,14 +49,19 @@ const TomasExplorar = ({ navigation, route }) => {
         if (page <= numPaginas && !loading){
             setLoading(true);
             try {
-                const tomas = await controller.ObtenerTomas(idGrupos, pageNumber, numeroTomas);
-                setListTomas((prevGrupos) => [...prevGrupos, ...tomas.items]);
-                setNumPaginas(tomas.totalPages)
-                setLoading(false);
-                setProgreso(1);
+                const tomas = await controller.ObtenerTomas(idGrupos, pageNumber, numeroTomas, buscar, campo);
+                setNumPaginas(tomas.totalPages);
+                if(clearList){
+                    setListTomas([...tomas.items]);
+                }else{
+                    setListTomas((prevGrupos) => [...prevGrupos, ...tomas.items]);
+                }
             } catch (error) {
                 setLoading(false);
                 lanzarAlerta("Error al obtener la lista de tomas.");
+            } finally {
+                setLoading(false);
+                setProgreso(1);
             }
         }
         setLoading(false);
@@ -95,11 +100,12 @@ const TomasExplorar = ({ navigation, route }) => {
         setListSelectDelete(listSelectDelete.filter((item) => item !== toma));
     };
 
-    const updateTomas = (dataRecibida) => {
-        setBuscar(dataRecibida[0]);
-        setCampo(dataRecibida[1]);
-        setProgreso(0);
-    };
+    const updateTomas = async (data) => {
+        console.log(data);
+        setPage(1);
+        setCampo(data[1]);
+        setBuscar(data[0]);
+    }
 
     function lanzarAlerta(mensaje) {
         setTimeout(() => {
@@ -111,8 +117,17 @@ const TomasExplorar = ({ navigation, route }) => {
     }
 
     useEffect(() => {
-        cargarTomas(page);
-    }, []);
+        const fetchData = async () => {
+            try {
+                console.log("cargando tomas " + buscar)
+                await cargarTomas(page, true);
+            } catch (error) {
+                console.error("Error al cargar datos:", error);
+            }
+        };
+    
+        fetchData();
+    }, [buscar]);
 
     function handleGuardarGrupo(){
         setOpenModal(true);
@@ -182,24 +197,7 @@ const TomasExplorar = ({ navigation, route }) => {
                         onPress={() => navigation.openDrawer()}
                     />
                 </View>
-                <View style={{width:'80%', justifyContent:"center", alignItems:'center'}}>
-                <Button
-                    icon={<Icon name="save" size={15} color={colorPrimario} />}
-                    buttonStyle={{backgroundColor: colorQuinario, borderRadius: 5}}
-                    containerStyle={{backgroundColor: colorQuinario, width:'75%'}}
-                    loadingProps={{ animating: true }}
-                    onPress={() => handleGuardarGrupo()}
-                    title="Guardar grupo"
-                    titleStyle={{ marginHorizontal: 5, color:colorPrimario }}
-                />
-                </View>
-                {/*
-                <BarraBusqueda
-                    titulo={'Buscar en las tomas'}
-                    pantalla={idGrupos}
-                    onResult={updateTomas} 
-                />
-                */}
+                <BarraBusqueda titulo={'Buscar tomas'} pantalla={'explorar'} onResult={updateTomas} />
             </View>
 
             <View style={{ flex: 1, backgroundColor: colorSecundario, borderTopLeftRadius: 20, borderTopRightRadius: 20, paddingTop: 60}}>
@@ -231,10 +229,21 @@ const TomasExplorar = ({ navigation, route }) => {
                             cargarTomas(nextPage);
                         }
                     }}
-                    onEndReachedThreshold={0.8}
+                    onEndReachedThreshold={0.5}
                     ListHeaderComponent={loading && <LinearProgress color={colorCuaternario} />}
                     ListHeaderComponentStyle={{marginBottom:15}}
                 />
+                <View style={{width:'100%', justifyContent:"center", alignItems:'center', margin: 5}}>
+                    <Button
+                        icon={<Icon name="save" size={15} color={colorPrimario} />}
+                        buttonStyle={{backgroundColor: colorQuinario, borderRadius: 5}}
+                        containerStyle={{backgroundColor: colorQuinario, width:'75%'}}
+                        loadingProps={{ animating: true }}
+                        onPress={() => handleGuardarGrupo()}
+                        title="Guardar grupo"
+                        titleStyle={{ marginHorizontal: 5, color:colorPrimario }}
+                    />
+                </View>
             </View>
             <VentanaFlotante
                 openModal={openModal}

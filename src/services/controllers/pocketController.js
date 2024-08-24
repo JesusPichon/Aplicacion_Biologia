@@ -44,11 +44,12 @@ class PocketController {
 
     // Tomas
 
-    async ObtenerTomas(id, pagina, itemsPorPagina) {
+    async ObtenerTomas(id, pagina, itemsPorPagina, buscar, campo) {
         try {
+            const filter = `id_grupo = "${id}" ${buscar ? ` && ${campo} ~ "${buscar}"` : ''}`;
             const resultList = await pb.collection('tomas').getList(pagina, itemsPorPagina, {
                 sort: '-created',
-                filter: `id_grupo = "${id}"`,
+                filter: filter,
             });
             return resultList;
         } catch (error) {

@@ -65,7 +65,6 @@ const Explorar = ({ navigation }) => {
     const ITEMS_POR_PAGINA = 5;
 
     const cargarGrupos = async (nuevaPagina, vaciar = false) => {
-        console.log({sinMasGrupos, cargando})
         if (sinMasGrupos || cargando) return;
     
         setCargando(true);
