@@ -3,8 +3,10 @@ import { principal, tercero, cuarto } from '../../styles/style-colors';
 import imagenEquipo from '../../assets/images/logoEquipo.jpg'
 import imagenBiologia from '../../assets/images/buap.png'
 import { useSelector, useDispatch } from 'react-redux';
-import React, { useState } from 'react';
-
+import VideoBioCollector from '../../assets/video/BioCollector.mp4'
+import React, { useState, useRef } from 'react';
+import { Icon } from "react-native-elements";
+import Video from 'react-native-video';
 import {
     Text,
     View,
@@ -115,6 +117,30 @@ const Nosotros = () => {
         }
     });
 
+    const videoRef = useRef(null);
+    const [paused, setPaused] = useState(true);
+    const [currentTime, setCurrentTime] = useState(0);
+
+    const handlePlayPause = () => {
+        setPaused(!paused);
+    };
+
+    const handleRewind = () => {
+        if (videoRef.current) {
+            videoRef.current.seek(currentTime - 10);
+        }
+    };
+
+    const handleForward = () => {
+        if (videoRef.current) {
+            videoRef.current.seek(currentTime + 10);
+        }
+    };
+
+    const onProgress = (data) => {
+        setCurrentTime(data.currentTime);
+    };
+
     return (
         <View style={{flex:1, marginTop:20}}>
             {/*logo*/}
@@ -153,8 +179,51 @@ const Nosotros = () => {
                 ))}
             </View>
             {/* Primeros pasos */}
-            <View style={{alignItems:'center', paddingHorizontal:20}}>
+            <View style={{alignItems:'center', paddingHorizontal:20, paddingVertical:40}}>
                 <Text style={[localStyles.Titulo, localStyles.Borde]}>Primeros pasos</Text>
+                <Video
+                    ref={videoRef}
+                    source={require('../../assets/video/BioCollector.mp4')}
+                    style={{ width: '100%', height: 200 }}
+                    paused={paused}
+                    onProgress={onProgress}
+                    repeat={true}
+                    audioOutput='speaker'
+                />
+
+                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', width:'100%', backgroundColor:colorQuinario }}>
+                    <Icon
+                        name='fast-rewind'
+                        type='material'
+                        color={colorPrimario}
+                        size={30}
+                        onPress={handleRewind}
+                    />
+                    {paused ?
+                        <Icon
+                            name='play-arrow'
+                            type='material'
+                            color={colorPrimario}
+                            size={30}
+                            onPress={handlePlayPause}
+                        />
+                    :
+                        <Icon
+                            name='pause'
+                            type='material'
+                            color={colorPrimario}
+                            size={30}
+                            onPress={handlePlayPause}
+                        />
+                    }
+                    <Icon
+                        name='fast-forward'
+                        type='material'
+                        color={colorPrimario}
+                        size={30}
+                        onPress={handleForward}
+                    />
+                </View>
             </View>
         </View>
     );
