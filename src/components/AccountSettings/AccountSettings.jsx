@@ -20,10 +20,11 @@ const AccountSettings = ({ control, handleSubmit, onSubmit, errors, isAuthentica
                     rules={{ required: 'Nombre de usuario o Email obligatorio', }}
                     render={({field: {onChange, onBlur, value}}) => (
                       <TextInput
-                        style={[styles.input, {backgroundColor: theme.colorPrimario, borderColor: theme.colorTerciario, color: theme.colorTexto, }]}
+                      style={[styles.input, {backgroundColor: theme.colorPrimario, borderColor: 'grey', color: 'grey', }]}
                         onBlur={onBlur}
                         onChangeText={onChange}
                         value={value}
+                        editable={false}
                       />
                     )}
                   />

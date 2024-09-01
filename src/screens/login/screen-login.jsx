@@ -15,7 +15,6 @@ import {
 } from "react-native";
 import animaciones from '../../components/animaciones/animaciones';
 import styles  from './style-login'
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm, Controller } from 'react-hook-form';
 import { loginUser, registerUser } from '../../services/auth/AuthFunctions';
@@ -58,18 +57,13 @@ const Login = ({ navigation }) => {
     });
 
     const [cargando, setCargando] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
 
     const onSubmit = async (data) => {
-        setCargando(true);
-        setErrorMessage('');
-        
+        setCargando(true);  
         if (isLogin) {
             Keyboard.dismiss();
             await dispatch(loginUser(data.email, data.password));
-            console.log("Se comprueba que el AuthStore es valido");
-            const AuthStatus = pb.authStore.isValid;;
-            console.log(AuthStatus);
+            const AuthStatus = pb.authStore.isValid;
             if (AuthStatus === true) {
                 reset();
                 navigation.goBack();
@@ -77,16 +71,13 @@ const Login = ({ navigation }) => {
                 reset();
             }
         } else {
+            Keyboard.dismiss();
             await dispatch(registerUser(data.username, data.email, data.password, data.passwordConfirm));
             setIsLogin(true);
             reset();
         }
         setCargando(false);
     };
-
-    useEffect(() => {
-        setErrorMessage(error);
-    }, [error]);
 
     const rulesPasswordLogin = { required: 'La contraseña es obligatoria', }
     const rulesPasswordRegister = { 
@@ -99,11 +90,6 @@ const Login = ({ navigation }) => {
         required: 'Email obligatorio',
         pattern: { value: /^\S+@\S+$/i, message: 'Correo electrónico no válido'},
     }
-
-    // useEffect(() => {
-    //     console.log('user:', user);
-    //         console.log('token', token);
-    // }, [user, token]);
 
     return (
         <ImageBackground source={imageBackgroundInicio} resizeMode="cover" style={{ flex: 1, width: '100%', height: '100%' }}>
@@ -207,7 +193,6 @@ const Login = ({ navigation }) => {
                                 </View>
                             )}
                             {errors.passwordConfirm && <Text style={styles.errorText}>{errors.passwordConfirm.message}</Text>}
-                            {errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
                             {cargando ? (
                                 <ActivityIndicator size="large" color={colorTerciario} />
                             ) : (
@@ -222,7 +207,6 @@ const Login = ({ navigation }) => {
                                 onPress={() => {
                                     setIsLogin(!isLogin);
                                     reset();
-                                    setErrorMessage("");
                                 }}>
                                 <Text style={[styles.buttonText]}>{isLogin ? '¿No tienes cuenta? Regístrate' : '¿Ya tienes cuenta? Ingresa'}</Text>
                             </TouchableOpacity>

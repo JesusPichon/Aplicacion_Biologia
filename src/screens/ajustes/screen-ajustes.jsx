@@ -111,7 +111,12 @@ const Ajustes = ({navigation}) => {
         console.log("ID:", pb.authStore.model.id);
         const updatedUser = await updateUser(pb.authStore.model.id, updateData);
 
-        Alert.alert('Éxito', 'Tus datos han sido actualizados');
+        setTimeout(() => {
+            Snackbar.show({
+              text: 'Éxito, Tus datos han sido actualizados',
+                duration: Snackbar.LENGTH_LONG,
+            });
+        }, 500);
 
         // Si se cambió la contraseña, reautenticar al usuario
         if (updateData.password) {
@@ -123,19 +128,25 @@ const Ajustes = ({navigation}) => {
         }
         reset();
       } else {
-        Alert.alert('Sin cambios', 'No se realizaron cambios en los datos.');
+        Snackbar.show({
+          text: 'Sin cambios, No se realizaron cambios en los datos.',
+            duration: Snackbar.LENGTH_LONG,
+        });
       }
     } catch (error) {
-      console.error('Error al actualizar los datos:', error);
-      Alert.alert('Error', 'Hubo un problema al actualizar tus datos');
+      //console.error('Error al actualizar los datos:', error);
+      setTimeout(() => {
+        Snackbar.show({
+          text: 'Error, Hubo un problema al actualizar tus datos',
+            duration: Snackbar.LENGTH_LONG,
+        });
+    }, 500);
     }
   };
 
   useEffect(() => {
     // Si el usuario está autenticado, carga los valores actuales en el formulario
-    console.log('valor de user:', user);
-    console.log('AuthStatus:', pb.authStore.isValid);
-    if (pb.authStore.isValid) {
+    if (isAuthenticated) {
       reset({
         username: user || '',
         email: pb.authStore.model.email || '',

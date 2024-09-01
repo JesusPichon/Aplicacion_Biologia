@@ -132,13 +132,13 @@ const Inicio = ({ navigation }) => {
             try {
                 // await AsyncStorage.removeItem('userToken');
                 // dispatch(logoutUser());
-                console.log('Checking authentication...');
                 await dispatch(checkUserAuthentication());
             } catch (error) {
                 console.error('Error checking authentication:', error);
                 // Handle the error here, e.g. show an error message to the user
             }
         };
+
         checkAuth();
     }, [dispatch]);    
 

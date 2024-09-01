@@ -2,19 +2,35 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { startLoading, endLoading, loginSuccess, loginFailure, logout } from '../redux/slices/authSlice';
 import pb from '../PocketBase/pocketbase';
 import Snackbar from 'react-native-snackbar';
+import { ClientResponseError } from 'pocketbase';
 
 export const loginUser = (email, password) => async (dispatch) => {
     dispatch(startLoading());
     try {
         const authData = await pb.collection('users').authWithPassword(email, password);
-        console.log("Autenticacion CORRECTA");
-        await AsyncStorage.setItem('userToken', pb.authStore.token);
-        const username = pb.authStore.model.username;
-        dispatch(loginSuccess({ user: username, token: pb.authStore.token }));
-
+        if (authData) {
+            console.log("Autenticacion CORRECTA");
+            await AsyncStorage.setItem('userToken', pb.authStore.token);
+            const username = pb.authStore.model.username;
+            dispatch(loginSuccess({ user: username, token: pb.authStore.token }));
+        }
     } catch (error) {
-        if (error.message.includes('Failed to authenticate')) {
-            dispatch(loginFailure('El nombre de usuario o contraseña son incorrectos'));
+        if (error instanceof ClientResponseError) {
+            if (error.message.includes('Failed to authenticate')) {
+                Snackbar.show({
+                    text: 'Correo o contraseña incorrectos.',
+                    duration: Snackbar.LENGTH_LONG,
+                    backgroundColor: '#ff0000',
+                });
+                dispatch(loginFailure('Correo o contraseña incorrectos.'));
+            }else {
+                Snackbar.show({
+                    text: 'Error al procesar la solicitud.',
+                    duration: Snackbar.LENGTH_LONG,
+                    backgroundColor: '#ff0000',
+                });
+                dispatch(loginFailure('Error al procesar la solicitud.'));
+            }
         }
     }
 };
@@ -31,7 +47,47 @@ export const registerUser = (username, email, password, passwordConfirm) => asyn
         const newUser = await pb.collection('users').create(newUserData);
         
     } catch (error) {
-        dispatch(loginFailure(error.message));
+        if (error instanceof ClientResponseError) {
+            if (error.message.includes('Failed to create record')) {
+                const { data } = error;  // Extraer los datos del error
+                let errorMessage = '';
+
+                // Verificar si hay errores en el email y username
+                const emailError = data?.data.email?.message;
+                const usernameError = data?.data.username?.message;
+
+                if (emailError && usernameError) {
+                    // Ambos errores están presentes
+                    errorMessage = "El correo y el nombre de usuario son inválidos o ya están en uso.";
+                } else if (emailError) {
+                    // Solo el error de correo
+                    errorMessage = "El correo es inválido o ya está en uso.";
+                } else if (usernameError) {
+                    // Solo el error de nombre de usuario
+                    errorMessage = "El nombre de usuario es inválido o ya está en uso.";
+                }
+
+                if (errorMessage) {
+                    // Mostrar un solo Snackbar con el mensaje combinado
+                    console.error('Mensaje de error final:', errorMessage);
+                    // Aquí llamas a tu función para mostrar el Snackbar con el mensaje
+                    Snackbar.show({
+                        text: errorMessage,
+                        duration: Snackbar.LENGTH_LONG,
+                        backgroundColor: '#ff0000',
+                    });
+                }
+            }else{
+                Snackbar.show({
+                    text: 'Error al procesar la solicitud.',
+                    duration: Snackbar.LENGTH_LONG,
+                    backgroundColor: '#ff0000',
+                });
+                dispatch(loginFailure('Error al procesar la solicitud.'));
+            }
+        } else {
+            console.error('Error desconocido:', error);
+        }
     }
 };
 
@@ -43,7 +99,6 @@ export const logoutUser = () => async (dispatch) => {
 
 export const checkUserAuthentication = () => async (dispatch) => {
     try {
-        console.log("Inicio de autenticacion, cargando...");
         dispatch(startLoading());
         const token = await AsyncStorage.getItem('userToken');
         if (token) {
@@ -59,15 +114,18 @@ export const checkUserAuthentication = () => async (dispatch) => {
             } else {
                 dispatch(logout());
             }
-            console.log("Fin de autenticacion, Carga terminadada...");
             dispatch(endLoading());
         } else {
             dispatch(logout());
-            console.log("Fin de autenticacion, Carga terminadada...");
             dispatch(endLoading());
         }
     } catch (error) {
-        console.error('Error en checkUserAuthentication:', error);
+        //console.error('Error en checkUserAuthentication:', error);
+        Snackbar.show({
+            text: 'Error recuperar la sesión.',
+            duration: Snackbar.LENGTH_LONG,
+            backgroundColor: '#ff0000',
+        });
         dispatch(endLoading());
         // Manejo de errores
     }
