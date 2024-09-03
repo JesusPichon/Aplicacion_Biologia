@@ -1,18 +1,18 @@
 // CustomDrawer.js
 import React from 'react';
-import { View, Text, Image } from 'react-native';
-import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
-import { useSelector, useDispatch } from 'react-redux';
-import { Icon } from 'react-native-elements';
-import { quintoFePro, principalFePro } from '../../styles/style-colors';
-import { logoutUser } from '../../services/auth/AuthFunctions';
+import {View, Text, Image} from 'react-native';
+import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
+import {useSelector, useDispatch} from 'react-redux';
+import {Icon} from 'react-native-elements';
+import {quintoFePro, principalFePro} from '../../styles/style-colors';
+import {logoutUser} from '../../services/auth/AuthFunctions';
 
-const CustomDrawer = (props) => {
+const CustomDrawer = props => {
   const {themes, currentTheme} = useSelector(state => state.theme);
   dispatch = useDispatch();
 
   const theme = themes[currentTheme] || themes.light;
-  const { 
+  const {
     colorPrimario,
     colorSecundario,
     colorTerciario,
@@ -21,7 +21,7 @@ const CustomDrawer = (props) => {
     logoInicio,
   } = theme;
 
-  const { routeNames, index } = props.state;
+  const {routeNames, index} = props.state;
   const focused = routeNames[index];
 
   const handleLogout = async () => {
@@ -35,7 +35,9 @@ const CustomDrawer = (props) => {
     }
   };
 
-  const { isAuthenticated, loading, error, token } = useSelector((state) => state.auth);
+  const {isAuthenticated, loading, error, token} = useSelector(
+    state => state.auth,
+  );
 
   return (
     <DrawerContentScrollView
@@ -56,6 +58,10 @@ const CustomDrawer = (props) => {
           label="Mis Grupos"
           onPress={() => {
             props.navigation.navigate('MisGrupos');
+            props.navigation.reset({
+              index: 0,
+              routes: [{name: 'MisGrupos'}],
+            });
           }}
           focused={focused === 'MisGrupos'}
           icon={({focused, color, size}) => (
@@ -118,6 +124,10 @@ const CustomDrawer = (props) => {
               label="Explorar"
               onPress={() => {
                 props.navigation.navigate('Explorar');
+                props.navigation.reset({
+                  index: 0,
+                  routes: [{name: 'Explorar'}],
+                });
               }}
               focused={focused === 'Explorar'}
               icon={({focused, color, size}) => (
