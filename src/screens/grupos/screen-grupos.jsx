@@ -11,8 +11,9 @@ import Snackbar from 'react-native-snackbar';
 import GrupoController from '../../services/controllers/grupoController';
 import {SpeedDial} from '@rneui/themed';
 import {Tab, TabView, Chip} from '@rneui/themed';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {Icon} from 'react-native-elements';
+import {setUpdate} from '../../services/redux/slices/updateSlice';
 
 const Grupos = ({navigation}) => {
   const {currentTheme, themes} = useSelector(state => state.theme);
@@ -26,6 +27,8 @@ const Grupos = ({navigation}) => {
     colorCuaternario,
     colorQuinario,
   } = theme;
+
+  const dispatch = useDispatch();
 
   // animaciones
   const {unoAnim, startAnimations} = animaciones();
@@ -98,6 +101,7 @@ const Grupos = ({navigation}) => {
         await cargarGrupos();
         if (isImporting === true) {
           controller.importTomas(nombre, data);
+          dispatch(setUpdate());
           setIsImporting(false);
         }
       }

@@ -20,6 +20,8 @@ const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, s
     colorQuinario,
   } = theme;
 
+  const { flagUpdate } = useSelector((state) => state.update);
+
   const [checked, setChecked] = useState(false);
   const [showExportOptions, setShowExportOptions] = useState(false);
   const [totalTomas, setTotalTomas] = useState(0);
@@ -48,7 +50,7 @@ const Grupo = ({ navigation, nombre, seleccionar, deseleccionar, showCheckBox, s
     }else{
       setTotalTomas(item.numero_tomas);
     }
-  }, [nombre]);
+  }, [flagUpdate]);
 
   const handleExportOptions = () => {
     setShowExportOptions(prevState => !prevState); // Alterna la visibilidad

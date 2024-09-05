@@ -20,7 +20,8 @@ import seleccion from "../../components/Selecionar-Imagenes/selecion";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCache } from "../../services/storage/CacheContext";
 import { Tab, TabView, Icon, } from '@rneui/themed';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { setUpdate } from "../../services/redux/slices/updateSlice";
 
 const Formulario = ({navigation, route}) => {
     const [index, setIndex] = React.useState(0); // Ensure index is initialized
@@ -35,6 +36,8 @@ const Formulario = ({navigation, route}) => {
         colorCuaternario,
         colorQuinario,
     } = theme;
+
+    const dispatch = useDispatch();
 
     // Estado para almacenar la URI de la imagen seleccionada
     const [imagenUri, setImagenUri] = useState(null); //El valor es null en caso de que el usuario no seleccione alguna imagen
@@ -168,6 +171,7 @@ const Formulario = ({navigation, route}) => {
             })
             .catch((error) => console.error("Error insertar toma: ", error));
         
+        dispatch(setUpdate());
         navigation.goBack();
     }
 

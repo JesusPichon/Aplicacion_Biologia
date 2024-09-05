@@ -9,10 +9,12 @@ import {useSelector} from 'react-redux';
 import {Icon, Text} from 'react-native-elements';
 import Snackbar from 'react-native-snackbar';
 import animaciones from '../../components/animaciones/animaciones';
+import { setUpdate } from '../../services/redux/slices/updateSlice';
 
 const Tomas = ({navigation, route}) => {
   const {currentTheme, themes} = useSelector(state => state.theme);
   const {unoAnim, startAnimations} = animaciones();
+  const {flagUpdate} = useSelector(state => state.update);
 
   const theme = themes[currentTheme] || themes.light;
   const {colorPrimario, colorSecundario, colorCuaternario, colorQuinario} =
@@ -135,7 +137,7 @@ const Tomas = ({navigation, route}) => {
     setListSelectPrint([]);
     setListSelectDelete([]);
     setEliminar(false);
-  }, [buscar]);
+  }, [buscar, flagUpdate]);
 
   return (
     <View style={{flex: 1, backgroundColor: colorPrimario}}>
