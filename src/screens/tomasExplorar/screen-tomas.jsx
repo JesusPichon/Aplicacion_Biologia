@@ -1,30 +1,21 @@
 import {useState, useEffect} from 'react';
-import {FlatList, Touchable, View} from 'react-native';
-import {SpeedDial, LinearProgress} from '@rneui/themed';
-import {
-  principalFePro,
-  secundarioFePro,
-  terceropFePro,
-  cuartoFePro,
-  quintoFePro,
-  terceroFePro,
-} from '../../styles/style-colors';
+import {FlatList, View, Animated} from 'react-native';
+import {LinearProgress} from '@rneui/themed';
 import Toma from '../../components/Toma';
-import {imprimirTomas} from '../../components/imprimir/imprimirSeleccionando';
 import BarraBusqueda from '../../components/BarraBusqueda';
-import TomaController from '../../services/controllers/tomaController';
 import {useSelector} from 'react-redux';
 import {Button, Icon, Text} from 'react-native-elements';
 import Snackbar from 'react-native-snackbar';
 import PocketController from '../../services/controllers/pocketController';
 import GrupoController from '../../services/controllers/grupoController';
 import VentanaFlotante from '../../components/VentanaFlotante';
-import {Controller} from 'react-hook-form';
 import NetInfo from '@react-native-community/netinfo';
 import NoConexion from '../../components/noConexion/NoConexion';
+import animaciones from '../../components/animaciones/animaciones';
 
 const TomasExplorar = ({navigation, route}) => {
   const {currentTheme, themes} = useSelector(state => state.theme);
+  const {unoAnim, startAnimations} = animaciones();
 
   const theme = themes[currentTheme] || themes.light;
   const {
@@ -156,6 +147,10 @@ const TomasExplorar = ({navigation, route}) => {
     fetchData();
   }, [buscar]);
 
+  useEffect(() => {
+    startAnimations();
+  }, []);
+
   function handleGuardarGrupo() {
     setOpenModal(true);
   }
@@ -254,13 +249,14 @@ const TomasExplorar = ({navigation, route}) => {
             />
           </View>
 
-          <View
+          <Animated.View
             style={{
               flex: 1,
               backgroundColor: colorSecundario,
               borderTopLeftRadius: 20,
               borderTopRightRadius: 20,
               paddingTop: 60,
+              opacity: unoAnim,
             }}>
             <FlatList
               ListEmptyComponent={
@@ -300,9 +296,6 @@ const TomasExplorar = ({navigation, route}) => {
                 }
               }}
               onEndReachedThreshold={0.5}
-              ListHeaderComponent={
-                loading && <LinearProgress color={colorCuaternario} />
-              }
               ListHeaderComponentStyle={{marginBottom: 15}}
             />
             <View
@@ -322,7 +315,8 @@ const TomasExplorar = ({navigation, route}) => {
                 titleStyle={{marginHorizontal: 5, color: colorPrimario}}
               />
             </View>
-          </View>
+            {loading && <LinearProgress color={colorQuinario} />}
+          </Animated.View>
           <VentanaFlotante
             openModal={openModal}
             handleCloseModal={handleCloseModal}

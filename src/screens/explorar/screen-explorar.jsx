@@ -1,23 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  Text,
-  Animated,
-  FlatList,
-  StatusBar,
-  ActivityIndicator,
-} from 'react-native';
-import {principal, secundario} from '../../styles/style-colors';
-import {selectCsv} from '../../services/functions/import-csv';
+import {View, Text, Animated, FlatList, StatusBar} from 'react-native';
 import styles from './style-canales';
 import animaciones from '../../components/animaciones/animaciones';
 import Grupo from '../../components/Grupo';
 import BarraBusqueda from '../../components/BarraBusqueda';
-import VentanaFlotante from '../../components/VentanaFlotante';
 import Snackbar from 'react-native-snackbar';
 import PocketController from '../../services/controllers/pocketController';
-import {SpeedDial} from '@rneui/themed';
-import {Tab, TabView, Chip} from '@rneui/themed';
+import {Tab, TabView, LinearProgress} from '@rneui/themed';
 import {useSelector} from 'react-redux';
 import {Icon} from 'react-native-elements';
 import NetInfo from '@react-native-community/netinfo';
@@ -238,9 +227,8 @@ const Explorar = ({navigation}) => {
 
       {isConnected ? (
         <>
-          <Animated.View
+          <View
             style={{
-              opacity: unoAnim,
               paddingHorizontal: 10,
               marginVertical: 10,
             }}>
@@ -256,15 +244,15 @@ const Explorar = ({navigation}) => {
               </View>
               <BarraBusqueda
                 titulo={'Buscar grupo'}
-                pantalla={'explorar'}
+                pantalla={'grupos'}
                 onResult={updateSearch}
               />
             </View>
-          </Animated.View>
-          <View
+          </View>
+          <Animated.View
             style={[
               styles.secondaryContainer,
-              {backgroundColor: colorSecundario},
+              {backgroundColor: colorSecundario, opacity: unoAnim},
             ]}>
             <View style={styles.titleContainer}>
               <Text
@@ -334,11 +322,6 @@ const Explorar = ({navigation}) => {
                     handleLoadMore();
                   }}
                   onEndReachedThreshold={0.5}
-                  ListFooterComponent={
-                    cargando && (
-                      <ActivityIndicator size="large" color="#0000ff" />
-                    )
-                  }
                 />
               </TabView.Item>
               <TabView.Item style={[styles.TabViewcontainer]}>
@@ -362,15 +345,11 @@ const Explorar = ({navigation}) => {
                     handleLoadMoreMisGrupos();
                   }}
                   onEndReachedThreshold={0.5}
-                  ListFooterComponent={
-                    cargando && (
-                      <ActivityIndicator size="large" color="#0000ff" />
-                    )
-                  }
                 />
               </TabView.Item>
             </TabView>
-          </View>
+            {cargando && <LinearProgress color={colorQuinario} />}
+          </Animated.View>
         </>
       ) : (
         <NoConexion navigation={navigation} />
