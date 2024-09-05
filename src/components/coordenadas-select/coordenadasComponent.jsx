@@ -101,7 +101,7 @@ const InputCoordenadas = ({control, rules, errors, name1, name2, name3, name4, n
               control={control}
               render={({ field: { onChange, value } }) => (
                 <TextInput
-                  style={[styles.textInputCoordenadas, {borderColor: borderColor}]}
+                  style={[styles.textInputCoordenadas, {borderColor: borderColor, color: colorQuinario}]}
                   onChangeText={onChange}
                   value={value}
                   placeholder="Ingrese los grados de latitud"
@@ -120,7 +120,7 @@ const InputCoordenadas = ({control, rules, errors, name1, name2, name3, name4, n
               control={control}
               render={({ field: { onChange, value } }) => (
                 <TextInput
-                  style={[styles.textInputCoordenadas, {borderColor: borderColor}]}
+                  style={[styles.textInputCoordenadas, {borderColor: borderColor, color: colorQuinario}]}
                   onChangeText={onChange}
                   value={value}
                   placeholder="Ingrese los minutos de latitud"
@@ -139,7 +139,7 @@ const InputCoordenadas = ({control, rules, errors, name1, name2, name3, name4, n
               control={control}
               render={({ field: { onChange, value } }) => (
                 <TextInput
-                  style={[styles.textInputCoordenadas, {borderColor: borderColor}]}
+                  style={[styles.textInputCoordenadas, {borderColor: borderColor, color: colorQuinario}]}
                   onChangeText={onChange}
                   value={value}
                   placeholder="Ingrese los segundos de latitud"
@@ -187,7 +187,7 @@ const InputCoordenadas = ({control, rules, errors, name1, name2, name3, name4, n
               control={control}
               render={({ field: { onChange, value } }) => (
                 <TextInput
-                  style={[styles.textInputCoordenadas, {borderColor: borderColor}]}
+                  style={[styles.textInputCoordenadas, {borderColor: borderColor, color: colorQuinario}]}
                   onChangeText={onChange}
                   value={value}
                   placeholder="Ingrese los grados de longitud"
@@ -206,7 +206,7 @@ const InputCoordenadas = ({control, rules, errors, name1, name2, name3, name4, n
               control={control}
               render={({ field: { onChange, value } }) => (
                 <TextInput
-                  style={[styles.textInputCoordenadas, {borderColor: borderColor}]}
+                  style={[styles.textInputCoordenadas, {borderColor: borderColor, color: colorQuinario}]}
                   onChangeText={onChange}
                   value={value}
                   placeholder="Ingrese los minutos de longitud"
@@ -225,7 +225,7 @@ const InputCoordenadas = ({control, rules, errors, name1, name2, name3, name4, n
               control={control}
               render={({ field: { onChange, value } }) => (
                 <TextInput
-                  style={[styles.textInputCoordenadas, {borderColor: borderColor}]}
+                  style={[styles.textInputCoordenadas, {borderColor: borderColor, color: colorQuinario}]}
                   onChangeText={onChange}
                   value={value}
                   placeholder="Ingrese los segundos de longitud"
