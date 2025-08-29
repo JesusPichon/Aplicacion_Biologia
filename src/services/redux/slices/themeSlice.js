@@ -6,6 +6,7 @@ import { set } from "react-hook-form";
 const lightTheme = {
     imageBackgroundInicio: require('../../../assets/images/fondoClaro.jpeg'), // Pantalla de inicio
     logoInicio: require('../../../assets/images/logoClaro.png'), //Pantalla de inicio
+    logoJardin: require('../../../assets/images/jardinClaro.png'), //Pantalla Acerca de
     iconoUsuario: require('../../../assets/images/usuarioClaro.png'), //Pantalla de inicio
     iconoContraseña: require('../../../assets/images/contraseñaClaro.png'), //Pantalla de inicio
     iconoCorreo: require('../../../assets/images/correoClaro.png'), //Pantalla de Registro
@@ -23,6 +24,7 @@ const lightTheme = {
 const darkTheme = {
     imageBackgroundInicio: require('../../../assets/images/fondoOscuro.jpeg'),
     logoInicio: require('../../../assets/images/logoOscuro.png'),
+    logoJardin: require('../../../assets/images/jardinOscuro.png'),
     iconoUsuario: require('../../../assets/images/usuarioOscuro.png'),
     iconoContraseña: require('../../../assets/images/contraseñaOscuro.png'),
     iconoCorreo: require('../../../assets/images/correoOscuro.png'),

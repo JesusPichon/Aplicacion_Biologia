@@ -8,7 +8,7 @@ import {
   useColorScheme,
   Image,
   StyleSheet,
-  Dimensions,
+  useWindowDimensions
 } from 'react-native';
 
 const FAQ = ({navigation}) => {
@@ -18,6 +18,7 @@ const FAQ = ({navigation}) => {
   const theme = themes[currentTheme] || themes[systemTheme] || themes.light;
   const {
     logoInicio,
+    logoJardin,
     colorPrimario,
     colorSecundario,
     colorTerciario,
@@ -25,18 +26,15 @@ const FAQ = ({navigation}) => {
     colorQuinario,
   } = theme;
 
-  const lodoMayor =
-    Dimensions.get('screen').width > Dimensions.get('screen').height
-      ? Dimensions.get('screen').width
-      : Dimensions.get('screen').height;
+  const { width, height } = useWindowDimensions();
+
   const localStyles = StyleSheet.create({
     imagenBackground: {
       opacity: 0.1,
-      minHeight: lodoMayor,
-      minWidth: lodoMayor,
+      height: height,
+      width: width,
       position: 'absolute',
       top: 30,
-      left: 50,
     },
   });
 
@@ -51,7 +49,7 @@ const FAQ = ({navigation}) => {
         animated={true}
         backgroundColor={colorPrimario}
       />
-      <Image style={localStyles.imagenBackground} source={logoInicio} />
+      <Image style={localStyles.imagenBackground} source={logoJardin} />
 
       <SafeAreaView>
         <ScrollView>
