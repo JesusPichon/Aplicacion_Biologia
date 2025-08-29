@@ -1,11 +1,11 @@
 import styles from '../../styles/style-app';
-import {principal, tercero, cuarto} from '../../styles/style-colors';
+import { principal, tercero, cuarto } from '../../styles/style-colors';
 import imagenEquipo from '../../assets/images/logoEquipo.jpg';
 import imagenBiologia from '../../assets/images/buap.png';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import VideoBioCollector from '../../assets/video/BioCollector.mp4';
-import React, {useState, useRef, useEffect} from 'react';
-import {Icon} from 'react-native-elements';
+import React, { useState, useRef, useEffect } from 'react';
+import { Icon } from 'react-native-elements';
 import Video from 'react-native-video';
 import {
   Text,
@@ -20,10 +20,10 @@ import {
   Linking,
 } from 'react-native';
 
-const Nosotros = ({navigation}) => {
+const Nosotros = ({ navigation }) => {
   const systemTheme = useColorScheme();
 
-  const {currentTheme, themes, modeTheme} = useSelector(state => state.theme);
+  const { currentTheme, themes, modeTheme } = useSelector(state => state.theme);
   const theme = themes[currentTheme] || themes[systemTheme] || themes.light;
   const {
     logoInicio,
@@ -36,31 +36,31 @@ const Nosotros = ({navigation}) => {
 
   const desarrolladores = [
     {
-      nombre: 'Irvyn Xicale Cabrera',
+      nombre: 'Ing. Irvyn Xicale Cabrera',
       github: 'irvyn2703',
       url: 'https://irvyn2703.github.io/',
       posicion: true,
     },
     {
-      nombre: 'Jesus Pichón Ramirez',
+      nombre: 'Ing. Jesus Pichón Ramirez',
       github: 'JesusPichon',
       url: 'https://github.com/JesusPichon',
       posicion: false,
     },
     {
-      nombre: 'Sergio Enrique Rivera Vidal',
+      nombre: 'Ing. Sergio Enrique Rivera Vidal',
       github: 'EnriqueRV10',
       url: 'https://github.com/EnriqueRV10',
       posicion: true,
     },
     {
-      nombre: 'Abner Pino Federico',
+      nombre: 'Ing. Abner Pino Federico',
       github: 'Abnerpino',
       url: 'https://github.com/Abnerpino',
       posicion: false,
     },
     {
-      nombre: 'Christian Santiago Rodriguez',
+      nombre: 'Ing. Christian Santiago Rodriguez',
       github: 'Kreork',
       url: 'https://github.com/Kreork',
       posicion: true,
@@ -98,7 +98,6 @@ const Nosotros = ({navigation}) => {
       borderRadius: 20,
     },
     TextContenido: {
-      textTransform: 'lowercase',
       textAlign: 'justify',
       fontSize: 16,
       fontWeight: 'bold',
@@ -154,9 +153,9 @@ const Nosotros = ({navigation}) => {
   }, [navigation]);
 
   return (
-    <View style={{flex: 1, marginTop: 20}}>
+    <View style={{ flex: 1, marginTop: 20 }}>
       {/*logo*/}
-      <View style={{width: '100%', alignItems: 'center', position: 'relative'}}>
+      <View style={{ width: '100%', alignItems: 'center', position: 'relative' }}>
         <View
           style={[
             {
@@ -169,7 +168,7 @@ const Nosotros = ({navigation}) => {
             },
             localStyles.Borde,
           ]}>
-          <Image style={{height: 85, width: 85}} source={logoInicio} />
+          <Image style={{ height: 85, width: 85 }} source={logoInicio} />
         </View>
         <View
           style={{
@@ -182,20 +181,59 @@ const Nosotros = ({navigation}) => {
           }}></View>
       </View>
       {/* Descripción */}
-      <View style={{alignItems: 'center', paddingHorizontal: 20}}>
+      <View style={{ alignItems: 'center', paddingHorizontal: 20, paddingBottom: 15 }}>
         <Text style={[localStyles.Titulo, localStyles.Borde]}>
           BIO COLLECTOR
         </Text>
         <Text style={[localStyles.TextContenido]}>
-          UNA APLICACIÓN MOVIL DISEÑADA PARA LA RECOLECCIÓN DE DATOS BIOLOGICOS,
-          OBTENIDOS EN PRUEBAS DE CAMPO. LA APLICACIÓN PERMITE A LOS USUARIOS
-          COMPARTIR LOS DATOS DE FORMA PÚBLICA DENTRO DE LA MISMA APLICACIÓN. EL
-          OBJETIVO ES CREAR REPOSITORIOS DE INFORMACIÓN PARA INVESTIGADORES Y
-          ALUMNOS DENTRO DEL CAMPO DE LA BIOLOGIA.
+          Una aplicación móvil diseñada para la recolección de datos biológicos,
+          obtenidos en pruebas de campo. La aplicación permite a los usuarios
+          compartir los datos de forma pública dentro de la misma aplicación. El
+          objetivo es crear repositorios de información para investigadores y
+          alumnos dentro del campo de la biología.
+        </Text>
+      </View>
+      {/* Encargado */}
+      <View style={{ alignItems: 'center', paddingHorizontal: 20, paddingBottom: 15 }}>
+        <Text style={[localStyles.Titulo, localStyles.Borde]}>
+          Encargado
+        </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            width: '100%',
+            justifyContent: 'center',
+            paddingHorizontal: 20,
+          }}>
+          <Image
+            style={[
+              { height: 85, width: 85, borderRadius: 200, zIndex: 2 },
+              localStyles.Borde,
+            ]}
+            source={{
+              uri: `https://github.com/irvyn2703.png`,
+            }}
+          />
+          <View
+            style={[
+              {
+                marginLeft: -10,
+                marginRight: 0,
+              },
+              localStyles.DevContenedor,
+            ]}>
+            <Text style={[localStyles.DevText]}>
+              Dr. Carlos Alberto Ruiz Jiménez
+            </Text>
+          </View>
+        </View>
+        <Text style={[localStyles.TextContenido, {textAlign: 'center'}]}>
+          Área de Educación y Divulgación del Jardín Botánico Universitario - BUAP
         </Text>
       </View>
       {/* Desarrolladores */}
-      <View style={{alignItems: 'center', paddingHorizontal: 20, gap: 15}}>
+      <View style={{ alignItems: 'center', paddingHorizontal: 20, gap: 15 }}>
         <Text style={[localStyles.Titulo, localStyles.Borde]}>
           Desarrolladores
         </Text>
@@ -214,7 +252,7 @@ const Nosotros = ({navigation}) => {
                 }}>
                 <Image
                   style={[
-                    {height: 85, width: 85, borderRadius: 200, zIndex: 2},
+                    { height: 85, width: 85, borderRadius: 200, zIndex: 2 },
                     localStyles.Borde,
                   ]}
                   source={{
@@ -251,7 +289,7 @@ const Nosotros = ({navigation}) => {
         <Video
           ref={videoRef}
           source={require('../../assets/video/BioCollector.mp4')}
-          style={{width: '100%', height: 200}}
+          style={{ width: '100%', height: 200 }}
           paused={paused}
           onProgress={onProgress}
           repeat={true}
