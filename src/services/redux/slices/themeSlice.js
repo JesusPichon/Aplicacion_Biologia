@@ -4,8 +4,8 @@ import { cuartoFePro, principal, principalFePro, quintoFePro, secundarioFePro, t
 import { set } from "react-hook-form";
 
 const lightTheme = {
-    imageBackgroundInicio: require('../../../assets/images/fondoClaro.jpeg'), // Pantalla de inicio
-    logoInicio: require('../../../assets/images/logoClaro.png'), //Pantalla de inicio
+    imageBackgroundInicio: require('../../../assets/images/fondo.jpg'), // Pantalla de inicio
+    logoInicio: require('../../../assets/images/logo.png'), //Pantalla de inicio
     logoJardin: require('../../../assets/images/jardinClaro.png'), //Pantalla Acerca de
     iconoUsuario: require('../../../assets/images/usuarioClaro.png'), //Pantalla de inicio
     iconoContraseña: require('../../../assets/images/contraseñaClaro.png'), //Pantalla de inicio
@@ -22,8 +22,8 @@ const lightTheme = {
 };
     
 const darkTheme = {
-    imageBackgroundInicio: require('../../../assets/images/fondoOscuro.jpeg'),
-    logoInicio: require('../../../assets/images/logoOscuro.png'),
+    imageBackgroundInicio: require('../../../assets/images/fondo.jpg'),
+    logoInicio: require('../../../assets/images/logo.png'),
     logoJardin: require('../../../assets/images/jardinOscuro.png'),
     iconoUsuario: require('../../../assets/images/usuarioOscuro.png'),
     iconoContraseña: require('../../../assets/images/contraseñaOscuro.png'),

@@ -92,7 +92,7 @@ const Login = ({ navigation }) => {
     }
 
     return (
-        <ImageBackground source={imageBackgroundInicio} resizeMode="cover" style={{ flex: 1, width: '100%', height: '100%' }}>
+        <ImageBackground source={imageBackgroundInicio} resizeMode="cover" style={{ flex: 1, width: '100%', height: '100%' }} imageStyle={{ opacity: 0.5 }}>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}>
                 <StatusBar
                     animated={true}
@@ -105,7 +105,9 @@ const Login = ({ navigation }) => {
 
                     <Animated.View style={{ flex: 30, flexDirection: 'row', overflow: 'hidden', transform: [{ translateY: translateAnimDOWN }, { scale: unoAnim }] }}>
                         <View style={{ flex: 1 }}></View>
-                        <ImageBackground source={logoInicio} resizeMode="contain" style={{ flex: 8, margin: 20 }}></ImageBackground>
+                        <ImageBackground source={logoInicio} resizeMode="contain" style={{ flex: 8, margin: 20, }}>
+                            <Text style={{ marginTop: '50%', marginLeft: '40%', fontStyle: 'italic', fontSize: 50, fontWeight: 'bold', color: '#333' }}>Laelia</Text>
+                        </ImageBackground>
                         <View style={{ flex: 1 }}></View>
                     </Animated.View>
 

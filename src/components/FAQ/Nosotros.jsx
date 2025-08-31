@@ -168,7 +168,7 @@ const Nosotros = ({ navigation }) => {
             },
             localStyles.Borde,
           ]}>
-          <Image style={{ height: 85, width: 85 }} source={logoInicio} />
+          <Image style={{ height: '100%', width: '100%', }} source={logoInicio} />
         </View>
         <View
           style={{
@@ -182,8 +182,8 @@ const Nosotros = ({ navigation }) => {
       </View>
       {/* Descripción */}
       <View style={{ alignItems: 'center', paddingHorizontal: 20, paddingBottom: 15 }}>
-        <Text style={[localStyles.Titulo, localStyles.Borde]}>
-          BIO COLLECTOR
+        <Text style={[localStyles.Titulo, localStyles.Borde, { fontStyle: 'italic', fontWeight: 'bold', fontSize: 30 }]}>
+          Laelia
         </Text>
         <Text style={[localStyles.TextContenido]}>
           Una aplicación móvil diseñada para la recolección de datos biológicos,
