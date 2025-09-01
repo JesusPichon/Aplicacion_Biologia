@@ -70,6 +70,7 @@ const Login = ({navigation}) => {
     formState: {errors},
   } = useForm({
     defaultValues: {
+      identifier: '', // Cambiado de 'email' a 'identifier'
       username: '',
       email: '',
       password: '',
@@ -79,11 +80,105 @@ const Login = ({navigation}) => {
 
   const [cargando, setCargando] = useState(false);
 
+  // VALIDACIONES MEJORADAS
+  const getValidationRules = fieldName => {
+    switch (fieldName) {
+      case 'identifier': // Campo para login
+        return {
+          required: 'Usuario o email obligatorio',
+          validate: value => {
+            if (!value?.trim()) return 'Campo obligatorio';
+
+            const isEmail = value.includes('@');
+            if (isEmail) {
+              // Validar como email
+              const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+              return emailRegex.test(value) || 'Formato de email inválido';
+            } else {
+              // Validar como username
+              if (value.length < 3) return 'Usuario mínimo 3 caracteres';
+              const usernameRegex = /^[a-zA-Z0-9_]+$/;
+              return (
+                usernameRegex.test(value) ||
+                'Usuario solo puede contener letras, números y _'
+              );
+            }
+          },
+        };
+
+      case 'username': // Campo para registro
+        return {
+          required: 'Nombre de usuario obligatorio',
+          minLength: {value: 3, message: 'Mínimo 3 caracteres'},
+          maxLength: {value: 20, message: 'Máximo 20 caracteres'},
+          pattern: {
+            value: /^[a-zA-Z0-9_]+$/,
+            message: 'Solo letras, números y guión bajo permitidos',
+          },
+          validate: {
+            notOnlyNumbers: value =>
+              !/^\d+$/.test(value) || 'No puede ser solo números',
+          },
+        };
+
+      case 'email': // Campo para registro
+        return {
+          required: 'Email obligatorio',
+          pattern: {
+            value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+            message: 'Formato de email inválido',
+          },
+          validate: {
+            maxLength: value => value.length <= 254 || 'Email demasiado largo',
+          },
+        };
+
+      case 'password':
+        if (isLogin) {
+          return {required: 'La contraseña es obligatoria'};
+        } else {
+          return {
+            required: 'La contraseña es obligatoria',
+            minLength: {value: 8, message: 'Mínimo 8 caracteres'},
+            validate: {
+              hasUpperCase: value =>
+                /[A-Z]/.test(value) || 'Debe contener al menos una mayúscula',
+              hasLowerCase: value =>
+                /[a-z]/.test(value) || 'Debe contener al menos una minúscula',
+              hasNumber: value =>
+                /\d/.test(value) || 'Debe contener al menos un número',
+            },
+          };
+        }
+
+      case 'passwordConfirm':
+        return {
+          required: 'Debes confirmar tu contraseña',
+          validate: value =>
+            value === watch('password') || 'Las contraseñas no coinciden',
+        };
+
+      default:
+        return {};
+    }
+  };
+
+  // ✅ LÓGICA DE ENVÍO MEJORADA
   const onSubmit = async data => {
     setCargando(true);
+
     if (isLogin) {
       Keyboard.dismiss();
-      await dispatch(loginUser(data.email, data.password));
+
+      // Detectar si el identifier es email o username
+      const isEmail = data.identifier.includes('@');
+      const credentials = {
+        [isEmail ? 'email' : 'username']: data.identifier,
+        password: data.password,
+      };
+
+      await dispatch(loginUser(credentials)); // ✅ Envío mejorado
+
       const AuthStatus = pb.authStore.isValid;
       if (AuthStatus === true) {
         reset();
@@ -105,21 +200,6 @@ const Login = ({navigation}) => {
       reset();
     }
     setCargando(false);
-  };
-
-  const rulesPasswordLogin = {required: 'La contraseña es obligatoria'};
-  const rulesPasswordRegister = {
-    required: 'La contraseña es obligatoria',
-    minLength: {
-      value: 8,
-      message: 'La contraseña debe tener al menos 8 caracteres',
-    },
-  };
-
-  const rulesEmailLogin = {required: 'Nombre de usuario o Email obligatorio'};
-  const rulesEmailRegister = {
-    required: 'Email obligatorio',
-    pattern: {value: /^\S+@\S+$/i, message: 'Correo electrónico no válido'},
   };
 
   // Función para alternar la visibilidad de la contraseña
@@ -169,13 +249,14 @@ const Login = ({navigation}) => {
               },
             ]}>
             <View style={styles.viewForm}>
+              {/* ✅ CAMPO USERNAME PARA REGISTRO */}
               {!isLogin && (
                 <View style={styles.viewUserField}>
                   <Image source={iconoUsuario} style={styles.viewUserIcon} />
                   <Controller
                     control={control}
                     name="username"
-                    rules={{required: 'El nombre de usuario es obligatorio'}}
+                    rules={getValidationRules('username')}
                     render={({field: {onChange, onBlur, value}}) => (
                       <TextInput
                         style={[
@@ -188,6 +269,7 @@ const Login = ({navigation}) => {
                         ]}
                         placeholder="Nombre de Usuario"
                         placeholderTextColor="#888"
+                        autoCapitalize="none"
                         onChangeText={onChange}
                         onBlur={onBlur}
                         value={value}
@@ -200,6 +282,7 @@ const Login = ({navigation}) => {
                 <Text style={styles.errorText}>{errors.username.message}</Text>
               )}
 
+              {/* ✅ CAMPO IDENTIFIER PARA LOGIN / EMAIL PARA REGISTRO */}
               <View style={styles.viewUserMailField}>
                 <Image
                   source={isLogin ? iconoUsuario : iconoCorreo}
@@ -207,10 +290,8 @@ const Login = ({navigation}) => {
                 />
                 <Controller
                   control={control}
-                  name="email"
-                  rules={
-                    isLogin === true ? rulesEmailLogin : rulesEmailRegister
-                  }
+                  name={isLogin ? 'identifier' : 'email'} // ✅ Campo dinámico
+                  rules={getValidationRules(isLogin ? 'identifier' : 'email')}
                   render={({field: {onChange, onBlur, value}}) => (
                     <TextInput
                       style={[
@@ -221,10 +302,10 @@ const Login = ({navigation}) => {
                           color: colorTexto,
                         },
                       ]}
-                      placeholder={
-                        isLogin ? 'Nombre de Usuario o Email' : 'Email'
-                      }
+                      placeholder={isLogin ? 'Usuario o Email' : 'Email'} // ✅ Placeholder mejorado
                       placeholderTextColor="#888"
+                      autoCapitalize="none"
+                      keyboardType={!isLogin ? 'email-address' : 'default'}
                       onChangeText={onChange}
                       onBlur={onBlur}
                       value={value}
@@ -232,20 +313,23 @@ const Login = ({navigation}) => {
                   )}
                 />
               </View>
-              {errors.email && (
+              {/* ✅ MOSTRAR ERRORES DINÁMICOS */}
+              {isLogin && errors.identifier && (
+                <Text style={styles.errorText}>
+                  {errors.identifier.message}
+                </Text>
+              )}
+              {!isLogin && errors.email && (
                 <Text style={styles.errorText}>{errors.email.message}</Text>
               )}
 
+              {/* CAMPO PASSWORD */}
               <View style={styles.viewPasswordField}>
                 <Image source={iconoContraseña} style={styles.iconoPassword} />
                 <Controller
                   control={control}
                   name="password"
-                  rules={
-                    isLogin === true
-                      ? rulesPasswordLogin
-                      : rulesPasswordRegister
-                  }
+                  rules={getValidationRules('password')}
                   render={({field: {onChange, onBlur, value}}) => (
                     <View style={styles.passwordContainer}>
                       <TextInput
@@ -282,6 +366,7 @@ const Login = ({navigation}) => {
                 <Text style={styles.errorText}>{errors.password.message}</Text>
               )}
 
+              {/* CAMPO CONFIRMAR PASSWORD PARA REGISTRO */}
               {!isLogin && (
                 <View style={styles.viewPasswordField}>
                   <Image
@@ -291,12 +376,7 @@ const Login = ({navigation}) => {
                   <Controller
                     control={control}
                     name="passwordConfirm"
-                    rules={{
-                      required: 'Debes confirmar tu contraseña',
-                      validate: value =>
-                        value === watch('password') ||
-                        'Las contraseñas no coinciden',
-                    }}
+                    rules={getValidationRules('passwordConfirm')}
                     render={({field: {onChange, onBlur, value}}) => (
                       <View style={styles.passwordContainer}>
                         <TextInput
@@ -340,6 +420,7 @@ const Login = ({navigation}) => {
                 </Text>
               )}
 
+              {/* BOTÓN DE ENVÍO */}
               {cargando ? (
                 <ActivityIndicator size="large" color={colorTerciario} />
               ) : (
@@ -352,6 +433,8 @@ const Login = ({navigation}) => {
                 </TouchableOpacity>
               )}
             </View>
+
+            {/* BOTÓN CAMBIAR MODO */}
             <View style={styles.viewToggleLogin}>
               <TouchableOpacity
                 style={[
