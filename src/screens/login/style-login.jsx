@@ -82,6 +82,34 @@ const styles = StyleSheet.create({
     height: 40,
     width: '85%',
   },
+  // Nuevo contenedor para campos de contraseña con botón
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '85%',
+    marginBottom: 25,
+    position: 'relative',
+  },
+  // Input específico para contraseñas (sin margen bottom)
+  inputPassword: {
+    fontWeight: 'bold',
+    borderWidth: 2,
+    borderRadius: 10,
+    paddingLeft: 10,
+    paddingRight: 45, // Espacio para el botón del ojo
+    height: 40,
+    flex: 1,
+  },
+  // Botón del ojo para mostrar/ocultar contraseña
+  eyeButton: {
+    position: 'absolute',
+    right: 10,
+    height: 40,
+    width: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1,
+  },
   button: {
     borderRadius: 25,
     width: '35%',

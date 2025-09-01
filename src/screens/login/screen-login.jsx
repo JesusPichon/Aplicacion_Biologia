@@ -20,6 +20,7 @@ import {useForm, Controller} from 'react-hook-form';
 import {loginUser, registerUser} from '../../services/auth/AuthFunctions';
 import {loginFailure} from '../../services/redux/slices/authSlice';
 import pb from '../../services/PocketBase/pocketbase';
+import {Icon} from '@rneui/themed';
 
 const Login = ({navigation}) => {
   const {
@@ -33,6 +34,10 @@ const Login = ({navigation}) => {
   const dispatch = useDispatch();
   const systemTheme = useColorScheme();
   const {currentTheme, themes} = useSelector(state => state.theme);
+
+  // Estados para controlar la visibilidad de las contraseñas
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
   useEffect(() => {
     const initializeLoginScreen = async () => {
@@ -117,6 +122,16 @@ const Login = ({navigation}) => {
     pattern: {value: /^\S+@\S+$/i, message: 'Correo electrónico no válido'},
   };
 
+  // Función para alternar la visibilidad de la contraseña
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  // Función para alternar la visibilidad de confirmar contraseña
+  const togglePasswordConfirmVisibility = () => {
+    setShowPasswordConfirm(!showPasswordConfirm);
+  };
+
   return (
     <ImageBackground
       source={imageBackgroundInicio}
@@ -184,6 +199,7 @@ const Login = ({navigation}) => {
               {errors.username && (
                 <Text style={styles.errorText}>{errors.username.message}</Text>
               )}
+
               <View style={styles.viewUserMailField}>
                 <Image
                   source={isLogin ? iconoUsuario : iconoCorreo}
@@ -219,6 +235,7 @@ const Login = ({navigation}) => {
               {errors.email && (
                 <Text style={styles.errorText}>{errors.email.message}</Text>
               )}
+
               <View style={styles.viewPasswordField}>
                 <Image source={iconoContraseña} style={styles.iconoPassword} />
                 <Controller
@@ -230,28 +247,41 @@ const Login = ({navigation}) => {
                       : rulesPasswordRegister
                   }
                   render={({field: {onChange, onBlur, value}}) => (
-                    <TextInput
-                      style={[
-                        styles.input,
-                        {
-                          backgroundColor: colorPrimario,
-                          borderColor: colorTerciario,
-                          color: colorTexto,
-                        },
-                      ]}
-                      placeholder="Contraseña"
-                      secureTextEntry
-                      placeholderTextColor="#888"
-                      onChangeText={onChange}
-                      onBlur={onBlur}
-                      value={value}
-                    />
+                    <View style={styles.passwordContainer}>
+                      <TextInput
+                        style={[
+                          styles.inputPassword,
+                          {
+                            backgroundColor: colorPrimario,
+                            borderColor: colorTerciario,
+                            color: colorTexto,
+                          },
+                        ]}
+                        placeholder="Contraseña"
+                        secureTextEntry={!showPassword}
+                        placeholderTextColor="#888"
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        value={value}
+                      />
+                      <TouchableOpacity
+                        onPress={togglePasswordVisibility}
+                        style={styles.eyeButton}>
+                        <Icon
+                          name={showPassword ? 'visibility' : 'visibility-off'}
+                          type="material"
+                          size={20}
+                          color="#888"
+                        />
+                      </TouchableOpacity>
+                    </View>
                   )}
                 />
               </View>
               {errors.password && (
                 <Text style={styles.errorText}>{errors.password.message}</Text>
               )}
+
               {!isLogin && (
                 <View style={styles.viewPasswordField}>
                   <Image
@@ -268,22 +298,38 @@ const Login = ({navigation}) => {
                         'Las contraseñas no coinciden',
                     }}
                     render={({field: {onChange, onBlur, value}}) => (
-                      <TextInput
-                        style={[
-                          styles.input,
-                          {
-                            backgroundColor: colorPrimario,
-                            borderColor: colorTerciario,
-                            color: colorTexto,
-                          },
-                        ]}
-                        placeholder="Confirmar Contraseña"
-                        secureTextEntry
-                        placeholderTextColor="#888"
-                        onChangeText={onChange}
-                        onBlur={onBlur}
-                        value={value}
-                      />
+                      <View style={styles.passwordContainer}>
+                        <TextInput
+                          style={[
+                            styles.inputPassword,
+                            {
+                              backgroundColor: colorPrimario,
+                              borderColor: colorTerciario,
+                              color: colorTexto,
+                            },
+                          ]}
+                          placeholder="Confirmar Contraseña"
+                          secureTextEntry={!showPasswordConfirm}
+                          placeholderTextColor="#888"
+                          onChangeText={onChange}
+                          onBlur={onBlur}
+                          value={value}
+                        />
+                        <TouchableOpacity
+                          onPress={togglePasswordConfirmVisibility}
+                          style={styles.eyeButton}>
+                          <Icon
+                            name={
+                              showPasswordConfirm
+                                ? 'visibility'
+                                : 'visibility-off'
+                            }
+                            type="material"
+                            size={20}
+                            color="#888"
+                          />
+                        </TouchableOpacity>
+                      </View>
                     )}
                   />
                 </View>
@@ -293,6 +339,7 @@ const Login = ({navigation}) => {
                   {errors.passwordConfirm.message}
                 </Text>
               )}
+
               {cargando ? (
                 <ActivityIndicator size="large" color={colorTerciario} />
               ) : (
@@ -314,6 +361,9 @@ const Login = ({navigation}) => {
                 onPress={() => {
                   setIsLogin(!isLogin);
                   reset();
+                  // Resetear visibilidad de contraseñas al cambiar modo
+                  setShowPassword(false);
+                  setShowPasswordConfirm(false);
                 }}>
                 <Text style={[styles.buttonText]}>
                   {isLogin
