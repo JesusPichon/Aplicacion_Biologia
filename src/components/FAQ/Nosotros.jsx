@@ -186,11 +186,10 @@ const Nosotros = ({ navigation }) => {
           Laelia
         </Text>
         <Text style={[localStyles.TextContenido]}>
-          Una aplicación móvil diseñada para la recolección de datos biológicos,
-          obtenidos en pruebas de campo. La aplicación permite a los usuarios
-          compartir los datos de forma pública dentro de la misma aplicación. El
-          objetivo es crear repositorios de información para investigadores y
-          alumnos dentro del campo de la biología.
+          Aplicación móvil diseñada para la recolección y gestión de datos biológicos
+          obtenidos en trabajo de campo. La aplicación permite a los usuarios crear, editar y
+          compartir la información sobre especímenes biológicos, implementando funcionalidades
+          offline y sincronización con servicios en la nube.
         </Text>
       </View>
       {/* Encargado */}
