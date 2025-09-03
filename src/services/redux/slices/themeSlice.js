@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Appearance } from "react-native";
-import { cuartoFePro, principal, principalFePro, quintoFePro, secundarioFePro, terceroFePro } from "../../../styles/style-colors";
+import { cuartoFePro, principal, principalFePro, quintoFePro, secundarioFePro, terceroFePro, tituloClaro, tituloOscuro } from "../../../styles/style-colors";
 import { set } from "react-hook-form";
 
 const lightTheme = {
-    imageBackgroundInicio: require('../../../assets/images/fondo.jpg'), // Pantalla de inicio
-    logoInicio: require('../../../assets/images/logo.png'), //Pantalla de inicio
+    imageBackgroundInicio: require('../../../assets/images/fondoClaro.jpg'), // Pantalla de inicio
+    logoInicio: require('../../../assets/images/logoClaro.png'), //Pantalla de inicio
     logoJardin: require('../../../assets/images/jardinClaro.png'), //Pantalla Acerca de
     iconoUsuario: require('../../../assets/images/usuarioClaro.png'), //Pantalla de inicio
     iconoContraseña: require('../../../assets/images/contraseñaClaro.png'), //Pantalla de inicio
@@ -19,11 +19,12 @@ const lightTheme = {
     colorTerciario: terceroFePro,       //'#1a4d4d'
     colorCuaternario: secundarioFePro,  //'#2e3b3b'
     colorQuinario: principalFePro,      //'#1e2d2d'
+    colorTitulo: tituloClaro,           //'#333'
 };
     
 const darkTheme = {
-    imageBackgroundInicio: require('../../../assets/images/fondo.jpg'),
-    logoInicio: require('../../../assets/images/logo.png'),
+    imageBackgroundInicio: require('../../../assets/images/fondoOscuro.jpg'),
+    logoInicio: require('../../../assets/images/logoOscuro.png'),
     logoJardin: require('../../../assets/images/jardinOscuro.png'),
     iconoUsuario: require('../../../assets/images/usuarioOscuro.png'),
     iconoContraseña: require('../../../assets/images/contraseñaOscuro.png'),
@@ -37,6 +38,7 @@ const darkTheme = {
     colorTerciario: terceroFePro,       //'#1a4d4d'
     colorCuaternario: cuartoFePro,      //'#306d6f'
     colorQuinario: quintoFePro,         //'#eff3f4'
+    colorTitulo: tituloOscuro,          //'#ffe'
 };
 
 initialState = {

@@ -58,6 +58,7 @@ const Login = ({navigation}) => {
     colorPrimario,
     colorTerciario,
     colorTexto,
+    colorTitulo,
   } = theme;
 
   const [isLogin, setIsLogin] = useState(true);
@@ -235,7 +236,7 @@ const Login = ({navigation}) => {
               source={logoInicio}
               resizeMode="contain"
               style={styles.keyboardView2}>
-              <Text style={styles.titleText}>Laelia</Text>
+              <Text style={[styles.titleText, {color: colorTitulo}]}>Laelia</Text>
             </ImageBackground>
             <View style={{flex: 1}}></View>
           </Animated.View>

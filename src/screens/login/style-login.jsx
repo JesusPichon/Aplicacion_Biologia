@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     fontSize: 50,
     fontWeight: 'bold',
-    color: '#333',
   },
   animatedView2: {
     flex: 70,

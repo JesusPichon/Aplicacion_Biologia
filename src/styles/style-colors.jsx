@@ -8,3 +8,6 @@ export const secundarioFePro = '#2e3b3b'
 export const terceroFePro = '#1a4d4d'
 export const cuartoFePro = '#98B9BC'
 export const quintoFePro = '#eff3f4'
+
+export const tituloClaro = '#333'
+export const tituloOscuro = '#ffe'
