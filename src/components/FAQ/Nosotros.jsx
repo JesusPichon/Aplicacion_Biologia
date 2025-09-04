@@ -99,10 +99,10 @@ const Nosotros = ({ navigation }) => {
     },
     TextContenido: {
       textAlign: 'justify',
-      fontSize: 16,
+      fontSize: 14,
       fontWeight: 'bold',
       color: colorQuinario,
-      opacity: 0.6,
+      opacity: 1,
     },
     DevContenedor: {
       backgroundColor: colorQuinario,
@@ -185,7 +185,7 @@ const Nosotros = ({ navigation }) => {
         <Text style={[localStyles.Titulo, localStyles.Borde, { fontStyle: 'italic', fontWeight: 'bold', fontSize: 30 }]}>
           Laelia
         </Text>
-        <Text style={[localStyles.TextContenido]}>
+        <Text style={[localStyles.TextContenido, { fontSize: 17.5, opacity: 0.75}]}>
           Aplicación móvil diseñada para la recolección y gestión de datos biológicos
           obtenidos en trabajo de campo. La aplicación permite a los usuarios crear, editar y
           compartir la información sobre especímenes biológicos, implementando funcionalidades
@@ -210,9 +210,7 @@ const Nosotros = ({ navigation }) => {
               { height: 85, width: 85, borderRadius: 200, zIndex: 2 },
               localStyles.Borde,
             ]}
-            source={{
-              uri: `https://github.com/irvyn2703.png`,
-            }}
+            source={require('../../assets/images/drCarlos.jpg')}
           />
           <View
             style={[
@@ -228,7 +226,13 @@ const Nosotros = ({ navigation }) => {
           </View>
         </View>
         <Text style={[localStyles.TextContenido, {textAlign: 'center'}]}>
-          Área de Educación y Divulgación del Jardín Botánico Universitario - BUAP
+          Coordinador del Área de Educación y Divulgación
+        </Text>
+        <Text style={[localStyles.TextContenido, {textAlign: 'center'}]}>
+          Jardín Botánico Universitario
+        </Text>
+        <Text style={[localStyles.TextContenido, {textAlign: 'center'}]}>
+          Benemérita Universidad Autónoma de Puebla
         </Text>
       </View>
       {/* Desarrolladores */}
