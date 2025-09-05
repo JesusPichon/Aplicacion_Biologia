@@ -50,7 +50,7 @@ const Login = ({navigation}) => {
   const theme = themes[currentTheme] || themes[systemTheme] || themes.light;
   const {
     imageBackgroundInicio,
-    logoInicio,
+    logoInicio1,
     colorStatusBarInicio,
     iconoUsuario,
     iconoContraseña,
@@ -233,10 +233,9 @@ const Login = ({navigation}) => {
             ]}>
             <View style={{flex: 1}}></View>
             <ImageBackground
-              source={logoInicio}
+              source={logoInicio1}
               resizeMode="contain"
               style={styles.keyboardView2}>
-              <Text style={[styles.titleText, {color: colorTitulo}]}>Laelia</Text>
             </ImageBackground>
             <View style={{flex: 1}}></View>
           </Animated.View>

@@ -26,7 +26,7 @@ const Nosotros = ({ navigation }) => {
   const { currentTheme, themes, modeTheme } = useSelector(state => state.theme);
   const theme = themes[currentTheme] || themes[systemTheme] || themes.light;
   const {
-    logoInicio,
+    logoInicio2,
     colorPrimario,
     colorSecundario,
     colorTerciario,
@@ -168,7 +168,7 @@ const Nosotros = ({ navigation }) => {
             },
             localStyles.Borde,
           ]}>
-          <Image style={{ height: '100%', width: '100%', }} source={logoInicio} />
+          <Image style={{ height: '100%', width: '100%', }} source={logoInicio2} />
         </View>
         <View
           style={{

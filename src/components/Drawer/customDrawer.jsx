@@ -18,7 +18,7 @@ const CustomDrawer = props => {
     colorTerciario,
     colorCuaternario,
     colorQuinario,
-    logoInicio,
+    logoInicio2,
   } = theme;
 
   const {routeNames, index} = props.state;
@@ -50,7 +50,7 @@ const CustomDrawer = props => {
       }}>
       {/* Imagen en la parte superior */}
       <View style={{marginHorizontal: 10, alignItems: 'left'}}>
-        <Image source={logoInicio} style={{width: 90, height: 90}} />
+        <Image source={logoInicio2} style={{width: 90, height: 90}} />
       </View>
 
       <View style={{flex: 1, justifyContent: 'center'}}>

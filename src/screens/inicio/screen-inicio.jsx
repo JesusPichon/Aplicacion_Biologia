@@ -117,7 +117,7 @@ const Inicio = ({ navigation }) => {
     }, [modeTheme]);
 
     const theme = themes[currentTheme] || themes[systemTheme] || themes.light;
-    const { imageBackgroundInicio, logoInicio, colorStatusBarInicio, iconoUsuario, iconoContraseña, colorPrimario, colorTerciario, colorTexto, colorTitulo } = theme;
+    const { imageBackgroundInicio, logoInicio1, colorStatusBarInicio, iconoUsuario, iconoContraseña, colorPrimario, colorTerciario, colorTexto, colorTitulo } = theme;
 
     const { isAuthenticated, user, loading } = useSelector((state) => state.auth);
     const [loadingAuth, setLoadingAuth] = useState();
@@ -164,9 +164,7 @@ const Inicio = ({ navigation }) => {
 
                     <Animated.View style={{ flex: 30, flexDirection: 'row', overflow: 'hidden', transform: [{ translateY: translateAnimDOWN }, { scale: unoAnim }] }}>
                         <View style={{ flex: 1 }}></View>
-                        <ImageBackground source={logoInicio} resizeMode="contain" style={{ flex: 8, margin:20, }}>
-                            <Text style={{ marginTop: '107%', marginLeft: '37%', fontStyle: 'italic', fontSize: 65, fontWeight: 'bold', color: colorTitulo }}>Laelia</Text>
-                        </ImageBackground>
+                        <ImageBackground source={logoInicio1} resizeMode="contain" style={{ flex: 8, margin:20, }}/>
                         <View style={{ flex: 1 }}></View>
                     </Animated.View>
                     { loadingAuth ? (
