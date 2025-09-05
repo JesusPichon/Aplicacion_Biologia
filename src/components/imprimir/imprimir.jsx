@@ -4,7 +4,7 @@ import imagenLocal from '../../assets/images/logoEquipo.jpg';
 
 const imprimir = async (listaFichas, imagen) => {
   const orderedKeys = [
-    'nombre_cientifico', 'familia', 'nombre_local', 'localidad', 'municipio', 'estado', 'altitud', 'x', 'coordenadas', 'tipo_vegetacion', 'informacion_ambiental', 'suelo', 'asociada', 'abundancia', 'forma_biologica', 'tamano', 'otros_datos', 'flor', 'fruto', 'usos', 'colector_es', 'no_colecta','fecha', 'determino'
+    'nombre_cientifico', 'familia', 'nombre_local', 'localidad', 'municipio', 'estado', 'altitud', 'x', 'coordenadas', 'tipo_vegetacion', 'informacion_ambiental', 'suelo', 'asociada', 'abundancia', 'forma_biologica', 'tamano', 'otros_datos', 'flor', 'fruto', 'usos', 'colector_es', 'no_colecta', 'fecha', 'determino'
   ];
 
   //console.log(listaFichas)
@@ -17,7 +17,8 @@ const imprimir = async (listaFichas, imagen) => {
   `;
 
   listaFichas.forEach(formData => {
-    htmlContent += `
+    for (let i = 0; i < 3; i++) { //Bucle para mostrar 3 etiquetas por hoja
+      htmlContent += `
       <div style="
       width: 95%;
       height: 30vh;
@@ -84,6 +85,7 @@ const imprimir = async (listaFichas, imagen) => {
       </div>
   </div>
     `;
+    }
   });
 
   htmlContent += `
